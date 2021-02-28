@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PluginContextOptions.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.spi.context</a> &gt; <span class="el_source">PluginContextOptions.java</span></div><h1>PluginContextOptions.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.spi.context;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+
+import io.wcm.devops.conga.generator.UrlFileManager;
+import io.wcm.devops.conga.generator.util.PluginManager;
+
+/**
+ * Parameters passed into all plugin contexts derived from {@link AbstractPluginContext}.
+ */
+<span class="fc" id="L33">public final class PluginContextOptions {</span>
+
+  private PluginManager pluginManager;
+  private UrlFileManager urlFileManager;
+  private Map&lt;String, Map&lt;String, Object&gt;&gt; valueProviderConfig;
+<span class="fc" id="L38">  private Map&lt;String, Map&lt;String, Object&gt;&gt; genericPluginConfig = new HashMap&lt;&gt;();</span>
+  private Object containerContext;
+  private Logger logger;
+
+  /**
+   * @return Plugin manager
+   */
+  public PluginManager getPluginManager() {
+<span class="fc" id="L46">    return this.pluginManager;</span>
+  }
+
+  /**
+   * @param value Plugin manager
+   * @return this
+   */
+  public PluginContextOptions pluginManager(PluginManager value) {
+<span class="fc" id="L54">    this.pluginManager = value;</span>
+<span class="fc" id="L55">    return this;</span>
+  }
+
+  /**
+   * @return URL file manager
+   */
+  public UrlFileManager getUrlFileManager() {
+<span class="fc" id="L62">    return this.urlFileManager;</span>
+  }
+
+  /**
+   * @param value URL file manager
+   * @return this
+   */
+  public PluginContextOptions urlFileManager(UrlFileManager value) {
+<span class="fc" id="L70">    this.urlFileManager = value;</span>
+<span class="fc" id="L71">    return this;</span>
+  }
+
+  /**
+   * @return Value provider configuration
+   */
+  public Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
+<span class="fc" id="L78">    return this.valueProviderConfig;</span>
+  }
+
+  /**
+   * @param value Value provider configuration
+   * @return this
+   */
+  public PluginContextOptions valueProviderConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
+<span class="fc" id="L86">    this.valueProviderConfig = value;</span>
+<span class="fc" id="L87">    return this;</span>
+  }
+
+  /**
+   * @return Generic plugin configuration
+   */
+  public Map&lt;String, Map&lt;String, Object&gt;&gt; getGenericPluginConfig() {
+<span class="fc" id="L94">    return this.genericPluginConfig;</span>
+  }
+
+  /**
+   * @param value Generic plugin configuration
+   * @return this
+   */
+  public PluginContextOptions genericPluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
+<span class="fc" id="L102">    this.genericPluginConfig = value;</span>
+<span class="fc" id="L103">    return this;</span>
+  }
+
+  /**
+   * @return Container-specific context object
+   */
+  public Object getContainerContext() {
+<span class="nc" id="L110">    return containerContext;</span>
+  }
+
+  /**
+   * @param value Container-specific context object
+   * @return this
+   */
+  public PluginContextOptions containerContext(Object value) {
+<span class="fc" id="L118">    containerContext = value;</span>
+<span class="fc" id="L119">    return this;</span>
+  }
+
+  /**
+   * @return Logger
+   */
+  public Logger getLogger() {
+<span class="fc" id="L126">    return logger;</span>
+  }
+
+  /**
+   * @param value Logger
+   * @return this
+   */
+  public PluginContextOptions logger(Logger value) {
+<span class="fc" id="L134">    logger = value;</span>
+<span class="fc" id="L135">    return this;</span>
+  }
+
+  /**
+   * Initialize options with all fields from other options.
+   * @param value Other options
+   * @return this
+   */
+  public PluginContextOptions pluginContextOptions(PluginContextOptions value) {
+<span class="fc" id="L144">    this.pluginManager = value.getPluginManager();</span>
+<span class="fc" id="L145">    this.urlFileManager = value.getUrlFileManager();</span>
+<span class="fc" id="L146">    this.valueProviderConfig = value.getValueProviderConfig();</span>
+<span class="fc" id="L147">    this.genericPluginConfig = value.getGenericPluginConfig();</span>
+<span class="fc" id="L148">    this.containerContext = value.containerContext;</span>
+<span class="fc" id="L149">    this.logger = value.getLogger();</span>
+<span class="fc" id="L150">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

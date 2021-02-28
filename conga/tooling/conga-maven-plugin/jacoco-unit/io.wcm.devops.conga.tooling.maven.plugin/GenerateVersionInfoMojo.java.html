@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GenerateVersionInfoMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin</a> &gt; <span class="el_source">GenerateVersionInfoMojo.java</span></div><h1>GenerateVersionInfoMojo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.GeneratorOptions;
+import io.wcm.devops.conga.generator.util.FileUtil;
+import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
+
+/**
+ * Generates a file with information CONGA maven plugin version and CONGA plugins versions used to generate this
+ * artifact.
+ */
+@Mojo(name = &quot;generate-version-info&quot;, defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresProject = true, threadSafe = true)
+<span class="nc" id="L46">public class GenerateVersionInfoMojo extends AbstractMojo {</span>
+
+  /**
+   * Target path for the prepared definition files.
+   */
+  @Parameter(defaultValue = &quot;${project.build.directory}/definitions&quot;)
+  private String definitionTarget;
+
+  @Parameter(property = &quot;project&quot;, required = true, readonly = true)
+  private MavenProject project;
+
+  @Override
+  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+  public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="nc" id="L60">    File outputDir = new File(definitionTarget, GeneratorOptions.CLASSPATH_PREFIX);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">    if (!outputDir.exists()) {</span>
+<span class="nc" id="L62">      outputDir.mkdirs();</span>
+    }
+
+<span class="nc" id="L65">    File propsFile = new File(outputDir, BuildConstants.FILE_VERSION_INFO);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">    if (propsFile.exists()) {</span>
+<span class="nc" id="L67">      propsFile.delete();</span>
+    }
+<span class="nc" id="L69">    Properties versionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
+<span class="nc" id="L70">    try (OutputStream os = new FileOutputStream(propsFile)) {</span>
+<span class="nc" id="L71">      versionInfo.store(os, &quot;CONGA Version Info&quot;);</span>
+    }
+<span class="nc" id="L73">    catch (IOException ex) {</span>
+<span class="nc" id="L74">      throw new MojoExecutionException(&quot;Error generating version info to &quot;</span>
+<span class="nc" id="L75">          + FileUtil.getCanonicalPath(propsFile) + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L76">    }</span>
+<span class="nc" id="L77">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

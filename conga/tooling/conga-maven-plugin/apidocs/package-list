@@ -1,0 +1,5 @@
+io.wcm.devops.conga.tooling.maven.plugin
+io.wcm.devops.conga.tooling.maven.plugin.urlfile
+io.wcm.devops.conga.tooling.maven.plugin.util
+io.wcm.devops.conga.tooling.maven.plugin.validation
+io.wcm.devops.conga.tooling.maven.plugin.valueprovider

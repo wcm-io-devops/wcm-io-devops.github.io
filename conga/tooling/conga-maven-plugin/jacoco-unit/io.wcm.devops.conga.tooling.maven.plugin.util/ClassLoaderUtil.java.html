@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClassLoaderUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin.util</a> &gt; <span class="el_source">ClassLoaderUtil.java</span></div><h1>ClassLoaderUtil.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin.util;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
+
+import com.google.common.collect.ImmutableMap;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+import io.wcm.devops.conga.generator.spi.context.ValueProviderGlobalContext;
+import io.wcm.devops.conga.generator.util.VariableMapResolver;
+import io.wcm.devops.conga.generator.util.VariableStringResolver;
+
+/**
+ * Utility methods for managing classpath and class loaders.
+ */
+public final class ClassLoaderUtil {
+
+  private ClassLoaderUtil() {
+    // static methods only
+  }
+
+  /**
+   * Build {@link ClassLoader} based on given list of dependency URLs.
+   * @param classpathUrls Classpath urls
+   * @return Resource loader
+   */
+  @SuppressFBWarnings(&quot;DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED&quot;)
+  public static ClassLoader buildClassLoader(List&lt;URL&gt; classpathUrls) {
+<span class="nc" id="L58">    return new URLClassLoader(classpathUrls.toArray(new URL[0]));</span>
+  }
+
+  /**
+   * Build class loader from dependency of a maven project.
+   * @param project Maven project
+   * @return Class loader
+   * @throws MojoExecutionException Mojo execution exception
+   */
+  public static List&lt;URL&gt; getMavenProjectClasspathUrls(MavenProject project) throws MojoExecutionException {
+    try {
+<span class="nc" id="L69">      List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">      for (String path : project.getCompileClasspathElements()) {</span>
+<span class="nc" id="L71">        classpathUrls.add(new File(path).toURI().toURL());</span>
+<span class="nc" id="L72">      }</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">      for (Resource resource : project.getResources()) {</span>
+<span class="nc" id="L74">        classpathUrls.add(new File(resource.getDirectory()).toURI().toURL());</span>
+<span class="nc" id="L75">      }</span>
+<span class="nc" id="L76">      return classpathUrls;</span>
+    }
+<span class="nc" id="L78">    catch (MalformedURLException | DependencyResolutionRequiredException ex) {</span>
+<span class="nc" id="L79">      throw new MojoExecutionException(&quot;Unable to get classpath elements for class loader.&quot;, ex);</span>
+    }
+  }
+
+  /**
+   * Resolves an environment dependency URL.
+   * @param dependencyUrl Dependeny URL
+   * @param pluginContextOptions Plugin context options
+   * @return Resolved dependency URL.
+   */
+  public static String resolveDependencyUrl(String dependencyUrl, PluginContextOptions pluginContextOptions) {
+
+<span class="nc" id="L91">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
+<span class="nc" id="L92">        .pluginContextOptions(pluginContextOptions);</span>
+<span class="nc" id="L93">    VariableMapResolver variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
+<span class="nc" id="L94">    VariableStringResolver variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
+
+    // resolver variables without config map - thus supporting only value providers with external values
+<span class="nc" id="L97">    return variableStringResolver.resolveString(dependencyUrl, ImmutableMap.of());</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

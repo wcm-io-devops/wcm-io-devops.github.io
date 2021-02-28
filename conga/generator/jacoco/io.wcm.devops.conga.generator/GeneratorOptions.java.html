@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GeneratorOptions.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator</a> &gt; <span class="el_source">GeneratorOptions.java</span></div><h1>GeneratorOptions.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2017 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.wcm.devops.conga.generator.export.ModelExport;
+import io.wcm.devops.conga.generator.util.PluginManager;
+import io.wcm.devops.conga.model.environment.Environment;
+
+/**
+ * Options for generator.
+ */
+<span class="fc" id="L40">public final class GeneratorOptions {</span>
+
+  /**
+   * Prefix for all CONGA resources in classpath.
+   */
+  public static final String CLASSPATH_PREFIX = &quot;CONGA-INF/&quot;;
+
+  /**
+   * Classpath directory in JAR file for roles
+   */
+  public static final String CLASSPATH_ROLES_DIR = CLASSPATH_PREFIX + &quot;roles&quot;;
+
+  /**
+   * Classpath directory in JAR file for roles
+   */
+  public static final String CLASSPATH_TEMPLATES_DIR = CLASSPATH_PREFIX + &quot;templates&quot;;
+
+  /**
+   * Classpath directory in JAR file for roles
+   */
+  public static final String CLASSPATH_ENVIRONMENTS_DIR = CLASSPATH_PREFIX + &quot;environments&quot;;
+
+  private File baseDir;
+  private File roleDir;
+  private File templateDir;
+  private File environmentDir;
+  private File destDir;
+  private boolean deleteBeforeGenerate;
+  private String version;
+<span class="fc" id="L69">  private boolean allowSymlinks = true;</span>
+  private ModelExport modelExport;
+  private Map&lt;String, Map&lt;String, Object&gt;&gt; valueProviderConfig;
+  private Map&lt;String, Map&lt;String, Object&gt;&gt; genericPluginConfig;
+  private Object containerContext;
+<span class="fc" id="L74">  private List&lt;URL&gt; containerClasspathUrls = new ArrayList&lt;&gt;();</span>
+  private PluginManager pluginManager;
+  private Function&lt;Environment, Collection&lt;String&gt;&gt; dependencyVersionBuilder;
+  private Map&lt;String, String&gt; containerVersionInfo;
+<span class="fc" id="L78">  private Logger logger = LoggerFactory.getLogger(Generator.class);</span>
+
+  /**
+   * @return Base directory for resolving relative file references
+   */
+  public File getBaseDir() {
+<span class="fc" id="L84">    return this.baseDir;</span>
+  }
+
+  /**
+   * @param value Base directory for resolving relative file references
+   * @return this
+   */
+  public GeneratorOptions baseDir(File value) {
+<span class="fc" id="L92">    this.baseDir = value;</span>
+<span class="fc" id="L93">    return this;</span>
+  }
+
+  /**
+   * Directory with role definitions. Filename without extension = role name.
+   * @return Directory
+   */
+  public File getRoleDir() {
+<span class="fc" id="L101">    return this.roleDir;</span>
+  }
+
+  /**
+   * @param value Directory with role definitions. Filename without extension = role name.
+   * @return this
+   */
+  public GeneratorOptions roleDir(File value) {
+<span class="fc" id="L109">    this.roleDir = value;</span>
+<span class="fc" id="L110">    return this;</span>
+  }
+
+  /**
+   * Template base directory
+   * @return Directory
+   */
+  public File getTemplateDir() {
+<span class="fc" id="L118">    return this.templateDir;</span>
+  }
+
+  /**
+   * @param value Template base directory
+   * @return this
+   */
+  public GeneratorOptions templateDir(File value) {
+<span class="fc" id="L126">    this.templateDir = value;</span>
+<span class="fc" id="L127">    return this;</span>
+  }
+
+  /**
+   * Directory with environment definitions. Filename without extension = environment name.
+   * @return Directory
+   */
+  public File getEnvironmentDir() {
+<span class="fc" id="L135">    return this.environmentDir;</span>
+  }
+
+  /**
+   * @param value Directory with environment definitions. Filename without extension = environment name.
+   * @return this
+   */
+  public GeneratorOptions environmentDir(File value) {
+<span class="fc" id="L143">    this.environmentDir = value;</span>
+<span class="fc" id="L144">    return this;</span>
+  }
+
+  /**
+   * Destination directory for generated file.
+   * @return Directory
+   */
+  public File getDestDir() {
+<span class="fc" id="L152">    return this.destDir;</span>
+  }
+
+  /**
+   * @param value Destination directory for generated file.
+   * @return this
+   */
+  public GeneratorOptions destDir(File value) {
+<span class="fc" id="L160">    this.destDir = value;</span>
+<span class="fc" id="L161">    return this;</span>
+  }
+
+  /**
+   * Set to true when the generate should delete the environment folders before generating new (default: false).
+   * @return Delete before generate
+   */
+  public boolean isDeleteBeforeGenerate() {
+<span class="fc" id="L169">    return this.deleteBeforeGenerate;</span>
+  }
+
+  /**
+   * @param value Delete before generate
+   * @return this
+   */
+  public GeneratorOptions deleteBeforeGenerate(boolean value) {
+<span class="nc" id="L177">    this.deleteBeforeGenerate = value;</span>
+<span class="nc" id="L178">    return this;</span>
+  }
+
+  /**
+   * The main version of the environment definition.
+   * @return Version
+   */
+  public String getVersion() {
+<span class="fc" id="L186">    return this.version;</span>
+  }
+
+  /**
+   * @param value Version
+   * @return this
+   */
+  public GeneratorOptions version(String value) {
+<span class="fc" id="L194">    this.version = value;</span>
+<span class="fc" id="L195">    return this;</span>
+  }
+
+  /**
+   * Is it allowed to create symlinks instead of copying files if they are local files.
+   * @return Allow symlinks
+   */
+  public boolean isAllowSymlinks() {
+<span class="fc" id="L203">    return this.allowSymlinks;</span>
+  }
+
+  /**
+   * @param value Allow symlinks
+   * @return this
+   */
+  public GeneratorOptions setAllowSymlinks(boolean value) {
+<span class="nc" id="L211">    this.allowSymlinks = value;</span>
+<span class="nc" id="L212">    return this;</span>
+  }
+
+  /**
+   * Settings for exporting models to files.
+   * @return Model export
+   */
+  public ModelExport getModelExport() {
+<span class="fc" id="L220">    return this.modelExport;</span>
+  }
+
+  /**
+   * @param value Model export
+   * @return this
+   */
+  public GeneratorOptions modelExport(ModelExport value) {
+<span class="fc" id="L228">    this.modelExport = value;</span>
+<span class="fc" id="L229">    return this;</span>
+  }
+
+  /**
+   * @return Configuration for value providers.
+   *         The outer map uses the value provider plugin name as key, the inner map contain the config properties.
+   */
+  public Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
+<span class="fc" id="L237">    return this.valueProviderConfig;</span>
+  }
+
+  /**
+   * @param value Configuration for value providers.
+   * @return this
+   */
+  public GeneratorOptions valueProviderConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
+<span class="nc" id="L245">    this.valueProviderConfig = value;</span>
+<span class="nc" id="L246">    return this;</span>
+  }
+
+  /**
+   * @return Generic plugin configuration.
+   */
+  public Map&lt;String, Map&lt;String, Object&gt;&gt; getGenericPluginConfig() {
+<span class="fc" id="L253">    return this.genericPluginConfig;</span>
+  }
+
+  /**
+   * @param value Generic plugin configuration.
+   * @return this
+   */
+  public GeneratorOptions genericPluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
+<span class="fc" id="L261">    this.genericPluginConfig = value;</span>
+<span class="fc" id="L262">    return this;</span>
+  }
+
+  /**
+   * Container-specific context object
+   * @return Context
+   */
+  public Object getContainerContext() {
+<span class="fc" id="L270">    return this.containerContext;</span>
+  }
+
+  /**
+   * @param value Container-specific context object
+   * @return this
+   */
+  public GeneratorOptions containerContext(Object value) {
+<span class="nc" id="L278">    this.containerContext = value;</span>
+<span class="nc" id="L279">    return this;</span>
+  }
+
+  /**
+   * @return List of classpath URLs to CONGA artifact dependencies and container classpath elements.
+   */
+  public List&lt;URL&gt; getContainerClasspathUrls() {
+<span class="fc" id="L286">    return this.containerClasspathUrls;</span>
+  }
+
+  /**
+   * @param value List of URLs to CONGA artifact dependencies defined in the container.
+   * @return this
+   */
+  public GeneratorOptions containerClasspathUrls(List&lt;URL&gt; value) {
+<span class="nc" id="L294">    this.containerClasspathUrls = value;</span>
+<span class="nc" id="L295">    return this;</span>
+  }
+
+  /**
+   * @return Plugin manager
+   */
+  public PluginManager getPluginManager() {
+<span class="fc" id="L302">    return this.pluginManager;</span>
+  }
+
+  /**
+   * @param value Plugin manager
+   * @return this
+   */
+  public GeneratorOptions pluginManager(PluginManager value) {
+<span class="fc" id="L310">    this.pluginManager = value;</span>
+<span class="fc" id="L311">    return this;</span>
+  }
+
+  /**
+   * @return Function to build a list of dependency versions for a given environment
+   */
+  public Function&lt;Environment, Collection&lt;String&gt;&gt; getDependencyVersionBuilder() {
+<span class="fc" id="L318">    return this.dependencyVersionBuilder;</span>
+  }
+
+  /**
+   * @param value Function to build a list of dependency versions for a given environment
+   * @return this
+   */
+  public GeneratorOptions dependencyVersionBuilder(Function&lt;Environment, Collection&lt;String&gt;&gt; value) {
+<span class="nc" id="L326">    this.dependencyVersionBuilder = value;</span>
+<span class="nc" id="L327">    return this;</span>
+  }
+
+  /**
+   * @return Version information from container, e.g. configured Maven plugin versions
+   */
+  public Map&lt;String, String&gt; getContainerVersionInfo() {
+<span class="fc" id="L334">    return this.containerVersionInfo;</span>
+  }
+
+  /**
+   * @param value Version information from container, e.g. configured Maven plugin versions
+   * @return this
+   */
+  public GeneratorOptions containerVersionInfo(Map&lt;String, String&gt; value) {
+<span class="nc" id="L342">    this.containerVersionInfo = value;</span>
+<span class="nc" id="L343">    return this;</span>
+  }
+
+  /**
+   * @return Logger
+   */
+  public Logger getLogger() {
+<span class="fc" id="L350">    return this.logger;</span>
+  }
+
+  /**
+   * @param value Logger
+   * @return this
+   */
+  public GeneratorOptions logger(Logger value) {
+<span class="nc" id="L358">    this.logger = value;</span>
+<span class="nc" id="L359">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

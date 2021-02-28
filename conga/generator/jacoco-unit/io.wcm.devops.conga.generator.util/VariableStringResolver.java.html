@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VariableStringResolver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.util</a> &gt; <span class="el_source">VariableStringResolver.java</span></div><h1>VariableStringResolver.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.util;
+
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+
+import io.wcm.devops.conga.generator.spi.context.ValueProviderGlobalContext;
+
+/**
+ * Resolve variables in a string referencing entries from a map.
+ */
+public final class VariableStringResolver {
+
+  /*
+   * variable pattern examples:
+   * ${var1}
+   * \${var1}
+   * ${var1:defaultValue}
+   * ${provider::var1}
+   * ${provider::Var1:defaultValue}
+   */
+  private static final String NAME_PATTERN_STRING = &quot;[^\\}\\{\\$\\:()'\&quot;/\\#,;\\+\\*@!\\^\\s]&quot;;
+  private static final String NAME_PATTERN_STRING_NOT_EMPTY = NAME_PATTERN_STRING + &quot;+&quot;;
+  private static final String NAME_PATTERN_STRING_OR_EMPTY = NAME_PATTERN_STRING + &quot;*&quot;;
+  private static final String EXPRESSION_STRING = &quot;[^\\}\\{]+&quot;;
+
+  static final int EXPRESSION_POS_DOLLAR_SIGN = 1;
+  static final int EXPRESSION_POS_EXPRESSION = 2;
+
+  private static final int VARIABLE_POS_VARIABLE_1 = 2;
+  private static final int VARIABLE_POS_VALUE_PROVIDER_NAME = 4;
+  private static final int VARIABLE_POS_VARIABLE_2 = 5;
+  private static final int VARIABLE_POS_DEFAULT_VALUE = 7;
+
+  private static final String EXPRESSION_PATTERN = &quot;(\\\\?\\$)&quot;
+      + &quot;\\{(&quot; + EXPRESSION_STRING + &quot;)\\}&quot;;
+<span class="fc" id="L58">  static final Pattern SINGLE_EXPRESSION_PATTERN = Pattern.compile(&quot;^&quot; + EXPRESSION_PATTERN + &quot;$&quot;);</span>
+<span class="fc" id="L59">  static final Pattern MULTI_EXPRESSION_PATTERN = Pattern.compile(EXPRESSION_PATTERN);</span>
+  private static final int REPLACEMENT_MAX_ITERATIONS = 20;
+
+  /*
+   * Either expect single strict variable name, or allow more complex expressions (e.g. jsonpath)
+   * if a value provider plugin is referenced.
+   */
+<span class="fc" id="L66">  static final Pattern VARIABLE_PATTERN = Pattern.compile(&quot;((&quot; + NAME_PATTERN_STRING_NOT_EMPTY + &quot;)|&quot;</span>
+      + &quot;((&quot; + NAME_PATTERN_STRING_NOT_EMPTY + &quot;)\\:\\:)&quot;
+      + &quot;([^\\}\\{]*?))&quot;
+      + &quot;(\\:(&quot; + NAME_PATTERN_STRING_OR_EMPTY + &quot;))?&quot;);
+
+  private final VariableResolver variableResolver;
+  private final JexlResolver jexlResolver;
+
+  /**
+   * @param valueProviderGlobalContext Value provider global context
+   * @param variableMapResolver Variable map resolver
+   */
+  public VariableStringResolver(ValueProviderGlobalContext valueProviderGlobalContext,
+<span class="fc" id="L79">      VariableMapResolver variableMapResolver) {</span>
+<span class="fc" id="L80">    this.variableResolver = new VariableResolver(valueProviderGlobalContext);</span>
+<span class="fc" id="L81">    this.jexlResolver = new JexlResolver(variableMapResolver);</span>
+<span class="fc" id="L82">  }</span>
+
+  /**
+   * Replace variable placeholders in a string with syntax ${key} with values from a map.
+   * The variables can recursively reference each other.
+   * All escaped variables are deescaped.
+   * @param value Value with variable placeholders
+   * @param variables Variable map
+   * @return Value with variable placeholders resolved.
+   * @throws IllegalArgumentException when a variable name could not be resolve.d
+   */
+  public String resolveString(String value, Map&lt;String, Object&gt; variables) {
+<span class="fc" id="L94">    Object result = resolve(value, variables);</span>
+<span class="fc" id="L95">    return ValueUtil.valueToString(result);</span>
+  }
+
+  /**
+   * Replace variable placeholders in a string with syntax ${key} with values from a map.
+   * The variables can recursively reference each other.
+   * All escaped variables are deescaped.
+   * @param value Value with variable placeholders
+   * @param variables Variable map
+   * @return Value with variable placeholders resolved.
+   * @throws IllegalArgumentException when a variable name could not be resolve.d
+   */
+  public Object resolve(String value, Map&lt;String, Object&gt; variables) {
+<span class="fc" id="L108">    return resolve(value, variables, true);</span>
+  }
+
+  /**
+   * Replace variable placeholders in a string with syntax ${key} with values from a map.
+   * The variables can recursively reference each other.
+   * @param value Value with variable placeholders
+   * @param variables Variable map
+   * @param deescapeVariables If true, {@link #deescape(String)} is applied to the result string
+   * @return Value with variable placeholders resolved.
+   * @throws IllegalArgumentException when a variable name could not be resolve.d
+   */
+  public String resolveString(String value, Map&lt;String, Object&gt; variables, boolean deescapeVariables) {
+<span class="fc" id="L121">    Object result = resolve(value, variables, deescapeVariables);</span>
+<span class="fc" id="L122">    return ValueUtil.valueToString(result);</span>
+  }
+
+  /**
+   * Replace variable placeholders in a string with syntax ${key} with values from a map.
+   * The variables can recursively reference each other.
+   * @param value Value with variable placeholders
+   * @param variables Variable map
+   * @param deescapeVariables If true, {@link #deescape(String)} is applied to the result string
+   * @return Value with variable placeholders resolved.
+   * @throws IllegalArgumentException when a variable name could not be resolve.d
+   */
+  public Object resolve(String value, Map&lt;String, Object&gt; variables, boolean deescapeVariables) {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L136">      return null;</span>
+    }
+
+<span class="fc" id="L139">    Object result = resolve(value, variables, 0);</span>
+
+<span class="fc bfc" id="L141" title="All 4 branches covered.">    if (deescapeVariables &amp;&amp; (result instanceof String)) {</span>
+<span class="fc" id="L142">      result = deescape((String)result);</span>
+    }
+
+<span class="fc" id="L145">    return result;</span>
+  }
+
+  /**
+   * De-escapes all escaped variables in the given string.
+   * @param value String that may contain escaped variable references (starting with \$)
+   * @return String with de-escaped variable references.
+   */
+  public String deescape(String value) {
+<span class="fc" id="L154">    return MULTI_EXPRESSION_PATTERN.matcher(value).replaceAll(&quot;\\$\\{&quot;</span>
+        + &quot;$&quot; + EXPRESSION_POS_EXPRESSION + &quot;\\}&quot;);
+  }
+
+  private Object resolve(String value, Map&lt;String, Object&gt; variables, int iterationCount) {
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    if (iterationCount &gt;= REPLACEMENT_MAX_ITERATIONS) {</span>
+<span class="fc" id="L160">      throw new IllegalArgumentException(&quot;Cyclic dependencies in variable string detected: &quot; + value);</span>
+    }
+
+    // check if variable string contains only single variable - in this case resolve and return value without necessarily converting it to a string
+<span class="fc" id="L164">    Matcher matcherSingle = SINGLE_EXPRESSION_PATTERN.matcher(value);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">    if (matcherSingle.matches()) {</span>
+<span class="fc" id="L166">      return resolveSingle(matcherSingle, variables, iterationCount);</span>
+    }
+    else {
+<span class="fc" id="L169">      Matcher matcherMulti = MULTI_EXPRESSION_PATTERN.matcher(value);</span>
+<span class="fc" id="L170">      return resolveMulti(matcherMulti, variables, iterationCount);</span>
+    }
+  }
+
+  private Object resolveSingle(Matcher matcher, Map&lt;String, Object&gt; variables, int iterationCount) {
+<span class="fc" id="L175">    boolean escapedVariable = StringUtils.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
+<span class="fc" id="L176">    String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+
+    // keep escaped variables intact
+<span class="fc bfc" id="L179" title="All 2 branches covered.">    if (escapedVariable) {</span>
+<span class="fc" id="L180">      return matcher.group(0);</span>
+    }
+
+    else {
+<span class="fc" id="L184">      Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+
+      // resolve variable
+<span class="fc bfc" id="L187" title="All 2 branches covered.">      if (variableMatcher.matches()) {</span>
+<span class="fc" id="L188">        String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
+<span class="fc" id="L189">        String variable = StringUtils.defaultString(variableMatcher.group(VARIABLE_POS_VARIABLE_1), variableMatcher.group(VARIABLE_POS_VARIABLE_2));</span>
+<span class="fc" id="L190">        String defaultValueString = variableMatcher.group(VARIABLE_POS_DEFAULT_VALUE);</span>
+
+<span class="fc" id="L192">        Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (valueObject != null) {</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">          if (valueObject instanceof String) {</span>
+            // try again until all nested references are resolved
+<span class="fc" id="L196">            return resolve((String)valueObject, variables, iterationCount + 1);</span>
+          }
+          else {
+<span class="fc" id="L199">            return valueObject;</span>
+          }
+        }
+        else {
+<span class="fc" id="L203">          throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + variable);</span>
+        }
+      }
+
+      // resolve JEXL expression
+      else {
+<span class="fc" id="L209">        Object valueObject = jexlResolver.resolve(expression, variables);</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">        if (valueObject != null) {</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">          if (valueObject instanceof String) {</span>
+            // try again until all nested references are resolved
+<span class="fc" id="L213">            return resolve((String)valueObject, variables, iterationCount + 1);</span>
+          }
+          else {
+<span class="fc" id="L216">            return valueObject;</span>
+          }
+        }
+        else {
+<span class="nc" id="L220">          throw new IllegalArgumentException(&quot;Unable to resolve variable expression: &quot; + expression);</span>
+        }
+      }
+    }
+  }
+
+  private Object resolveMulti(Matcher matcher, Map&lt;String, Object&gt; variables, int iterationCount) {
+<span class="fc" id="L227">    StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L228">    boolean replacedAny = false;</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L230">      boolean escapedVariable = StringUtils.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
+<span class="fc" id="L231">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+
+      // keep escaped variables intact
+<span class="fc bfc" id="L234" title="All 2 branches covered.">      if (escapedVariable) {</span>
+<span class="fc" id="L235">        matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));</span>
+      }
+
+      else {
+<span class="fc" id="L239">        Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+
+        // resolve variable
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (variableMatcher.matches()) {</span>
+<span class="fc" id="L243">          String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
+<span class="fc" id="L244">          String variable = StringUtils.defaultString(variableMatcher.group(VARIABLE_POS_VARIABLE_1), variableMatcher.group(VARIABLE_POS_VARIABLE_2));</span>
+<span class="fc" id="L245">          String defaultValueString = variableMatcher.group(VARIABLE_POS_DEFAULT_VALUE);</span>
+
+<span class="fc" id="L247">          Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">          if (valueObject != null) {</span>
+<span class="fc" id="L249">            String variableValue = ValueUtil.valueToString(valueObject);</span>
+<span class="fc" id="L250">            matcher.appendReplacement(sb, Matcher.quoteReplacement(variableValue));</span>
+<span class="fc" id="L251">            replacedAny = true;</span>
+<span class="fc" id="L252">          }</span>
+          else {
+<span class="fc" id="L254">            throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + variable);</span>
+          }
+<span class="fc" id="L256">        }</span>
+
+        // resolve JEXL expression
+        else {
+<span class="fc" id="L260">          Object valueObject = jexlResolver.resolve(expression, variables);</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">          if (valueObject != null) {</span>
+<span class="fc" id="L262">            String variableValue = ValueUtil.valueToString(valueObject);</span>
+<span class="fc" id="L263">            matcher.appendReplacement(sb, Matcher.quoteReplacement(variableValue));</span>
+<span class="fc" id="L264">            replacedAny = true;</span>
+<span class="fc" id="L265">          }</span>
+          else {
+<span class="nc" id="L267">            throw new IllegalArgumentException(&quot;Unable to resolve variable expression: &quot; + expression);</span>
+          }
+        }
+      }
+
+<span class="fc" id="L272">    }</span>
+<span class="fc" id="L273">    matcher.appendTail(sb);</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">    if (replacedAny) {</span>
+      // try again until all nested references are resolved
+<span class="fc" id="L276">      return resolve(sb.toString(), variables, iterationCount + 1);</span>
+    }
+    else {
+<span class="fc" id="L279">      return sb.toString();</span>
+    }
+  }
+
+  /**
+   * Checks if the given string contains any reference to a variable from a value provider.
+   * @param value Value string
+   * @return true if a value provider reference was found.
+   */
+  public static boolean hasValueProviderReference(String value) {
+<span class="fc" id="L289">    Matcher matcher = MULTI_EXPRESSION_PATTERN.matcher(value);</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L291">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+<span class="fc" id="L292">      Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">      if (variableMatcher.matches()) {</span>
+<span class="fc" id="L294">        String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        if (StringUtils.isNotEmpty(valueProviderName)) {</span>
+<span class="fc" id="L296">          return true;</span>
+        }
+      }
+<span class="fc" id="L299">    }</span>
+<span class="fc" id="L300">    return false;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

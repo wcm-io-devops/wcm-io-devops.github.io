@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ValueProviderGlobalContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.spi.context</a> &gt; <span class="el_source">ValueProviderGlobalContext.java</span></div><h1>ValueProviderGlobalContext.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2017 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.spi.context;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Global context for all {@link io.wcm.devops.conga.generator.spi.ValueProviderPlugin} implementations.
+ */
+<span class="fc" id="L29">public final class ValueProviderGlobalContext extends AbstractPluginContext&lt;ValueProviderGlobalContext&gt; {</span>
+
+<span class="fc" id="L31">  private final Map&lt;String, Object&gt; globalValueProviderCache = new HashMap&lt;&gt;();</span>
+
+  /**
+   * Parameter name in value provider configuration to specify the value provider plugin name.
+   * If not defined, the value provider name itself is used as plugin name.
+   */
+  public static final String PARAM_PLUGIN_NAME = &quot;_plugin_&quot;;
+
+  /**
+   * @return Configuration for value providers.
+   *         The outer map uses the value provider plugin name as key, the inner map contain the config properties.
+   *         Never null.
+   */
+  public Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
+<span class="fc" id="L45">    Map&lt;String, Map&lt;String, Object&gt;&gt; value = this.getPluginContextOptions().getValueProviderConfig();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L47">      value = Collections.emptyMap();</span>
+    }
+<span class="fc" id="L49">    return value;</span>
+  }
+
+  /**
+   * @param valueProviderName Value provider name
+   * @return Configuration for the given value provider. Never null.
+   */
+  public Map&lt;String, Object&gt; getValueProviderConfig(String valueProviderName) {
+<span class="fc" id="L57">    Map&lt;String, Object&gt; config = getValueProviderConfig().get(valueProviderName);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">    if (config == null) {</span>
+<span class="fc" id="L59">      return Collections.emptyMap();</span>
+    }
+<span class="fc" id="L61">    return config;</span>
+  }
+
+  /**
+   * Get global cache map used by all value provider plugin implementations.
+   * @return Global cache map
+   */
+  public Map&lt;String, Object&gt; getGlobalValueProviderCache() {
+<span class="nc" id="L69">    return globalValueProviderCache;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

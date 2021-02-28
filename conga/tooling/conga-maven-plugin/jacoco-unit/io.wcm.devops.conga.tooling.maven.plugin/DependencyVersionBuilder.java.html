@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DependencyVersionBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin</a> &gt; <span class="el_source">DependencyVersionBuilder.java</span></div><h1>DependencyVersionBuilder.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.model.Dependency;
+import org.eclipse.aether.artifact.Artifact;
+
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.GeneratorOptions;
+import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+import io.wcm.devops.conga.generator.util.FileUtil;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper;
+import io.wcm.devops.conga.tooling.maven.plugin.util.MavenContext;
+import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
+
+class DependencyVersionBuilder implements Function&lt;Environment, Collection&lt;String&gt;&gt; {
+
+  private final MavenContext mavenContext;
+  private final PluginContextOptions pluginContextOptions;
+
+<span class="nc" id="L51">  DependencyVersionBuilder(PluginContextOptions pluginContextOptions) {</span>
+<span class="nc" id="L52">    this.mavenContext = (MavenContext)pluginContextOptions.getContainerContext();</span>
+<span class="nc" id="L53">    this.pluginContextOptions = pluginContextOptions;</span>
+<span class="nc" id="L54">  }</span>
+
+  @Override
+  public Collection&lt;String&gt; apply(Environment environment) {
+<span class="nc" id="L58">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(environment, pluginContextOptions);</span>
+
+    try {
+<span class="nc" id="L61">      List&lt;Artifact&gt; dependencyArtifacts = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L62">      dependencyArtifacts.addAll(getCompileDependencyArtifacts(mavenArtifactHelper));</span>
+<span class="nc" id="L63">      dependencyArtifacts.addAll(getEnvironmentDependencyArtifacts(environment, mavenArtifactHelper));</span>
+
+<span class="nc" id="L65">      return new TreeSet&lt;&gt;(</span>
+<span class="nc" id="L66">          dependencyArtifacts.stream()</span>
+              // include only dependencies with a CONGA-INF/ directory
+<span class="nc" id="L68">              .filter(this::hasCongaDefinitions)</span>
+              // transform to string
+<span class="nc" id="L70">              .map(this::toArtifactCoordsPaxUrlStyle)</span>
+<span class="nc" id="L71">              .collect(Collectors.toSet()));</span>
+    }
+<span class="nc" id="L73">    catch (IOException ex) {</span>
+<span class="nc" id="L74">      throw new GeneratorException(ex.getMessage(), ex);</span>
+    }
+  }
+
+  @SuppressWarnings(&quot;deprecation&quot;)
+  private List&lt;Artifact&gt; getCompileDependencyArtifacts(MavenArtifactHelper mavenArtifactHelper) throws IOException {
+<span class="nc" id="L80">    List&lt;Artifact&gt; artifacts = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">    for (Dependency dependency : mavenContext.getProject().getCompileDependencies()) {</span>
+<span class="nc" id="L82">      artifacts.add(mavenArtifactHelper.resolveArtifact(</span>
+<span class="nc" id="L83">          dependency.getGroupId(),</span>
+<span class="nc" id="L84">          dependency.getArtifactId(),</span>
+<span class="nc" id="L85">          dependency.getType(),</span>
+<span class="nc" id="L86">          dependency.getClassifier(),</span>
+<span class="nc" id="L87">          dependency.getVersion()));</span>
+<span class="nc" id="L88">    }</span>
+<span class="nc" id="L89">    return artifacts;</span>
+  }
+
+  private List&lt;Artifact&gt; getEnvironmentDependencyArtifacts(Environment environment, MavenArtifactHelper mavenArtifactHelper) throws IOException {
+<span class="nc" id="L93">    return mavenArtifactHelper.dependencyUrlsToArtifactsWithTransitiveDependencies(environment.getDependencies());</span>
+  }
+
+  /**
+   * Checks if the JAR file of the given dependency has a CONGA-INF/ directory.
+   * @param artifact Dependency
+   * @return true if configuration definitions found
+   */
+  private boolean hasCongaDefinitions(Artifact artifact) {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">    if (!StringUtils.equalsAny(artifact.getExtension(), &quot;jar&quot;)) {</span>
+<span class="nc" id="L103">      return false;</span>
+    }
+<span class="nc" id="L105">    String fileInfo = artifact.toString();</span>
+    try {
+<span class="nc" id="L107">      fileInfo = FileUtil.getCanonicalPath(artifact.getFile());</span>
+<span class="nc" id="L108">      try (ZipFile zipFile = new ZipFile(artifact.getFile())) {</span>
+<span class="nc" id="L109">        Enumeration&lt;? extends ZipEntry&gt; entries = zipFile.entries();</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L111">          ZipEntry entry = entries.nextElement();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">          if (StringUtils.startsWith(entry.getName(), GeneratorOptions.CLASSPATH_PREFIX)) {</span>
+<span class="nc" id="L113">            return true;</span>
+          }
+<span class="nc" id="L115">        }</span>
+      }
+    }
+<span class="nc" id="L118">    catch (IOException ex) {</span>
+<span class="nc" id="L119">      throw new GeneratorException(&quot;Unable to read from JAR file: &quot; + fileInfo, ex);</span>
+<span class="nc" id="L120">    }</span>
+<span class="nc" id="L121">    return false;</span>
+  }
+
+  /**
+   * Build artifact coords string.
+   * @param artifact Artifact
+   * @return Artifact coords
+   */
+  private String toArtifactCoordsPaxUrlStyle(Artifact artifact) {
+<span class="nc" id="L130">    return artifact.getGroupId() + &quot;/&quot; + artifact.getArtifactId()</span>
+<span class="nc" id="L131">        + &quot;/&quot; + VersionInfoUtil.cleanupSnapshotVersion(artifact.getVersion())</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        + (StringUtils.isNotEmpty(artifact.getClassifier()) ? &quot;/&quot; + artifact.getExtension() + &quot;/&quot; + artifact.getClassifier() : &quot;&quot;);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

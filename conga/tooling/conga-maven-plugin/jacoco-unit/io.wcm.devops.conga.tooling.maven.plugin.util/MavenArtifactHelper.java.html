@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MavenArtifactHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin.util</a> &gt; <span class="el_source">MavenArtifactHelper.java</span></div><h1>MavenArtifactHelper.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin.util;
+
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.project.MavenProject;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.ArtifactType;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactDescriptorException;
+import org.eclipse.aether.resolution.ArtifactDescriptorRequest;
+import org.eclipse.aether.resolution.ArtifactDescriptorResult;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
+
+import com.google.common.collect.ImmutableList;
+
+import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.tooling.maven.plugin.urlfile.MavenUrlFilePlugin;
+
+/**
+ * Helper for resolving maven artifacts.
+ */
+public class MavenArtifactHelper {
+
+  private final MavenProject project;
+  private final RepositorySystem repoSystem;
+  private final RepositorySystemSession repoSession;
+  private final List&lt;RemoteRepository&gt; remoteRepos;
+  private final Map&lt;String, String&gt; artifactTypeMappings;
+  private final List&lt;String&gt; environmentDependencyUrls;
+  private final PluginContextOptions pluginContextOptions;
+
+  /**
+   * @param environment CONGA environment
+   * @param pluginContextOptions Plugin context options
+   */
+<span class="nc" id="L70">  public MavenArtifactHelper(Environment environment, PluginContextOptions pluginContextOptions) {</span>
+<span class="nc" id="L71">    MavenContext mavenContext = (MavenContext)pluginContextOptions.getContainerContext();</span>
+<span class="nc" id="L72">    this.project = mavenContext.getProject();</span>
+<span class="nc" id="L73">    this.repoSystem = mavenContext.getRepoSystem();</span>
+<span class="nc" id="L74">    this.repoSession = mavenContext.getRepoSession();</span>
+<span class="nc" id="L75">    this.remoteRepos = mavenContext.getRemoteRepos();</span>
+<span class="nc" id="L76">    this.artifactTypeMappings = mavenContext.getArtifactTypeMappings();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    this.environmentDependencyUrls = environment != null ? environment.getDependencies() : ImmutableList.of();</span>
+<span class="nc" id="L78">    this.pluginContextOptions = pluginContextOptions;</span>
+<span class="nc" id="L79">  }</span>
+
+  /**
+   * Get Maven artifact for given artifact coordinates.
+   * @param artifactCoords Artifact coordinates in either Maven-style or Pax URL-style.
+   * @return Maven artifact
+   * @throws IOException If artifact resolution was not successful
+   */
+  public Artifact resolveArtifact(String artifactCoords) throws IOException {
+    Artifact artifact;
+<span class="nc bnc" id="L89" title="All 2 branches missed.">    if (StringUtils.contains(artifactCoords, &quot;/&quot;)) {</span>
+<span class="nc" id="L90">      artifact = getArtifactFromMavenCoordinatesPaxUrlStyle(artifactCoords);</span>
+    }
+    else {
+<span class="nc" id="L93">      artifact = getArtifactFromMavenCoordinates(artifactCoords);</span>
+    }
+<span class="nc" id="L95">    return resolveArtifact(artifact);</span>
+  }
+
+  /**
+   * Get Maven artifact for given artifact coordinates.
+   * @param groupId Group Id
+   * @param artifactId Artifact Id
+   * @param type Type
+   * @param classifier Classifier
+   * @param version Version
+   * @return Artifact
+   * @throws IOException If dependency resolution fails
+   */
+  @SuppressWarnings(&quot;PMD.UseObjectForClearerAPI&quot;)
+  public Artifact resolveArtifact(String groupId, String artifactId, String type, String classifier, String version) throws IOException {
+<span class="nc" id="L110">    Artifact artifact = createArtifact(groupId, artifactId, type, classifier, version);</span>
+<span class="nc" id="L111">    return resolveArtifact(artifact);</span>
+  }
+
+  /**
+   * Get transitive compile dependencies of given artifact.
+   * @param artifact Maven artifact
+   * @return List of artifact dependencies
+   * @throws IOException If artifact resolution was not successful
+   */
+  public List&lt;Artifact&gt; getTransitiveDependencies(Artifact artifact) throws IOException {
+<span class="nc" id="L121">    List&lt;Artifact&gt; dependencies = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L122">    ArtifactDescriptorRequest descriptorRequest = new ArtifactDescriptorRequest();</span>
+<span class="nc" id="L123">    descriptorRequest.setArtifact(artifact);</span>
+<span class="nc" id="L124">    descriptorRequest.setRepositories(remoteRepos);</span>
+    try {
+<span class="nc" id="L126">      ArtifactDescriptorResult result = repoSystem.readArtifactDescriptor(repoSession, descriptorRequest);</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">      for (Dependency dependency : result.getDependencies()) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (StringUtils.equals(dependency.getScope(), SCOPE_COMPILE)) {</span>
+<span class="nc" id="L129">          Artifact resolvedArtifact = resolveArtifact(dependency.getArtifact());</span>
+<span class="nc" id="L130">          dependencies.add(resolvedArtifact);</span>
+        }
+<span class="nc" id="L132">      }</span>
+    }
+<span class="nc" id="L134">    catch (ArtifactDescriptorException ex) {</span>
+<span class="nc" id="L135">      throw new IOException(&quot;Unable to get artifact descriptor for: '&quot; + artifact + &quot;': &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L136">    }</span>
+<span class="nc" id="L137">    return dependencies;</span>
+  }
+
+  /**
+   * Transform a list of dependency urls to a list of references maven artifacts including their transitive
+   * dependencies.
+   * @param dependencyUrls Dependency URLs
+   * @return List of artifacts
+   * @throws IOException If dependency resolution fails
+   */
+  public List&lt;Artifact&gt; dependencyUrlsToArtifactsWithTransitiveDependencies(Collection&lt;String&gt; dependencyUrls) throws IOException {
+<span class="nc" id="L148">    List&lt;Artifact&gt; artifacts = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">    for (String dependencyUrl : environmentDependencyUrls) {</span>
+<span class="nc" id="L150">      String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">      if (!StringUtils.startsWith(resolvedDependencyUrl, MavenUrlFilePlugin.PREFIX)) {</span>
+<span class="nc" id="L152">        continue;</span>
+      }
+
+<span class="nc" id="L155">      String mavenCoords = MavenUrlFilePlugin.getMavenCoords(resolvedDependencyUrl);</span>
+<span class="nc" id="L156">      Artifact artifact = resolveArtifact(mavenCoords);</span>
+<span class="nc" id="L157">      artifacts.add(artifact);</span>
+<span class="nc" id="L158">      artifacts.addAll(getTransitiveDependencies(artifact));</span>
+<span class="nc" id="L159">    }</span>
+<span class="nc" id="L160">    return artifacts;</span>
+  }
+
+  /**
+   * Parse coordinates following definition from https://maven.apache.org/pom.html#Maven_Coordinates
+   * @param artifactCoords Artifact coordinates
+   * @return Artifact object
+   */
+  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  private Artifact getArtifactFromMavenCoordinates(String artifactCoords) throws IOException {
+    try {
+<span class="nc" id="L171">      Artifact artifact = new DefaultArtifact(artifactCoords);</span>
+<span class="nc" id="L172">      return createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getExtension(), artifact.getClassifier(), artifact.getVersion());</span>
+    }
+<span class="nc" id="L174">    catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L175">      throw new IOException(ex.getMessage());</span>
+    }
+  }
+
+  /**
+   * Parse coordinates in slingstart/Pax URL style following definition from https://ops4j1.jira.com/wiki/x/CoA6
+   * @param artifactCoords Artifact coordinates
+   * @return Artifact object
+   */
+  private Artifact getArtifactFromMavenCoordinatesPaxUrlStyle(String artifactCoords) throws IOException {
+<span class="nc" id="L185">    String[] parts = StringUtils.splitPreserveAllTokens(artifactCoords, &quot;/&quot;);</span>
+
+<span class="nc" id="L187">    String version = null;</span>
+<span class="nc" id="L188">    String packaging = null;</span>
+<span class="nc" id="L189">    String classifier = null;</span>
+
+<span class="nc bnc" id="L191" title="All 5 branches missed.">    switch (parts.length) {</span>
+      case 2:
+        // groupId/artifactId
+<span class="nc" id="L194">        break;</span>
+
+      case 3:
+        // groupId/artifactId/version
+<span class="nc" id="L198">        version = StringUtils.defaultIfBlank(parts[2], null);</span>
+<span class="nc" id="L199">        break;</span>
+
+      case 4:
+        // groupId/artifactId/version/type
+<span class="nc" id="L203">        packaging = StringUtils.defaultIfBlank(parts[3], null);</span>
+<span class="nc" id="L204">        version = StringUtils.defaultIfBlank(parts[2], null);</span>
+<span class="nc" id="L205">        break;</span>
+
+      case 5:
+        // groupId/artifactId/version/type/classifier
+<span class="nc" id="L209">        packaging = StringUtils.defaultIfBlank(parts[3], null);</span>
+<span class="nc" id="L210">        classifier = StringUtils.defaultIfBlank(parts[4], null);</span>
+<span class="nc" id="L211">        version = StringUtils.defaultIfBlank(parts[2], null);</span>
+<span class="nc" id="L212">        break;</span>
+
+      default:
+<span class="nc" id="L215">        throw new IOException(&quot;Invalid artifact: &quot; + artifactCoords);</span>
+    }
+
+<span class="nc" id="L218">    String groupId = StringUtils.defaultIfBlank(parts[0], null);</span>
+<span class="nc" id="L219">    String artifactId = StringUtils.defaultIfBlank(parts[1], null);</span>
+
+<span class="nc" id="L221">    return createArtifact(groupId, artifactId, packaging, classifier, version);</span>
+  }
+
+  private Artifact createArtifact(String groupId, String artifactId, String type, String classifier, String version) throws IOException {
+
+<span class="nc" id="L226">    String artifactVersion = version;</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">    if (artifactVersion == null) {</span>
+<span class="nc" id="L228">      artifactVersion = resolveArtifactVersion(groupId, artifactId, type, classifier);</span>
+    }
+<span class="nc" id="L230">    String artifactExtension = type;</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">    if (artifactExtension == null) {</span>
+<span class="nc" id="L232">      artifactExtension = &quot;jar&quot;;</span>
+    }
+
+<span class="nc" id="L235">    ArtifactType artifactType = repoSession.getArtifactTypeRegistry().get(artifactExtension);</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">    if (artifactType != null) {</span>
+<span class="nc" id="L237">      artifactExtension = artifactType.getExtension();</span>
+    }
+
+    // apply custom mapping from artifact type to extension if defined in plugin config
+<span class="nc bnc" id="L241" title="All 4 branches missed.">    if (artifactTypeMappings != null &amp;&amp; artifactTypeMappings.containsKey(artifactExtension)) {</span>
+<span class="nc" id="L242">      artifactExtension = artifactTypeMappings.get(artifactExtension);</span>
+    }
+
+<span class="nc bnc" id="L245" title="All 6 branches missed.">    if (StringUtils.isBlank(groupId) || StringUtils.isBlank(artifactId) || StringUtils.isBlank(artifactVersion)) {</span>
+<span class="nc" id="L246">      throw new IOException(&quot;Invalid Maven artifact reference: &quot;</span>
+          + &quot;artifactId=&quot; + artifactId + &quot;, &quot;
+          + &quot;groupId=&quot; + groupId + &quot;, &quot;
+          + &quot;version=&quot; + artifactVersion + &quot;, &quot;
+          + &quot;extension=&quot; + artifactExtension + &quot;, &quot;
+          + &quot;classifier=&quot; + classifier + &quot;,&quot;
+          + &quot;type=&quot; + artifactType);
+    }
+
+<span class="nc" id="L255">    return new DefaultArtifact(groupId, artifactId, classifier, artifactExtension, artifactVersion, artifactType);</span>
+  }
+
+  private Artifact resolveArtifact(Artifact artifact) throws IOException {
+<span class="nc" id="L259">    ArtifactRequest artifactRequest = new ArtifactRequest();</span>
+<span class="nc" id="L260">    artifactRequest.setArtifact(artifact);</span>
+<span class="nc" id="L261">    artifactRequest.setRepositories(remoteRepos);</span>
+    try {
+<span class="nc" id="L263">      ArtifactResult result = repoSystem.resolveArtifact(repoSession, artifactRequest);</span>
+<span class="nc" id="L264">      return result.getArtifact();</span>
+    }
+<span class="nc" id="L266">    catch (final ArtifactResolutionException ex) {</span>
+<span class="nc" id="L267">      throw new IOException(&quot;Unable to get artifact for '&quot; + artifact + &quot;': &quot; + ex.getMessage(), ex);</span>
+    }
+  }
+
+  private String resolveArtifactVersion(String groupId, String artifactId, String type, String classifier) throws IOException {
+<span class="nc" id="L272">    String version = findVersionInMavenProject(groupId, artifactId, type, classifier);</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">    if (version == null) {</span>
+<span class="nc" id="L274">      version = findVersionInEnvironmentDependencies(groupId, artifactId, type, classifier);</span>
+    }
+<span class="nc" id="L276">    return version;</span>
+  }
+
+  private String findVersionInMavenProject(String groupId, String artifactId, String type, String classifier) {
+<span class="nc" id="L280">    Set&lt;org.apache.maven.artifact.Artifact&gt; dependencies = project.getArtifacts();</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">    if (dependencies != null) {</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">      for (org.apache.maven.artifact.Artifact dependency : dependencies) {</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">        if (artifactEquals(dependency, artifactId, groupId, type, classifier)) {</span>
+<span class="nc" id="L284">          return dependency.getVersion();</span>
+        }
+<span class="nc" id="L286">      }</span>
+    }
+<span class="nc" id="L288">    return null;</span>
+  }
+
+  private boolean artifactEquals(org.apache.maven.artifact.Artifact dependency, String artifactId, String groupId, String type, String classifier) {
+<span class="nc bnc" id="L292" title="All 2 branches missed.">    return StringUtils.equals(dependency.getGroupId(), groupId)</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getArtifactId(), artifactId)</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(StringUtils.defaultString(dependency.getClassifier()), StringUtils.defaultString(classifier))</span>
+<span class="nc bnc" id="L295" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getType(), type);</span>
+  }
+
+  private String findVersionInEnvironmentDependencies(String groupId, String artifactId, String packaging, String classifier) throws IOException {
+<span class="nc" id="L299">    List&lt;Artifact&gt; dependencies = dependencyUrlsToArtifactsWithTransitiveDependencies(environmentDependencyUrls);</span>
+
+<span class="nc bnc" id="L301" title="All 2 branches missed.">    for (Artifact dependency : dependencies) {</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">      if (artifactEquals(dependency, groupId, artifactId, packaging, classifier)) {</span>
+<span class="nc" id="L303">        return dependency.getVersion();</span>
+      }
+<span class="nc" id="L305">    }</span>
+
+<span class="nc" id="L307">    return null;</span>
+  }
+
+  private boolean artifactEquals(Artifact dependency, String groupId, String artifactId, String type, String classifier) {
+<span class="nc bnc" id="L311" title="All 2 branches missed.">    return StringUtils.equals(dependency.getGroupId(), groupId)</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getArtifactId(), artifactId)</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(StringUtils.defaultString(dependency.getClassifier()), StringUtils.defaultString(classifier))</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getExtension(), type);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

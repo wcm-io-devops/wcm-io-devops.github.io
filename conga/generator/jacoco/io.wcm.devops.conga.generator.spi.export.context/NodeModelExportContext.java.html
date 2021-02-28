@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NodeModelExportContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.spi.export.context</a> &gt; <span class="el_source">NodeModelExportContext.java</span></div><h1>NodeModelExportContext.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.spi.export.context;
+
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import io.wcm.devops.conga.generator.spi.context.AbstractPluginContext;
+import io.wcm.devops.conga.generator.spi.yaml.context.YamlRepresenter;
+import io.wcm.devops.conga.generator.util.ModelExportConfigProcessor;
+import io.wcm.devops.conga.generator.util.VariableMapResolver;
+import io.wcm.devops.conga.generator.util.VariableStringResolver;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.model.environment.Node;
+
+/**
+ * Context for {@link io.wcm.devops.conga.generator.spi.export.NodeModelExportPlugin}.
+ */
+<span class="fc" id="L38">public final class NodeModelExportContext extends AbstractPluginContext&lt;NodeModelExportContext&gt; {</span>
+
+  private Node node;
+  private Environment environment;
+  private List&lt;ExportNodeRoleData&gt; roleData;
+  private File nodeDir;
+  private Map&lt;String, Object&gt; config;
+  private VariableStringResolver variableStringResolver;
+  private VariableMapResolver variableMapResolver;
+  private Map&lt;String, String&gt; containerVersionInfo;
+  private Set&lt;String&gt; sensitiveConfigParameters;
+  private ModelExportConfigProcessor modelExportConfigProcessor;
+  private YamlRepresenter yamlRepresenter;
+
+  /**
+   * @return Node
+   */
+  public Node getNode() {
+<span class="nc" id="L56">    return this.node;</span>
+  }
+
+  /**
+   * @param value Node
+   * @return this
+   */
+  public NodeModelExportContext node(Node value) {
+<span class="fc" id="L64">    this.node = value;</span>
+<span class="fc" id="L65">    return this;</span>
+  }
+
+  /**
+   * @return Environment
+   */
+  public Environment getEnvironment() {
+<span class="nc" id="L72">    return environment;</span>
+  }
+
+  /**
+   * @param value Environment
+   * @return this
+   */
+  public NodeModelExportContext environment(Environment value) {
+<span class="fc" id="L80">    environment = value;</span>
+<span class="fc" id="L81">    return this;</span>
+  }
+
+  /**
+   * @return Node role data
+   */
+  public List&lt;ExportNodeRoleData&gt; getRoleData() {
+<span class="fc" id="L88">    return this.roleData;</span>
+  }
+
+  /**
+   * @param value Node role data
+   * @return this
+   */
+  public NodeModelExportContext roleData(List&lt;ExportNodeRoleData&gt; value) {
+<span class="fc" id="L96">    this.roleData = value;</span>
+<span class="fc" id="L97">    return this;</span>
+  }
+
+  /**
+   * @return Node files target directory
+   */
+  public File getNodeDir() {
+<span class="fc" id="L104">    return this.nodeDir;</span>
+  }
+
+  /**
+   * @param value Node files target directory
+   * @return this
+   */
+  public NodeModelExportContext nodeDir(File value) {
+<span class="fc" id="L112">    this.nodeDir = value;</span>
+<span class="fc" id="L113">    return this;</span>
+  }
+
+  /**
+   * @return Plugin config
+   */
+  public Map&lt;String, Object&gt; getConfig() {
+<span class="nc" id="L120">    return config;</span>
+  }
+
+  /**
+   * @param value Plugin config
+   * @return this
+   */
+  public NodeModelExportContext config(Map&lt;String, Object&gt; value) {
+<span class="nc" id="L128">    config = value;</span>
+<span class="nc" id="L129">    return this;</span>
+  }
+
+  /**
+   * @return Variable string resolver
+   */
+  public VariableStringResolver getVariableStringResolver() {
+<span class="fc" id="L136">    return this.variableStringResolver;</span>
+  }
+
+  /**
+   * @param value Variable string resolver
+   * @return this
+   */
+  public NodeModelExportContext variableStringResolver(VariableStringResolver value) {
+<span class="fc" id="L144">    this.variableStringResolver = value;</span>
+<span class="fc" id="L145">    return this;</span>
+  }
+
+  /**
+   * @return Variable map resolver
+   */
+  public VariableMapResolver getVariableMapResolver() {
+<span class="nc" id="L152">    return this.variableMapResolver;</span>
+  }
+
+  /**
+   * @param value Variable map resolver
+   * @return this
+   */
+  public NodeModelExportContext variableMapResolver(VariableMapResolver value) {
+<span class="fc" id="L160">    this.variableMapResolver = value;</span>
+<span class="fc" id="L161">    return this;</span>
+  }
+
+  /**
+   * @return Version information from container, e.g. configured Maven plugin versions
+   */
+  public Map&lt;String, String&gt; getContainerVersionInfo() {
+<span class="fc" id="L168">    return this.containerVersionInfo;</span>
+  }
+
+  /**
+   * @param value Version information from container, e.g. configured Maven plugin versions
+   * @return this
+   */
+  public NodeModelExportContext containerVersionInfo(Map&lt;String, String&gt; value) {
+<span class="fc" id="L176">    this.containerVersionInfo = value;</span>
+<span class="fc" id="L177">    return this;</span>
+  }
+
+  /**
+   * @return List of configuration parameter names that contain sensitive data.
+   */
+  public Set&lt;String&gt; getSensitiveConfigParameters() {
+<span class="fc" id="L184">    return this.sensitiveConfigParameters;</span>
+  }
+
+  /**
+   * @param value List of configuration parameter names that contain sensitive data
+   * @return this
+   */
+  public NodeModelExportContext sensitiveConfigParameters(Set&lt;String&gt; value) {
+<span class="fc" id="L192">    this.sensitiveConfigParameters = value;</span>
+<span class="fc" id="L193">    return this;</span>
+  }
+
+  /**
+   * @return Model export configuration processor
+   */
+  public ModelExportConfigProcessor getModelExportConfigProcessor() {
+<span class="fc bfc" id="L200" title="All 2 branches covered.">    if (this.modelExportConfigProcessor == null) {</span>
+<span class="fc" id="L201">      this.modelExportConfigProcessor = new ModelExportConfigProcessor(getPluginContextOptions(), getSensitiveConfigParameters());</span>
+    }
+<span class="fc" id="L203">    return this.modelExportConfigProcessor;</span>
+  }
+
+  /**
+   * @return YAML representer
+   */
+  public YamlRepresenter getYamlRepresenter() {
+<span class="fc" id="L210">    return this.yamlRepresenter;</span>
+  }
+
+  /**
+   * @param value YAML representer
+   * @return this
+   */
+  public NodeModelExportContext yamlRepresenter(YamlRepresenter value) {
+<span class="fc" id="L218">    this.yamlRepresenter = value;</span>
+<span class="fc" id="L219">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

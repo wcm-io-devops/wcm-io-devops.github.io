@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NodeModelExport.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.export</a> &gt; <span class="el_source">NodeModelExport.java</span></div><h1>NodeModelExport.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.export;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.rits.cloning.Cloner;
+
+import io.wcm.devops.conga.generator.ContextProperties;
+import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+import io.wcm.devops.conga.generator.spi.export.NodeModelExportPlugin;
+import io.wcm.devops.conga.generator.spi.export.context.ExportNodeRoleData;
+import io.wcm.devops.conga.generator.spi.export.context.ExportNodeRoleTenantData;
+import io.wcm.devops.conga.generator.spi.export.context.NodeModelExportContext;
+import io.wcm.devops.conga.generator.spi.yaml.context.YamlRepresenter;
+import io.wcm.devops.conga.generator.util.VariableMapResolver;
+import io.wcm.devops.conga.generator.util.VariableStringResolver;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.model.environment.Node;
+import io.wcm.devops.conga.model.environment.Tenant;
+import io.wcm.devops.conga.model.util.MapMerger;
+
+/**
+ * Managers model exports via the model export plugins.
+ */
+public final class NodeModelExport {
+
+  private final File nodeDir;
+  private final Node node;
+  private final Environment environment;
+<span class="fc" id="L52">  private final List&lt;NodeModelExportPlugin&gt; nodeModelExportPlugins = new ArrayList&lt;&gt;();</span>
+  private final VariableStringResolver variableStringResolver;
+  private final VariableMapResolver variableMapResolver;
+  private final Map&lt;String, String&gt; containerVersionInfo;
+  private final PluginContextOptions pluginContextOptions;
+  private final Set&lt;String&gt; sensitiveConfigParameters;
+  private final YamlRepresenter yamlRepresenter;
+
+<span class="fc" id="L60">  private final List&lt;ExportNodeRoleData&gt; roleData = new ArrayList&lt;&gt;();</span>
+
+  /**
+   * @param nodeDir Target directory for node
+   * @param node Node
+   * @param environment Environment
+   * @param modelExport Model export
+   * @param variableStringResolver Variable string resolver
+   * @param variableMapResolver Variable map resolver
+   * @param containerVersionInfo Version information from container, e.g. configured Maven plugin versions
+   * @param pluginContextOptions Plugin context options
+   * @param sensitiveConfigParameters Combined list of all sensitive config parameter names from all roles in the
+   *          environment.
+   * @param yamlRepresenter YAML representer
+   */
+  public NodeModelExport(File nodeDir, Node node, Environment environment, ModelExport modelExport,
+      VariableStringResolver variableStringResolver, VariableMapResolver variableMapResolver,
+      Map&lt;String, String&gt; containerVersionInfo, PluginContextOptions pluginContextOptions,
+<span class="fc" id="L78">      Set&lt;String&gt; sensitiveConfigParameters, YamlRepresenter yamlRepresenter) {</span>
+<span class="fc" id="L79">    this.node = node;</span>
+<span class="fc" id="L80">    this.environment = environment;</span>
+<span class="fc" id="L81">    this.nodeDir = nodeDir;</span>
+<span class="fc" id="L82">    this.variableStringResolver = variableStringResolver;</span>
+<span class="fc" id="L83">    this.variableMapResolver = variableMapResolver;</span>
+<span class="fc" id="L84">    this.containerVersionInfo = containerVersionInfo;</span>
+<span class="fc" id="L85">    this.pluginContextOptions = pluginContextOptions;</span>
+<span class="fc" id="L86">    this.sensitiveConfigParameters = sensitiveConfigParameters;</span>
+<span class="fc" id="L87">    this.yamlRepresenter = yamlRepresenter;</span>
+
+    // get export plugins
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (modelExport != null) {</span>
+<span class="fc" id="L91">      List&lt;String&gt; nodeExportPlugins = modelExport.getNode();</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">      if (nodeExportPlugins != null) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (String nodeExportPlugin : nodeExportPlugins) {</span>
+<span class="fc" id="L94">          nodeModelExportPlugins.add(pluginContextOptions.getPluginManager().get(nodeExportPlugin, NodeModelExportPlugin.class));</span>
+<span class="fc" id="L95">        }</span>
+      }
+    }
+<span class="fc" id="L98">  }</span>
+
+  private boolean isActive() {
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    return !nodeModelExportPlugins.isEmpty();</span>
+  }
+
+  /**
+   * Add role information
+   * @param role Role name
+   * @param roleVariants Role variant name
+   * @param config Merged configuration (unresolved)
+   * @param sensitiveConfigParametersList List of configuration parameter names that contain sensitive data
+   * @return Node role data
+   */
+  public ExportNodeRoleData addRole(String role, List&lt;String&gt; roleVariants, Map&lt;String, Object&gt; config,
+      List&lt;String&gt; sensitiveConfigParametersList) {
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">    if (!isActive()) {</span>
+<span class="nc" id="L115">      return new ExportNodeRoleData();</span>
+    }
+
+    // clone config to make sure it is not tampered by the plugin
+<span class="fc" id="L119">    Map&lt;String, Object&gt; clonedConfig = Cloner.standard().deepClone(config);</span>
+
+    // resolve variables in configuration, and remove context properties
+<span class="fc" id="L122">    Map&lt;String, Object&gt; resolvedNodeConfig = variableMapResolver.resolve(clonedConfig, false);</span>
+
+    // generate tenants and tenant config
+<span class="fc" id="L125">    List&lt;ExportNodeRoleTenantData&gt; tenantData = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">    for (Tenant tenant : environment.getTenants()) {</span>
+<span class="fc" id="L127">      Map&lt;String, Object&gt; tenantConfig = MapMerger.merge(tenant.getConfig(), clonedConfig);</span>
+
+      // set tenant-specific context variables
+<span class="fc" id="L130">      tenantConfig.put(ContextProperties.TENANT, variableStringResolver.resolve(tenant.getTenant(), tenantConfig));</span>
+<span class="fc" id="L131">      tenantConfig.put(ContextProperties.TENANT_ROLES, tenant.getRoles());</span>
+
+      // resolve variables in configuration
+<span class="fc" id="L134">      Map&lt;String, Object&gt; resolvedTenantConfig = variableMapResolver.resolve(tenantConfig, false);</span>
+
+<span class="fc" id="L136">      tenantData.add(new ExportNodeRoleTenantData()</span>
+<span class="fc" id="L137">          .tenant(tenant.getTenant())</span>
+<span class="fc" id="L138">          .roles(tenant.getRoles())</span>
+<span class="fc" id="L139">          .config(resolvedTenantConfig));</span>
+<span class="fc" id="L140">    }</span>
+
+<span class="fc" id="L142">    ExportNodeRoleData item = new ExportNodeRoleData()</span>
+<span class="fc" id="L143">        .role(role)</span>
+<span class="fc" id="L144">        .roleVariant(roleVariants)</span>
+<span class="fc" id="L145">        .config(resolvedNodeConfig)</span>
+<span class="fc" id="L146">        .tenantData(tenantData);</span>
+<span class="fc" id="L147">    roleData.add(item);</span>
+<span class="fc" id="L148">    return item;</span>
+  }
+
+  /**
+   * Generate model YAML file.
+   */
+  public void generate() {
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">    if (!isActive()) {</span>
+<span class="nc" id="L156">      return;</span>
+    }
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    for (NodeModelExportPlugin plugin : nodeModelExportPlugins) {</span>
+<span class="fc" id="L160">      plugin.export(new NodeModelExportContext()</span>
+<span class="fc" id="L161">          .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L162">          .node(node)</span>
+<span class="fc" id="L163">          .environment(environment)</span>
+<span class="fc" id="L164">          .roleData(roleData)</span>
+<span class="fc" id="L165">          .nodeDir(nodeDir)</span>
+<span class="fc" id="L166">          .variableStringResolver(variableStringResolver)</span>
+<span class="fc" id="L167">          .variableMapResolver(variableMapResolver)</span>
+<span class="fc" id="L168">          .containerVersionInfo(containerVersionInfo)</span>
+<span class="fc" id="L169">          .sensitiveConfigParameters(sensitiveConfigParameters)</span>
+<span class="fc" id="L170">          .yamlRepresenter(yamlRepresenter));</span>
+<span class="fc" id="L171">    }</span>
+<span class="fc" id="L172">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

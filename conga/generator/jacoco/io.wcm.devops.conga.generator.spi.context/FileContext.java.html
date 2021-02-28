@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.spi.context</a> &gt; <span class="el_source">FileContext.java</span></div><h1>FileContext.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.spi.context;
+
+import java.io.File;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+
+import io.wcm.devops.conga.generator.util.FileUtil;
+
+/**
+ * File context for plugins.
+ */
+<span class="fc" id="L32">public final class FileContext {</span>
+
+  private File file;
+  private String canonicalPath;
+  private String charset;
+<span class="fc" id="L37">  private Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
+  private File targetDir;
+
+  /**
+   * @return File
+   */
+  public File getFile() {
+<span class="fc" id="L44">    return file;</span>
+  }
+
+  /**
+   * @param value File
+   * @return this
+   */
+  public FileContext file(File value) {
+<span class="fc" id="L52">    file = value;</span>
+<span class="fc" id="L53">    canonicalPath = FileUtil.getCanonicalPath(value);</span>
+<span class="fc" id="L54">    return this;</span>
+  }
+
+  /**
+   * @return Canonical path
+   */
+  public String getCanonicalPath() {
+<span class="fc" id="L61">    return canonicalPath;</span>
+  }
+
+  /**
+   * @return Charset
+   */
+  public String getCharset() {
+<span class="fc" id="L68">    return charset;</span>
+  }
+
+  /**
+   * @param value Charset
+   * @return this
+   */
+  public FileContext charset(String value) {
+<span class="fc" id="L76">    charset = value;</span>
+<span class="fc" id="L77">    return this;</span>
+  }
+
+  /**
+   * @param value Charset
+   * @return this
+   */
+  public FileContext charset(Charset value) {
+<span class="fc" id="L85">    charset = value.name();</span>
+<span class="fc" id="L86">    return this;</span>
+  }
+
+  /**
+   * @return Model options
+   */
+  public Map&lt;String, Object&gt; getModelOptions() {
+<span class="fc" id="L93">    return this.modelOptions;</span>
+  }
+
+  /**
+   * @param value Model options
+   * @return this
+   */
+  public FileContext modelOptions(Map&lt;String, Object&gt; value) {
+<span class="fc" id="L101">    this.modelOptions = value;</span>
+<span class="fc" id="L102">    return this;</span>
+  }
+
+  /**
+   * @return Target directory for generated configuration
+   */
+  public File getTargetDir() {
+<span class="nc" id="L109">    return this.targetDir;</span>
+  }
+
+  /**
+   * @param value Target directory for generated configuration
+   * @return this
+   */
+  public FileContext targetDir(File value) {
+<span class="fc" id="L117">    this.targetDir = value;</span>
+<span class="fc" id="L118">    return this;</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="nc" id="L123">    return canonicalPath;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

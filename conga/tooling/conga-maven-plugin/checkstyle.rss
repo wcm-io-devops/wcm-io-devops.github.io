@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>CONGA Maven Plugin - Checkstyle report</title>
+    <link>https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin/</link>
+    <description>CONGA Maven Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2015 - 2021 wcm.io DevOps</copyright>
+    <item>
+      <title>File: 23,
+             Errors: 0,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.DependencyVersionBuilder.java">io/wcm/devops/conga/tooling/maven/plugin/DependencyVersionBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.DefinitionPackageMojo.java">io/wcm/devops/conga/tooling/maven/plugin/DefinitionPackageMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.MavenContext.java">io/wcm/devops/conga/tooling/maven/plugin/util/MavenContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.valueprovider.MavenPropertyValueProviderPlugin.java">io/wcm/devops/conga/tooling/maven/plugin/valueprovider/MavenPropertyValueProviderPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.GenerateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.NoValueProviderInRoleValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/NoValueProviderInRoleValidator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.PathUtil.java">io/wcm/devops/conga/tooling/maven/plugin/util/PathUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.urlfile.MavenUrlFilePlugin.java">io/wcm/devops/conga/tooling/maven/plugin/urlfile/MavenUrlFilePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.ModelValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/ModelValidator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper.java">io/wcm/devops/conga/tooling/maven/plugin/util/MavenArtifactHelper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.DefinitionValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/DefinitionValidator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.PluginConfigUtil.java">io/wcm/devops/conga/tooling/maven/plugin/util/PluginConfigUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil.java">io/wcm/devops/conga/tooling/maven/plugin/util/ClassLoaderUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.MavenSlf4jLogFacade.java">io/wcm/devops/conga/tooling/maven/plugin/MavenSlf4jLogFacade.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.java">io/wcm/devops/conga/tooling/maven/plugin/BuildConstants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.PackageMojo.java">io/wcm/devops/conga/tooling/maven/plugin/PackageMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.HelpMojo.java">io/wcm/devops/conga/tooling/maven/plugin/HelpMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.AbstractCongaMojo.java">io/wcm/devops/conga/tooling/maven/plugin/AbstractCongaMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.RoleTemplateFileValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/RoleTemplateFileValidator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/TemplateValidator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo.java">io/wcm/devops/conga/tooling/maven/plugin/GenerateVersionInfoMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.ValidateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil.java">io/wcm/devops/conga/tooling/maven/plugin/util/VersionInfoUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

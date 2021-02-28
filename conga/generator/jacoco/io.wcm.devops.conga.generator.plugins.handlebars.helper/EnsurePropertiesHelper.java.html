@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnsurePropertiesHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.plugins.handlebars.helper</a> &gt; <span class="el_source">EnsurePropertiesHelper.java</span></div><h1>EnsurePropertiesHelper.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2017 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.plugins.handlebars.helper;
+
+import java.io.IOException;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.github.jknack.handlebars.Options;
+
+import io.wcm.devops.conga.generator.spi.handlebars.HelperPlugin;
+import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
+
+/**
+ * Handlebars helper that checks if all given property names have a value set.
+ * If not, an exception is thrown containing the missing property names.
+ */
+<span class="fc" id="L37">public final class EnsurePropertiesHelper implements HelperPlugin&lt;Object&gt; {</span>
+
+  /**
+   * Plugin/Helper name
+   */
+  public static final String NAME = &quot;ensureProperties&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L46">    return NAME;</span>
+  }
+
+  @Override
+  public Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
+<span class="fc" id="L51">    Set&lt;String&gt; missingPropertyNames = new TreeSet&lt;&gt;();</span>
+<span class="fc" id="L52">    checkProperty(context, options, missingPropertyNames);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">    for (Object propertyNameExpression : options.params) {</span>
+<span class="fc" id="L54">      checkProperty(propertyNameExpression, options, missingPropertyNames);</span>
+    }
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    if (!missingPropertyNames.isEmpty()) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">      if (missingPropertyNames.size() == 1) {</span>
+<span class="fc" id="L58">        throw new IOException(&quot;Mandatory property not set: &quot; + missingPropertyNames.iterator().next());</span>
+      }
+      else {
+<span class="fc" id="L61">        throw new IOException(&quot;Mandatory properties not set: &quot; + StringUtils.join(missingPropertyNames, &quot;, &quot;));</span>
+      }
+    }
+<span class="fc" id="L64">    return null;</span>
+  }
+
+  private void checkProperty(Object propertyNameExpression, Options options, Set&lt;String&gt; missingPropertyNames) {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (propertyNameExpression == null) {</span>
+<span class="fc" id="L69">      return;</span>
+    }
+<span class="fc" id="L71">    String propertyName = propertyNameExpression.toString();</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">    if (StringUtils.isBlank(propertyName)) {</span>
+<span class="nc" id="L73">      return;</span>
+    }
+<span class="fc" id="L75">    Object value = options.get(propertyName);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L77">      missingPropertyNames.add(propertyName);</span>
+    }
+<span class="fc" id="L79">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

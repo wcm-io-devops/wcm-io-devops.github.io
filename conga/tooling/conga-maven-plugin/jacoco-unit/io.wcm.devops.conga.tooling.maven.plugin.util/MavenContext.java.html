@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MavenContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin.util</a> &gt; <span class="el_source">MavenContext.java</span></div><h1>MavenContext.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin.util;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.maven.artifact.resolver.ResolutionErrorHandler;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.sonatype.plexus.build.incremental.BuildContext;
+
+/**
+ * Contains maven-specific context objects.
+ */
+<span class="fc" id="L37">public final class MavenContext {</span>
+
+  private MavenProject project;
+  private MavenSession session;
+  private org.apache.maven.repository.RepositorySystem repositorySystem;
+  private ResolutionErrorHandler resolutionErrorHandler;
+  private BuildContext buildContext;
+  private Log log;
+  private RepositorySystem repoSystem;
+  private RepositorySystemSession repoSession;
+  private List&lt;RemoteRepository&gt; remoteRepos;
+  private Map&lt;String, String&gt; artifactTypeMappings;
+
+  /**
+   * @return Maven project
+   */
+  public MavenProject getProject() {
+<span class="fc" id="L54">    return this.project;</span>
+  }
+
+  /**
+   * @param value Maven project
+   * @return this
+   */
+  public MavenContext project(MavenProject value) {
+<span class="fc" id="L62">    this.project = value;</span>
+<span class="fc" id="L63">    return this;</span>
+  }
+
+  /**
+   * @return Maven Session
+   */
+  public MavenSession getSession() {
+<span class="nc" id="L70">    return this.session;</span>
+  }
+
+  /**
+   * @param value Maven Session
+   * @return this
+   */
+  public MavenContext session(MavenSession value) {
+<span class="nc" id="L78">    this.session = value;</span>
+<span class="nc" id="L79">    return this;</span>
+  }
+
+  /**
+   * @return Repository system
+   */
+  public org.apache.maven.repository.RepositorySystem getRepositorySystem() {
+<span class="nc" id="L86">    return this.repositorySystem;</span>
+  }
+
+  /**
+   * @param value Repository system
+   * @return this
+   */
+  public MavenContext setRepositorySystem(org.apache.maven.repository.RepositorySystem value) {
+<span class="nc" id="L94">    this.repositorySystem = value;</span>
+<span class="nc" id="L95">    return this;</span>
+  }
+
+  /**
+   * @return Resolution error handler
+   */
+  public ResolutionErrorHandler getResolutionErrorHandler() {
+<span class="nc" id="L102">    return this.resolutionErrorHandler;</span>
+  }
+
+  /**
+   * @param value Resolution error handler
+   * @return this
+   */
+  public MavenContext resolutionErrorHandler(ResolutionErrorHandler value) {
+<span class="nc" id="L110">    this.resolutionErrorHandler = value;</span>
+<span class="nc" id="L111">    return this;</span>
+  }
+
+  /**
+   * @return Build context
+   */
+  public BuildContext getBuildContext() {
+<span class="nc" id="L118">    return this.buildContext;</span>
+  }
+
+  /**
+   * @param value Build context
+   * @return this
+   */
+  public MavenContext buildContext(BuildContext value) {
+<span class="nc" id="L126">    this.buildContext = value;</span>
+<span class="nc" id="L127">    return this;</span>
+  }
+
+  /**
+   * @return Log
+   */
+  public Log getLog() {
+<span class="nc" id="L134">    return this.log;</span>
+  }
+
+  /**
+   * @param value Log
+   * @return this
+   */
+  public MavenContext log(Log value) {
+<span class="nc" id="L142">    this.log = value;</span>
+<span class="nc" id="L143">    return this;</span>
+  }
+
+  /**
+   * @return Repository system
+   */
+  public RepositorySystem getRepoSystem() {
+<span class="nc" id="L150">    return this.repoSystem;</span>
+  }
+
+  /**
+   * @param value Repository system
+   * @return this
+   */
+  public MavenContext repoSystem(RepositorySystem value) {
+<span class="nc" id="L158">    this.repoSystem = value;</span>
+<span class="nc" id="L159">    return this;</span>
+  }
+
+  /**
+   * @return Repository session
+   */
+  public RepositorySystemSession getRepoSession() {
+<span class="nc" id="L166">    return this.repoSession;</span>
+  }
+
+  /**
+   * @param value Repository session
+   * @return this
+   */
+  public MavenContext repoSession(RepositorySystemSession value) {
+<span class="nc" id="L174">    this.repoSession = value;</span>
+<span class="nc" id="L175">    return this;</span>
+  }
+
+  /**
+   * @return Remote repositories
+   */
+  public List&lt;RemoteRepository&gt; getRemoteRepos() {
+<span class="nc" id="L182">    return this.remoteRepos;</span>
+  }
+
+  /**
+   * @param value Remote repositories
+   * @return this
+   */
+  public MavenContext remoteRepos(List&lt;RemoteRepository&gt; value) {
+<span class="nc" id="L190">    this.remoteRepos = value;</span>
+<span class="nc" id="L191">    return this;</span>
+  }
+
+  /**
+   * @return Artifact type mappings
+   */
+  public Map&lt;String, String&gt; getArtifactTypeMappings() {
+<span class="nc" id="L198">    return this.artifactTypeMappings;</span>
+  }
+
+  /**
+   * @param value Artifact type mappings
+   * @return this
+   */
+  public MavenContext artifactTypeMappings(Map&lt;String, String&gt; value) {
+<span class="nc" id="L206">    this.artifactTypeMappings = value;</span>
+<span class="nc" id="L207">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

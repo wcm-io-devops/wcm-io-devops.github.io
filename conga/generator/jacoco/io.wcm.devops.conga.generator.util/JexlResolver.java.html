@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JexlResolver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.util</a> &gt; <span class="el_source">JexlResolver.java</span></div><h1>JexlResolver.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.util;
+
+import static io.wcm.devops.conga.generator.util.VariableStringResolver.EXPRESSION_POS_DOLLAR_SIGN;
+import static io.wcm.devops.conga.generator.util.VariableStringResolver.EXPRESSION_POS_EXPRESSION;
+import static io.wcm.devops.conga.generator.util.VariableStringResolver.MULTI_EXPRESSION_PATTERN;
+import static io.wcm.devops.conga.generator.util.VariableStringResolver.VARIABLE_PATTERN;
+
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+
+import org.apache.commons.jexl3.JexlBuilder;
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JexlEngine;
+import org.apache.commons.jexl3.JexlException;
+import org.apache.commons.jexl3.JexlExpression;
+import org.apache.commons.jexl3.MapContext;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.ImmutableMap;
+
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.model.util.MapMerger;
+import io.wcm.devops.conga.model.util.MapSplitter;
+import io.wcm.devops.conga.model.util.MapSplitter.SplitResult;
+
+final class JexlResolver {
+
+  private static final int CACHE_SIZE = 1024;
+
+  private final JexlEngine jexl;
+  private final VariableMapResolver variableMapResolver;
+
+<span class="fc" id="L53">  private static final Map&lt;String, Object&gt; JEXL_FUNCTION_NS = ImmutableMap.of(</span>
+      &quot;stringUtils&quot;, StringUtils.class);
+
+<span class="fc" id="L56">  JexlResolver(VariableMapResolver variableMapResolver) {</span>
+<span class="fc" id="L57">    this.jexl = new JexlBuilder()</span>
+<span class="fc" id="L58">        .cache(CACHE_SIZE)</span>
+<span class="fc" id="L59">        .namespaces(JEXL_FUNCTION_NS)</span>
+<span class="fc" id="L60">        .create();</span>
+<span class="fc" id="L61">    this.variableMapResolver = variableMapResolver;</span>
+<span class="fc" id="L62">  }</span>
+
+  public Object resolve(String expressionString, Map&lt;String, Object&gt; variables) {
+<span class="fc" id="L65">    Map&lt;String, Object&gt; resolvedVariables = resolveMapWithoutCycles(variables);</span>
+    try {
+<span class="fc" id="L67">      JexlExpression expression = jexl.createExpression(expressionString);</span>
+<span class="fc" id="L68">      JexlContext context = new MapContext(resolvedVariables);</span>
+<span class="fc" id="L69">      return expression.evaluate(context);</span>
+    }
+<span class="fc" id="L71">    catch (JexlException ex) {</span>
+<span class="fc" id="L72">      throw new GeneratorException(&quot;Unable to parse expression: ${&quot; + expressionString + &quot;}: &quot; + ex.getMessage(), ex);</span>
+    }
+  }
+
+  private Map&lt;String, Object&gt; resolveMapWithoutCycles(Map&lt;String, Object&gt; variables) {
+
+    // split out variables with values containing expressions that are not simple variable references
+<span class="fc" id="L79">    SplitResult splitResult = MapSplitter.splitMap(variables, entry -&gt; {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">      if (entry.getValue() instanceof List) {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (Object item : (List)entry.getValue()) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">          if (item instanceof String) {</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            if (hasJexlExpresssions((String)item)) {</span>
+<span class="nc" id="L84">              return false;</span>
+            }
+          }
+<span class="fc" id="L87">        }</span>
+      }
+<span class="fc bfc" id="L89" title="All 2 branches covered.">      else if (entry.getValue() instanceof String) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        return !hasJexlExpresssions((String)entry.getValue());</span>
+      }
+<span class="fc" id="L92">      return true;</span>
+    });
+
+    // resolve simple variable references inside map
+<span class="fc" id="L96">    Map&lt;String, Object&gt; resolvedVariables = variableMapResolver.resolve(splitResult.getMatching());</span>
+
+    // add back variables with complex expressions without resolving them
+<span class="fc" id="L99">    resolvedVariables = MapMerger.merge(resolvedVariables, splitResult.getUnmatching());</span>
+
+<span class="fc" id="L101">    return resolvedVariables;</span>
+  }
+
+  private boolean hasJexlExpresssions(String expressionString) {
+<span class="fc" id="L105">    Matcher matcher = MULTI_EXPRESSION_PATTERN.matcher(expressionString);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    while (matcher.find()) {</span>
+
+<span class="fc" id="L108">      boolean escapedVariable = StringUtils.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
+<span class="fc" id="L109">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+
+      // keep escaped variables intact
+<span class="fc bfc" id="L112" title="All 2 branches covered.">      if (!escapedVariable) {</span>
+<span class="fc" id="L113">        Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+        // if expression found that matches not the variable pattern this string contains Jexl expressions
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!variableMatcher.matches()) {</span>
+<span class="fc" id="L116">          return true;</span>
+        }
+      }
+
+<span class="fc" id="L120">    }</span>
+<span class="fc" id="L121">    return false;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

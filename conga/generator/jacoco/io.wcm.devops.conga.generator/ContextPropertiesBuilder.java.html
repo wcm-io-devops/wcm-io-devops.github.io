@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContextPropertiesBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator</a> &gt; <span class="el_source">ContextPropertiesBuilder.java</span></div><h1>ContextPropertiesBuilder.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator;
+
+import static io.wcm.devops.conga.generator.ContextProperties.ENVIRONMENT;
+import static io.wcm.devops.conga.generator.ContextProperties.NODE;
+import static io.wcm.devops.conga.generator.ContextProperties.NODES;
+import static io.wcm.devops.conga.generator.ContextProperties.NODES_BY_ROLE;
+import static io.wcm.devops.conga.generator.ContextProperties.NODES_BY_ROLE_VARIANT;
+import static io.wcm.devops.conga.generator.ContextProperties.ROLE;
+import static io.wcm.devops.conga.generator.ContextProperties.ROLE_VARIANT;
+import static io.wcm.devops.conga.generator.ContextProperties.ROLE_VARIANTS;
+import static io.wcm.devops.conga.generator.ContextProperties.TENANT;
+import static io.wcm.devops.conga.generator.ContextProperties.TENANTS;
+import static io.wcm.devops.conga.generator.ContextProperties.TENANTS_BY_ROLE;
+import static io.wcm.devops.conga.generator.ContextProperties.TENANT_ROLES;
+import static io.wcm.devops.conga.generator.ContextProperties.VERSION;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+import com.rits.cloning.Cloner;
+
+import io.wcm.devops.conga.generator.util.VariableObjectTreeResolver;
+import io.wcm.devops.conga.generator.util.VariableStringResolver;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.model.environment.Node;
+import io.wcm.devops.conga.model.environment.NodeRole;
+import io.wcm.devops.conga.model.environment.Tenant;
+import io.wcm.devops.conga.model.util.MapMerger;
+
+/**
+ * Builds context variables
+ */
+public final class ContextPropertiesBuilder {
+
+<span class="fc" id="L58">  static final Map&lt;String, Object&gt; EMPTY_CONTEXT_VARIABLES = ImmutableMap.&lt;String, Object&gt;builder()</span>
+<span class="fc" id="L59">      .put(VERSION, &quot;&quot;)</span>
+<span class="fc" id="L60">      .put(ENVIRONMENT, &quot;&quot;)</span>
+<span class="fc" id="L61">      .put(NODES, Collections.EMPTY_LIST)</span>
+<span class="fc" id="L62">      .put(NODES_BY_ROLE, Collections.EMPTY_MAP)</span>
+<span class="fc" id="L63">      .put(NODES_BY_ROLE_VARIANT, Collections.EMPTY_MAP)</span>
+<span class="fc" id="L64">      .put(TENANTS, Collections.EMPTY_LIST)</span>
+<span class="fc" id="L65">      .put(TENANTS_BY_ROLE, Collections.EMPTY_MAP)</span>
+<span class="fc" id="L66">      .put(ROLE, &quot;&quot;)</span>
+<span class="fc" id="L67">      .put(ROLE_VARIANT, &quot;&quot;)</span>
+<span class="fc" id="L68">      .put(NODE, &quot;&quot;)</span>
+<span class="fc" id="L69">      .put(TENANT, &quot;&quot;)</span>
+<span class="fc" id="L70">      .put(TENANT_ROLES, Collections.EMPTY_LIST)</span>
+<span class="fc" id="L71">      .build();</span>
+
+  private ContextPropertiesBuilder() {
+    // static methods only
+  }
+
+  /**
+   * Build context variables that are global to the environment.
+   * @param environmentName Environment name
+   * @param environment Environment
+   * @param version Environment version
+   * @param variableObjectTreeResolver Variable object tree resolver
+   * @param variableStringResolver Variable string resolver
+   * @return Context variables map
+   */
+  public static Map&lt;String, Object&gt; buildEnvironmentContextVariables(String environmentName,
+      Environment environment, String version,
+      VariableObjectTreeResolver variableObjectTreeResolver, VariableStringResolver variableStringResolver) {
+<span class="fc" id="L89">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;(EMPTY_CONTEXT_VARIABLES);</span>
+
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (version != null) {</span>
+<span class="fc" id="L92">      map.put(VERSION, version);</span>
+    }
+<span class="fc" id="L94">    map.put(ENVIRONMENT, environmentName);</span>
+
+    // clone environment before resolving variables to make sure they are resolved only for this context, not for file generation
+<span class="fc" id="L97">    Environment clonedEnvironemnt = Cloner.standard().deepClone(environment);</span>
+
+    // resolve all variables at any level in environment
+<span class="fc" id="L100">    variableObjectTreeResolver.resolve(clonedEnvironemnt);</span>
+
+    // list of nodes
+<span class="fc" id="L103">    map.put(NODES, clonedEnvironemnt.getNodes());</span>
+<span class="fc" id="L104">    Map&lt;String, List&lt;Node&gt;&gt; nodesByRole = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L105">    Map&lt;String, Map&lt;String, List&lt;Node&gt;&gt;&gt; nodesByRoleVariant = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    for (Node node : clonedEnvironemnt.getNodes()) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">      for (NodeRole nodeRole : node.getRoles()) {</span>
+<span class="fc" id="L108">        List&lt;Node&gt; nodes = nodesByRole.get(nodeRole.getRole());</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (nodes == null) {</span>
+<span class="fc" id="L110">          nodes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L111">          nodesByRole.put(nodeRole.getRole(), nodes);</span>
+        }
+<span class="fc" id="L113">        nodes.add(node);</span>
+
+<span class="fc" id="L115">        List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (String variant : variants) {</span>
+<span class="fc" id="L117">          Map&lt;String, List&lt;Node&gt;&gt; nodesByVariant = nodesByRoleVariant.get(nodeRole.getRole());</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">          if (nodesByVariant == null) {</span>
+<span class="fc" id="L119">            nodesByVariant = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L120">            nodesByRoleVariant.put(nodeRole.getRole(), nodesByVariant);</span>
+          }
+<span class="fc" id="L122">          List&lt;Node&gt; variantNodes = nodesByVariant.get(variant);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">          if (variantNodes == null) {</span>
+<span class="fc" id="L124">            variantNodes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L125">            nodesByVariant.put(variant, variantNodes);</span>
+          }
+<span class="fc" id="L127">          variantNodes.add(node);</span>
+<span class="fc" id="L128">        }</span>
+<span class="fc" id="L129">      }</span>
+<span class="fc" id="L130">    }</span>
+<span class="fc" id="L131">    map.put(NODES_BY_ROLE, nodesByRole);</span>
+<span class="fc" id="L132">    map.put(NODES_BY_ROLE_VARIANT, nodesByRoleVariant);</span>
+
+    // list of tenants
+<span class="fc" id="L135">    map.put(TENANTS, clonedEnvironemnt.getTenants());</span>
+<span class="fc" id="L136">    Map&lt;String, List&lt;Tenant&gt;&gt; tenantsByRole = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">    for (Tenant tenant : clonedEnvironemnt.getTenants()) {</span>
+
+      // resolve placeholders in tentant name
+<span class="fc" id="L140">      Map&lt;String, Object&gt; tenantConfig = MapMerger.merge(clonedEnvironemnt.getConfig(), tenant.getConfig());</span>
+<span class="fc" id="L141">      String tenantName = variableStringResolver.resolveString(tenant.getTenant(), tenantConfig);</span>
+<span class="fc" id="L142">      tenant.setTenant(tenantName);</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">      for (String tenantRoleName : tenant.getRoles()) {</span>
+<span class="fc" id="L145">        List&lt;Tenant&gt; tenants = tenantsByRole.get(tenantRoleName);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (tenants == null) {</span>
+<span class="fc" id="L147">          tenants = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L148">          tenantsByRole.put(tenantRoleName, tenants);</span>
+        }
+<span class="fc" id="L150">        tenants.add(tenant);</span>
+<span class="fc" id="L151">      }</span>
+<span class="fc" id="L152">    }</span>
+<span class="fc" id="L153">    map.put(TENANTS_BY_ROLE, tenantsByRole);</span>
+
+<span class="fc" id="L155">    return map;</span>
+  }
+
+  /**
+   * Build context variables specific for a node and role/variant.
+   * @param node Node
+   * @param nodeRole Node role
+   * @return Context variables map
+   */
+  public static Map&lt;String, Object&gt; buildCurrentContextVariables(Node node, NodeRole nodeRole) {
+<span class="fc" id="L165">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L166">    map.put(ROLE, nodeRole.getRole());</span>
+
+<span class="fc" id="L168">    List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">    if (variants.size() == 1) {</span>
+<span class="fc" id="L170">      map.put(ROLE_VARIANT, variants.get(0));</span>
+    }
+    else {
+<span class="fc" id="L173">      map.put(ROLE_VARIANT, null);</span>
+    }
+<span class="fc" id="L175">    map.put(ROLE_VARIANTS, variants);</span>
+
+<span class="fc" id="L177">    map.put(NODE, node.getNode());</span>
+<span class="fc" id="L178">    return map;</span>
+  }
+
+  /**
+   * Removes all context variables.
+   * @param config Configuration
+   * @return Configuration
+   */
+  public static Map&lt;String, Object&gt; removeContextVariables(Map&lt;String, Object&gt; config) {
+<span class="fc" id="L187">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;(config);</span>
+<span class="fc" id="L188">    map.remove(VERSION);</span>
+<span class="fc" id="L189">    map.remove(ENVIRONMENT);</span>
+<span class="fc" id="L190">    map.remove(NODES);</span>
+<span class="fc" id="L191">    map.remove(NODES_BY_ROLE);</span>
+<span class="fc" id="L192">    map.remove(NODES_BY_ROLE_VARIANT);</span>
+<span class="fc" id="L193">    map.remove(TENANTS);</span>
+<span class="fc" id="L194">    map.remove(TENANTS_BY_ROLE);</span>
+<span class="fc" id="L195">    map.remove(ROLE);</span>
+<span class="fc" id="L196">    map.remove(ROLE_VARIANT);</span>
+<span class="fc" id="L197">    map.remove(NODE);</span>
+<span class="fc" id="L198">    map.remove(TENANT);</span>
+<span class="fc" id="L199">    map.remove(TENANT_ROLES);</span>
+<span class="fc" id="L200">    return map;</span>
+  }
+
+  /**
+   * Get map with all context variables set to empty values.
+   * @return Map with context variables
+   */
+  public static Map&lt;String, Object&gt; getEmptyContextVariables() {
+<span class="fc" id="L208">    return EMPTY_CONTEXT_VARIABLES;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

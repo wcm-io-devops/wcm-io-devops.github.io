@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LineEndingConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.util</a> &gt; <span class="el_source">LineEndingConverter.java</span></div><h1>LineEndingConverter.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.util;
+
+import java.util.regex.Pattern;
+
+import io.wcm.devops.conga.model.shared.LineEndings;
+
+/**
+ * Utility methods for handling line endings in files.
+ */
+public final class LineEndingConverter {
+
+  /**
+   * Unix line pattern
+   */
+<span class="fc" id="L34">  private static final Pattern PATTERN_UNIX = Pattern.compile(Pattern.quote(LineEndings.unix.getLineEnding()));</span>
+
+  /**
+   * Windows line ending regex pattern
+   */
+<span class="fc" id="L39">  private static final Pattern PATTERN_WINDOWS = Pattern.compile(Pattern.quote(LineEndings.windows.getLineEnding()));</span>
+
+  /**
+   * MacOS line ending pattern
+   */
+<span class="fc" id="L44">  private static final Pattern PATTERN_MACOS_LEGACY = Pattern.compile(Pattern.quote(LineEndings.macos.getLineEnding()));</span>
+
+  private LineEndingConverter() {
+    // static constants and methods only
+  }
+
+  /**
+   * Normalizes all line endings that may be Windows or MacOS-style and converts them to Unix-style line endings.
+   * @param value String containing any line endings.
+   * @return String containing only unix line endings.
+   */
+  public static String normalizeToUnix(String value) {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L57">      return null;</span>
+    }
+<span class="fc" id="L59">    String partialConverted = PATTERN_WINDOWS.matcher(value).replaceAll(LineEndings.unix.getLineEnding());</span>
+<span class="fc" id="L60">    return PATTERN_MACOS_LEGACY.matcher(partialConverted).replaceAll(LineEndings.unix.getLineEnding());</span>
+  }
+
+  /**
+   * Converts all unix line endings to the given line ending style.
+   * @param normalizedValue String with line endings normalized to Unix-style
+   * @param lineEndings Line ending style.
+   * @return String with the given line ending style.
+   */
+  public static String convertTo(String normalizedValue, LineEndings lineEndings) {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (normalizedValue == null) {</span>
+<span class="fc" id="L71">      return null;</span>
+    }
+<span class="fc bfc" id="L73" title="All 4 branches covered.">    if (lineEndings == null || lineEndings == LineEndings.unix) {</span>
+<span class="fc" id="L74">      return normalizedValue;</span>
+    }
+<span class="fc" id="L76">    return PATTERN_UNIX.matcher(normalizedValue).replaceAll(lineEndings.getLineEnding());</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

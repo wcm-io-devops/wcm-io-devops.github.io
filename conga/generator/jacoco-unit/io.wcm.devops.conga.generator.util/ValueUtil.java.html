@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ValueUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.util</a> &gt; <span class="el_source">ValueUtil.java</span></div><h1>ValueUtil.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2017 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+/**
+ * Value utilities.
+ */
+public final class ValueUtil {
+
+  private static final String LIST_SEPARATOR = &quot;,&quot;;
+
+  private ValueUtil() {
+    // static methods only
+  }
+
+  /**
+   * Parses a string value and converts it to a value object (or list).
+   * Supports String, Number, Boolean, and lists of those separated by &quot;,&quot;.
+   * @param valueString Value string.
+   * @return Parsed value
+   */
+  public static Object stringToValue(String valueString) {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">    if (valueString == null) {</span>
+<span class="fc" id="L50">      return null;</span>
+    }
+<span class="fc bfc" id="L52" title="All 2 branches covered.">    else if (StringUtils.contains(valueString, LIST_SEPARATOR)) {</span>
+<span class="fc" id="L53">      return stringToValueList(valueString);</span>
+    }
+<span class="fc bfc" id="L55" title="All 2 branches covered.">    else if (StringUtils.equalsIgnoreCase(valueString, &quot;true&quot;)) {</span>
+<span class="fc" id="L56">      return true;</span>
+    }
+<span class="fc bfc" id="L58" title="All 2 branches covered.">    else if (StringUtils.equalsIgnoreCase(valueString, &quot;false&quot;)) {</span>
+<span class="fc" id="L59">      return false;</span>
+    }
+<span class="fc bfc" id="L61" title="All 2 branches covered.">    else if (NumberUtils.isCreatable(valueString)) {</span>
+<span class="fc" id="L62">      return NumberUtils.createNumber(valueString);</span>
+    }
+    else {
+<span class="fc" id="L65">      return valueString;</span>
+    }
+  }
+
+  private static Object stringToValueList(String valueStringList) {
+<span class="fc" id="L70">    List&lt;Object&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L71">    String[] valueStrings = StringUtils.splitPreserveAllTokens(valueStringList, LIST_SEPARATOR);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    for (String valueString : valueStrings) {</span>
+<span class="fc" id="L73">      list.add(stringToValue(valueString));</span>
+    }
+<span class="fc" id="L75">    return list;</span>
+  }
+
+  /**
+   * Convert a value to it's string representation.
+   * @param value Value
+   * @return String representation
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public static String valueToString(Object value) {
+<span class="fc bfc" id="L85" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L86">      return &quot;&quot;;</span>
+    }
+<span class="fc bfc" id="L88" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L89">      StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">      for (Object item : ((List)value)) {</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc" id="L92">          sb.append(&quot;,&quot;);</span>
+        }
+<span class="fc" id="L94">        sb.append(valueToString(item));</span>
+<span class="fc" id="L95">      }</span>
+<span class="fc" id="L96">      return sb.toString();</span>
+    }
+<span class="fc bfc" id="L98" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L99">      StringBuilder sb = new StringBuilder();</span>
+      // use sorted map to ensure consistent order of keys
+<span class="fc" id="L101">      SortedMap&lt;Object, Object&gt; sortedMap = new TreeMap&lt;&gt;((Map&lt;Object, Object&gt;)value);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">      for (Map.Entry&lt;Object, Object&gt; entry : sortedMap.entrySet()) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc" id="L104">          sb.append(&quot;,&quot;);</span>
+        }
+<span class="fc" id="L106">        sb.append(valueToString(entry.getKey()));</span>
+<span class="fc" id="L107">        sb.append(&quot;=&quot;);</span>
+<span class="fc" id="L108">        sb.append(valueToString(entry.getValue()));</span>
+<span class="fc" id="L109">      }</span>
+<span class="fc" id="L110">      return sb.toString();</span>
+    }
+    else {
+<span class="fc" id="L113">      return value.toString();</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

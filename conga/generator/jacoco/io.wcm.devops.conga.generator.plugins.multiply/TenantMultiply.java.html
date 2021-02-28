@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TenantMultiply.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.plugins.multiply</a> &gt; <span class="el_source">TenantMultiply.java</span></div><h1>TenantMultiply.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.plugins.multiply;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
+import io.wcm.devops.conga.generator.ContextProperties;
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.spi.MultiplyPlugin;
+import io.wcm.devops.conga.generator.spi.context.MultiplyContext;
+import io.wcm.devops.conga.model.environment.Tenant;
+import io.wcm.devops.conga.model.util.MapMerger;
+
+/**
+ * Multiplies a file for each tenant with a matching tenant role.
+ */
+<span class="fc" id="L38">public final class TenantMultiply implements MultiplyPlugin {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;tenant&quot;;
+
+  static final String ROLES_PROPERTY = &quot;roles&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L49">    return NAME;</span>
+  }
+
+  @Override
+  public List&lt;Map&lt;String, Object&gt;&gt; multiply(MultiplyContext context) {
+<span class="fc" id="L54">    List&lt;Map&lt;String, Object&gt;&gt; contexts = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    for (Tenant tenant : context.getEnvironment().getTenants()) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">      if (StringUtils.isEmpty(tenant.getTenant())) {</span>
+<span class="fc" id="L58">        throw new GeneratorException(&quot;Tenant without tenant name detected.&quot;);</span>
+      }
+<span class="fc bfc" id="L60" title="All 2 branches covered.">      if (acceptTenant(tenant, context.getRoleFile().getMultiplyOptions())) {</span>
+<span class="fc" id="L61">        Map&lt;String, Object&gt; mergedConfig = MapMerger.merge(tenant.getConfig(), context.getConfig());</span>
+
+        // set tenant-specific context variables
+<span class="fc" id="L64">        mergedConfig.put(ContextProperties.TENANT, context.getVariableStringResolver().resolve(tenant.getTenant(), mergedConfig));</span>
+<span class="fc" id="L65">        mergedConfig.put(ContextProperties.TENANT_ROLES, tenant.getRoles());</span>
+
+<span class="fc" id="L67">        contexts.add(mergedConfig);</span>
+      }
+<span class="fc" id="L69">    }</span>
+
+<span class="fc" id="L71">    return contexts;</span>
+  }
+
+  /**
+   * Ensures that required roles match for the given tenant.
+   * @param tenant Tenant
+   * @param multiplyOptions Options with required roles.
+   * @return true if matches
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  private boolean acceptTenant(Tenant tenant, Map&lt;String, Object&gt; multiplyOptions) {
+<span class="fc" id="L82">    List&lt;String&gt; roles = (List&lt;String&gt;)multiplyOptions.get(ROLES_PROPERTY);</span>
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">    if (roles != null &amp;&amp; !roles.isEmpty()) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">      for (String role : roles) {</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (tenant.getRoles().contains(role)) {</span>
+<span class="fc" id="L86">          return true;</span>
+        }
+<span class="fc" id="L88">      }</span>
+<span class="fc" id="L89">      return false;</span>
+    }
+    else {
+<span class="fc" id="L92">      return true;</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

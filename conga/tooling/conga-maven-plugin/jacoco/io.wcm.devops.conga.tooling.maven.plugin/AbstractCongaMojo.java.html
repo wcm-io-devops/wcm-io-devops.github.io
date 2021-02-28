@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCongaMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin</a> &gt; <span class="el_source">AbstractCongaMojo.java</span></div><h1>AbstractCongaMojo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin;
+
+import static io.wcm.devops.conga.generator.GeneratorOptions.CLASSPATH_ENVIRONMENTS_DIR;
+import static io.wcm.devops.conga.generator.GeneratorOptions.CLASSPATH_ROLES_DIR;
+import static io.wcm.devops.conga.generator.GeneratorOptions.CLASSPATH_TEMPLATES_DIR;
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.CLASSIFIER_DEFINITION;
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.FILE_EXTENSION_DEFINITION;
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.PACKAGING_CONFIGURATION;
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.PACKAGING_DEFINITION;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.archiver.MavenArchiveConfiguration;
+import org.apache.maven.archiver.MavenArchiver;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.archiver.jar.ManifestException;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.export.ModelExport;
+import io.wcm.devops.conga.resource.Resource;
+import io.wcm.devops.conga.resource.ResourceCollection;
+import io.wcm.devops.conga.resource.ResourceLoader;
+import io.wcm.devops.conga.tooling.maven.plugin.util.PluginConfigUtil;
+
+/**
+ * Common features for all Mojos.
+ */
+<span class="nc" id="L69">abstract class AbstractCongaMojo extends AbstractMojo {</span>
+
+  /**
+   * Source path with templates.
+   */
+  @Parameter(defaultValue = &quot;${basedir}/src/main/templates&quot;)
+  private File templateDir;
+
+  /**
+   * Source path with role definitions.
+   */
+  @Parameter(defaultValue = &quot;${basedir}/src/main/roles&quot;)
+  private File roleDir;
+
+  /**
+   * Target path for the generated configuration files.
+   */
+  @Parameter(defaultValue = &quot;${project.build.directory}/configuration&quot;)
+  private File target;
+
+  /**
+   * Source path with environment definitions.
+   */
+  @Parameter(defaultValue = &quot;${basedir}/src/main/environments&quot;)
+  private File environmentDir;
+
+  /**
+   * Target path for the prepared definition files.
+   */
+  @Parameter(defaultValue = &quot;${project.build.directory}/definitions&quot;)
+  private String definitionTarget;
+
+  /**
+   * List for plugins for exporting model data for nodes.
+   * You can specify multiple plugins separated by &quot;,&quot;.
+   * To disable export of model data set to &quot;none&quot;.
+   */
+  @Parameter(defaultValue = &quot;yaml&quot;)
+  private String modelExportNode;
+
+  /**
+   * Configuration for value providers.
+   * &lt;p&gt;
+   * This uses the same syntax as OSGi manifest headers - example:
+   * &lt;/p&gt;
+   *
+   * &lt;pre&gt;
+   * valueProviderPluginName1;param1=value1;param2=value2,
+   * valueProviderPluginName2;param3=value3
+   * &lt;/pre&gt;
+   * &lt;p&gt;
+   * If you want to define multiple value providers of the same type, you can use an arbitrary value provider name, and
+   * specify the plugin name with the optional &lt;code&gt;_plugin_&lt;/code&gt; parameter - example:
+   * &lt;/p&gt;
+   *
+   * &lt;pre&gt;
+   * valueProvider1;_plugin_=valueProviderPluginName1,param1=value1;param2=value2,
+   * valueProvider2;_plugin_=valueProviderPluginName1,param3=value3
+   * &lt;/pre&gt;
+   */
+  @Parameter
+  private String valueProvider;
+
+  /**
+   * Plugin-specific configuration. This holds configuration for CONGA plugins that are not part of the built-in set of
+   * CONGA plugins (e.g. configuration for the CONGA AEM Plugin).
+   * &lt;p&gt;
+   * This uses the same syntax as OSGi manifest headers - example:
+   * &lt;/p&gt;
+   *
+   * &lt;pre&gt;
+   * pluginName1;param1=value1;param2=value2,
+   * pluginName2;param3=value3
+   * &lt;/pre&gt;
+   */
+  @Parameter
+  private String pluginConfig;
+
+  /**
+   * Allows to define custom artifact type to extension mappings for resolving dependencies from artifact coordinates
+   * where it is not fully clear if the an extension is really the extension or a artifact type identifier.
+   * Defaults to &lt;code&gt;bundle&lt;/code&gt;-&amp;gt;&lt;code&gt;jar&lt;/code&gt;, &lt;code&gt;content-package&lt;/code&gt;-&amp;gt;&lt;code&gt;zip&lt;/code&gt;.
+   */
+  @Parameter
+  private Map&lt;String,String&gt; artifactTypeMappings;
+
+  @Parameter(property = &quot;project&quot;, required = true, readonly = true)
+  private MavenProject project;
+
+  @Component(role = Archiver.class, hint = &quot;jar&quot;)
+  private JarArchiver jarArchiver;
+
+  /**
+   * The archive configuration to use.
+   * See &lt;a href=&quot;http://maven.apache.org/shared/maven-archiver/index.html&quot;&gt;Maven Archiver Reference&lt;/a&gt;.
+   */
+<span class="nc" id="L165">  @Parameter</span>
+  @SuppressWarnings(&quot;PMD.ImmutableField&quot;)
+  private MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
+
+  @Parameter(property = &quot;session&quot;, readonly = true, required = true)
+  private MavenSession mavenSession;
+
+  @Component
+  protected MavenProjectHelper projectHelper;
+
+<span class="nc" id="L175">  private static final Map&lt;String, String&gt; DEFAULT_ARTIFACT_TYPE_MAPPINGS = ImmutableMap.of(</span>
+      &quot;bundle&quot;, &quot;jar&quot;,
+      &quot;content-package&quot;, &quot;zip&quot;);
+
+  protected File getTemplateDir() {
+<span class="nc" id="L180">    return templateDir;</span>
+  }
+
+  protected File getRoleDir() {
+<span class="nc" id="L184">    return roleDir;</span>
+  }
+
+  protected File getEnvironmentDir() {
+<span class="nc" id="L188">    return environmentDir;</span>
+  }
+
+  protected File getTargetDir() {
+<span class="nc" id="L192">    return target;</span>
+  }
+
+  protected MavenProject getProject() {
+<span class="nc" id="L196">    return project;</span>
+  }
+
+  protected ModelExport getModelExport() {
+<span class="nc" id="L200">    ModelExport modelExport = new ModelExport();</span>
+
+<span class="nc" id="L202">    String[] nodeExportPlugins = StringUtils.split(this.modelExportNode, &quot;,&quot;);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">    if (nodeExportPlugins != null) {</span>
+<span class="nc" id="L204">      modelExport.setNode(ImmutableList.copyOf(nodeExportPlugins));</span>
+    }
+
+<span class="nc" id="L207">    return modelExport;</span>
+  }
+
+  protected Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
+<span class="nc" id="L211">    return PluginConfigUtil.getConfigMap(this.valueProvider);</span>
+  }
+
+  protected Map&lt;String, Map&lt;String, Object&gt;&gt; getPluginConfig() {
+<span class="nc" id="L215">    return PluginConfigUtil.getConfigMap(this.pluginConfig);</span>
+  }
+
+  protected Map&lt;String, String&gt; getArtifactTypeMappings() {
+<span class="nc" id="L219">    Map&lt;String, String&gt; mappings = this.artifactTypeMappings;</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">    if (mappings == null) {</span>
+<span class="nc" id="L221">      mappings = DEFAULT_ARTIFACT_TYPE_MAPPINGS;</span>
+    }
+<span class="nc" id="L223">    return mappings;</span>
+  }
+
+  /**
+   * Builds a JAR file with all CONGA definitions and resources. This is the main output artefact.
+   * @throws MojoExecutionException MOJO execution exception
+   * @throws MojoFailureException MOJO failure exception
+   */
+  protected void buildDefinitionsJarFile() throws MojoExecutionException, MojoFailureException {
+
+    // copy definitions to classes dir
+<span class="nc" id="L234">    File definitionDir = copyDefinitions();</span>
+
+    // build JAR artifact
+<span class="nc" id="L237">    File outputFile = buildJarFile(definitionDir);</span>
+
+    // set or attach JAR artifact
+<span class="nc bnc" id="L240" title="All 2 branches missed.">    if (StringUtils.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L241">      project.getArtifact().setFile(outputFile);</span>
+    }
+    else {
+<span class="nc" id="L244">      projectHelper.attachArtifact(project, outputFile, CLASSIFIER_DEFINITION);</span>
+    }
+<span class="nc" id="L246">  }</span>
+
+  /**
+   * Build JAR file with definitions.
+   * @param contentDirectory Content directory for JAR file
+   * @return JAR file
+   */
+  private File buildJarFile(File contentDirectory) throws MojoExecutionException {
+<span class="nc" id="L254">    File jarFile = new File(project.getBuild().getDirectory(), buildJarFileName());</span>
+
+<span class="nc" id="L256">    MavenArchiver archiver = new MavenArchiver();</span>
+<span class="nc" id="L257">    archiver.setArchiver(jarArchiver);</span>
+<span class="nc" id="L258">    archiver.setOutputFile(jarFile);</span>
+<span class="nc" id="L259">    archive.setForced(true);</span>
+
+    // include definitions
+<span class="nc" id="L262">    archiver.getArchiver().addDirectory(contentDirectory);</span>
+
+    // include resources
+<span class="nc bnc" id="L265" title="All 2 branches missed.">    for (org.apache.maven.model.Resource resource : project.getResources()) {</span>
+<span class="nc" id="L266">      File resourceDir = new File(resource.getDirectory());</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">      if (resourceDir.exists()) {</span>
+<span class="nc" id="L268">        archiver.getArchiver().addDirectory(resourceDir,</span>
+<span class="nc" id="L269">            toArray(resource.getIncludes()), toArray(resource.getExcludes()));</span>
+      }
+<span class="nc" id="L271">    }</span>
+
+    try {
+<span class="nc" id="L274">      archiver.createArchive(mavenSession, project, archive);</span>
+    }
+<span class="nc" id="L276">    catch (ArchiverException | ManifestException | IOException | DependencyResolutionRequiredException ex) {</span>
+<span class="nc" id="L277">      throw new MojoExecutionException(&quot;Unable to build file &quot; + jarFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L278">    }</span>
+
+<span class="nc" id="L280">    return jarFile;</span>
+  }
+
+  private String[] toArray(List&lt;String&gt; values) {
+<span class="nc bnc" id="L284" title="All 4 branches missed.">    if (values == null || values.isEmpty()) {</span>
+<span class="nc" id="L285">      return null;</span>
+    }
+<span class="nc" id="L287">    return values.toArray(new String[0]);</span>
+  }
+
+  private String buildJarFileName() {
+<span class="nc" id="L291">    StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L292">    sb.append(project.getBuild().getFinalName());</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">    if (!StringUtils.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L294">      sb.append(&quot;-&quot;).append(CLASSIFIER_DEFINITION);</span>
+    }
+<span class="nc" id="L296">    sb.append(&quot;.&quot;).append(FILE_EXTENSION_DEFINITION);</span>
+<span class="nc" id="L297">    return sb.toString();</span>
+  }
+
+  /**
+   * Copy definitions and template files to classes folder to include them in JAR artifact.
+   */
+  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+  private File copyDefinitions() throws MojoExecutionException {
+<span class="nc" id="L305">    File outputDir = new File(definitionTarget);</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">    if (!outputDir.exists()) {</span>
+<span class="nc" id="L307">      outputDir.mkdirs();</span>
+    }
+
+<span class="nc" id="L310">    ResourceLoader resourceLoader = new ResourceLoader();</span>
+<span class="nc" id="L311">    ResourceCollection roleDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());</span>
+<span class="nc" id="L312">    ResourceCollection templateDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());</span>
+<span class="nc" id="L313">    ResourceCollection environmentDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());</span>
+
+    // copy definitions
+    try {
+<span class="nc" id="L317">      copyDefinitions(roleDirCol, outputDir, outputDir, CLASSPATH_ROLES_DIR);</span>
+<span class="nc" id="L318">      copyDefinitions(templateDirCol, outputDir, outputDir, CLASSPATH_TEMPLATES_DIR);</span>
+<span class="nc" id="L319">      copyDefinitions(environmentDirCol, outputDir, outputDir, CLASSPATH_ENVIRONMENTS_DIR);</span>
+    }
+<span class="nc" id="L321">    catch (IOException ex) {</span>
+<span class="nc" id="L322">      throw new MojoExecutionException(&quot;Unable to copy definitions:&quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L323">    }</span>
+
+<span class="nc" id="L325">    return outputDir;</span>
+  }
+
+  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+  private void copyDefinitions(ResourceCollection sourceDir, File rootOutputDir, File parentTargetDir, String dirName) throws IOException {
+<span class="nc bnc" id="L330" title="All 2 branches missed.">    if (!sourceDir.exists()) {</span>
+<span class="nc" id="L331">      return;</span>
+    }
+<span class="nc" id="L333">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
+<span class="nc" id="L334">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
+<span class="nc bnc" id="L335" title="All 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
+<span class="nc" id="L336">      return;</span>
+    }
+
+<span class="nc" id="L339">    File targetDir = new File(parentTargetDir, dirName);</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">    if (!targetDir.exists()) {</span>
+<span class="nc" id="L341">      targetDir.mkdirs();</span>
+    }
+
+<span class="nc bnc" id="L344" title="All 2 branches missed.">    for (Resource file : files) {</span>
+<span class="nc" id="L345">      File targetFile = new File(targetDir, file.getName());</span>
+
+<span class="nc" id="L347">      getLog().info(&quot;Include &quot; + getPathForLog(rootOutputDir, targetFile));</span>
+
+<span class="nc bnc" id="L349" title="All 2 branches missed.">      if (targetFile.exists()) {</span>
+<span class="nc" id="L350">        targetFile.delete();</span>
+      }
+<span class="nc" id="L352">      try (InputStream is = file.getInputStream()) {</span>
+<span class="nc" id="L353">        byte[] data = IOUtils.toByteArray(is);</span>
+<span class="nc" id="L354">        FileUtils.writeByteArrayToFile(targetFile, data);</span>
+      }
+<span class="nc" id="L356">    }</span>
+
+<span class="nc bnc" id="L358" title="All 2 branches missed.">    for (ResourceCollection dir : dirs) {</span>
+<span class="nc" id="L359">      copyDefinitions(dir, rootOutputDir, targetDir, dir.getName());</span>
+<span class="nc" id="L360">    }</span>
+<span class="nc" id="L361">  }</span>
+
+  private String getPathForLog(File rootOutputDir, File file) throws IOException {
+<span class="nc" id="L364">    String path = unifySlashes(file.getCanonicalPath());</span>
+<span class="nc" id="L365">    String rootPath = unifySlashes(rootOutputDir.getCanonicalPath()) + &quot;/&quot;;</span>
+<span class="nc" id="L366">    return StringUtils.substringAfter(path, rootPath);</span>
+  }
+
+  private String unifySlashes(String path) {
+<span class="nc" id="L370">    return StringUtils.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

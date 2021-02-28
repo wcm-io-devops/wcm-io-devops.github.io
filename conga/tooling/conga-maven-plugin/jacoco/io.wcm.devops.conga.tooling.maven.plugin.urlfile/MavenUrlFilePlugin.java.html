@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MavenUrlFilePlugin.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin.urlfile</a> &gt; <span class="el_source">MavenUrlFilePlugin.java</span></div><h1>MavenUrlFilePlugin.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin.urlfile;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.aether.artifact.Artifact;
+
+import io.wcm.devops.conga.generator.spi.UrlFilePlugin;
+import io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
+import io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper;
+
+/**
+ * Download files from Maven artifact repository.
+ */
+<span class="nc" id="L41">public class MavenUrlFilePlugin implements UrlFilePlugin {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;maven&quot;;
+
+  /**
+   * Url prefix
+   */
+  public static final String PREFIX = &quot;mvn:&quot;;
+
+  @Override
+  public String getName() {
+<span class="nc" id="L55">    return NAME;</span>
+  }
+
+  @Override
+  public boolean accepts(String url, UrlFilePluginContext context) {
+<span class="nc" id="L60">    return StringUtils.startsWith(url, PREFIX);</span>
+  }
+
+  @Override
+  public String getFileName(String url, UrlFilePluginContext context) throws IOException {
+<span class="nc" id="L65">    File file = getLocalFile(url, context);</span>
+<span class="nc" id="L66">    return file.getName();</span>
+  }
+
+  @Override
+  public InputStream getFile(String url, UrlFilePluginContext context) throws IOException {
+<span class="nc" id="L71">    File file = getLocalFile(url, context);</span>
+<span class="nc" id="L72">    return new BufferedInputStream(new FileInputStream(file));</span>
+  }
+
+  @Override
+  public URL getFileUrl(String url, UrlFilePluginContext context) throws IOException {
+<span class="nc" id="L77">    File file = getLocalFile(url, context);</span>
+<span class="nc" id="L78">    return file.toURI().toURL();</span>
+  }
+
+  @Override
+  public List&lt;URL&gt; getFileUrlsWithDependencies(String url, UrlFilePluginContext context) throws IOException {
+<span class="nc" id="L83">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(context.getEnvironment(), context.getPluginContextOptions());</span>
+<span class="nc" id="L84">    List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
+
+    // add artifact itself
+<span class="nc" id="L87">    Artifact artifact = mavenArtifactHelper.resolveArtifact(getMavenCoords(url));</span>
+<span class="nc" id="L88">    urls.add(artifact.getFile().toURI().toURL());</span>
+
+    // get transitive dependencies of artifact
+<span class="nc bnc" id="L91" title="All 2 branches missed.">    for (Artifact dependencyArtifact : mavenArtifactHelper.getTransitiveDependencies(artifact)) {</span>
+<span class="nc" id="L92">      urls.add(dependencyArtifact.getFile().toURI().toURL());</span>
+<span class="nc" id="L93">    }</span>
+
+<span class="nc" id="L95">    return urls;</span>
+  }
+
+  @Override
+  public boolean isLocalFile(String url, UrlFilePluginContext context) throws IOException {
+<span class="nc" id="L100">    File file = getLocalFile(url, context);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">    return file != null;</span>
+  }
+
+  @Override
+  public File getLocalFile(String url, UrlFilePluginContext context) throws IOException {
+<span class="nc" id="L106">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(context.getEnvironment(), context.getPluginContextOptions());</span>
+<span class="nc" id="L107">    return mavenArtifactHelper.resolveArtifact(getMavenCoords(url)).getFile();</span>
+  }
+
+  /**
+   * Get Maven coordinates
+   * @param url Maven url staring with mvn:
+   * @return Maven coordinates
+   */
+  public static String getMavenCoords(String url) {
+<span class="nc" id="L116">    return StringUtils.substringAfter(url, PREFIX);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

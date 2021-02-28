@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiplyContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.spi.context</a> &gt; <span class="el_source">MultiplyContext.java</span></div><h1>MultiplyContext.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.spi.context;
+
+import java.util.Map;
+
+import io.wcm.devops.conga.generator.util.VariableMapResolver;
+import io.wcm.devops.conga.generator.util.VariableStringResolver;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.model.role.Role;
+import io.wcm.devops.conga.model.role.RoleFile;
+
+/**
+ * Context for {@link io.wcm.devops.conga.generator.spi.MultiplyPlugin}.
+ */
+<span class="fc" id="L33">public final class MultiplyContext extends AbstractPluginContext&lt;MultiplyContext&gt; {</span>
+
+  private Role role;
+  private RoleFile roleFile;
+  private Environment environment;
+  private Map&lt;String, Object&gt; config;
+  private VariableStringResolver variableStringResolver;
+  private VariableMapResolver variableMapResolver;
+
+  /**
+   * @return Role
+   */
+  public Role getRole() {
+<span class="nc" id="L46">    return role;</span>
+  }
+
+  /**
+   * @param value Role
+   * @return this
+   */
+  public MultiplyContext role(Role value) {
+<span class="fc" id="L54">    role = value;</span>
+<span class="fc" id="L55">    return this;</span>
+  }
+
+  /**
+   * @return Role file
+   */
+  public RoleFile getRoleFile() {
+<span class="fc" id="L62">    return roleFile;</span>
+  }
+
+  /**
+   * @param value Role file
+   * @return this
+   */
+  public MultiplyContext roleFile(RoleFile value) {
+<span class="fc" id="L70">    roleFile = value;</span>
+<span class="fc" id="L71">    return this;</span>
+  }
+
+  /**
+   * @return Environment
+   */
+  public Environment getEnvironment() {
+<span class="fc" id="L78">    return environment;</span>
+  }
+
+  /**
+   * @param value Environment
+   * @return this
+   */
+  public MultiplyContext environment(Environment value) {
+<span class="fc" id="L86">    environment = value;</span>
+<span class="fc" id="L87">    return this;</span>
+  }
+
+  /**
+   * @return Config
+   */
+  public Map&lt;String, Object&gt; getConfig() {
+<span class="fc" id="L94">    return config;</span>
+  }
+
+  /**
+   * @param value Config
+   * @return this
+   */
+  public MultiplyContext config(Map&lt;String, Object&gt; value) {
+<span class="fc" id="L102">    config = value;</span>
+<span class="fc" id="L103">    return this;</span>
+  }
+
+  /**
+   * @return Variable string resolver
+   */
+  public VariableStringResolver getVariableStringResolver() {
+<span class="fc" id="L110">    return this.variableStringResolver;</span>
+  }
+
+  /**
+   * @param value Variable string resolver
+   * @return this
+   */
+  public MultiplyContext variableStringResolver(VariableStringResolver value) {
+<span class="fc" id="L118">    this.variableStringResolver = value;</span>
+<span class="fc" id="L119">    return this;</span>
+  }
+
+  /**
+   * @return Variable map resolver
+   */
+  public VariableMapResolver getVariableMapResolver() {
+<span class="nc" id="L126">    return this.variableMapResolver;</span>
+  }
+
+  /**
+   * @param value Variable map resolver
+   * @return this
+   */
+  public MultiplyContext variableMapResolver(VariableMapResolver value) {
+<span class="fc" id="L134">    this.variableMapResolver = value;</span>
+<span class="fc" id="L135">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

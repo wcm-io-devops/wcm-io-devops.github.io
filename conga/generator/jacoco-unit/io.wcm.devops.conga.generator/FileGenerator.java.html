@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator</a> &gt; <span class="el_source">FileGenerator.java</span></div><h1>FileGenerator.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+
+import com.github.jknack.handlebars.Template;
+import com.google.common.collect.ImmutableList;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.plugins.fileheader.NoneFileHeader;
+import io.wcm.devops.conga.generator.plugins.validator.NoneValidator;
+import io.wcm.devops.conga.generator.spi.FileHeaderPlugin;
+import io.wcm.devops.conga.generator.spi.FilePlugin;
+import io.wcm.devops.conga.generator.spi.ImplicitApplyOptions;
+import io.wcm.devops.conga.generator.spi.PostProcessorPlugin;
+import io.wcm.devops.conga.generator.spi.ValidatorPlugin;
+import io.wcm.devops.conga.generator.spi.context.FileContext;
+import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
+import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
+import io.wcm.devops.conga.generator.spi.context.ValidatorContext;
+import io.wcm.devops.conga.generator.spi.export.context.GeneratedFileContext;
+import io.wcm.devops.conga.generator.util.FileUtil;
+import io.wcm.devops.conga.generator.util.LineEndingConverter;
+import io.wcm.devops.conga.generator.util.PluginManager;
+import io.wcm.devops.conga.generator.util.VariableMapResolver;
+import io.wcm.devops.conga.model.role.RoleFile;
+import io.wcm.devops.conga.model.util.MapExpander;
+import io.wcm.devops.conga.model.util.MapMerger;
+
+/**
+ * Generates file for one environment.
+ */
+@SuppressWarnings(&quot;PMD.MoreThanOneLogger&quot;)
+class FileGenerator {
+
+  private final String environmentName;
+  private final String roleName;
+  private final List&lt;String&gt; roleVariantNames;
+  private final String templateName;
+  private final File nodeDir;
+  private final File file;
+  private final String url;
+  private final String symlinkTarget;
+  private final RoleFile roleFile;
+  private final Map&lt;String, Object&gt; config;
+  private final Template template;
+  private final PluginManager pluginManager;
+  private final UrlFileManager urlFileManager;
+  private final Logger log;
+  private final FileContext fileContext;
+  private final FileHeaderContext fileHeaderContext;
+  private final ValidatorContext validatorContext;
+  private final PostProcessorContext postProcessorContext;
+  private final boolean allowSymlinks;
+
+  // if the creation of a symlink fails once, do not try it again (esp. e.g. on windows systems)
+  private static boolean symlinkCreationFailed;
+
+  static final String POSTPROCESSOR_KEY_FILE_HEADER = &quot;postProcessor.fileHeader&quot;;
+  static final String POSTPROCESSOR_KEY_VALIDATORS = &quot;postProcessor.validators&quot;;
+
+  //CHECKSTYLE:OFF
+  FileGenerator(GeneratorOptions options, String environmentName,
+      String roleName, List&lt;String&gt; roleVariantNames, String templateName,
+      File nodeDir, File file, String url, String symlinkTarget,
+      RoleFile roleFile, Map&lt;String, Object&gt; config, Template template,
+      VariableMapResolver variableMapResolver, UrlFileManager urlFileManager, PluginContextOptions pluginContextOptions,
+<span class="fc" id="L107">      Collection&lt;String&gt; dependencyVersions) {</span>
+    //CHECKSTYLE:ON
+<span class="fc" id="L109">    this.environmentName = environmentName;</span>
+<span class="fc" id="L110">    this.roleName = roleName;</span>
+<span class="fc" id="L111">    this.roleVariantNames = roleVariantNames;</span>
+<span class="fc" id="L112">    this.templateName = templateName;</span>
+<span class="fc" id="L113">    this.nodeDir = nodeDir;</span>
+<span class="fc" id="L114">    this.file = file;</span>
+<span class="fc" id="L115">    this.url = url;</span>
+<span class="fc" id="L116">    this.symlinkTarget = symlinkTarget;</span>
+<span class="fc" id="L117">    this.roleFile = roleFile;</span>
+<span class="fc" id="L118">    this.template = template;</span>
+<span class="fc" id="L119">    this.pluginManager = options.getPluginManager();</span>
+<span class="fc" id="L120">    this.urlFileManager = urlFileManager;</span>
+<span class="fc" id="L121">    this.log = options.getLogger();</span>
+<span class="fc" id="L122">    this.fileContext = new FileContext()</span>
+<span class="fc" id="L123">        .file(file)</span>
+<span class="fc" id="L124">        .charset(roleFile.getCharset())</span>
+<span class="fc" id="L125">        .modelOptions(roleFile.getModelOptions())</span>
+<span class="fc" id="L126">        .targetDir(nodeDir);</span>
+
+    // overlay logger in options with plugin-specific logger
+<span class="fc" id="L129">    Logger pluginLogger = new MessagePrefixLoggerFacade(log, &quot;    &quot;);</span>
+<span class="fc" id="L130">    PluginContextOptions pluginContextOptionsForPlugin = new PluginContextOptions()</span>
+<span class="fc" id="L131">        .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L132">        .logger(pluginLogger);</span>
+
+
+<span class="fc" id="L135">    this.fileHeaderContext = new FileHeaderContext()</span>
+<span class="fc" id="L136">        .pluginContextOptions(pluginContextOptionsForPlugin)</span>
+<span class="fc" id="L137">        .commentLines(buildFileHeaderCommentLines(options.getVersion(), dependencyVersions));</span>
+
+<span class="fc" id="L139">    this.validatorContext = new ValidatorContext()</span>
+<span class="fc" id="L140">        .pluginContextOptions(pluginContextOptionsForPlugin)</span>
+<span class="fc" id="L141">        .options(variableMapResolver.resolve(MapMerger.merge(roleFile.getValidatorOptions(), config)));</span>
+
+<span class="fc" id="L143">    this.postProcessorContext = new PostProcessorContext()</span>
+<span class="fc" id="L144">        .pluginContextOptions(pluginContextOptionsForPlugin)</span>
+<span class="fc" id="L145">        .options(variableMapResolver.resolve(MapMerger.merge(roleFile.getPostProcessorOptions(), config)));</span>
+
+<span class="fc" id="L147">    this.config = variableMapResolver.deescape(config);</span>
+<span class="fc" id="L148">    this.allowSymlinks = options.isAllowSymlinks();</span>
+<span class="fc" id="L149">  }</span>
+
+  /**
+   * Generate comment lines for file header added to all files for which a {@link FileHeaderPlugin} is registered.
+   * @param dependencyVersions List of artifact versions to include
+   * @return Formatted comment lines
+   */
+  private List&lt;String&gt; buildFileHeaderCommentLines(String version, Collection&lt;String&gt; dependencyVersions) {
+<span class="fc" id="L157">    List&lt;String&gt; lines = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L159">    lines.add(&quot;This file is AUTO-GENERATED by CONGA. Please do not change it manually.&quot;);</span>
+<span class="fc" id="L160">    lines.add(&quot;&quot;);</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">    if (version != null) {</span>
+<span class="fc" id="L162">      lines.add(&quot;Version &quot; + version);</span>
+    }
+
+    // add information how this file was generated
+<span class="fc" id="L166">    lines.add(&quot;Environment: &quot; + environmentName);</span>
+<span class="fc" id="L167">    lines.add(&quot;Role: &quot; + roleName);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">    if (!roleVariantNames.isEmpty()) {</span>
+<span class="fc" id="L169">      lines.add(&quot;Variant: &quot; + StringUtils.join(roleVariantNames, &quot;,&quot;));</span>
+    }
+<span class="fc" id="L171">    lines.add(&quot;Template: &quot; + templateName);</span>
+
+<span class="pc bpc" id="L173" title="1 of 4 branches missed.">    if (dependencyVersions != null &amp;&amp; !dependencyVersions.isEmpty()) {</span>
+<span class="fc" id="L174">      lines.add(&quot;&quot;);</span>
+<span class="fc" id="L175">      lines.add(&quot;Dependencies:&quot;);</span>
+<span class="fc" id="L176">      lines.addAll(dependencyVersions);</span>
+    }
+
+<span class="fc" id="L179">    return formatFileHeaderCommentLines(lines);</span>
+  }
+
+  /**
+   * Format comment lines.
+   * @param lines Unformatted comment lines
+   * @return Formatted comment lines
+   */
+  private List&lt;String&gt; formatFileHeaderCommentLines(List&lt;String&gt; lines) {
+<span class="fc" id="L188">    List&lt;String&gt; formattedLines = new ArrayList&lt;&gt;();</span>
+
+    // create separator with same length as longest comment entry
+<span class="fc" id="L191">    int maxLength = lines.stream()</span>
+<span class="fc" id="L192">        .map(entry -&gt; entry.length())</span>
+<span class="fc" id="L193">        .max(Integer::compare).get();</span>
+<span class="fc" id="L194">    String separator = StringUtils.repeat(&quot;*&quot;, maxLength + 4);</span>
+
+<span class="fc" id="L196">    formattedLines.add(separator);</span>
+<span class="fc" id="L197">    formattedLines.add(&quot;&quot;);</span>
+<span class="fc" id="L198">    lines.forEach(line -&gt; formattedLines.add(&quot;  &quot; + line));</span>
+<span class="fc" id="L199">    formattedLines.add(&quot;&quot;);</span>
+<span class="fc" id="L200">    formattedLines.add(separator);</span>
+
+<span class="fc" id="L202">    return formattedLines;</span>
+  }
+
+  /**
+   * Generate file(s).
+   * @return List of files that where generated directly or indirectly (by post processors).
+   */
+  @SuppressFBWarnings({ &quot;ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD&quot;, &quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot; })
+  public Collection&lt;GeneratedFileContext&gt; generate() throws IOException {
+<span class="fc" id="L211">    File dir = file.getParentFile();</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">    if (!dir.exists()) {</span>
+<span class="fc" id="L213">      dir.mkdirs();</span>
+    }
+
+    Collection&lt;GeneratedFileContext&gt; postProcessedFiles;
+<span class="fc bfc" id="L217" title="All 2 branches covered.">    if (template != null) {</span>
+<span class="fc" id="L218">      log.info(&quot;Generate file {}&quot;, getFilenameForLog(fileContext));</span>
+
+      // generate with template
+<span class="fc" id="L221">      generateWithTemplate();</span>
+
+      // add file header, validate and post-process generated file
+<span class="fc" id="L224">      applyFileHeader(fileContext, roleFile.getFileHeader());</span>
+<span class="fc" id="L225">      applyValidation(fileContext, roleFile.getValidators());</span>
+<span class="fc" id="L226">      postProcessedFiles = applyPostProcessor(fileContext);</span>
+
+    }
+<span class="fc bfc" id="L229" title="All 2 branches covered.">    else if (StringUtils.isNotBlank(url)) {</span>
+
+      // if copying from a local file try to create a symlink instead of coyping it
+<span class="fc" id="L232">      boolean symlinkCreated = false;</span>
+<span class="pc bpc" id="L233" title="5 of 8 branches missed.">      if (allowSymlinks &amp;&amp; !symlinkCreationFailed &amp;&amp; urlFileManager.isLocalFile(url) &amp;&amp; !roleFile.isDeleteSource()) {</span>
+<span class="nc" id="L234">        log.info(&quot;Symlink file {} from {}&quot;, getFilenameForLog(fileContext), url);</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        if (createSymlinkToLocalFile()) {</span>
+<span class="nc" id="L236">          symlinkCreated = true;</span>
+        }
+        else {
+<span class="nc" id="L239">          symlinkCreationFailed = true;</span>
+        }
+      }
+
+      // generate by downloading/copying from URL
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">      if (!symlinkCreated) {</span>
+<span class="fc" id="L245">        log.info(&quot;Copy file {} from {}&quot;, getFilenameForLog(fileContext), url);</span>
+<span class="fc" id="L246">        copyFromUrlFile();</span>
+      }
+
+      // post-process downloaded or symlinked file
+<span class="fc" id="L250">      postProcessedFiles = applyPostProcessor(fileContext);</span>
+<span class="fc" id="L251">    }</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">    else if (StringUtils.isNotBlank(symlinkTarget)) {</span>
+
+      // create a symlink pointing to the given target
+<span class="fc" id="L255">      createSymlinkToSymlinkTarget();</span>
+
+      // post-process symlinked file
+<span class="fc" id="L258">      postProcessedFiles = applyPostProcessor(fileContext);</span>
+
+    }
+    else {
+<span class="nc" id="L262">      throw new IOException(&quot;No template, URL or symlink target defined for file: &quot; + FileUtil.getFileInfo(roleName, roleFile));</span>
+    }
+
+<span class="fc" id="L265">    return postProcessedFiles;</span>
+  }
+
+  /**
+   * Generate file with handlebars template.
+   * Use unix file endings by default.
+   */
+  private void generateWithTemplate() throws IOException {
+<span class="fc" id="L273">    try (FileOutputStream fos = new FileOutputStream(file);</span>
+<span class="fc" id="L274">        Writer fileWriter = new OutputStreamWriter(fos, roleFile.getCharset())) {</span>
+<span class="fc" id="L275">      StringWriter stringWriter = new StringWriter();</span>
+<span class="fc" id="L276">      template.apply(config, stringWriter);</span>
+<span class="fc" id="L277">      fileWriter.write(normalizeLineEndings(stringWriter.toString()));</span>
+<span class="fc" id="L278">      fileWriter.flush();</span>
+    }
+<span class="fc" id="L280">  }</span>
+
+  /**
+   * Generate file by downloading/copying it's binary content from URL.
+   */
+  private void copyFromUrlFile() throws IOException {
+<span class="fc" id="L286">    try (FileOutputStream fos = new FileOutputStream(file);</span>
+<span class="fc" id="L287">        InputStream is = urlFileManager.getFile(url)) {</span>
+<span class="fc" id="L288">      IOUtils.copy(is, fos);</span>
+<span class="fc" id="L289">      fos.flush();</span>
+    }
+<span class="fc bfc" id="L291" title="All 2 branches covered.">    if (roleFile.isDeleteSource()) {</span>
+<span class="fc" id="L292">      urlFileManager.deleteFile(url);</span>
+    }
+<span class="fc" id="L294">  }</span>
+
+  /**
+   * Create a symlink to a local file.
+   * @return true if symlink creation was successful. This is likely to return false on windows operating systems.
+   * @throws IOException If an unexpected error occurs
+   */
+  @SuppressWarnings(&quot;PMD.GuardLogStatement&quot;)
+  private boolean createSymlinkToLocalFile() throws IOException {
+    // if file is a local file try to create a symlink to it
+<span class="nc" id="L304">    File localFile = urlFileManager.getLocalFile(url);</span>
+<span class="nc" id="L305">    Path linkPath = file.toPath();</span>
+<span class="nc" id="L306">    Path targetPath = localFile.toPath();</span>
+    try {
+<span class="nc" id="L308">      Files.createSymbolicLink(linkPath, targetPath);</span>
+<span class="nc" id="L309">      return true;</span>
+    }
+<span class="nc" id="L311">    catch (IOException ex) {</span>
+      // creates symbolic link failed - log warning and fallback to copying content
+<span class="nc" id="L313">      log.warn(&quot;Unable to create symbolic link: &quot; + ex.getMessage());</span>
+<span class="nc" id="L314">      return false;</span>
+    }
+  }
+
+  /**
+   * Create a symlink to the given symlink target.
+   * @throws IOException If an unexpected error occurs
+   */
+  @SuppressWarnings(&quot;PMD.GuardLogStatement&quot;)
+  private void createSymlinkToSymlinkTarget() throws IOException {
+<span class="fc" id="L324">    File localFile = new File(nodeDir, this.symlinkTarget);</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">    if (!localFile.exists()) {</span>
+<span class="nc" id="L326">      throw new IOException(&quot;Symlink target file not found: &quot; + FileUtil.getCanonicalPath(localFile));</span>
+    }
+<span class="fc" id="L328">    Path linkPath = file.toPath();</span>
+<span class="fc" id="L329">    Path targetPath = localFile.toPath();</span>
+<span class="fc" id="L330">    Path relativizedPath = file.getParentFile().toPath().relativize(targetPath);</span>
+    try {
+<span class="fc" id="L332">      Files.createSymbolicLink(linkPath, relativizedPath);</span>
+    }
+<span class="nc" id="L334">    catch (IOException ex) {</span>
+      // creates symbolic link failed - create text file with link instead (similar to git)
+<span class="nc" id="L336">      log.warn(&quot;Created link textfile instead of symbolic link: &quot; + ex.getMessage());</span>
+<span class="nc" id="L337">      FileUtils.write(linkPath.toFile(), relativizedPath.toString(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L338">    }</span>
+<span class="fc" id="L339">  }</span>
+
+  private String normalizeLineEndings(String value) {
+    // convert/normalize all line endings to unix style
+<span class="fc" id="L343">    String normalizedLineEndings = LineEndingConverter.normalizeToUnix(value);</span>
+    // and then to the line-ending style as requested in the tempalte definition
+<span class="fc" id="L345">    return LineEndingConverter.convertTo(normalizedLineEndings, roleFile.getLineEndings());</span>
+  }
+
+  /**
+   * Collect all file plugins that are either configured explicitely, or apply implicitely, or should always apply.
+   * @param pluginClass File plugin class
+   * @param fileItem File item
+   * @param contextObject File plugin context object
+   * @param pluginNames List of configured plugin names
+   * @return List of plugins that should apply
+   * @param &lt;T&gt; Plugin context object type.
+   * @param &lt;R&gt; Return type of the plugin apply method.
+   * @param &lt;P&gt; Plugin class
+   */
+  private &lt;T, R, P extends FilePlugin&lt;T, R&gt;&gt; Stream&lt;P&gt; collectFilePlugins(Class&lt;P&gt; pluginClass, FileContext fileItem, T contextObject,
+      List&lt;String&gt; pluginNames) {
+    Stream&lt;P&gt; plugins;
+<span class="fc bfc" id="L362" title="All 2 branches covered.">    if (pluginNames.isEmpty()) {</span>
+      // auto-detect matching plugins if none are defined
+<span class="fc" id="L364">      plugins = pluginManager.getAll(pluginClass).stream()</span>
+<span class="fc" id="L365">          .filter(plugin -&gt; plugin.accepts(fileItem, contextObject))</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">          .filter(plugin -&gt; plugin.implicitApply(fileItem, contextObject) == ImplicitApplyOptions.WHEN_UNCONFIGURED);</span>
+    }
+    else {
+      // otherwise apply selected plugins
+<span class="fc" id="L370">      plugins = pluginNames.stream()</span>
+<span class="fc" id="L371">          .map(name -&gt; pluginManager.get(name, pluginClass));</span>
+    }
+    // add plugins that should always apply
+<span class="fc" id="L374">    return Stream.concat(plugins, pluginManager.getAll(pluginClass).stream()</span>
+<span class="fc" id="L375">          .filter(plugin -&gt; plugin.accepts(fileItem, contextObject))</span>
+<span class="fc bfc" id="L376" title="All 2 branches covered.">          .filter(plugin -&gt; plugin.implicitApply(fileItem, contextObject) == ImplicitApplyOptions.ALWAYS));</span>
+  }
+
+  private void applyFileHeader(FileContext fileItem, String pluginName) {
+<span class="fc" id="L380">    List&lt;String&gt; pluginNames = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">    if (!StringUtils.isEmpty(pluginName)) {</span>
+<span class="fc" id="L382">      pluginNames.add(pluginName);</span>
+    }
+<span class="fc" id="L384">    collectFilePlugins(FileHeaderPlugin.class, fileItem, fileHeaderContext, pluginNames)</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneFileHeader.NAME))</span>
+<span class="fc" id="L386">        .forEach(plugin -&gt; applyFileHeader(fileItem, plugin));</span>
+<span class="fc" id="L387">  }</span>
+
+  private void applyFileHeader(FileContext fileItem, FileHeaderPlugin plugin) {
+<span class="fc" id="L390">    log.debug(&quot;  Add {} file header to file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
+<span class="fc" id="L391">    plugin.apply(fileItem, fileHeaderContext);</span>
+<span class="fc" id="L392">  }</span>
+
+  private void applyValidation(FileContext fileItem, List&lt;String&gt; pluginNames) {
+<span class="fc" id="L395">    collectFilePlugins(ValidatorPlugin.class, fileItem, validatorContext, pluginNames)</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneValidator.NAME))</span>
+<span class="fc" id="L397">        .forEach(plugin -&gt; applyValidation(fileItem, plugin));</span>
+<span class="fc" id="L398">  }</span>
+
+  private void applyValidation(FileContext fileItem, ValidatorPlugin plugin) {
+<span class="fc" id="L401">    log.info(&quot;  Validate {} for file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
+<span class="fc" id="L402">    plugin.apply(fileItem, validatorContext);</span>
+<span class="fc" id="L403">  }</span>
+
+  private Collection&lt;GeneratedFileContext&gt; applyPostProcessor(FileContext fileItem) {
+    // collect distinct list of files returned by each post processor
+    // if a file is returned by multiple post processors combine to single entry with multiple plugin names
+<span class="fc" id="L408">    Map&lt;String, GeneratedFileContext&gt; consolidatedFiles = new LinkedHashMap&lt;&gt;();</span>
+
+    // start with original file
+<span class="fc" id="L411">    consolidatedFiles.put(fileContext.getCanonicalPath(), new GeneratedFileContext().fileContext(fileContext));</span>
+
+    // collect postprocessor plugins
+<span class="fc" id="L414">    Stream&lt;PostProcessorPlugin&gt; postProcessors = collectFilePlugins(PostProcessorPlugin.class, fileItem, postProcessorContext,</span>
+<span class="fc" id="L415">        roleFile.getPostProcessors());</span>
+
+    // process all processors. if multiple processors each processor processed the files of the previous one.
+<span class="fc" id="L418">    postProcessors.forEach(plugin -&gt; applyPostProcessor(consolidatedFiles, plugin));</span>
+
+<span class="fc" id="L420">    return consolidatedFiles.values();</span>
+  }
+
+  private void applyPostProcessor(Map&lt;String, GeneratedFileContext&gt; consolidatedFiles, PostProcessorPlugin plugin) {
+
+    // process all files from given map
+<span class="fc" id="L426">    ImmutableList.copyOf(consolidatedFiles.values()).stream()</span>
+        // do not apply post processor twice
+<span class="fc bfc" id="L428" title="All 2 branches covered.">        .filter(fileItem -&gt; !fileItem.getPostProcessors().contains(plugin.getName()))</span>
+<span class="fc" id="L429">        .filter(fileItem -&gt; plugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
+<span class="fc" id="L430">        .forEach(fileItem -&gt; {</span>
+<span class="fc" id="L431">          List&lt;FileContext&gt; processedFiles = applyPostProcessor(fileItem.getFileContext(), plugin);</span>
+<span class="fc" id="L432">          fileItem.postProcessor(plugin.getName());</span>
+<span class="fc" id="L433">          processedFiles.forEach(item -&gt; {</span>
+<span class="fc" id="L434">            GeneratedFileContext generatedFileContext = consolidatedFiles.get(item.getCanonicalPath());</span>
+<span class="pc bpc" id="L435" title="1 of 2 branches missed.">            if (generatedFileContext == null) {</span>
+<span class="fc" id="L436">              generatedFileContext = new GeneratedFileContext().fileContext(item);</span>
+<span class="fc" id="L437">              consolidatedFiles.put(item.getCanonicalPath(), generatedFileContext);</span>
+            }
+<span class="fc" id="L439">            generatedFileContext.postProcessor(plugin.getName());</span>
+<span class="fc" id="L440">          });</span>
+<span class="fc" id="L441">      });</span>
+
+    // remove items that do no longer exist
+<span class="fc" id="L444">    ImmutableList.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">      if (!fileItem.getFileContext().getFile().exists()) {</span>
+<span class="fc" id="L446">        consolidatedFiles.remove(fileItem.getFileContext().getCanonicalPath());</span>
+      }
+<span class="fc" id="L448">    });</span>
+
+    // apply post processor configured as implicit ALWAYS
+<span class="fc" id="L451">    consolidatedFiles.values().forEach(fileItem -&gt; {</span>
+<span class="fc" id="L452">      pluginManager.getAll(PostProcessorPlugin.class).stream()</span>
+<span class="fc" id="L453">          .filter(implicitPlugin -&gt; implicitPlugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
+<span class="fc bfc" id="L454" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; implicitPlugin.implicitApply(fileItem.getFileContext(), postProcessorContext) == ImplicitApplyOptions.ALWAYS)</span>
+          // do not apply post processor twice
+<span class="fc bfc" id="L456" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; !fileItem.getPostProcessors().contains(implicitPlugin.getName()))</span>
+<span class="fc" id="L457">          .forEach(implicitPlugin -&gt; {</span>
+<span class="fc" id="L458">            List&lt;FileContext&gt; processedFiles = applyPostProcessor(fileItem.getFileContext(), implicitPlugin);</span>
+<span class="fc" id="L459">            fileItem.postProcessor(implicitPlugin.getName());</span>
+<span class="fc" id="L460">            processedFiles.forEach(item -&gt; {</span>
+<span class="nc" id="L461">              GeneratedFileContext generatedFileContext = consolidatedFiles.get(item.getCanonicalPath());</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">              if (generatedFileContext == null) {</span>
+<span class="nc" id="L463">                generatedFileContext = new GeneratedFileContext().fileContext(item);</span>
+<span class="nc" id="L464">                consolidatedFiles.put(item.getCanonicalPath(), generatedFileContext);</span>
+              }
+<span class="nc" id="L466">              generatedFileContext.postProcessor(implicitPlugin.getName());</span>
+<span class="nc" id="L467">            });</span>
+<span class="fc" id="L468">          });</span>
+<span class="fc" id="L469">    });</span>
+
+    // remove items that do no longer exist
+<span class="fc" id="L472">    ImmutableList.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>
+<span class="pc bpc" id="L473" title="1 of 2 branches missed.">      if (!fileItem.getFileContext().getFile().exists()) {</span>
+<span class="nc" id="L474">        consolidatedFiles.remove(fileItem.getFileContext().getCanonicalPath());</span>
+      }
+<span class="fc" id="L476">    });</span>
+
+<span class="fc" id="L478">  }</span>
+
+  private List&lt;FileContext&gt; applyPostProcessor(FileContext fileItem, PostProcessorPlugin plugin) {
+<span class="fc" id="L481">    log.info(&quot;  Post-process {} for file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
+
+<span class="fc" id="L483">    List&lt;FileContext&gt; processedFiles = plugin.apply(fileItem, postProcessorContext);</span>
+
+<span class="pc bpc" id="L485" title="1 of 2 branches missed.">    if (processedFiles != null) {</span>
+      // add file header, validate files
+<span class="fc" id="L487">      processedFiles.forEach(processedFile -&gt; {</span>
+<span class="fc" id="L488">        applyFileHeader(processedFile, getPostProcessorFileHeader());</span>
+<span class="fc" id="L489">        applyValidation(processedFile, getPostProcessorValidators());</span>
+<span class="fc" id="L490">      });</span>
+    }
+
+<span class="fc" id="L493">    return processedFiles;</span>
+  }
+
+  private String getPostProcessorFileHeader() {
+<span class="fc" id="L497">    Object fileHeader = MapExpander.getDeep(postProcessorContext.getOptions(), POSTPROCESSOR_KEY_FILE_HEADER);</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">    if (fileHeader instanceof String) {</span>
+<span class="fc" id="L499">      return (String)fileHeader;</span>
+    }
+    else {
+<span class="fc" id="L502">      return null;</span>
+    }
+  }
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  private List&lt;String&gt; getPostProcessorValidators() {
+<span class="fc" id="L508">    Object validators = MapExpander.getDeep(postProcessorContext.getOptions(), POSTPROCESSOR_KEY_VALIDATORS);</span>
+<span class="fc bfc" id="L509" title="All 2 branches covered.">    if (validators instanceof List) {</span>
+<span class="fc" id="L510">      return (List&lt;String&gt;)validators;</span>
+    }
+    else {
+<span class="fc" id="L513">      return ImmutableList.of();</span>
+    }
+  }
+
+  private String getFilenameForLog(FileContext fileItem) {
+<span class="fc" id="L518">    return StringUtils.substring(fileItem.getCanonicalPath(), FileUtil.getCanonicalPath(nodeDir).length() + 1);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

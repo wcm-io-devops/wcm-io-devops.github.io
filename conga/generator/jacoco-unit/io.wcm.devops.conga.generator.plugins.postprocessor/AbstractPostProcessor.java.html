@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractPostProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.plugins.postprocessor</a> &gt; <span class="el_source">AbstractPostProcessor.java</span></div><h1>AbstractPostProcessor.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.plugins.postprocessor;
+
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
+
+import io.wcm.devops.conga.generator.plugins.fileheader.NoneFileHeader;
+import io.wcm.devops.conga.generator.spi.FileHeaderPlugin;
+import io.wcm.devops.conga.generator.spi.PostProcessorPlugin;
+import io.wcm.devops.conga.generator.spi.context.FileContext;
+import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
+import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
+
+/**
+ * Shared functionality for post processor plugins.
+ */
+<span class="fc" id="L36">public abstract class AbstractPostProcessor implements PostProcessorPlugin {</span>
+
+  /**
+   * Extract file header from given file. File type is detected automatically.
+   * @param file File
+   * @param postProcessorContext Post processor context
+   * @return File header or null if none found
+   */
+  protected final FileHeaderContext extractFileHeader(FileContext file,
+      PostProcessorContext postProcessorContext) {
+<span class="fc" id="L46">    FileHeaderPlugin fileHeaderPlugin = detectFileHeaderPlugin(file, postProcessorContext);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">    if (fileHeaderPlugin != null) {</span>
+<span class="fc" id="L48">      FileHeaderContext header = fileHeaderPlugin.extract(file);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">      if (header != null) {</span>
+<span class="fc" id="L50">        return header.pluginContextOptions(postProcessorContext.getPluginContextOptions());</span>
+      }
+    }
+<span class="fc" id="L53">    return null;</span>
+  }
+
+  /**
+   * Apply file header to given file. File type is detected automatically.
+   * @param file File
+   * @param fileHeader File header
+   * @param postProcessorContext Post processor context
+   */
+  protected final void applyFileHeader(FileContext file, FileHeaderContext fileHeader,
+      PostProcessorContext postProcessorContext) {
+<span class="pc bpc" id="L64" title="2 of 4 branches missed.">    if (fileHeader == null || fileHeader.getCommentLines().isEmpty()) {</span>
+<span class="nc" id="L65">      return;</span>
+    }
+<span class="fc" id="L67">    FileHeaderPlugin fileHeaderPlugin = detectFileHeaderPlugin(file, postProcessorContext);</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">    if (fileHeaderPlugin != null) {</span>
+<span class="fc" id="L69">      fileHeaderPlugin.apply(file, fileHeader);</span>
+    }
+<span class="fc" id="L71">  }</span>
+
+  /**
+   * Find matching file header plugin for the given file.
+   * @param file File context
+   * @return File header plugin or null if no match found.
+   */
+  private FileHeaderPlugin detectFileHeaderPlugin(FileContext file, PostProcessorContext postProcessorContext) {
+<span class="fc" id="L79">    FileHeaderContext dummyFileHeader = new FileHeaderContext();</span>
+<span class="fc" id="L80">    Optional&lt;FileHeaderPlugin&gt; fileHeaderPlugin = postProcessorContext.getPluginManager()</span>
+<span class="fc" id="L81">        .getAll(FileHeaderPlugin.class).stream()</span>
+<span class="fc" id="L82">        .filter(plugin -&gt; plugin.accepts(file, dummyFileHeader))</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneFileHeader.NAME))</span>
+<span class="fc" id="L84">        .findFirst();</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (fileHeaderPlugin.isPresent()) {</span>
+<span class="fc" id="L86">      return fileHeaderPlugin.get();</span>
+    }
+    else {
+<span class="nc" id="L89">      return null;</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

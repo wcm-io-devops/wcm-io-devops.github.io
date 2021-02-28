@@ -1,0 +1,24 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.urlfile,MavenUrlFilePlugin,114,0,4,0,22,0,12,0,10,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,PackageMojo,338,0,32,0,66,0,26,0,10,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,HelpMojo,893,0,110,0,159,0,71,0,16,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,DefinitionPackageMojo,6,0,0,0,3,0,2,0,2,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,GenerateVersionInfoMojo,65,0,4,0,15,0,4,0,2,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,BuildConstants,5,0,0,0,1,0,1,0,1,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,GenerateMojo,194,0,6,0,50,0,6,0,3,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,MavenSlf4jLogFacade,336,48,1,5,104,13,63,4,62,2
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,ValidateMojo,596,0,34,0,120,0,32,0,15,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,AbstractCongaMojo,459,0,32,0,91,0,35,0,19,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,DependencyVersionBuilder,202,0,10,0,44,0,11,0,6,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.valueprovider,MavenPropertyValueProviderPlugin,0,23,0,2,0,7,0,4,0,3
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,PluginConfigUtil,0,68,0,6,0,10,0,4,0,1
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,ClassLoaderUtil,88,0,4,0,16,0,5,0,3,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,MavenContext,72,11,0,0,27,4,18,3,18,3
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,MavenArtifactHelper,566,0,61,0,110,0,46,0,14,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,PathUtil,5,0,0,0,1,0,1,0,1,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,VersionInfoUtil,62,39,6,2,17,9,6,3,3,2
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,TemplateValidator,62,0,2,0,13,0,3,0,2,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,NoValueProviderInRoleValidator,78,0,8,0,17,0,8,0,4,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,ModelValidator,35,0,0,0,7,0,2,0,2,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,RoleTemplateFileValidator,97,0,14,0,20,0,9,0,2,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,NoValueProviderInRoleValidator.MapReader,14,0,0,0,4,0,2,0,2,0

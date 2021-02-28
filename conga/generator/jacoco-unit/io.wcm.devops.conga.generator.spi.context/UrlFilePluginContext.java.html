@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UrlFilePluginContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.spi.context</a> &gt; <span class="el_source">UrlFilePluginContext.java</span></div><h1>UrlFilePluginContext.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.spi.context;
+
+import java.io.File;
+
+import io.wcm.devops.conga.model.environment.Environment;
+
+/**
+ * Context for {@link io.wcm.devops.conga.generator.spi.UrlFilePlugin}.
+ */
+<span class="fc" id="L29">public final class UrlFilePluginContext extends AbstractPluginContext&lt;UrlFilePluginContext&gt; {</span>
+
+<span class="fc" id="L31">  private File baseDir = new File(&quot;.&quot;);</span>
+  private File nodeBaseDir;
+<span class="fc" id="L33">  private ClassLoader resourceClassLoader = getClass().getClassLoader();</span>
+  private Environment environment;
+
+  /**
+   * @return Base directory for resolving relative files in filesystem
+   */
+  public File getBaseDir() {
+<span class="fc" id="L40">    return baseDir;</span>
+  }
+
+  /**
+   * @param value Base directory for resolving relative files in filesystem
+   * @return this
+   */
+  public UrlFilePluginContext baseDir(File value) {
+<span class="fc" id="L48">    baseDir = value;</span>
+<span class="fc" id="L49">    return this;</span>
+  }
+
+  /**
+   * @return Base directory for resolving relative files of the generated files for the current node in filesystem
+   */
+  public File getNodeBaseDir() {
+<span class="fc" id="L56">    return nodeBaseDir;</span>
+  }
+
+  /**
+   * @param value Base directory for resolving relative files of the generated files for the current node in filesystem
+   * @return this
+   */
+  public UrlFilePluginContext baseNodeDir(File value) {
+<span class="fc" id="L64">    nodeBaseDir = value;</span>
+<span class="fc" id="L65">    return this;</span>
+  }
+
+  /**
+   * @param value Class loader for resources
+   * @return this
+   */
+  public UrlFilePluginContext resourceClassLoader(ClassLoader value) {
+<span class="fc" id="L73">    resourceClassLoader = value;</span>
+<span class="fc" id="L74">    return this;</span>
+  }
+
+  /**
+   * @return Class loader for resources
+   */
+  public ClassLoader getResourceClassLoader() {
+<span class="fc" id="L81">    return resourceClassLoader;</span>
+  }
+
+  /**
+   * @return Environment
+   */
+  public Environment getEnvironment() {
+<span class="nc" id="L88">    return this.environment;</span>
+  }
+
+  /**
+   * @param value Environment
+   * @return this
+   */
+  public UrlFilePluginContext environment(Environment value) {
+<span class="fc" id="L96">    this.environment = value;</span>
+<span class="fc" id="L97">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

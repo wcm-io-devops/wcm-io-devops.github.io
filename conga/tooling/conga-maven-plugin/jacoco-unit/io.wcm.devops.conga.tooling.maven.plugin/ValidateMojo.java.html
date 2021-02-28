@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ValidateMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin</a> &gt; <span class="el_source">ValidateMojo.java</span></div><h1>ValidateMojo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.SortedSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.artifact.resolver.ResolutionErrorHandler;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.sonatype.plexus.build.incremental.BuildContext;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
+import com.google.common.collect.ImmutableList;
+
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.GeneratorOptions;
+import io.wcm.devops.conga.generator.UrlFileManager;
+import io.wcm.devops.conga.generator.handlebars.HandlebarsManager;
+import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+import io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
+import io.wcm.devops.conga.generator.util.PluginManager;
+import io.wcm.devops.conga.generator.util.PluginManagerImpl;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.model.reader.EnvironmentReader;
+import io.wcm.devops.conga.model.reader.RoleReader;
+import io.wcm.devops.conga.model.role.Role;
+import io.wcm.devops.conga.resource.Resource;
+import io.wcm.devops.conga.resource.ResourceCollection;
+import io.wcm.devops.conga.resource.ResourceInfo;
+import io.wcm.devops.conga.resource.ResourceLoader;
+import io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil;
+import io.wcm.devops.conga.tooling.maven.plugin.util.MavenContext;
+import io.wcm.devops.conga.tooling.maven.plugin.util.PathUtil;
+import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
+import io.wcm.devops.conga.tooling.maven.plugin.validation.DefinitionValidator;
+import io.wcm.devops.conga.tooling.maven.plugin.validation.ModelValidator;
+import io.wcm.devops.conga.tooling.maven.plugin.validation.NoValueProviderInRoleValidator;
+import io.wcm.devops.conga.tooling.maven.plugin.validation.RoleTemplateFileValidator;
+import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
+
+/**
+ * Validates definitions by trying to parse them with model reader or compile them via handlebars.
+ * Validates that the CONGA maven plugin version and CONGA plugin versions match or are newer than those versions
+ * used when generating the dependency artifacts.
+ */
+@Mojo(name = &quot;validate&quot;, defaultPhase = LifecyclePhase.VALIDATE, requiresProject = true, threadSafe = true,
+    requiresDependencyResolution = ResolutionScope.COMPILE)
+<span class="nc" id="L87">public class ValidateMojo extends AbstractCongaMojo {</span>
+
+  /**
+   * Selected environments to validate.
+   */
+  @Parameter(property = &quot;conga.environments&quot;)
+  private String[] environments;
+
+  @Parameter(property = &quot;project&quot;, required = true, readonly = true)
+  private MavenProject project;
+
+  @Component
+  private org.apache.maven.repository.RepositorySystem repositorySystem;
+  @Component
+  private ResolutionErrorHandler resolutionErrorHandler;
+  @Component
+  private RepositorySystem repoSystem;
+  @Component
+  private BuildContext buildContext;
+  @Parameter(property = &quot;repositorySystemSession&quot;, readonly = true)
+  private RepositorySystemSession repoSession;
+  @Parameter(property = &quot;project.remoteProjectRepositories&quot;, readonly = true)
+  private List&lt;RemoteRepository&gt; remoteRepos;
+  @Parameter(defaultValue = &quot;${session}&quot;, readonly = true, required = false)
+  private MavenSession session;
+
+  @Override
+  public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="nc" id="L115">    List&lt;URL&gt; mavenProjectClasspathUrls = ClassLoaderUtil.getMavenProjectClasspathUrls(project);</span>
+<span class="nc" id="L116">    ClassLoader mavenProjectClassLoader = ClassLoaderUtil.buildClassLoader(mavenProjectClasspathUrls);</span>
+<span class="nc" id="L117">    ResourceLoader mavenProjectResourceLoader = new ResourceLoader(mavenProjectClassLoader);</span>
+
+<span class="nc" id="L119">    ResourceCollection roleDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());</span>
+<span class="nc" id="L120">    ResourceCollection templateDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());</span>
+<span class="nc" id="L121">    ResourceCollection environmentDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());</span>
+
+    // validate role definition syntax
+<span class="nc" id="L124">    validateFiles(roleDir, roleDir, new ModelValidator&lt;Role&gt;(&quot;Role&quot;, new RoleReader()));</span>
+
+<span class="nc" id="L126">    PluginManager pluginManager = new PluginManagerImpl();</span>
+
+<span class="nc" id="L128">    MavenContext mavenContext = new MavenContext()</span>
+<span class="nc" id="L129">        .project(project)</span>
+<span class="nc" id="L130">        .session(session)</span>
+<span class="nc" id="L131">        .setRepositorySystem(repositorySystem)</span>
+<span class="nc" id="L132">        .resolutionErrorHandler(resolutionErrorHandler)</span>
+<span class="nc" id="L133">        .buildContext(buildContext)</span>
+<span class="nc" id="L134">        .log(getLog())</span>
+<span class="nc" id="L135">        .repoSystem(repoSystem)</span>
+<span class="nc" id="L136">        .repoSession(repoSession)</span>
+<span class="nc" id="L137">        .remoteRepos(remoteRepos)</span>
+<span class="nc" id="L138">        .artifactTypeMappings(getArtifactTypeMappings());</span>
+
+<span class="nc" id="L140">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
+<span class="nc" id="L141">        .baseDir(project.getBasedir())</span>
+<span class="nc" id="L142">        .resourceClassLoader(mavenProjectClassLoader)</span>
+<span class="nc" id="L143">        .pluginContextOptions(new PluginContextOptions()</span>
+<span class="nc" id="L144">          .containerContext(mavenContext));</span>
+<span class="nc" id="L145">    UrlFileManager urlFileManager = new UrlFileManager(pluginManager, urlFilePluginContext);</span>
+
+<span class="nc" id="L147">    PluginContextOptions pluginContextOptions = new PluginContextOptions()</span>
+<span class="nc" id="L148">        .pluginManager(pluginManager)</span>
+<span class="nc" id="L149">        .urlFileManager(urlFileManager)</span>
+<span class="nc" id="L150">        .valueProviderConfig(getValueProviderConfig())</span>
+<span class="nc" id="L151">        .genericPluginConfig(getPluginConfig())</span>
+<span class="nc" id="L152">        .containerContext(mavenContext)</span>
+<span class="nc" id="L153">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
+
+    // validate that all templates can be compiled
+<span class="nc" id="L156">    HandlebarsManager handlebarsManager = new HandlebarsManager(ImmutableList.of(templateDir), pluginContextOptions);</span>
+<span class="nc" id="L157">    validateFiles(templateDir, templateDir, new TemplateValidator(templateDir, handlebarsManager));</span>
+
+    // validate that roles reference existing templates
+<span class="nc" id="L160">    validateFiles(roleDir, roleDir, new RoleTemplateFileValidator(handlebarsManager));</span>
+
+    // validate that no value providers are used in role files - they should be only used in environment
+<span class="nc" id="L163">    validateFiles(roleDir, roleDir, new NoValueProviderInRoleValidator());</span>
+
+    // validate environment definition syntax
+<span class="nc" id="L166">    List&lt;Environment&gt; environmentList = validateFiles(environmentDir, environmentDir, new ModelValidator&lt;Environment&gt;(&quot;Environment&quot;, new EnvironmentReader()),</span>
+        // filter environments
+        resourceInfo -&gt; {
+<span class="nc bnc" id="L169" title="All 4 branches missed.">          if (this.environments == null || this.environments.length == 0) {</span>
+<span class="nc" id="L170">            return true;</span>
+          }
+<span class="nc bnc" id="L172" title="All 2 branches missed.">          for (String environment : this.environments) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            if (StringUtils.equals(environment, FilenameUtils.getBaseName(resourceInfo.getName()))) {</span>
+<span class="nc" id="L174">              return true;</span>
+            }
+          }
+<span class="nc" id="L177">          return false;</span>
+        });
+
+    // validate version information - for each environment separately
+<span class="nc bnc" id="L181" title="All 2 branches missed.">    for (Environment environment : environmentList) {</span>
+<span class="nc" id="L182">      UrlFilePluginContext environmentUrlFilePluginContext = new UrlFilePluginContext()</span>
+<span class="nc" id="L183">          .baseDir(project.getBasedir())</span>
+<span class="nc" id="L184">          .resourceClassLoader(mavenProjectClassLoader)</span>
+<span class="nc" id="L185">          .environment(environment)</span>
+<span class="nc" id="L186">          .pluginContextOptions(new PluginContextOptions()</span>
+<span class="nc" id="L187">              .containerContext(mavenContext));</span>
+<span class="nc" id="L188">      UrlFileManager environmentUrlFileManager = new UrlFileManager(pluginManager, environmentUrlFilePluginContext);</span>
+
+<span class="nc" id="L190">      PluginContextOptions environmentPluginContextOptions = new PluginContextOptions()</span>
+<span class="nc" id="L191">          .pluginContextOptions(pluginContextOptions)</span>
+<span class="nc" id="L192">          .urlFileManager(environmentUrlFileManager);</span>
+<span class="nc" id="L193">      validateVersionInfo(environment, mavenProjectClasspathUrls, environmentPluginContextOptions);</span>
+<span class="nc" id="L194">    }</span>
+<span class="nc" id="L195">  }</span>
+
+  // ===== FILE VALIDATION =====
+
+  private &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator)
+      throws MojoFailureException {
+<span class="nc" id="L201">    return validateFiles(sourceDir, rootSourceDir, validator, resourceInfo -&gt; true);</span>
+  }
+
+  private &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
+      Function&lt;ResourceInfo, Boolean&gt; resourceFilter) throws MojoFailureException {
+<span class="nc bnc" id="L206" title="All 2 branches missed.">    if (!sourceDir.exists()) {</span>
+<span class="nc" id="L207">      return ImmutableList.of();</span>
+    }
+<span class="nc" id="L209">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
+<span class="nc" id="L210">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
+<span class="nc bnc" id="L211" title="All 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
+<span class="nc" id="L212">      return ImmutableList.of();</span>
+    }
+
+<span class="nc" id="L215">    List&lt;T&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">    for (Resource file : files) {</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">      if (resourceFilter.apply(file)) {</span>
+<span class="nc" id="L218">        result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));</span>
+      }
+<span class="nc" id="L220">    }</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">    for (ResourceCollection dir : dirs) {</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">      if (resourceFilter.apply(dir)) {</span>
+<span class="nc" id="L223">        result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));</span>
+      }
+<span class="nc" id="L225">    }</span>
+<span class="nc" id="L226">    return result;</span>
+  }
+
+  private static String getPathForLog(ResourceCollection rootSourceDir, Resource file) {
+<span class="nc" id="L230">    String path = PathUtil.unifySlashes(file.getCanonicalPath());</span>
+<span class="nc" id="L231">    String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + &quot;/&quot;;</span>
+<span class="nc" id="L232">    return StringUtils.substringAfter(path, rootPath);</span>
+  }
+
+  // ===== PLUGIN VERSION INFO VALIDATION =====
+
+  /**
+   * Validates that the CONGA maven plugin version and CONGA plugin versions match or are newer than those versions used
+   * when generating the dependency artifacts.
+   * @param environment Environment
+   * @param mavenProjectClasspathUrls Classpath URLs of maven project
+   * @param pluginContextOptions Plugin context options
+   */
+  private void validateVersionInfo(Environment environment, List&lt;URL&gt; mavenProjectClasspathUrls, PluginContextOptions pluginContextOptions)
+      throws MojoExecutionException {
+
+    // build combined classpath for dependencies defined in environment and maven project
+<span class="nc" id="L248">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L249">    classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));</span>
+<span class="nc" id="L250">    classpathUrls.addAll(mavenProjectClasspathUrls);</span>
+<span class="nc" id="L251">    ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);</span>
+
+    // get version info from this project
+<span class="nc" id="L254">    Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
+
+    // validate current version info against dependency version infos
+<span class="nc bnc" id="L257" title="All 2 branches missed.">    for (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {</span>
+<span class="nc" id="L258">      validateVersionInfo(currentVersionInfo, dependencyVersionInfo);</span>
+<span class="nc" id="L259">    }</span>
+
+<span class="nc" id="L261">  }</span>
+
+  private List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls, PluginContextOptions pluginContextOptions) {
+<span class="nc" id="L264">    return dependencyUrls.stream()</span>
+<span class="nc" id="L265">        .map(dependencyUrl -&gt; {</span>
+<span class="nc" id="L266">          String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
+          try {
+<span class="nc" id="L268">            return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
+          }
+<span class="nc" id="L270">          catch (IOException ex) {</span>
+<span class="nc" id="L271">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
+          }
+        })
+<span class="nc" id="L274">        .flatMap(list -&gt; list.stream())</span>
+<span class="nc" id="L275">        .collect(Collectors.toList());</span>
+  }
+
+  private void validateVersionInfo(Properties currentVersionInfo, Properties dependencyVersionInfo) throws MojoExecutionException {
+<span class="nc bnc" id="L279" title="All 2 branches missed.">    for (Object keyObject : currentVersionInfo.keySet()) {</span>
+<span class="nc" id="L280">      String key = keyObject.toString();</span>
+<span class="nc" id="L281">      String currentVersionString = currentVersionInfo.getProperty(key);</span>
+<span class="nc" id="L282">      String dependencyVersionString = dependencyVersionInfo.getProperty(key);</span>
+<span class="nc bnc" id="L283" title="All 4 branches missed.">      if (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {</span>
+<span class="nc" id="L284">        continue;</span>
+      }
+<span class="nc" id="L286">      DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(currentVersionString);</span>
+<span class="nc" id="L287">      DefaultArtifactVersion dependencyVersion = new DefaultArtifactVersion(dependencyVersionString);</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">      if (currentVersion.compareTo(dependencyVersion) &lt; 0) {</span>
+<span class="nc" id="L289">        throw new MojoExecutionException(&quot;Newer CONGA maven plugin or plugin version required: &quot; + key + &quot;:&quot; + dependencyVersion.toString());</span>
+      }
+<span class="nc" id="L291">    }</span>
+<span class="nc" id="L292">  }</span>
+
+  private List&lt;Properties&gt; getDependencyVersionInfos(ClassLoader classLoader) throws MojoExecutionException {
+<span class="nc" id="L295">    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);</span>
+    try {
+<span class="nc" id="L297">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
+          &quot;classpath*:&quot; + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
+<span class="nc" id="L299">      return Arrays.stream(resources)</span>
+<span class="nc" id="L300">          .map(resource -&gt; toProperties(resource))</span>
+<span class="nc" id="L301">          .collect(Collectors.toList());</span>
+    }
+<span class="nc" id="L303">    catch (IOException ex) {</span>
+<span class="nc" id="L304">      throw new MojoExecutionException(&quot;Unable to get classpath resources: &quot; + ex.getMessage(), ex);</span>
+    }
+  }
+
+  private Properties toProperties(org.springframework.core.io.Resource resource) {
+<span class="nc" id="L309">    try (InputStream is = resource.getInputStream()) {</span>
+<span class="nc" id="L310">      Properties props = new Properties();</span>
+<span class="nc" id="L311">      props.load(is);</span>
+<span class="nc" id="L312">      return props;</span>
+    }
+<span class="nc" id="L314">    catch (IOException ex) {</span>
+<span class="nc" id="L315">      throw new RuntimeException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PackageMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.tooling.maven.plugin</a> &gt; <span class="el_source">PackageMojo.java</span></div><h1>PackageMojo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.tooling.maven.plugin;
+
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.CLASSIFIER_CONFIGURATION;
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.FILE_EXTENSION_CONFIGURATION;
+import static io.wcm.devops.conga.tooling.maven.plugin.BuildConstants.PACKAGING_CONFIGURATION;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.zip.ZipArchiver;
+
+import com.google.common.collect.ImmutableSet;
+
+import io.wcm.devops.conga.generator.util.FileUtil;
+
+/**
+ * Packages the generated configurations in a ZIP file.
+ */
+@Mojo(name = &quot;package&quot;, defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true, threadSafe = true)
+<span class="nc" id="L54">public class PackageMojo extends AbstractCongaMojo {</span>
+
+  /**
+   * Selected environments to generate.
+   */
+  @Parameter(property = &quot;conga.environments&quot;)
+  private String[] environments;
+
+  /**
+   * If set to true (default) a separate ZIP artifact is generated per environment.
+   * Otherwise a single ZIP containing all environments in sub directories is created.
+   */
+  @Parameter(defaultValue = &quot;true&quot;)
+  private boolean artifactPerEnvironment;
+
+  @Component(role = Archiver.class, hint = &quot;zip&quot;)
+  private ZipArchiver zipArchiver;
+
+  @Override
+  @SuppressWarnings(&quot;PMD.UseStringBufferForStringAppends&quot;)
+  public void execute() throws MojoExecutionException, MojoFailureException {
+
+    // build attachments with all generated configurations
+<span class="nc" id="L77">    buildGeneratedConfigurationAttachments();</span>
+
+<span class="nc" id="L79">  }</span>
+
+
+  @SuppressWarnings(&quot;PMD.UseStringBufferForStringAppends&quot;)
+  private void buildGeneratedConfigurationAttachments() throws MojoExecutionException, MojoFailureException {
+    Set&lt;String&gt; selectedEnvironments;
+<span class="nc bnc" id="L85" title="All 4 branches missed.">    if (environments != null &amp;&amp; environments.length &gt; 0) {</span>
+<span class="nc" id="L86">      selectedEnvironments = ImmutableSet.copyOf(environments);</span>
+    }
+    else {
+<span class="nc" id="L89">      selectedEnvironments = null;</span>
+    }
+
+    // collect configuration environment directories
+<span class="nc" id="L93">    File configRootDir = getTargetDir();</span>
+<span class="nc" id="L94">    List&lt;File&gt; environmentDirs = Arrays.stream(configRootDir.listFiles())</span>
+<span class="nc" id="L95">        .filter(file -&gt; file.isDirectory())</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        .filter(dir -&gt; selectedEnvironments == null || selectedEnvironments.contains(dir.getName()))</span>
+<span class="nc" id="L97">        .collect(Collectors.toList());</span>
+
+<span class="nc" id="L99">    MavenProject project = getProject();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">    if (artifactPerEnvironment) {</span>
+      // generate an ZIP artifact with generated configurations for each environment
+<span class="nc bnc" id="L102" title="All 2 branches missed.">      for (File environmentDir : environmentDirs) {</span>
+
+        // classifier is environment name
+        // if current project is not a config project, prefix the classifier
+<span class="nc" id="L106">        String classifier = environmentDir.getName();</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (!StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L108">          classifier = CLASSIFIER_CONFIGURATION + &quot;-&quot; + classifier;</span>
+        }
+<span class="nc" id="L110">        validateClassifier(classifier);</span>
+
+        // build ZIP artifact
+<span class="nc" id="L113">        File outputFile = buildZipFile(environmentDir, classifier);</span>
+
+        // attach ZIP artifact
+<span class="nc" id="L116">        projectHelper.attachArtifact(project, outputFile, classifier);</span>
+
+<span class="nc" id="L118">      }</span>
+
+      // additionally build a JAR file with all CONGA definitions and resources as main artifact
+<span class="nc" id="L121">      buildDefinitionsJarFile();</span>
+
+    }
+    else {
+      // generate an ZIP artifact containing all environments
+<span class="nc" id="L126">      String classifier = null;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">      if (!StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L128">        classifier = CLASSIFIER_CONFIGURATION;</span>
+      }
+<span class="nc" id="L130">      validateClassifier(classifier);</span>
+
+<span class="nc" id="L132">      File outputFile = buildZipFile(configRootDir, classifier);</span>
+      // set or attach ZIP artifact
+<span class="nc bnc" id="L134" title="All 2 branches missed.">      if (StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L135">        project.getArtifact().setFile(outputFile);</span>
+      }
+      else {
+<span class="nc" id="L138">        projectHelper.attachArtifact(project, outputFile, CLASSIFIER_CONFIGURATION);</span>
+      }
+    }
+
+<span class="nc" id="L142">  }</span>
+
+  /**
+   * Build JAR file with definitions.
+   * @param contentDirectory Content directory for JAR file
+   * @return JAR file
+   */
+  private File buildZipFile(File contentDirectory, String classifier) throws MojoExecutionException {
+<span class="nc" id="L150">    File zipFile = new File(getProject().getBuild().getDirectory(), buildZipFileName(classifier));</span>
+
+<span class="nc" id="L152">    String basePath = toZipDirectoryPath(contentDirectory);</span>
+<span class="nc" id="L153">    addZipDirectory(basePath, contentDirectory);</span>
+<span class="nc" id="L154">    zipArchiver.setDestFile(zipFile);</span>
+    try {
+<span class="nc" id="L156">      zipArchiver.createArchive();</span>
+    }
+<span class="nc" id="L158">    catch (ArchiverException | IOException ex) {</span>
+<span class="nc" id="L159">      throw new MojoExecutionException(&quot;Unable to build file &quot; + zipFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L160">    }</span>
+
+<span class="nc" id="L162">    return zipFile;</span>
+  }
+
+  /**
+   * Recursive through all directory and add file to zipArchiver.
+   * This is used instead of zipArchiver.addDirectory to make sure for symlinks the target of the symlink
+   * are included rather than the symlink information itself.
+   * @param basePath Base path
+   * @param directory Directory to include
+   */
+  private void addZipDirectory(String basePath, File directory) throws MojoExecutionException {
+<span class="nc" id="L173">    String directoryPath = toZipDirectoryPath(directory);</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
+<span class="nc" id="L175">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
+<span class="nc" id="L176">      File[] files = directory.listFiles();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">      if (files != null) {</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        for (File file : files) {</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">          if (file.isDirectory()) {</span>
+<span class="nc" id="L180">            addZipDirectory(basePath, file);</span>
+          }
+<span class="nc bnc" id="L182" title="All 2 branches missed.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
+            // include file symlink is pointing at
+            try {
+<span class="nc" id="L185">              zipArchiver.addFile(file.toPath().toRealPath().toFile(), relativeDirectoryPath + file.getName());</span>
+            }
+<span class="nc" id="L187">            catch (IOException ex) {</span>
+<span class="nc" id="L188">              throw new MojoExecutionException(&quot;Unable to include symlinked file &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+<span class="nc" id="L189">            }</span>
+          }
+          else {
+<span class="nc" id="L192">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
+          }
+        }
+      }
+    }
+<span class="nc" id="L197">  }</span>
+
+  private String toZipDirectoryPath(File directory) {
+<span class="nc" id="L200">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
+<span class="nc" id="L201">    return StringUtils.replace(canoncialPath, &quot;\\&quot;, &quot;/&quot;) + &quot;/&quot;;</span>
+  }
+
+  private String buildZipFileName(String classifier) {
+<span class="nc" id="L205">    StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L206">    sb.append(getProject().getBuild().getFinalName());</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">    if (StringUtils.isNotBlank(classifier)) {</span>
+<span class="nc" id="L208">      sb.append(&quot;-&quot;).append(classifier);</span>
+    }
+<span class="nc" id="L210">    sb.append(&quot;.&quot;).append(FILE_EXTENSION_CONFIGURATION);</span>
+<span class="nc" id="L211">    return sb.toString();</span>
+  }
+
+  private void validateClassifier(String classifier) throws MojoExecutionException {
+    // classifier should not contain dots to make sure separation from extension/packaging types is not affected
+<span class="nc bnc" id="L216" title="All 2 branches missed.">    if (StringUtils.contains(classifier, &quot;.&quot;)) {</span>
+<span class="nc" id="L217">      throw new MojoExecutionException(&quot;Classifier must not contain dots: &quot; + classifier);</span>
+    }
+<span class="nc" id="L219">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

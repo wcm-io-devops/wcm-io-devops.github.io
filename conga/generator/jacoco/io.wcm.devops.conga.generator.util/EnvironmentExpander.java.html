@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnvironmentExpander.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.util</a> &gt; <span class="el_source">EnvironmentExpander.java</span></div><h1>EnvironmentExpander.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.ImmutableList;
+import com.rits.cloning.Cloner;
+
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.model.environment.Environment;
+import io.wcm.devops.conga.model.environment.Node;
+
+/**
+ * Expands configuration nodes in environment.
+ */
+public final class EnvironmentExpander {
+
+  private EnvironmentExpander() {
+    // static methods only
+  }
+
+  /**
+   * Environment definitions allows definition of nodes with multiple node names.
+   * Expand them to nodes with single node names to simplify further processing.
+   * @param environment Environment that may contain nodes with multiple node names.
+   * @param environmentName Environment name
+   * @return Environment that contains only nodes with single node names
+   */
+  public static Environment expandNodes(Environment environment, String environmentName) {
+<span class="fc" id="L53">    Environment clonedEnvironemnt = Cloner.standard().deepClone(environment);</span>
+
+<span class="fc" id="L55">    clonedEnvironemnt.setNodes(environment.getNodes().stream()</span>
+<span class="fc" id="L56">        .flatMap(node -&gt; getSingleNodes(node, environmentName))</span>
+<span class="fc" id="L57">        .collect(Collectors.toList()));</span>
+
+<span class="fc" id="L59">    return clonedEnvironemnt;</span>
+  }
+
+  private static Stream&lt;Node&gt; getSingleNodes(Node node, String environmentName) {
+<span class="fc" id="L63">    List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L65">    boolean hasNode = StringUtils.isNotEmpty(node.getNode());</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">    boolean hasNodes = !node.getNodes().isEmpty();</span>
+
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">    if (!hasNode &amp;&amp; !hasNodes) {</span>
+<span class="nc" id="L69">      throw new GeneratorException(&quot;Node without properties 'node' and 'nodes' found in '&quot; + environmentName + &quot;'.&quot;);</span>
+    }
+<span class="pc bpc" id="L71" title="1 of 4 branches missed.">    else if (hasNode &amp;&amp; hasNodes) {</span>
+<span class="nc" id="L72">      throw new GeneratorException(&quot;Node with both properties 'node' and 'nodes' found in '&quot; + environmentName + &quot;'.&quot;);</span>
+    }
+<span class="fc bfc" id="L74" title="All 2 branches covered.">    else if (hasNode) {</span>
+<span class="fc" id="L75">      nodes.add(node);</span>
+    }
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">    else if (hasNodes) {</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">      for (String nodeName : node.getNodes()) {</span>
+<span class="fc" id="L79">        Node clonedNode = Cloner.standard().deepClone(node);</span>
+<span class="fc" id="L80">        clonedNode.setNode(nodeName);</span>
+<span class="fc" id="L81">        clonedNode.setNodes(ImmutableList.of());</span>
+<span class="fc" id="L82">        nodes.add(clonedNode);</span>
+<span class="fc" id="L83">      }</span>
+    }
+
+<span class="fc" id="L86">    return nodes.stream();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
