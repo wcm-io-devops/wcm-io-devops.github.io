@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnsibleInventoryWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">it.andreascarpino.ansible.inventory.util</a> &gt; <span class="el_source">AnsibleInventoryWriter.java</span></div><h1>AnsibleInventoryWriter.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ * Copyright (c) 2016 Andrea Scarpino &lt;me@andreascarpino.it&gt;
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+//CHECKSTYLE:OFF
+package it.andreascarpino.ansible.inventory.util;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import it.andreascarpino.ansible.inventory.type.AnsibleGroup;
+import it.andreascarpino.ansible.inventory.type.AnsibleHost;
+import it.andreascarpino.ansible.inventory.type.AnsibleInventory;
+import it.andreascarpino.ansible.inventory.type.AnsibleVariable;
+
+/**
+ * @author Andrea Scarpino
+ */
+public final class AnsibleInventoryWriter {
+
+  private AnsibleInventoryWriter() {
+  }
+
+  private static String groupHeader(String group) {
+<span class="fc" id="L38">    return &quot;[&quot; + group + &quot;]\n&quot;;</span>
+  }
+
+  private static String variableBlock(AnsibleVariable variable) {
+<span class="fc" id="L42">    final String val = variable.getValue().toString();</span>
+
+    // Escape backslashes for YAML
+<span class="fc" id="L45">    return variable.getName() + &quot;=&quot; + val.replace(&quot;\\&quot;, &quot;\\\\&quot;);</span>
+  }
+
+  private static String groupVarsHeader(String group) {
+<span class="fc" id="L49">    return &quot;[&quot; + group + &quot;:vars]\n&quot;;</span>
+  }
+
+  private static String groupOfGroupHeader(String group) {
+<span class="fc" id="L53">    return &quot;[&quot; + group + &quot;:children]\n&quot;;</span>
+  }
+
+  private static String printHost(AnsibleHost host) {
+<span class="fc" id="L57">    final StringBuilder builder = new StringBuilder();</span>
+<span class="fc" id="L58">    builder.append(host.getName());</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    for (AnsibleVariable variable : host.getVariables()) {</span>
+<span class="fc" id="L61">      builder.append(' ').append(variableBlock(variable));</span>
+<span class="fc" id="L62">    }</span>
+
+<span class="fc" id="L64">    builder.append('\n');</span>
+
+<span class="fc" id="L66">    return builder.toString();</span>
+  }
+
+  private static void printHost(AnsibleHost host, OutputStream stream) throws IOException {
+<span class="nc" id="L70">    stream.write(host.getName().getBytes());</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">    for (AnsibleVariable variable : host.getVariables()) {</span>
+<span class="nc" id="L73">      stream.write((&quot; &quot; + variableBlock(variable)).getBytes());</span>
+<span class="nc" id="L74">    }</span>
+
+<span class="nc" id="L76">    stream.write(&quot;\n&quot;.getBytes());</span>
+<span class="nc" id="L77">  }</span>
+
+  public static String write(AnsibleInventory inventory) {
+<span class="fc" id="L80">    final StringBuilder builder = new StringBuilder();</span>
+
+<span class="fc bfc" id="L82" title="All 2 branches covered.">    for (AnsibleHost host : inventory.getHosts()) {</span>
+<span class="fc" id="L83">      builder.append(printHost(host));</span>
+<span class="fc" id="L84">    }</span>
+
+<span class="fc bfc" id="L86" title="All 2 branches covered.">    for (AnsibleGroup group : inventory.getGroups()) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">      if (!group.getSubgroups().isEmpty()) {</span>
+<span class="fc" id="L88">        builder.append(groupOfGroupHeader(group.getName()));</span>
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (!group.getSubgroups().isEmpty()) {</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">          for (AnsibleGroup g : group.getSubgroups()) {</span>
+<span class="fc" id="L92">            builder.append(g.getName()).append('\n');</span>
+<span class="fc" id="L93">          }</span>
+        } else {
+<span class="nc" id="L95">          builder.append(&quot;\n&quot;);</span>
+        }
+      }
+
+<span class="fc bfc" id="L99" title="All 2 branches covered.">      if (!group.getHosts().isEmpty()) {</span>
+<span class="fc" id="L100">        builder.append(groupHeader(group.getName()));</span>
+
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        for (AnsibleHost host : group.getHosts()) {</span>
+<span class="fc" id="L103">          builder.append(printHost(host));</span>
+<span class="fc" id="L104">        }</span>
+      }
+
+<span class="fc bfc" id="L107" title="All 2 branches covered.">      if (!group.getVariables().isEmpty()) {</span>
+<span class="fc" id="L108">        builder.append(groupVarsHeader(group.getName()));</span>
+
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (!group.getVariables().isEmpty()) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">          for (AnsibleVariable variable : group.getVariables()) {</span>
+<span class="fc" id="L112">            builder.append(variableBlock(variable)).append('\n');</span>
+<span class="fc" id="L113">          }</span>
+        } else {
+<span class="nc" id="L115">          builder.append(&quot;\n&quot;);</span>
+        }
+      }
+<span class="fc" id="L118">    }</span>
+
+<span class="fc" id="L120">    return builder.toString();</span>
+  }
+
+  public static void write(AnsibleInventory inventory, OutputStream stream) throws IOException {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">    for (AnsibleHost host : inventory.getHosts()) {</span>
+<span class="nc" id="L125">      printHost(host, stream);</span>
+<span class="nc" id="L126">    }</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">    for (AnsibleGroup group : inventory.getGroups()) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">      if (!group.getSubgroups().isEmpty()) {</span>
+<span class="nc" id="L130">        stream.write(groupOfGroupHeader(group.getName()).getBytes());</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (!group.getSubgroups().isEmpty()) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">          for (AnsibleGroup g : group.getSubgroups()) {</span>
+<span class="nc" id="L134">            stream.write((g.getName() + &quot;\n&quot;).getBytes());</span>
+<span class="nc" id="L135">          }</span>
+        } else {
+<span class="nc" id="L137">          stream.write(&quot;\n&quot;.getBytes());</span>
+        }
+      }
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">      if (!group.getHosts().isEmpty()) {</span>
+<span class="nc" id="L142">        stream.write(groupHeader(group.getName()).getBytes());</span>
+
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        for (AnsibleHost host : group.getHosts()) {</span>
+<span class="nc" id="L145">          printHost(host, stream);</span>
+<span class="nc" id="L146">        }</span>
+      }
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">      if (!group.getVariables().isEmpty()) {</span>
+<span class="nc" id="L150">        stream.write(&quot;\n&quot;.getBytes());</span>
+<span class="nc" id="L151">        stream.write(groupVarsHeader(group.getName()).getBytes());</span>
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (!group.getVariables().isEmpty()) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">          for (AnsibleVariable variable : group.getVariables()) {</span>
+<span class="nc" id="L155">            stream.write((variableBlock(variable) + &quot;\n&quot;).getBytes());</span>
+<span class="nc" id="L156">          }</span>
+        } else {
+<span class="nc" id="L158">          stream.write(&quot;\n&quot;.getBytes());</span>
+        }
+      }
+<span class="nc" id="L161">    }</span>
+<span class="nc" id="L162">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

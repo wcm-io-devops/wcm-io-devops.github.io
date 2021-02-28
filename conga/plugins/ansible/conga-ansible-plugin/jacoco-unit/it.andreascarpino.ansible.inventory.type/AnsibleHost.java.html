@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnsibleHost.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">it.andreascarpino.ansible.inventory.type</a> &gt; <span class="el_source">AnsibleHost.java</span></div><h1>AnsibleHost.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ * Copyright (c) 2016 Andrea Scarpino &lt;me@andreascarpino.it&gt;
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+//CHECKSTYLE:OFF
+package it.andreascarpino.ansible.inventory.type;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * @author Andrea Scarpino
+ */
+@SuppressWarnings(&quot;hiding&quot;)
+public class AnsibleHost {
+
+  private String name;
+
+  private Set&lt;AnsibleVariable&gt; variables;
+
+  public AnsibleHost(String name) {
+<span class="fc" id="L39">    super();</span>
+<span class="fc" id="L40">    this.name = name;</span>
+<span class="fc" id="L41">    this.variables = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L42">  }</span>
+
+  public AnsibleHost(String name, List&lt;AnsibleVariable&gt; variables) {
+<span class="nc" id="L45">    this(name);</span>
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">    if (variables != null) {</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">      for (AnsibleVariable v : variables) {</span>
+<span class="nc" id="L49">        this.variables.add(v);</span>
+<span class="nc" id="L50">      }</span>
+    }
+<span class="nc" id="L52">  }</span>
+
+  public String getName() {
+<span class="fc" id="L55">    return name;</span>
+  }
+
+  public Set&lt;AnsibleVariable&gt; getVariables() {
+<span class="fc" id="L59">    return this.variables;</span>
+  }
+
+  public void addVariable(AnsibleVariable variable) {
+<span class="fc" id="L63">    this.variables.add(variable);</span>
+<span class="fc" id="L64">  }</span>
+
+  public void addVariables(List&lt;AnsibleVariable&gt; variables) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">    for (AnsibleVariable v : variables) {</span>
+<span class="nc" id="L68">      addVariable(v);</span>
+<span class="nc" id="L69">    }</span>
+<span class="nc" id="L70">  }</span>
+
+  public AnsibleVariable getVariable(String variableName) {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">    for (AnsibleVariable v : variables) {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">      if (v.getName().equals(variableName)) {</span>
+<span class="nc" id="L75">        return v;</span>
+      }
+<span class="nc" id="L77">    }</span>
+
+<span class="nc" id="L79">    return null;</span>
+  }
+
+  public void removeVariable(String variableName) {
+<span class="nc" id="L83">    Iterator&lt;AnsibleVariable&gt; variableIterator = variables.iterator();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">    while (variableIterator.hasNext()) {</span>
+<span class="nc" id="L85">      AnsibleVariable v = variableIterator.next();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">      if (StringUtils.equals(v.getName(), variableName)) {</span>
+<span class="nc" id="L87">        variableIterator.remove();</span>
+      }
+<span class="nc" id="L89">    }</span>
+<span class="nc" id="L90">  }</span>
+
+  public void clear() {
+<span class="nc" id="L93">    this.variables.clear();</span>
+<span class="nc" id="L94">  }</span>
+
+  @Override
+  public boolean equals(Object o) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">    if (this == o) {</span>
+<span class="nc" id="L99">      return true;</span>
+    }
+<span class="nc bnc" id="L101" title="All 4 branches missed.">    if ((o == null) || (getClass() != o.getClass())) {</span>
+<span class="nc" id="L102">      return false;</span>
+    }
+
+<span class="nc" id="L105">    AnsibleHost host = (AnsibleHost) o;</span>
+
+<span class="nc" id="L107">    return name.equals(host.name);</span>
+  }
+
+  @Override
+  public int hashCode() {
+<span class="nc" id="L112">    return name.hashCode();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnsibleVaultValueProviderPlugin.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.ansible.valueprovider</a> &gt; <span class="el_source">AnsibleVaultValueProviderPlugin.java</span></div><h1>AnsibleVaultValueProviderPlugin.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.ansible.valueprovider;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.spi.ValueProviderPlugin;
+import io.wcm.devops.conga.generator.spi.context.ValueProviderContext;
+import io.wcm.devops.conga.generator.util.FileUtil;
+import io.wcm.devops.conga.plugins.ansible.util.AnsibleVaultPassword;
+import io.wcm.devops.conga.plugins.ansible.util.FileScriptLoader;
+import net.wedjaa.ansible.vault.Manager;
+
+/**
+ * Gets variables from Ansible Vault-encrypted YAML files.
+ */
+<span class="fc" id="L39">public class AnsibleVaultValueProviderPlugin implements ValueProviderPlugin {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;ansible-vault&quot;;
+
+  /**
+   * Parameter: Path to inventory file
+   */
+  public static final String PARAM_FILE = &quot;file&quot;;
+
+  /**
+   * Parameter: Vault password
+   */
+  public static final String PARAM_PASSWORD = &quot;password&quot;;
+
+  /**
+   * Parameter: Vault password file.
+   */
+  public static final String PARAM_PASSWORD_FILE = &quot;passwordFile&quot;;
+
+  /**
+   * System environment variable pointing to a file containing the vault password.
+   */
+  public static final String ENVIRONMENT_VARIABLE_PASSWORD_FILE = &quot;ANSIBLE_VAULT_PASSWORD_FILE&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L68">    return NAME;</span>
+  }
+
+  @Override
+  public Object resolve(String variableName, ValueProviderContext context) {
+<span class="fc" id="L73">    Map&lt;String, Object&gt; vars = getVaultContent(context);</span>
+<span class="fc" id="L74">    return vars.get(variableName);</span>
+  }
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  private Map&lt;String, Object&gt; getVaultContent(ValueProviderContext context) {
+
+    // try to get from cache
+<span class="fc" id="L81">    Map&lt;String, Object&gt; content = (Map&lt;String, Object&gt;)context.getValueProviderCache();</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">    if (content != null) {</span>
+<span class="fc" id="L83">      return content;</span>
+    }
+
+    // get vault password
+<span class="fc" id="L87">    String password = AnsibleVaultPassword.get();</span>
+
+    // read from inventory file
+<span class="fc" id="L90">    String filePath = (String)context.getValueProviderConfig(PARAM_FILE);</span>
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    if (StringUtils.isBlank(filePath)) {</span>
+<span class="fc" id="L93">      throw new GeneratorException(&quot;Config parameters '&quot; + PARAM_FILE + &quot;' missing for value provider '&quot; + NAME + &quot;'.&quot;);</span>
+    }
+
+<span class="fc" id="L96">    File file = new File(filePath);</span>
+<span class="pc bpc" id="L97" title="1 of 4 branches missed.">    if (!(file.exists() &amp;&amp; file.isFile())) {</span>
+<span class="fc" id="L98">      throw new GeneratorException(&quot;Ansible Vault file does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+    }
+
+    try {
+<span class="fc" id="L102">      String encryptedContent = FileScriptLoader.readFileToString(file);</span>
+<span class="fc" id="L103">      content = (Map&lt;String, Object&gt;)new Manager().getFromVault(Map.class, encryptedContent, password);</span>
+
+      // put to cache
+<span class="fc" id="L106">      context.setValueProviderCache(content);</span>
+<span class="fc" id="L107">      return content;</span>
+    }
+<span class="nc" id="L109">    catch (IOException ex) {</span>
+<span class="nc" id="L110">      throw new GeneratorException(&quot;Error reading Ansible Vault file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

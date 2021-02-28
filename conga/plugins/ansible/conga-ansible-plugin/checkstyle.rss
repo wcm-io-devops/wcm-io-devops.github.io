@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>CONGA Ansible Plugin - Checkstyle report</title>
+    <link>https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible/</link>
+    <description>CONGA Ansible Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2015 - 2021 wcm.io DevOps</copyright>
+    <item>
+      <title>File: 31,
+             Errors: 0,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.util.AnsibleInventoryReader.java">it/andreascarpino/ansible/inventory/util/AnsibleInventoryReader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueencryption.YamlVaultValue.java">io/wcm/devops/conga/plugins/ansible/valueencryption/YamlVaultValue.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.util.package-info.java">io/wcm/devops/conga/plugins/ansible/util/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.type.AnsibleHost.java">it/andreascarpino/ansible/inventory/type/AnsibleHost.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.urlfile.package-info.java">io/wcm/devops/conga/plugins/ansible/urlfile/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueprovider.package-info.java">io/wcm/devops/conga/plugins/ansible/valueprovider/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.type.AnsibleConstants.java">it/andreascarpino/ansible/inventory/type/AnsibleConstants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.decoders.CypherFactory.java">net/wedjaa/ansible/vault/crypto/decoders/CypherFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.data.VaultContent.java">net/wedjaa/ansible/vault/crypto/data/VaultContent.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.type.AnsibleInventory.java">it/andreascarpino/ansible/inventory/type/AnsibleInventory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.util.AnsibleVaultPasswordMissing.java">io/wcm/devops/conga/plugins/ansible/util/AnsibleVaultPasswordMissing.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueprovider.AnsibleInventoryValueProviderPlugin.java">io/wcm/devops/conga/plugins/ansible/valueprovider/AnsibleInventoryValueProviderPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.decoders.implementation.CypherAES256.java">net/wedjaa/ansible/vault/crypto/decoders/implementation/CypherAES256.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.decoders.implementation.CypherAES.java">net/wedjaa/ansible/vault/crypto/decoders/implementation/CypherAES.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.VaultHandler.java">net/wedjaa/ansible/vault/crypto/VaultHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.type.AnsibleVariable.java">it/andreascarpino/ansible/inventory/type/AnsibleVariable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueencryption.AnsibleYamlRepresentPlugin.java">io/wcm/devops/conga/plugins/ansible/valueencryption/AnsibleYamlRepresentPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.util.AnsibleInventoryWriter.java">it/andreascarpino/ansible/inventory/util/AnsibleInventoryWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.decoders.implementation.EncryptionKeychain.java">net/wedjaa/ansible/vault/crypto/decoders/implementation/EncryptionKeychain.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.data.VaultInfo.java">net/wedjaa/ansible/vault/crypto/data/VaultInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.urlfile.AnsibleVaultUrlFilePlugin.java">io/wcm/devops/conga/plugins/ansible/urlfile/AnsibleVaultUrlFilePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#it.andreascarpino.ansible.inventory.type.AnsibleGroup.java">it/andreascarpino/ansible/inventory/type/AnsibleGroup.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueprovider.AnsibleVaultValueProviderPlugin.java">io/wcm/devops/conga/plugins/ansible/valueprovider/AnsibleVaultValueProviderPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueencryption.AnsibleYamlConstructorPlugin.java">io/wcm/devops/conga/plugins/ansible/valueencryption/AnsibleYamlConstructorPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueencryption.AnsibleValueEncryptionPlugin.java">io/wcm/devops/conga/plugins/ansible/valueencryption/AnsibleValueEncryptionPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.valueencryption.YamlVaultValueRepresent.java">io/wcm/devops/conga/plugins/ansible/valueencryption/YamlVaultValueRepresent.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.Manager.java">net/wedjaa/ansible/vault/Manager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface.java">net/wedjaa/ansible/vault/crypto/decoders/inter/CypherInterface.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#net.wedjaa.ansible.vault.crypto.data.Util.java">net/wedjaa/ansible/vault/crypto/data/Util.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.util.FileScriptLoader.java">io/wcm/devops/conga/plugins/ansible/util/FileScriptLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/conga-ansible-plugin/io.wcm.devops.conga.plugins.ansible.parent/io.wcm.devops.conga.plugins.ansible//checkstyle.html#io.wcm.devops.conga.plugins.ansible.util.AnsibleVaultPassword.java">io/wcm/devops/conga/plugins/ansible/util/AnsibleVaultPassword.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

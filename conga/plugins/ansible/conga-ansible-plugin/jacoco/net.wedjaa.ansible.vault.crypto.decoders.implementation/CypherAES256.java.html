@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CypherAES256.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto.decoders.implementation</a> &gt; <span class="el_source">CypherAES256.java</span></div><h1>CypherAES256.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//CHECKSTYLE:OFF
+package net.wedjaa.ansible.vault.crypto.decoders.implementation;
+
+import static net.wedjaa.ansible.vault.crypto.VaultHandler.CHAR_ENCODING;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.wedjaa.ansible.vault.crypto.data.Util;
+import net.wedjaa.ansible.vault.crypto.data.VaultContent;
+import net.wedjaa.ansible.vault.crypto.data.VaultInfo;
+import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
+
+<span class="fc" id="L38">public class CypherAES256 implements CypherInterface {</span>
+
+<span class="fc" id="L40">  private static final Logger logger = LoggerFactory.getLogger(CypherAES256.class);</span>
+
+  public final static String CYPHER_ID = &quot;AES256&quot;;
+  public final static int AES_KEYLEN = 256;
+  public final static String KEYGEN_ALGO = &quot;HmacSHA256&quot;;
+  public final static String CYPHER_KEY_ALGO = &quot;AES&quot;;
+  public static final String CYPHER_ALGO = &quot;AES/CTR/NoPadding&quot;;
+  private static final String JDK8_UPF_URL = &quot;http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html&quot;;
+
+  private static final int SALT_LENGTH = 32;
+  public final static int KEYLEN = 32;
+  public final static int IVLEN = 16;
+  public final static int ITERATIONS = 10000;
+
+  private boolean hasValidAESProvider() {
+<span class="fc" id="L55">    boolean canCrypt = false;</span>
+    try {
+<span class="fc" id="L57">      int maxKeyLen = Cipher.getMaxAllowedKeyLength(CYPHER_ALGO);</span>
+<span class="fc" id="L58">      logger.trace(&quot;Available keylen: {}&quot;, maxKeyLen);</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">      if (maxKeyLen &gt;= AES_KEYLEN) {</span>
+<span class="fc" id="L60">        canCrypt = true;</span>
+      }
+      else {
+<span class="nc" id="L63">        logger.warn(&quot;JRE doesn't support {} keylength for {}\nInstall unrestricted policy files from:\n{}&quot;,</span>
+<span class="nc" id="L64">            AES_KEYLEN, CYPHER_KEY_ALGO, JDK8_UPF_URL);</span>
+      }
+    }
+<span class="nc" id="L67">    catch (Exception ex) {</span>
+<span class="nc" id="L68">      logger.warn(&quot;Failed to check for proper cypher algorithms: {}&quot;, ex.getMessage());</span>
+<span class="fc" id="L69">    }</span>
+<span class="fc" id="L70">    return canCrypt;</span>
+  }
+
+  public byte[] calculateHMAC(byte[] key, byte[] data) throws IOException {
+<span class="fc" id="L74">    byte[] computedMac = null;</span>
+
+    try {
+<span class="fc" id="L77">      SecretKeySpec hmacKey = new SecretKeySpec(key, KEYGEN_ALGO);</span>
+<span class="fc" id="L78">      Mac mac = Mac.getInstance(KEYGEN_ALGO);</span>
+<span class="fc" id="L79">      mac.init(hmacKey);</span>
+<span class="fc" id="L80">      computedMac = mac.doFinal(data);</span>
+    }
+<span class="nc" id="L82">    catch (Exception ex) {</span>
+<span class="nc" id="L83">      throw new IOException(&quot;Error decrypting HMAC hash: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L84">    }</span>
+
+<span class="fc" id="L86">    return computedMac;</span>
+  }
+
+  public boolean verifyHMAC(byte[] hmac, byte[] key, byte[] data) throws IOException {
+<span class="fc" id="L90">    byte[] calculated = calculateHMAC(key, data);</span>
+<span class="fc" id="L91">    return Arrays.equals(hmac, calculated);</span>
+  }
+
+  public int paddingLength(byte[] decrypted) {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    if (decrypted.length == 0) {</span>
+<span class="nc" id="L96">      logger.trace(&quot;Empty decoded text has no padding.&quot;);</span>
+<span class="nc" id="L97">      return 0;</span>
+    }
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L101">      logger.trace(&quot;Padding length: {}&quot;, decrypted[decrypted.length - 1]);</span>
+    }
+<span class="fc" id="L103">    return decrypted[decrypted.length - 1];</span>
+  }
+
+  public byte[] unpad(byte[] decrypted) {
+<span class="fc" id="L107">    int length = decrypted.length - paddingLength(decrypted);</span>
+<span class="fc" id="L108">    return Arrays.copyOfRange(decrypted, 0, length);</span>
+  }
+
+  public byte[] pad(byte[] cleartext) throws IOException {
+<span class="fc" id="L112">    byte[] padded = null;</span>
+
+    try {
+<span class="fc" id="L115">      int blockSize = Cipher.getInstance(CYPHER_ALGO).getBlockSize();</span>
+<span class="fc" id="L116">      logger.trace(&quot;Padding to block size: {}&quot;, blockSize);</span>
+<span class="fc" id="L117">      int padding_length = (blockSize - (cleartext.length % blockSize));</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">      if (padding_length == 0) {</span>
+<span class="nc" id="L119">        padding_length = blockSize;</span>
+      }
+<span class="fc" id="L121">      padded = Arrays.copyOf(cleartext, cleartext.length + padding_length);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">      for (int i = 1; i &lt;= padding_length; i++) {</span>
+<span class="fc" id="L123">        padded[padded.length - i] = (byte)padding_length;</span>
+      }
+
+    }
+<span class="nc" id="L127">    catch (Exception ex) {</span>
+<span class="nc" id="L128">      throw new IOException(&quot;Error calculating padding for &quot; + CYPHER_ALGO + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L129">    }</span>
+
+<span class="fc" id="L131">    return padded;</span>
+  }
+
+  public byte[] decryptAES(byte[] cypher, byte[] key, byte[] iv) throws IOException {
+
+<span class="fc" id="L136">    SecretKeySpec keySpec = new SecretKeySpec(key, CYPHER_KEY_ALGO);</span>
+<span class="fc" id="L137">    IvParameterSpec ivSpec = new IvParameterSpec(iv);</span>
+    try {
+<span class="fc" id="L139">      Cipher cipher = Cipher.getInstance(CYPHER_ALGO);</span>
+<span class="fc" id="L140">      cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);</span>
+<span class="fc" id="L141">      byte[] decrypted = cipher.doFinal(cypher);</span>
+<span class="fc" id="L142">      return unpad(decrypted);</span>
+    }
+<span class="nc" id="L144">    catch (Exception ex) {</span>
+<span class="nc" id="L145">      throw new IOException(&quot;Failed to decrypt data: &quot; + ex.getMessage(), ex);</span>
+    }
+  }
+
+  public byte[] encryptAES(byte[] cleartext, byte[] key, byte[] iv) throws IOException {
+<span class="fc" id="L150">    SecretKeySpec keySpec = new SecretKeySpec(key, CYPHER_KEY_ALGO);</span>
+<span class="fc" id="L151">    IvParameterSpec ivSpec = new IvParameterSpec(iv);</span>
+    try {
+<span class="fc" id="L153">      Cipher cipher = Cipher.getInstance(CYPHER_ALGO);</span>
+<span class="fc" id="L154">      cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);</span>
+<span class="fc" id="L155">      byte[] encrypted = cipher.doFinal(cleartext);</span>
+<span class="fc" id="L156">      return encrypted;</span>
+    }
+<span class="nc" id="L158">    catch (Exception ex) {</span>
+<span class="nc" id="L159">      throw new IOException(&quot;Failed to encrypt data: &quot; + ex.getMessage(), ex);</span>
+    }
+  }
+
+  @Override
+  public byte[] decrypt(byte[] encryptedData, String password) throws IOException {
+<span class="fc" id="L165">    byte[] decrypted = null;</span>
+
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">    if (!hasValidAESProvider()) {</span>
+<span class="nc" id="L168">      throw new IOException(&quot;Missing valid AES256 provider - install unrestricted policy profiles.&quot;);</span>
+    }
+
+<span class="fc" id="L171">    VaultContent vaultContent = new VaultContent(encryptedData);</span>
+
+<span class="fc" id="L173">    byte[] salt = vaultContent.getSalt();</span>
+<span class="fc" id="L174">    byte[] hmac = vaultContent.getHmac();</span>
+<span class="fc" id="L175">    byte[] cypher = vaultContent.getData();</span>
+<span class="fc" id="L176">    logger.trace(&quot;Salt: {} - {}&quot;, salt.length, Util.hexit(salt, 100));</span>
+<span class="fc" id="L177">    logger.trace(&quot;HMAC: {} - {}&quot;, hmac.length, Util.hexit(hmac, 100));</span>
+<span class="fc" id="L178">    logger.trace(&quot;Data: {} - {}&quot;, cypher.length, Util.hexit(cypher, 100));</span>
+
+<span class="fc" id="L180">    EncryptionKeychain keys = new EncryptionKeychain(salt, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);</span>
+<span class="fc" id="L181">    keys.createKeys();</span>
+
+<span class="fc" id="L183">    byte[] cypherKey = keys.getEncryptionKey();</span>
+<span class="fc" id="L184">    logger.trace(&quot;Key 1: {} - {}&quot;, cypherKey.length, Util.hexit(cypherKey, 100));</span>
+<span class="fc" id="L185">    byte[] hmacKey = keys.getHmacKey();</span>
+<span class="fc" id="L186">    logger.trace(&quot;Key 2: {} - {}&quot;, hmacKey.length, Util.hexit(hmacKey, 100));</span>
+<span class="fc" id="L187">    byte[] iv = keys.getIv();</span>
+<span class="fc" id="L188">    logger.trace(&quot;IV: {} - {}&quot;, iv.length, Util.hexit(iv, 100));</span>
+
+<span class="fc bfc" id="L190" title="All 2 branches covered.">    if (verifyHMAC(hmac, hmacKey, cypher)) {</span>
+<span class="fc" id="L191">      logger.trace(&quot;Signature matches - decrypting&quot;);</span>
+<span class="fc" id="L192">      decrypted = decryptAES(cypher, cypherKey, iv);</span>
+<span class="fc" id="L193">      logger.trace(&quot;Decoded:\n{}&quot;, new String(decrypted, CHAR_ENCODING));</span>
+    }
+    else {
+<span class="fc" id="L196">      throw new IOException(&quot;HMAC Digest doesn't match - possibly it's the wrong password.&quot;);</span>
+    }
+
+<span class="fc" id="L199">    return decrypted;</span>
+  }
+
+  @Override
+  public void decrypt(OutputStream decodedStream, byte[] encryptedData, String password) throws IOException {
+<span class="nc" id="L204">    decodedStream.write(decrypt(encryptedData, password));</span>
+<span class="nc" id="L205">  }</span>
+
+  @Override
+  public void encrypt(OutputStream encodedStream, byte[] data, String password) throws IOException {
+<span class="nc" id="L209">    encodedStream.write(encrypt(data, password));</span>
+<span class="nc" id="L210">  }</span>
+
+  @Override
+  public String infoLine() {
+<span class="fc" id="L214">    return VaultInfo.vaultInfoForCypher(CYPHER_ID);</span>
+  }
+
+  @Override
+  @SuppressWarnings(&quot;PMD.AvoidReassigningParameters&quot;)
+  public byte[] encrypt(byte[] data, String password) throws IOException {
+<span class="fc" id="L220">    EncryptionKeychain keys = new EncryptionKeychain(SALT_LENGTH, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);</span>
+<span class="fc" id="L221">    keys.createKeys();</span>
+<span class="fc" id="L222">    byte[] cypherKey = keys.getEncryptionKey();</span>
+<span class="fc" id="L223">    logger.trace(&quot;Key 1: {} - {}&quot;, cypherKey.length, Util.hexit(cypherKey, 100));</span>
+<span class="fc" id="L224">    byte[] hmacKey = keys.getHmacKey();</span>
+<span class="fc" id="L225">    logger.trace(&quot;Key 2: {} - {}&quot;, hmacKey.length, Util.hexit(hmacKey, 100));</span>
+<span class="fc" id="L226">    byte[] iv = keys.getIv();</span>
+<span class="fc" id="L227">    logger.trace(&quot;IV: {} - {}&quot;, iv.length, Util.hexit(iv, 100));</span>
+<span class="fc" id="L228">    logger.trace(&quot;Original data length: {}&quot;, data.length);</span>
+<span class="fc" id="L229">    data = pad(data);</span>
+<span class="fc" id="L230">    logger.trace(&quot;Padded data length: {}&quot;, data.length);</span>
+<span class="fc" id="L231">    byte[] encrypted = encryptAES(data, keys.getEncryptionKey(), keys.getIv());</span>
+<span class="fc" id="L232">    byte[] hmacHash = calculateHMAC(keys.getHmacKey(), encrypted);</span>
+<span class="fc" id="L233">    VaultContent vaultContent = new VaultContent(keys.getSalt(), hmacHash, encrypted);</span>
+<span class="fc" id="L234">    return vaultContent.toByteArray();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

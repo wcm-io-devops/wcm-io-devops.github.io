@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VaultInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto.data</a> &gt; <span class="el_source">VaultInfo.java</span></div><h1>VaultInfo.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//CHECKSTYLE:OFF
+package net.wedjaa.ansible.vault.crypto.data;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.wedjaa.ansible.vault.crypto.decoders.CypherFactory;
+import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
+
+public class VaultInfo {
+
+<span class="fc" id="L27">  private static final Logger logger = LoggerFactory.getLogger(VaultInfo.class);</span>
+
+  public final static String INFO_SEPARATOR = &quot;;&quot;;
+  public final static int INFO_ELEMENTS = 3;
+  public final static int MAGIC_PART = 0;
+  public final static int VERSION_PART = 1;
+  public final static int CYPHER_PART = 2;
+
+  public final static String VAULT_MAGIC = &quot;$ANSIBLE_VAULT&quot;;
+  public final static String VAULT_VERSION = &quot;1.1&quot;;
+
+  private boolean validVault;
+  private String vaultVersion;
+  private String vaultCypher;
+
+  public static String vaultInfoForCypher(String vaultCypher) {
+<span class="fc" id="L43">    String infoLine = VAULT_MAGIC + &quot;;&quot; + VAULT_VERSION + &quot;;&quot; + vaultCypher;</span>
+<span class="fc" id="L44">    return infoLine;</span>
+  }
+
+<span class="fc" id="L47">  public VaultInfo(String infoLine) {</span>
+<span class="fc" id="L48">    logger.trace(&quot;Ansible Vault info: {}&quot;, infoLine);</span>
+
+<span class="fc" id="L50">    String[] infoParts = infoLine.split(INFO_SEPARATOR);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">    if (infoParts.length == INFO_ELEMENTS) {</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">      if (infoParts[MAGIC_PART].equals(VAULT_MAGIC)) {</span>
+<span class="fc" id="L53">        validVault = true;</span>
+<span class="fc" id="L54">        vaultVersion = infoParts[VERSION_PART];</span>
+<span class="fc" id="L55">        vaultCypher = infoParts[CYPHER_PART];</span>
+      }
+    }
+<span class="fc" id="L58">  }</span>
+
+  public boolean isEncryptedVault() {
+<span class="fc" id="L61">    return validVault;</span>
+  }
+
+  public CypherInterface getCypher() {
+<span class="fc" id="L65">    return CypherFactory.getCypher(vaultCypher);</span>
+  }
+
+  public String getVaultVersion() {
+<span class="nc" id="L69">    return vaultVersion;</span>
+  }
+
+  public boolean isValidVault() {
+<span class="pc bpc" id="L73" title="2 of 4 branches missed.">    return isEncryptedVault() &amp;&amp; getCypher() != null;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VaultContent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto.data</a> &gt; <span class="el_source">VaultContent.java</span></div><h1>VaultContent.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//CHECKSTYLE:OFF
+package net.wedjaa.ansible.vault.crypto.data;
+
+import static net.wedjaa.ansible.vault.crypto.VaultHandler.CHAR_ENCODING;
+
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class VaultContent {
+
+<span class="fc" id="L28">  private static final Logger logger = LoggerFactory.getLogger(VaultContent.class);</span>
+
+  private final byte[] salt;
+  private final byte[] hmac;
+  private final byte[] data;
+
+<span class="fc" id="L34">  public VaultContent(byte[] encryptedVault) throws IOException {</span>
+<span class="fc" id="L35">    byte[][] vaultContents = splitData(encryptedVault);</span>
+<span class="fc" id="L36">    salt = Util.unhex(new String(vaultContents[0], CHAR_ENCODING));</span>
+<span class="fc" id="L37">    hmac = Util.unhex(new String(vaultContents[1], CHAR_ENCODING));</span>
+<span class="fc" id="L38">    data = Util.unhex(new String(vaultContents[2], CHAR_ENCODING));</span>
+<span class="fc" id="L39">  }</span>
+
+<span class="fc" id="L41">  public VaultContent(byte[] salt, byte[] hmac, byte[] data) {</span>
+<span class="fc" id="L42">    this.salt = salt;</span>
+<span class="fc" id="L43">    this.hmac = hmac;</span>
+<span class="fc" id="L44">    this.data = data;</span>
+<span class="fc" id="L45">  }</span>
+
+  public byte[] toByteArray() {
+<span class="fc" id="L48">    return toString().getBytes(CHAR_ENCODING);</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L54">      logger.trace(&quot;Salt: {} - HMAC: {} - Data: {} - TargetLen: {}&quot;, salt.length, hmac.length, data.length, (salt.length + hmac.length + data.length) * 2);</span>
+    }
+<span class="fc" id="L56">    String saltString = Util.hexit(salt);</span>
+<span class="fc" id="L57">    logger.trace(&quot;Salt String Length: {}&quot;, saltString.length());</span>
+<span class="fc" id="L58">    String hmacString = Util.hexit(hmac);</span>
+<span class="fc" id="L59">    logger.trace(&quot;HMAC String Length: {}&quot;, hmacString.length());</span>
+<span class="fc" id="L60">    String dataString = Util.hexit(data, -1);</span>
+<span class="fc" id="L61">    logger.trace(&quot;DATA String Length: {}&quot;, dataString.length());</span>
+<span class="fc" id="L62">    String complete = saltString + &quot;\n&quot; + hmacString + &quot;\n&quot; + dataString;</span>
+<span class="fc" id="L63">    logger.trace(&quot;Complete: {} \n{}&quot;, complete.length(), complete);</span>
+<span class="fc" id="L64">    String result = Util.hexit(complete.getBytes(CHAR_ENCODING), 80);</span>
+<span class="fc" id="L65">    logger.trace(&quot;Result: [{}] {}\n{}&quot;, complete.length() * 2, result.length(), result);</span>
+<span class="fc" id="L66">    return result;</span>
+  }
+
+  private int[] getDataLengths(byte[] encodedData) throws IOException {
+
+<span class="fc" id="L71">    int[] result = new int[3];</span>
+
+<span class="fc" id="L73">    int idx = 0;</span>
+<span class="fc" id="L74">    int saltLen = 0;</span>
+<span class="pc bpc" id="L75" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L76">      saltLen++;</span>
+<span class="fc" id="L77">      idx++;</span>
+    }
+    // Skip the newline
+<span class="fc" id="L80">    idx++;</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L82">      throw new IOException(&quot;Malformed data - salt incomplete&quot;);</span>
+    }
+<span class="fc" id="L84">    result[0] = saltLen;</span>
+
+<span class="fc" id="L86">    int hmacLen = 0;</span>
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L88">      hmacLen++;</span>
+<span class="fc" id="L89">      idx++;</span>
+    }
+    // Skip the newline
+<span class="fc" id="L92">    idx++;</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L94">      throw new IOException(&quot;Malformed data - hmac incomplete&quot;);</span>
+    }
+<span class="fc" id="L96">    result[1] = hmacLen;</span>
+<span class="fc" id="L97">    int dataLen = 0;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">    while (idx &lt; encodedData.length) {</span>
+<span class="fc" id="L99">      dataLen++;</span>
+<span class="fc" id="L100">      idx++;</span>
+    }
+<span class="fc" id="L102">    result[2] = dataLen;</span>
+
+<span class="fc" id="L104">    return result;</span>
+  }
+
+  private byte[][] splitData(byte[] encodedData) throws IOException {
+<span class="fc" id="L108">    int[] partsLength = getDataLengths(encodedData);</span>
+
+<span class="fc" id="L110">    byte[][] result = new byte[3][];</span>
+
+<span class="fc" id="L112">    int idx = 0;</span>
+<span class="fc" id="L113">    int saltIdx = 0;</span>
+<span class="fc" id="L114">    result[0] = new byte[partsLength[0]];</span>
+<span class="pc bpc" id="L115" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L116">      result[0][saltIdx++] = encodedData[idx++];</span>
+    }
+    // Skip the newline
+<span class="fc" id="L119">    idx++;</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L121">      throw new IOException(&quot;Malformed data - salt incomplete&quot;);</span>
+    }
+<span class="fc" id="L123">    int macIdx = 0;</span>
+<span class="fc" id="L124">    result[1] = new byte[partsLength[1]];</span>
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L126">      result[1][macIdx++] = encodedData[idx++];</span>
+    }
+    // Skip the newline
+<span class="fc" id="L129">    idx++;</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L131">      throw new IOException(&quot;Malformed data - hmac incomplete&quot;);</span>
+    }
+<span class="fc" id="L133">    int dataIdx = 0;</span>
+<span class="fc" id="L134">    result[2] = new byte[partsLength[2]];</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">    while (idx &lt; encodedData.length) {</span>
+<span class="fc" id="L136">      result[2][dataIdx++] = encodedData[idx++];</span>
+    }
+<span class="fc" id="L138">    return result;</span>
+  }
+
+  public byte[] getSalt() {
+<span class="fc" id="L142">    return salt;</span>
+  }
+
+  public byte[] getHmac() {
+<span class="fc" id="L146">    return hmac;</span>
+  }
+
+  public byte[] getData() {
+<span class="fc" id="L150">    return data;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

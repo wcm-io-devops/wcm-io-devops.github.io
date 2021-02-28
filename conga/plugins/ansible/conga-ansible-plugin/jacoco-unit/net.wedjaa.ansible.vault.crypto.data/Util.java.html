@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Util.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto.data</a> &gt; <span class="el_source">Util.java</span></div><h1>Util.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//CHECKSTYLE:OFF
+package net.wedjaa.ansible.vault.crypto.data;
+
+import static net.wedjaa.ansible.vault.crypto.VaultHandler.CHAR_ENCODING;
+
+import java.util.Arrays;
+
+public final class Util {
+
+  private static final int DEFAULT_LINE_LENGTH = 80;
+
+<span class="fc" id="L27">  final static char[] hexArray = &quot;0123456789ABCDEF&quot;.toCharArray();</span>
+  final static String LINE_BREAK = &quot;\n&quot;;
+
+  private Util() {
+    // static methods only
+  }
+
+  public static String join(String[] datalines) {
+<span class="fc" id="L35">    return String.join(&quot;&quot;, Arrays.asList(datalines));</span>
+  }
+
+  public static byte[] unhex(String hexed) {
+<span class="fc" id="L39">    int dataLen = hexed.length();</span>
+<span class="fc" id="L40">    byte[] output = new byte[dataLen / 2];</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    for (int charIdx = 0; charIdx &lt; dataLen; charIdx += 2) {</span>
+<span class="fc" id="L42">      output[charIdx / 2] = (byte)((Character.digit(hexed.charAt(charIdx), 16) &lt;&lt; 4)</span>
+<span class="fc" id="L43">          + Character.digit(hexed.charAt(charIdx + 1), 16));</span>
+    }
+<span class="fc" id="L45">    return output;</span>
+  }
+
+  public static String hexit(byte[] unhexed) {
+<span class="fc" id="L49">    return hexit(unhexed, DEFAULT_LINE_LENGTH);</span>
+  }
+
+  public static String hexit(byte[] unhexed, int lineLength) {
+<span class="fc" id="L53">    StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L54">    int colIdx = 0;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">    for (byte val : unhexed) {</span>
+<span class="fc" id="L56">      result.append(String.format(&quot;%02x&quot;, val));</span>
+<span class="fc" id="L57">      colIdx++;</span>
+<span class="fc bfc" id="L58" title="All 4 branches covered.">      if (lineLength &gt; 0 &amp;&amp; colIdx &gt;= lineLength / 2) {</span>
+<span class="fc" id="L59">        result.append(LINE_BREAK);</span>
+<span class="fc" id="L60">        colIdx = 0;</span>
+      }
+    }
+
+<span class="fc" id="L64">    return result.toString();</span>
+  }
+
+  public static VaultInfo getVaultInfo(String vaultData) {
+<span class="fc" id="L68">    String infoString = vaultData.substring(0, vaultData.indexOf(LINE_BREAK));</span>
+<span class="fc" id="L69">    return new VaultInfo(infoString);</span>
+  }
+
+  public static VaultInfo getVaultInfo(byte[] vaultData) {
+<span class="fc" id="L73">    return getVaultInfo(new String(vaultData, CHAR_ENCODING));</span>
+  }
+
+  public static String cleanupData(String vaultData) {
+<span class="fc" id="L77">    return vaultData.substring(vaultData.indexOf(LINE_BREAK) + 1);</span>
+  }
+
+  public static byte[] getVaultData(String vaultData) {
+<span class="nc" id="L81">    String rawData = join(cleanupData(vaultData).split(LINE_BREAK));</span>
+<span class="nc" id="L82">    return unhex(rawData);</span>
+  }
+
+  public static byte[] getVaultData(byte[] vaultData) {
+<span class="fc" id="L86">    String rawData = join(cleanupData(new String(vaultData, CHAR_ENCODING)).split(LINE_BREAK));</span>
+<span class="fc" id="L87">    return unhex(rawData);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

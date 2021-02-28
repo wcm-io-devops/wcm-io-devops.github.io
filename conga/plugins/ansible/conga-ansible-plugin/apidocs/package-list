@@ -1,0 +1,12 @@
+io.wcm.devops.conga.plugins.ansible.urlfile
+io.wcm.devops.conga.plugins.ansible.util
+io.wcm.devops.conga.plugins.ansible.valueencryption
+io.wcm.devops.conga.plugins.ansible.valueprovider
+it.andreascarpino.ansible.inventory.type
+it.andreascarpino.ansible.inventory.util
+net.wedjaa.ansible.vault
+net.wedjaa.ansible.vault.crypto
+net.wedjaa.ansible.vault.crypto.data
+net.wedjaa.ansible.vault.crypto.decoders
+net.wedjaa.ansible.vault.crypto.decoders.implementation
+net.wedjaa.ansible.vault.crypto.decoders.inter
