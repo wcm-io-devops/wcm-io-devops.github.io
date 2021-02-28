@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AesCryptoSupport.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.crypto.impl</a> &gt; <span class="el_source">AesCryptoSupport.java</span></div><h1>AesCryptoSupport.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.crypto.impl;
+
+import java.nio.ByteBuffer;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.SecureRandom;
+import java.util.Random;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import io.wcm.devops.conga.plugins.aem.crypto.CryptoSupport;
+
+/**
+ * AES crypto support implementation with the same algorithms as used by AEM 6.3 and up.
+ */
+public class AesCryptoSupport extends CryptoSupport {
+
+  private static final String AES_KEY_ALGORITHM = &quot;AES&quot;;
+  private static final int AES_KEY_SIZE = 128;
+
+  private static final String AES_CYPHER_ALGORITHM = &quot;AES/CBC/PKCS5Padding&quot;;
+  private static final int IV_SIZE = 16;
+
+  private static final String SECURE_RANDOM_ALGORITHM = &quot;SHA1PRNG&quot;;
+
+  private final Random random;
+
+  /**
+   * @throws GeneralSecurityException Security exception
+   */
+<span class="fc" id="L53">  public AesCryptoSupport() throws GeneralSecurityException {</span>
+<span class="fc" id="L54">    this.random = SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM);</span>
+<span class="fc" id="L55">  }</span>
+
+  @Override
+  public Key generateKey() throws GeneralSecurityException {
+<span class="fc" id="L59">    KeyGenerator keyGenerator = KeyGenerator.getInstance(AES_KEY_ALGORITHM);</span>
+<span class="fc" id="L60">    keyGenerator.init(AES_KEY_SIZE);</span>
+<span class="fc" id="L61">    return keyGenerator.generateKey();</span>
+  }
+
+  @Override
+  public Key readKey(byte[] keyData) {
+<span class="fc" id="L66">    return new SecretKeySpec(keyData, AES_KEY_ALGORITHM);</span>
+  }
+
+  @Override
+  public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException {
+<span class="fc" id="L71">    byte[] iv = generateIV();</span>
+<span class="fc" id="L72">    byte[] byteEncyrpted = getCipher(Cipher.ENCRYPT_MODE, iv, key).doFinal(data);</span>
+<span class="fc" id="L73">    ByteBuffer buffer = ByteBuffer.allocate(iv.length + byteEncyrpted.length);</span>
+<span class="fc" id="L74">    buffer.put(iv).put(byteEncyrpted);</span>
+<span class="fc" id="L75">    return buffer.array();</span>
+  }
+
+  @Override
+  public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException {
+<span class="fc" id="L80">    byte[] iv = new byte[IV_SIZE];</span>
+<span class="fc" id="L81">    byte[] byteEncrypted = new byte[data.length - IV_SIZE];</span>
+<span class="fc" id="L82">    ByteBuffer buffer = ByteBuffer.wrap(data);</span>
+<span class="fc" id="L83">    buffer.get(iv).get(byteEncrypted);</span>
+<span class="fc" id="L84">    return getCipher(Cipher.DECRYPT_MODE, iv, key).doFinal(byteEncrypted);</span>
+  }
+
+  private Cipher getCipher(int cipherMode, byte[] iv, Key key) throws GeneralSecurityException {
+<span class="fc" id="L88">    IvParameterSpec spec = new IvParameterSpec(iv);</span>
+<span class="fc" id="L89">    Cipher cipher = Cipher.getInstance(AES_CYPHER_ALGORITHM);</span>
+<span class="fc" id="L90">    cipher.init(cipherMode, key, spec);</span>
+<span class="fc" id="L91">    return cipher;</span>
+  }
+
+  private byte[] generateIV() {
+<span class="fc" id="L95">    byte[] iv = new byte[IV_SIZE];</span>
+<span class="fc" id="L96">    random.nextBytes(iv);</span>
+<span class="fc" id="L97">    return iv;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AemCryptoEncryptHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.handlebars.helper</a> &gt; <span class="el_source">AemCryptoEncryptHelper.java</span></div><h1>AemCryptoEncryptHelper.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.handlebars.helper;
+
+import static io.wcm.devops.conga.plugins.aem.AemPluginConfig.PARAMETER_CRYPTO_AES_KEY_URL;
+import static io.wcm.devops.conga.plugins.aem.AemPluginConfig.PARAMETER_CRYPTO_SKIP;
+import static io.wcm.devops.conga.plugins.aem.AemPluginConfig.PLUGIN_NAME;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.github.jknack.handlebars.Options;
+
+import io.wcm.devops.conga.generator.spi.handlebars.HelperPlugin;
+import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
+import io.wcm.devops.conga.plugins.aem.crypto.CryptoString;
+import io.wcm.devops.conga.plugins.aem.crypto.CryptoSupport;
+import io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport;
+
+/**
+ * Handlebars helper that encrypts a given string with AEM crypto key.
+ */
+<span class="fc" id="L48">public final class AemCryptoEncryptHelper implements HelperPlugin&lt;Object&gt; {</span>
+
+  /**
+   * Plugin/Helper name
+   */
+  public static final String NAME = &quot;aemCryptoEncrypt&quot;;
+
+  /**
+   * If set to true, missing crypto key is ignored and the input string is inserted unencrypted.
+   */
+  public static final String HASH_IGNORE_MISSING_KEY = &quot;ignoreMissingKey&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L62">    return NAME;</span>
+  }
+
+  @Override
+  public Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
+<span class="fc bfc" id="L67" title="All 2 branches covered.">    if (context == null) {</span>
+<span class="fc" id="L68">      return null;</span>
+    }
+
+    // read crypto config parameter
+<span class="fc" id="L72">    String cryptoAesKeyUrl = null;</span>
+<span class="fc" id="L73">    boolean cryptoSkip = false;</span>
+<span class="fc" id="L74">    Map&lt;String, Object&gt; aemPluginConfig = pluginContext.getGenericPluginConfig().get(PLUGIN_NAME);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">    if (aemPluginConfig != null) {</span>
+<span class="fc" id="L76">      cryptoAesKeyUrl = Objects.toString(aemPluginConfig.get(PARAMETER_CRYPTO_AES_KEY_URL), null);</span>
+<span class="fc" id="L77">      Object cryptoSkipObject = aemPluginConfig.get(PARAMETER_CRYPTO_SKIP);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">      if (cryptoSkipObject != null) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (cryptoSkipObject instanceof Boolean) {</span>
+<span class="fc" id="L80">          cryptoSkip = (Boolean)cryptoSkipObject;</span>
+        }
+        else {
+<span class="fc" id="L83">          cryptoSkip = BooleanUtils.toBoolean(cryptoSkipObject.toString());</span>
+        }
+      }
+    }
+
+    // Skip encryption if configured, or if value is already encrypted
+<span class="fc" id="L89">    String input = context.toString();</span>
+<span class="fc bfc" id="L90" title="All 4 branches covered.">    if (cryptoSkip || CryptoString.isCryptoString(input)) {</span>
+<span class="fc" id="L91">      return input;</span>
+    }
+
+    byte[] cryptoKeyData;
+    try {
+      // get urls to crypto keys
+<span class="fc bfc" id="L97" title="All 2 branches covered.">      if (StringUtils.isBlank(cryptoAesKeyUrl)) {</span>
+<span class="fc" id="L98">        throw new IOException(&quot;Unable to encrypto string with AEM crypto keys: &quot;</span>
+            + &quot;Please add plugin configuration: '&quot; + PLUGIN_NAME + &quot;;&quot; + PARAMETER_CRYPTO_AES_KEY_URL + &quot;=/path/to/master&quot;);
+      }
+
+      // get crypto key
+<span class="fc" id="L103">      try (InputStream is = pluginContext.getUrlFileManager().getFile(cryptoAesKeyUrl)) {</span>
+<span class="fc" id="L104">        cryptoKeyData = IOUtils.toByteArray(is);</span>
+      }
+    }
+    /*CHECKSTYLE:OFF*/
+<span class="fc" id="L108">    catch (Exception ex) {</span>
+      /*CHECKSTYLE:ON*/
+<span class="fc bfc" id="L110" title="All 2 branches covered.">      if ((Boolean)options.hash(HASH_IGNORE_MISSING_KEY, false)) {</span>
+<span class="fc" id="L111">        return input;</span>
+      }
+      else {
+<span class="fc" id="L114">        throw ex;</span>
+      }
+<span class="fc" id="L116">    }</span>
+
+    // encrypt input string
+    try {
+<span class="fc" id="L120">      CryptoSupport crypto = new AesCryptoSupport();</span>
+<span class="fc" id="L121">      Key cryptoKey = crypto.readKey(cryptoKeyData);</span>
+<span class="fc" id="L122">      return crypto.encrypt(input, cryptoKey);</span>
+    }
+<span class="nc" id="L124">    catch (GeneralSecurityException ex) {</span>
+<span class="nc" id="L125">      throw new IOException(&quot;Unable to encrypt input string.&quot;, ex);</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

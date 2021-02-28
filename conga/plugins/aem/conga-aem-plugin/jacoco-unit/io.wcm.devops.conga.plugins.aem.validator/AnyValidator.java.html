@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnyValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.validator</a> &gt; <span class="el_source">AnyValidator.java</span></div><h1>AnyValidator.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.validator;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.day.any.BaseHandler;
+import com.day.any.Parser;
+import com.day.any.ResourceExpander;
+
+import io.wcm.devops.conga.generator.spi.ValidationException;
+import io.wcm.devops.conga.generator.spi.ValidatorPlugin;
+import io.wcm.devops.conga.generator.spi.context.FileContext;
+import io.wcm.devops.conga.generator.spi.context.ValidatorContext;
+import io.wcm.devops.conga.generator.util.FileUtil;
+
+/**
+ * Validates Day ANY files.
+ */
+<span class="fc" id="L46">public class AnyValidator implements ValidatorPlugin {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;any&quot;;
+
+  private static final String FILE_EXTENSION = &quot;any&quot;;
+
+<span class="fc" id="L55">  private static final Pattern TICK_PROPERTY = Pattern.compile(&quot;/(\\S+)\\s+'([^']*)'&quot;);</span>
+
+  @Override
+  public String getName() {
+<span class="fc" id="L59">    return NAME;</span>
+  }
+
+  @Override
+  public boolean accepts(FileContext file, ValidatorContext context) {
+<span class="fc" id="L64">    return FileUtil.matchesExtension(file, FILE_EXTENSION);</span>
+  }
+
+  @Override
+  public Void apply(FileContext file, ValidatorContext context) throws ValidationException {
+<span class="fc" id="L69">    Parser parser = new Parser(new BaseHandler());</span>
+
+    // set resource expander and entity resolver that do not resolve anything
+    // just make sure they are in place to allow any parser parsing files with include directives
+<span class="fc" id="L73">    parser.setResourceExpander(new ResourceExpander() {</span>
+      @Override
+      public String[] expand(String arg0) {
+<span class="nc" id="L76">        return new String[0];</span>
+      }
+    });
+<span class="fc" id="L79">    parser.setEnitiyResolver(new EntityResolver() {</span>
+      @Override
+      public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+<span class="nc" id="L82">        return null;</span>
+      }
+    });
+
+    // read any file
+    try {
+<span class="fc" id="L88">      String anyFileContent = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
+<span class="fc" id="L89">      anyFileContent = replaceTicks(anyFileContent);</span>
+<span class="fc" id="L90">      try (Reader reader = new StringReader(anyFileContent)) {</span>
+<span class="fc" id="L91">        parser.parse(new InputSource(reader));</span>
+      }
+    }
+<span class="fc" id="L94">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="fc" id="L95">      throw new ValidationException(&quot;ANY file is not valid: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L96">    }</span>
+<span class="fc" id="L97">    return null;</span>
+  }
+
+  /**
+   * Replace ticks (') for properties with quotes (&quot;) because the old java ANY file parser implementation
+   * does not support them.
+   * @param anyFileContent Any file content
+   * @return Content with ticks replaces
+   */
+  static String replaceTicks(String anyFileContent) {
+<span class="fc" id="L107">    StringBuffer result = new StringBuffer();</span>
+<span class="fc" id="L108">    Matcher matcher = TICK_PROPERTY.matcher(anyFileContent);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L110">      matcher.appendReplacement(result, &quot;/&quot; + Matcher.quoteReplacement(matcher.group(1)) + &quot; \&quot;&quot; + Matcher.quoteReplacement(matcher.group(2)) + &quot;\&quot;&quot;);</span>
+    }
+<span class="fc" id="L112">    matcher.appendTail(result);</span>
+<span class="fc" id="L113">    return result.toString();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

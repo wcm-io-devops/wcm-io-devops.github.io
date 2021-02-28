@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContentPackageBinaryFile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.util</a> &gt; <span class="el_source">ContentPackageBinaryFile.java</span></div><h1>ContentPackageBinaryFile.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.util;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.lang3.StringUtils;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.UrlFileManager;
+
+/**
+ * Binary to be added to content package.
+ */
+public final class ContentPackageBinaryFile {
+
+  private final String fileName;
+  private final String dir;
+  private final String url;
+  private final String path;
+  private final boolean delete;
+
+<span class="fc" id="L44">  ContentPackageBinaryFile(String file, String dir, String url, String path, boolean delete) {</span>
+<span class="fc" id="L45">    this.fileName = file;</span>
+<span class="fc" id="L46">    this.dir = dir;</span>
+<span class="fc" id="L47">    this.url = url;</span>
+<span class="fc" id="L48">    this.path = path;</span>
+<span class="fc" id="L49">    this.delete = delete;</span>
+<span class="fc" id="L50">  }</span>
+
+  /**
+   * @param urlFileManager URL file manager
+   * @param targetDir Target directory for configuration
+   * @return Input stream with binary data of file.
+   * @throws IOException I/O exception
+   */
+  public InputStream getInputStream(UrlFileManager urlFileManager, File targetDir) throws IOException {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    if (StringUtils.isNotBlank(url)) {</span>
+<span class="fc" id="L60">      return urlFileManager.getFile(url);</span>
+    }
+<span class="fc" id="L62">    File file = getFile(targetDir);</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">    if (file != null) {</span>
+<span class="fc" id="L64">      return new BufferedInputStream(new FileInputStream(file));</span>
+    }
+    else {
+<span class="nc" id="L67">      throw new IllegalArgumentException(&quot;For a file definition either url or file has to be specified.&quot;);</span>
+    }
+  }
+
+  private File getFile(File targetDir) {
+<span class="fc" id="L72">    File parent = targetDir;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(dir)) {</span>
+<span class="fc" id="L74">      parent = new File(targetDir, dir);</span>
+    }
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(fileName)) {</span>
+<span class="fc" id="L77">      return new File(parent, fileName);</span>
+    }
+<span class="nc" id="L79">    return null;</span>
+  }
+
+  /**
+   * @return Target path for file (including file name).
+   */
+  public String getPath() {
+<span class="fc" id="L86">    return this.path;</span>
+  }
+
+  /**
+   * If delete was configured for the file delete it.
+   * @param urlFileManager URL file manager
+   * @param targetDir Target directory for configuration
+   * @throws IOException I/O exception
+   */
+  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+  public void deleteIfRequired(UrlFileManager urlFileManager, File targetDir) throws IOException {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">    if (delete) {</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">      if (StringUtils.isNotBlank(url)) {</span>
+<span class="nc" id="L99">        urlFileManager.deleteFile(url);</span>
+<span class="nc" id="L100">        return;</span>
+      }
+<span class="fc" id="L102">      File file = getFile(targetDir);</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">      if (file != null) {</span>
+<span class="fc" id="L104">        file.delete();</span>
+      }
+    }
+<span class="fc" id="L107">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

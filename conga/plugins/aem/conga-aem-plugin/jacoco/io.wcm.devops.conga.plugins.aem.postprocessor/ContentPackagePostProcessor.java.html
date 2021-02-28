@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContentPackagePostProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.postprocessor</a> &gt; <span class="el_source">ContentPackagePostProcessor.java</span></div><h1>ContentPackagePostProcessor.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.postprocessor;
+
+import static io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOptions.PROPERTY_PACKAGE_ROOT_PATH;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+
+import com.google.common.collect.ImmutableList;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.plugins.postprocessor.AbstractPostProcessor;
+import io.wcm.devops.conga.generator.spi.context.FileContext;
+import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
+import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
+import io.wcm.devops.conga.generator.util.FileUtil;
+import io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile;
+import io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil;
+import io.wcm.devops.conga.plugins.aem.util.JsonContentLoader;
+import io.wcm.tooling.commons.contentpackagebuilder.ContentPackage;
+import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
+import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
+
+/**
+ * Transforms a JSON file describing a JCR content structure to an AEM content package
+ * to be deployed via CRX package manager.
+ */
+<span class="fc" id="L54">public class ContentPackagePostProcessor extends AbstractPostProcessor {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;aem-contentpackage&quot;;
+
+  private static final String FILE_EXTENSION = &quot;json&quot;;
+
+<span class="fc" id="L63">  private final JsonContentLoader jsonContentLoader = new JsonContentLoader();</span>
+
+  @Override
+  public String getName() {
+<span class="fc" id="L67">    return NAME;</span>
+  }
+
+  @Override
+  public boolean accepts(FileContext file, PostProcessorContext context) {
+<span class="fc" id="L72">    return FileUtil.matchesExtension(file, FILE_EXTENSION);</span>
+  }
+
+  @Override
+  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+  public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
+<span class="fc" id="L78">    File file = fileContext.getFile();</span>
+<span class="fc" id="L79">    Logger logger = context.getLogger();</span>
+<span class="fc" id="L80">    Map&lt;String, Object&gt; options = context.getOptions();</span>
+
+    try {
+      // extract file header
+<span class="fc" id="L84">      FileHeaderContext fileHeader = extractFileHeader(fileContext, context);</span>
+
+      // create AEM content package with configurations
+<span class="fc" id="L87">      File zipFile = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + &quot;.zip&quot;);</span>
+<span class="fc" id="L88">      logger.info(&quot;Generate {}&quot;, zipFile.getCanonicalPath());</span>
+
+<span class="fc" id="L90">      String rootPath = ContentPackageUtil.getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
+
+<span class="fc" id="L92">      ContentPackageBuilder builder = ContentPackageUtil.getContentPackageBuilder(options, context.getUrlFileManager(), fileHeader);</span>
+<span class="fc" id="L93">      try (ContentPackage contentPackage = builder.build(zipFile)) {</span>
+
+        // add content from JSON file
+<span class="fc" id="L96">        ContentElement content = jsonContentLoader.load(fileContext.getFile());</span>
+<span class="fc" id="L97">        contentPackage.addContent(rootPath, content);</span>
+
+        // add additional binary files
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (ContentPackageBinaryFile binaryFile : ContentPackageUtil.getFiles(options, fileContext.getTargetDir())) {</span>
+<span class="fc" id="L101">          String path = binaryFile.getPath();</span>
+<span class="fc" id="L102">          try (InputStream is = binaryFile.getInputStream(context.getUrlFileManager(), fileContext.getTargetDir())) {</span>
+<span class="fc" id="L103">            contentPackage.addFile(path, is);</span>
+          }
+<span class="fc" id="L105">          binaryFile.deleteIfRequired(context.getUrlFileManager(), fileContext.getTargetDir());</span>
+<span class="fc" id="L106">        }</span>
+
+      }
+
+      // delete provisioning file after transformation
+<span class="fc" id="L111">      file.delete();</span>
+
+      // set force to true by default for CONGA-generated packages (but allow override from role definition)
+<span class="fc" id="L114">      Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L115">      modelOptions.put(&quot;force&quot;, true);</span>
+<span class="fc" id="L116">      modelOptions.putAll(fileContext.getModelOptions());</span>
+
+<span class="fc" id="L118">      return ImmutableList.of(new FileContext().file(zipFile).modelOptions(modelOptions));</span>
+    }
+<span class="nc" id="L120">    catch (IOException ex) {</span>
+<span class="nc" id="L121">      throw new GeneratorException(&quot;Unable to post-process JSON data file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

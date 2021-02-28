@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CloudManagerAllPackageMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.maven</a> &gt; <span class="el_source">CloudManagerAllPackageMojo.java</span></div><h1>CloudManagerAllPackageMojo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2020 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.maven;
+
+import static io.wcm.devops.conga.generator.util.FileUtil.getCanonicalPath;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
+
+import io.wcm.devops.conga.plugins.aem.maven.allpackage.AllPackageBuilder;
+import io.wcm.devops.conga.plugins.aem.maven.model.ContentPackageFile;
+import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
+
+/**
+ * Builds an &quot;all&quot; content package dedicated for deployment via Adobe Cloud Manager
+ * for the given environment and node(s).
+ * &lt;p&gt;
+ * By default, it builds one &quot;all&quot; package per environment and node without adding any Cloud Manager
+ * environment-specific run mode suffixes to the folders. By defining a parameter &lt;code&gt;cloudManager.target&lt;/code&gt;
+ * (contains a list of string values) in the CONGA environment it is possible:
+ * &lt;/p&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;If it contains &lt;code&gt;none&lt;/code&gt; no &quot;all&quot; package is build.&lt;/li&gt;
+ * &lt;li&gt;If set to one or multiple environment names (normally dev/stage/prod) one &quot;all&quot; package for each of
+ * them is defined, and the environment name is added as runmode suffix to all config and install folders.&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+@Mojo(name = &quot;cloudmanager-all-package&quot;, threadSafe = true)
+<span class="nc" id="L57">public final class CloudManagerAllPackageMojo extends AbstractCloudManagerMojo {</span>
+
+  /**
+   * Package name for the &quot;all&quot; content package.
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.name&quot;, defaultValue = &quot;all&quot;)
+  private String name;
+
+  /**
+   * Group name for the &quot;all&quot; content package.
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.group&quot;, required = true)
+  private String group;
+
+  /**
+   * Build one single content package for all environments and nodes.
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.singlePackage&quot;, defaultValue = &quot;false&quot;)
+  private boolean singlePackage;
+
+  /**
+   * Attach &quot;all&quot; content package(s) as artifacts to maven build lifecycle.
+   * The given package name will be used as classifier.
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.attachArtifact&quot;, defaultValue = &quot;false&quot;)
+  private boolean attachArtifact;
+
+  /**
+   * Automatically generate dependencies between content packages based on file order in CONGA configuration.
+   * &lt;p&gt;
+   * Possible values:
+   * &lt;/p&gt;
+   * &lt;ul&gt;
+   * &lt;li&gt;&lt;code&gt;IMMUTABLE_MUTABLE_COMBINED&lt;/code&gt;: Generate a single dependency chain spanning both immutable and mutable
+   * content packages.&lt;/li&gt;
+   * &lt;li&gt;&lt;code&gt;IMMUTABLE_MUTABLE_SEPARATE&lt;/code&gt;: Generate separate dependency chains for immutable and mutable content
+   * packages.&lt;/li&gt;
+   * &lt;li&gt;&lt;code&gt;IMMUTABLE_ONLY&lt;/code&gt;: Generate a dependency chain only for immutable content packages.&lt;/li&gt;
+   * &lt;li&gt;&lt;code&gt;OFF&lt;/code&gt;: Do not generate dependencies between content packages.&lt;/li&gt;
+   * &lt;/ul&gt;
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.autoDependenciesMode&quot;)
+  private AutoDependenciesMode autoDependenciesMode;
+
+  /**
+   * Automatically generate dependencies between content packages based on file order in CONGA configuration.
+   * @deprecated Please use autoDependenciesMode instead.
+   */
+  @Deprecated
+  @Parameter(property = &quot;conga.cloudManager.allPackage.autoDependencies&quot;, defaultValue = &quot;true&quot;)
+  private boolean autoDependencies;
+
+  /**
+   * Use separate dependency chains for mutable and immutable packages.
+   * @deprecated Please use autoDependenciesMode instead.
+   */
+  @Deprecated
+  @Parameter(property = &quot;conga.cloudManager.allPackage.autoDependenciesSeparateMutable&quot;, defaultValue = &quot;false&quot;)
+  private boolean autoDependenciesSeparateMutable;
+
+  /**
+   * Specifies additional properties to be set in the properties.xml file.
+   */
+  @Parameter
+  private Map&lt;String, String&gt; properties;
+
+  /**
+   * Set this to &quot;true&quot; to skip installing packages to CRX although configured in the POM.
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.skip&quot;, defaultValue = &quot;false&quot;)
+  private boolean skip;
+
+  @Parameter(readonly = true, defaultValue = &quot;${project}&quot;)
+  private MavenProject project;
+  @Component
+  private MavenProjectHelper projectHelper;
+
+  private static final String CLOUDMANAGER_TARGET_NONE = &quot;none&quot;;
+
+  @Override
+  public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="nc bnc" id="L138" title="All 2 branches missed.">    if (skip) {</span>
+<span class="nc" id="L139">      return;</span>
+    }
+
+<span class="nc bnc" id="L142" title="All 2 branches missed.">    if (this.autoDependenciesMode == null) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">      if (this.autoDependencies) {</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (this.autoDependenciesSeparateMutable) {</span>
+<span class="nc" id="L145">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_SEPARATE;</span>
+        }
+        else {
+<span class="nc" id="L148">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED;</span>
+        }
+      }
+      else {
+<span class="nc" id="L152">        this.autoDependenciesMode = AutoDependenciesMode.OFF;</span>
+      }
+    }
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">    if (singlePackage) {</span>
+<span class="nc" id="L157">      buildSingleAllPackage();</span>
+    }
+    else {
+<span class="nc" id="L160">      buildAllPackagesPerEnvironmentNode();</span>
+    }
+<span class="nc" id="L162">  }</span>
+
+  /**
+   * Build an &quot;all&quot; package for each environment and node.
+   */
+  private void buildAllPackagesPerEnvironmentNode() throws MojoExecutionException, MojoFailureException {
+<span class="nc" id="L168">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+<span class="nc" id="L169">      String packageName = environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.&quot; + this.name;</span>
+<span class="nc" id="L170">      AllPackageBuilder builder = createBuilder(packageName);</span>
+
+      try {
+<span class="nc" id="L173">        builder.add(contentPackages, cloudManagerTarget);</span>
+      }
+<span class="nc" id="L175">      catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L176">        throw new MojoFailureException(ex.getMessage(), ex);</span>
+<span class="nc" id="L177">      }</span>
+
+<span class="nc" id="L179">      buildAllPackage(builder);</span>
+<span class="nc" id="L180">    });</span>
+<span class="nc" id="L181">  }</span>
+
+  /**
+   * Build a single &quot;all&quot; package containing packages from all environments and nodes.
+   */
+  private void buildSingleAllPackage() throws MojoExecutionException, MojoFailureException {
+<span class="nc" id="L187">    String packageName = this.name;</span>
+<span class="nc" id="L188">    AllPackageBuilder builder = createBuilder(packageName);</span>
+
+<span class="nc" id="L190">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+      try {
+<span class="nc" id="L192">        builder.add(contentPackages, cloudManagerTarget);</span>
+      }
+<span class="nc" id="L194">      catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L195">        throw new MojoFailureException(ex.getMessage(), ex);</span>
+<span class="nc" id="L196">      }</span>
+<span class="nc" id="L197">    });</span>
+
+<span class="nc" id="L199">    buildAllPackage(builder);</span>
+<span class="nc" id="L200">  }</span>
+
+  private AllPackageBuilder createBuilder(String packageName) {
+    String fileName;
+<span class="nc bnc" id="L204" title="All 2 branches missed.">    if (attachArtifact) {</span>
+<span class="nc" id="L205">      fileName = project.getArtifactId() + &quot;.&quot; + packageName + &quot;-&quot; + project.getVersion() + &quot;.zip&quot;;</span>
+    }
+    else {
+<span class="nc" id="L208">      fileName = packageName + &quot;.zip&quot;;</span>
+    }
+<span class="nc" id="L210">    File targetFile = new File(getTargetDir(), fileName);</span>
+<span class="nc" id="L211">    return new AllPackageBuilder(targetFile, this.group, packageName)</span>
+<span class="nc" id="L212">        .version(project.getVersion())</span>
+<span class="nc" id="L213">        .autoDependenciesMode(this.autoDependenciesMode)</span>
+<span class="nc" id="L214">        .logger(getLog());</span>
+  }
+
+  private void buildAllPackage(AllPackageBuilder builder) throws MojoExecutionException {
+    try {
+<span class="nc bnc" id="L219" title="All 2 branches missed.">      if (builder.build(properties)) {</span>
+<span class="nc" id="L220">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        if (attachArtifact) {</span>
+<span class="nc" id="L222">          projectHelper.attachArtifact(this.project, &quot;zip&quot;, builder.getPackageName(), builder.getTargetFile());</span>
+        }
+      }
+      else {
+<span class="nc" id="L226">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
+      }
+    }
+<span class="nc" id="L229">    catch (IOException ex) {</span>
+<span class="nc" id="L230">      throw new MojoExecutionException(&quot;Unable to generate &quot; + getCanonicalPath(builder.getTargetFile()), ex);</span>
+<span class="nc" id="L231">    }</span>
+<span class="nc" id="L232">  }</span>
+
+  private void visitEnvironmentsNodes(EnvironmentNodeVisitor visitor) throws MojoExecutionException, MojoFailureException {
+<span class="nc" id="L235">    ModelParser modelParser = new ModelParser();</span>
+<span class="nc" id="L236">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">    for (File environmentDir : environmentDirs) {</span>
+<span class="nc" id="L238">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">      for (File nodeDir : nodeDirs) {</span>
+<span class="nc" id="L240">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
+<span class="nc" id="L242">          List&lt;ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
+<span class="nc" id="L243">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
+        }
+<span class="nc" id="L245">      }</span>
+<span class="nc" id="L246">    }</span>
+<span class="nc" id="L247">  }</span>
+
+  interface EnvironmentNodeVisitor {
+    void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
+        List&lt;ContentPackageFile&gt; contentPackages) throws MojoExecutionException, MojoFailureException;
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

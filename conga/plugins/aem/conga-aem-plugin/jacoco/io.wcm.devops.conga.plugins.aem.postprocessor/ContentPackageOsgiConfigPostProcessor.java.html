@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContentPackageOsgiConfigPostProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.postprocessor</a> &gt; <span class="el_source">ContentPackageOsgiConfigPostProcessor.java</span></div><h1>ContentPackageOsgiConfigPostProcessor.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.postprocessor;
+
+import static io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOptions.PROPERTY_PACKAGE_ROOT_PATH;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.provisioning.model.Model;
+import org.slf4j.Logger;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.plugins.postprocessor.AbstractPostProcessor;
+import io.wcm.devops.conga.generator.spi.context.FileContext;
+import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
+import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
+import io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil;
+import io.wcm.devops.conga.plugins.sling.util.ConfigConsumer;
+import io.wcm.devops.conga.plugins.sling.util.OsgiConfigUtil;
+import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
+import io.wcm.tooling.commons.contentpackagebuilder.ContentPackage;
+import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
+
+/**
+ * Transforms a Sling Provisioning file into OSGi configurations (ignoring all other provisioning contents)
+ * and then packages them up in an AEM content package to be deployed via CRX package manager.
+ */
+<span class="fc" id="L62">public class ContentPackageOsgiConfigPostProcessor extends AbstractPostProcessor {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;aem-contentpackage-osgiconfig&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L71">    return NAME;</span>
+  }
+
+  @Override
+  public boolean accepts(FileContext file, PostProcessorContext context) {
+<span class="fc" id="L76">    return ProvisioningUtil.isProvisioningFile(file);</span>
+  }
+
+  @Override
+  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+  public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
+<span class="fc" id="L82">    File file = fileContext.getFile();</span>
+<span class="fc" id="L83">    Logger logger = context.getLogger();</span>
+<span class="fc" id="L84">    Map&lt;String, Object&gt; options = context.getOptions();</span>
+
+    try {
+      // extract file header
+<span class="fc" id="L88">      FileHeaderContext fileHeader = extractFileHeader(fileContext, context);</span>
+
+      // generate OSGi configurations
+<span class="fc" id="L91">      Model model = ProvisioningUtil.getModel(fileContext);</span>
+
+      // check if any osgi configuration is present
+<span class="fc" id="L94">      boolean hasAnyConfig = !ProvisioningUtil.visitOsgiConfigurations(model,</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">          (ConfigConsumer&lt;Boolean&gt;)(path, properties) -&gt; true).isEmpty();</span>
+
+      // create AEM content package with configurations
+<span class="fc" id="L98">      File zipFile = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + &quot;.zip&quot;);</span>
+<span class="fc" id="L99">      logger.info(&quot;Generate {}&quot;, zipFile.getCanonicalPath());</span>
+
+<span class="fc" id="L101">      String rootPath = ContentPackageUtil.getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
+
+<span class="fc" id="L103">      ContentPackageBuilder builder = ContentPackageUtil.getContentPackageBuilder(options, context.getUrlFileManager(), fileHeader);</span>
+
+      // set package type depending on if config is present or not
+<span class="fc bfc" id="L106" title="All 2 branches covered.">      builder.packageType(hasAnyConfig ? &quot;container&quot; : &quot;application&quot;);</span>
+
+<span class="fc" id="L108">      try (ContentPackage contentPackage = builder.build(zipFile)) {</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (hasAnyConfig) {</span>
+          // generate OSGI config files
+<span class="fc" id="L111">          generateOsgiConfigurations(model, contentPackage, rootPath, fileHeader, context);</span>
+        }
+        else {
+          // create folder for root path if package is empty otherwise
+          // (to make sure probably already existing config is overridden/cleaned)
+<span class="fc" id="L116">          contentPackage.addContent(rootPath, ImmutableMap.of(&quot;jcr:primaryType&quot;, &quot;nt:folder&quot;));</span>
+        }
+      }
+
+      // delete provisioning file after transformation
+<span class="fc" id="L121">      file.delete();</span>
+
+      // set force to true by default for CONGA-generated packages (but allow override from role definition)
+<span class="fc" id="L124">      Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L125">      modelOptions.put(&quot;force&quot;, true);</span>
+<span class="fc" id="L126">      modelOptions.putAll(fileContext.getModelOptions());</span>
+
+<span class="fc" id="L128">      return ImmutableList.of(new FileContext().file(zipFile).modelOptions(modelOptions));</span>
+    }
+<span class="nc" id="L130">    catch (IOException ex) {</span>
+<span class="nc" id="L131">      throw new GeneratorException(&quot;Unable to post-process sling provisioning OSGi configurations.&quot;, ex);</span>
+    }
+  }
+
+  /**
+   * Generate OSGi configuration for all feature and run modes.
+   * @param model Provisioning Model
+   * @param contentPackage Content package
+   * @param rootPath Root path
+   * @param fileHeader File header
+   * @param context Post processor context
+   * @return true if any config file was added
+   */
+  private boolean generateOsgiConfigurations(Model model, ContentPackage contentPackage,
+      String rootPath, FileHeaderContext fileHeader, PostProcessorContext context) throws IOException {
+<span class="fc" id="L146">    List&lt;Void&gt; result = ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;Void&gt;() {</span>
+      @Override
+      @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+      public Void accept(String path, Dictionary&lt;String, Object&gt; properties) throws IOException {
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        String contentPath = rootPath + (StringUtils.contains(path, &quot;/&quot;) ? &quot;.&quot; : &quot;/&quot;) + path;</span>
+<span class="fc" id="L151">        context.getLogger().info(&quot;  Include &quot; + contentPath);</span>
+
+        // write configuration to temporary file
+<span class="fc" id="L154">        File tempFile = File.createTempFile(NAME, &quot;.config&quot;);</span>
+<span class="fc" id="L155">        try (OutputStream os = new FileOutputStream(tempFile)) {</span>
+<span class="fc" id="L156">          OsgiConfigUtil.write(os, properties);</span>
+        }
+        try {
+<span class="fc" id="L159">          FileContext tempFileContext = new FileContext().file(tempFile).charset(StandardCharsets.UTF_8);</span>
+
+          // apply file header
+<span class="fc" id="L162">          applyFileHeader(tempFileContext, fileHeader, context);</span>
+
+          // write configuration to content package
+<span class="fc" id="L165">          try (InputStream is = new BufferedInputStream(new FileInputStream(tempFile))) {</span>
+<span class="fc" id="L166">            contentPackage.addFile(contentPath, is);</span>
+          }
+        }
+        finally {
+          // remove temporary file
+<span class="fc" id="L171">          tempFile.delete();</span>
+        }
+<span class="fc" id="L173">        return null;</span>
+      }
+    });
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">    return !result.isEmpty();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

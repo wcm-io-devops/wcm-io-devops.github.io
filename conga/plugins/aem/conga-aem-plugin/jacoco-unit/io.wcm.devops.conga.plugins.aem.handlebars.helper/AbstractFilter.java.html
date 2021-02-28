@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.handlebars.helper</a> &gt; <span class="el_source">AbstractFilter.java</span></div><h1>AbstractFilter.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2017 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.handlebars.helper;
+
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+<span class="fc" id="L29">abstract class AbstractFilter {</span>
+
+  /**
+   * Gets and removes value from map.
+   * @param map Map
+   * @param key Key
+   * @return Value or null if not set
+   */
+  protected final String getValue(Map&lt;String, Object&gt; map, String key) {
+    // get and remove value from map
+<span class="fc" id="L39">    Object value = map.remove(key);</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">    if (value instanceof String) {</span>
+<span class="fc" id="L41">      return (String)value;</span>
+    }
+    else {
+<span class="fc" id="L44">      return null;</span>
+    }
+  }
+
+  /**
+   * Gets and removes value from map and validtes as regex.
+   * @param map Map
+   * @param key Key
+   * @return Value or null if not set
+   */
+  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  protected final String getRegexValue(Map&lt;String, Object&gt; map, String key) {
+<span class="fc" id="L56">    String value = getValue(map, key);</span>
+
+    // compile value to regex to validate it
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    if (value != null) {</span>
+      try {
+<span class="fc" id="L61">        Pattern.compile(value);</span>
+      }
+<span class="fc" id="L63">      catch (PatternSyntaxException ex) {</span>
+<span class="fc" id="L64">        throw new IllegalArgumentException(&quot;Invalid regex for '&quot; + key + &quot;': &quot; + ex.getMessage());</span>
+<span class="fc" id="L65">      }</span>
+    }
+
+<span class="fc" id="L68">    return value;</span>
+  }
+
+  /**
+   * Gets and removes type and casts it to enum.
+   * @param map Map
+   * @param enumType Type class
+   * @return Type value - never null
+   */
+  protected final &lt;T extends Enum&lt;T&gt;&gt; T getFilterType(Map&lt;String, Object&gt; map, Class&lt;T&gt; enumType) {
+<span class="fc" id="L78">    String typeValue = getValue(map, &quot;type&quot;);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">    if (typeValue == null) {</span>
+<span class="fc" id="L80">      throw new IllegalArgumentException(&quot;Type expression missing.&quot;);</span>
+    }
+<span class="fc" id="L82">    return Enum.valueOf(enumType, StringUtils.upperCase(typeValue));</span>
+  }
+
+  /**
+   * Validates that map is empty and does not contain more parameters.
+   * @param map Map
+   */
+  protected final void ensureNoMoreParams(Map&lt;String, Object&gt; map) {
+<span class="fc bfc" id="L90" title="All 2 branches covered.">    if (!map.isEmpty()) {</span>
+<span class="fc" id="L91">      throw new IllegalArgumentException(&quot;Unexpected properties for filter rule: &quot; + StringUtils.join(map.keySet(), &quot;, &quot;));</span>
+    }
+<span class="fc" id="L93">  }</span>
+
+  @Override
+  public final String toString() {
+<span class="fc" id="L97">    return ToStringBuilder.reflectionToString(this, NoClassNameOmitNullsStyle.TOSTRING_STYLE);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCloudManagerConditionalHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.handlebars.helper</a> &gt; <span class="el_source">AbstractCloudManagerConditionalHelper.java</span></div><h1>AbstractCloudManagerConditionalHelper.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2020 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.handlebars.helper;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.github.jknack.handlebars.Context;
+import com.github.jknack.handlebars.Options;
+import com.github.jknack.handlebars.Options.Buffer;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import io.wcm.devops.conga.generator.spi.handlebars.HelperPlugin;
+import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
+import io.wcm.devops.conga.model.util.MapMerger;
+
+/**
+ * Checks if there is a conditional statement 'httpd.cloudManagerConditional' in the current context.
+ * If yes iterates over all environments and renders the body for each with a merged model.
+ * If no the body is rendered once with the default model.
+ */
+<span class="fc" id="L44">abstract class AbstractCloudManagerConditionalHelper implements HelperPlugin&lt;Object&gt; {</span>
+
+  static final String HTTPD_KEY = &quot;httpd&quot;;
+  static final String CLOUD_MANAGER_CONDITIONAL_KEY = &quot;cloudManagerConditional&quot;;
+<span class="fc" id="L48">  static final List&lt;String&gt; ENVIRONMENTS = ImmutableList.of(&quot;dev&quot;, &quot;stage&quot;, &quot;prod&quot;);</span>
+
+  @Override
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public final Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
+<span class="fc" id="L53">    Buffer buffer = options.buffer();</span>
+
+<span class="fc" id="L55">    Context currentContext = options.context;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    if (context != null) {</span>
+<span class="fc" id="L57">      currentContext = Context.copy(options.context, context);</span>
+    }
+
+    // get tenants from context
+<span class="fc" id="L61">    Object cloudManagerConditional = currentContext.get(HTTPD_KEY + &quot;.&quot; + CLOUD_MANAGER_CONDITIONAL_KEY);</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    if (!(cloudManagerConditional instanceof Map)) {</span>
+      // no conditional statement - just render the body
+<span class="fc" id="L65">      buffer.append(options.fn(currentContext));</span>
+    }
+    else {
+      // render body for each environment in conditional block with a merged context
+<span class="fc" id="L69">      List&lt;CloudManagerConditional&gt; items = getCloudManagerConditional((Map&lt;String, Object&gt;)cloudManagerConditional);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">      for (CloudManagerConditional item : items) {</span>
+
+        // config inside httpd.cloudManagerConditional is considered to be prefixed with &quot;httpd.&quot;, so wrap it around here for merging
+<span class="fc" id="L73">        Map&lt;String, Object&gt; httpdWrapper = ImmutableMap.of(HTTPD_KEY, item.getConfig());</span>
+<span class="fc" id="L74">        Map&lt;String, Object&gt; mergedModel = MapMerger.merge(httpdWrapper, (Map&lt;String, Object&gt;)currentContext.model());</span>
+
+        // remove cloudManagerConditional after merging the models
+<span class="fc" id="L77">        Map&lt;String, Object&gt; mergedHttpd = (Map&lt;String, Object&gt;)mergedModel.get(HTTPD_KEY);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (mergedHttpd != null) {</span>
+<span class="fc" id="L79">          mergedHttpd.remove(CLOUD_MANAGER_CONDITIONAL_KEY);</span>
+        }
+
+<span class="fc" id="L82">        Context mergedContext = Context.copy(currentContext, mergedModel);</span>
+<span class="fc" id="L83">        CharSequence bodyContent = options.fn(mergedContext);</span>
+
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (StringUtils.isNotBlank(bodyContent)) {</span>
+<span class="fc" id="L86">          renderBodyContent(buffer, bodyContent, item.getTargetEnvironment());</span>
+        }
+<span class="fc" id="L88">      }</span>
+    }
+
+<span class="fc" id="L91">    return buffer;</span>
+  }
+
+  protected abstract void renderBodyContent(Buffer buffer, CharSequence bodyContent,
+      String targetEnvironment) throws IOException;
+
+  private List&lt;CloudManagerConditional&gt; getCloudManagerConditional(Map&lt;String, Object&gt; cloudManagerConditional) {
+<span class="fc" id="L98">    return ENVIRONMENTS.stream()</span>
+<span class="fc" id="L99">        .map(env -&gt; new CloudManagerConditional(env, cloudManagerConditional.getOrDefault(env, ImmutableMap.of())))</span>
+<span class="fc" id="L100">        .collect(Collectors.toList());</span>
+  }
+
+  /**
+   * Cloud manager conditional result per tenant and target environment.
+   */
+  private static class CloudManagerConditional {
+
+    private final Map&lt;String, Object&gt; config;
+    private final String targetEnvironment;
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L112">    CloudManagerConditional(String targetEnvironment, Object value) {</span>
+<span class="fc" id="L113">      this.targetEnvironment = targetEnvironment;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
+<span class="fc" id="L115">        this.config = (Map&lt;String, Object&gt;)value;</span>
+      }
+      else {
+<span class="nc" id="L118">        this.config = ImmutableMap.of();</span>
+      }
+<span class="fc" id="L120">    }</span>
+
+    public String getTargetEnvironment() {
+<span class="fc" id="L123">      return targetEnvironment;</span>
+    }
+
+    public Map&lt;String, Object&gt; getConfig() {
+<span class="fc" id="L127">      return config;</span>
+    }
+
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OakAuthorizableUuidHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.handlebars.helper</a> &gt; <span class="el_source">OakAuthorizableUuidHelper.java</span></div><h1>OakAuthorizableUuidHelper.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2018 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.handlebars.helper;
+
+import java.io.IOException;
+
+import org.apache.jackrabbit.oak.commons.UUIDUtils;
+import org.apache.jackrabbit.oak.spi.security.ConfigurationParameters;
+import org.apache.jackrabbit.oak.spi.security.user.UserConstants;
+
+import com.github.jknack.handlebars.Options;
+
+import io.wcm.devops.conga.generator.spi.handlebars.HelperPlugin;
+import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
+
+/**
+ * Handlebars helper that builds a password hash for a given password string of an Oak JCR user.
+ */
+<span class="fc" id="L36">public final class OakAuthorizableUuidHelper implements HelperPlugin&lt;Object&gt; {</span>
+
+  /**
+   * Plugin/Helper name
+   */
+  public static final String NAME = &quot;oakAuthorizableUuid&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L45">    return NAME;</span>
+  }
+
+  @Override
+  public Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">    if (context == null) {</span>
+<span class="fc" id="L51">      return null;</span>
+    }
+
+<span class="fc" id="L54">    ConfigurationParameters config = ConfigurationParameters.of(options.hash);</span>
+<span class="fc" id="L55">    boolean usercaseMappedProfile = config.getConfigValue(UserConstants.PARAM_ENABLE_RFC7613_USERCASE_MAPPED_PROFILE,</span>
+<span class="fc" id="L56">        UserConstants.DEFAULT_ENABLE_RFC7613_USERCASE_MAPPED_PROFILE);</span>
+
+<span class="fc" id="L58">    String authorizableId = context.toString();</span>
+<span class="fc" id="L59">    return getContentID(authorizableId, usercaseMappedProfile);</span>
+  }
+
+  /*
+   * Method copied from https://github.com/apache/jackrabbit-oak/blob/trunk/oak-core/src/main/java/org/apache/jackrabbit/oak/security/user/AuthorizableBaseProvider.java
+   */
+  private String getContentID(String authorizableId, boolean usercaseMappedProfile) {
+<span class="fc" id="L66">    String s = authorizableId.toLowerCase();</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if (usercaseMappedProfile) {</span>
+<span class="nc" id="L68">      s = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFKC);</span>
+    }
+<span class="fc" id="L70">    return UUIDUtils.generateUUID(s);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCloudManagerMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.maven</a> &gt; <span class="el_source">AbstractCloudManagerMojo.java</span></div><h1>AbstractCloudManagerMojo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2020 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.maven;
+
+import static io.wcm.devops.conga.generator.util.FileUtil.getCanonicalPath;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import com.google.common.collect.ImmutableSet;
+
+/**
+ * Common functionality for mojos that generate configuration ZIP files for Adobe Cloud Manager.
+ */
+<span class="nc" id="L40">abstract class AbstractCloudManagerMojo extends AbstractMojo {</span>
+
+  /**
+   * Selected environments to generate.
+   */
+  @Parameter(property = &quot;conga.environments&quot;)
+  private String[] environments;
+
+  /**
+   * Selected nodes to generate.
+   */
+  @Parameter(property = &quot;conga.nodes&quot;)
+  private String[] nodes;
+
+  /**
+   * Path for the generated configuration files.
+   */
+  @Parameter(defaultValue = &quot;${project.build.directory}/configuration&quot;)
+  private File configurationDir;
+
+  /**
+   * Target path for the generated copied files.
+   */
+  @Parameter(defaultValue = &quot;${project.build.directory}&quot;)
+  private File target;
+
+  /**
+   * @return Target directory
+   */
+  protected File getTargetDir() {
+<span class="nc" id="L70">    return target;</span>
+  }
+
+  /**
+   * Get directory of the selected environment. It has to be exactly one matching environment.
+   * @return Environment directory
+   * @throws MojoExecutionException if no or multiple directories found
+   */
+  protected List&lt;File&gt; getEnvironmentDir() throws MojoExecutionException {
+<span class="nc" id="L79">    List&lt;File&gt; directories = null;</span>
+<span class="nc" id="L80">    Set&lt;String&gt; selectedEnvironments = toSet(this.environments);</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">    if (configurationDir.exists() &amp;&amp; configurationDir.isDirectory()) {</span>
+<span class="nc" id="L82">      File[] files = configurationDir.listFiles();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">      if (files != null) {</span>
+<span class="nc" id="L84">        directories = Arrays.stream(files)</span>
+<span class="nc" id="L85">            .filter(File::isDirectory)</span>
+<span class="nc bnc" id="L86" title="All 4 branches missed.">            .filter(dir -&gt; (selectedEnvironments.isEmpty() || selectedEnvironments.contains(dir.getName())))</span>
+<span class="nc" id="L87">            .collect(Collectors.toList());</span>
+      }
+    }
+<span class="nc bnc" id="L90" title="All 4 branches missed.">    if (directories == null || directories.isEmpty()) {</span>
+<span class="nc" id="L91">      throw new MojoExecutionException(&quot;No matching environment directory found in &quot; + getCanonicalPath(configurationDir));</span>
+    }
+<span class="nc" id="L93">    return directories;</span>
+  }
+
+  /**
+   * Get matching node directories from environment.
+   * @param environmentDir Environment directory
+   * @return List of directories
+   */
+  protected List&lt;File&gt; getNodeDirs(File environmentDir) {
+<span class="nc" id="L102">    Set&lt;String&gt; selectedNodes = toSet(this.nodes);</span>
+<span class="nc" id="L103">    File[] files = environmentDir.listFiles();</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">    if (files != null) {</span>
+<span class="nc" id="L105">      return Arrays.stream(files)</span>
+<span class="nc" id="L106">          .filter(File::isDirectory)</span>
+<span class="nc bnc" id="L107" title="All 4 branches missed.">          .filter(dir -&gt; selectedNodes.isEmpty() || selectedNodes.contains(dir.getName()))</span>
+<span class="nc" id="L108">          .collect(Collectors.toList());</span>
+    }
+    else {
+<span class="nc" id="L111">      return Collections.emptyList();</span>
+    }
+  }
+
+  private static Set&lt;String&gt; toSet(String[] values) {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">    if (values != null) {</span>
+<span class="nc" id="L117">      return ImmutableSet.copyOf(values);</span>
+    }
+    else {
+<span class="nc" id="L120">      return ImmutableSet.of();</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

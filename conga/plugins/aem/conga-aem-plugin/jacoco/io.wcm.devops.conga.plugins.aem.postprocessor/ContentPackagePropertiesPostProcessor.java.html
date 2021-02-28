@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContentPackagePropertiesPostProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.postprocessor</a> &gt; <span class="el_source">ContentPackagePropertiesPostProcessor.java</span></div><h1>ContentPackagePropertiesPostProcessor.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.postprocessor;
+
+import static io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOptions.PROPERTY_PACKAGE_PACKAGE_TYPE;
+import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_PACKAGE_TYPE;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+
+import com.google.common.collect.ImmutableList;
+
+import io.wcm.devops.conga.generator.GeneratorException;
+import io.wcm.devops.conga.generator.plugins.postprocessor.AbstractPostProcessor;
+import io.wcm.devops.conga.generator.spi.ImplicitApplyOptions;
+import io.wcm.devops.conga.generator.spi.context.FileContext;
+import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
+import io.wcm.devops.conga.generator.util.FileUtil;
+import io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil;
+import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
+
+/**
+ * Extracts properties from a given AEM content package and stores them as additional
+ * model options in the file context.
+ */
+<span class="fc" id="L47">public class ContentPackagePropertiesPostProcessor extends AbstractPostProcessor {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;aem-contentpackage-properties&quot;;
+
+  /**
+   * Holds map containing the content package properties.
+   */
+  public static final String MODEL_OPTIONS_PROPERTY = &quot;aemContentPackageProperties&quot;;
+
+  private static final String FILE_EXTENSION = &quot;zip&quot;;
+  private static final String ALTERNATE_FILE_EXTENSION = &quot;jar&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L64">    return NAME;</span>
+  }
+
+  @Override
+  public boolean accepts(FileContext file, PostProcessorContext context) {
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    return FileUtil.matchesExtension(file, FILE_EXTENSION)</span>
+<span class="pc bnc" id="L70" title="All 2 branches missed.">        || FileUtil.matchesExtension(file, ALTERNATE_FILE_EXTENSION);</span>
+  }
+
+  @Override
+  public ImplicitApplyOptions implicitApply(FileContext file, PostProcessorContext context) {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">    if (FileUtil.matchesExtension(file, FILE_EXTENSION)) {</span>
+<span class="nc" id="L76">      return ImplicitApplyOptions.ALWAYS;</span>
+    }
+    else {
+<span class="nc" id="L79">      return ImplicitApplyOptions.NEVER;</span>
+    }
+  }
+
+  @Override
+  public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
+<span class="fc" id="L85">    Logger logger = context.getLogger();</span>
+
+    try {
+<span class="fc" id="L88">      Map&lt;String, Object&gt; properties = ContentPackageProperties.get(fileContext.getFile());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">      if (!properties.isEmpty()) {</span>
+
+        // allow to redefine the packageType content package property via post processor options
+        // this is useful when 3rdparty packages do not define a package type
+<span class="fc" id="L93">        String packageType = ContentPackageUtil.getOptionalProp(context.getOptions(), PROPERTY_PACKAGE_PACKAGE_TYPE);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (StringUtils.isNotBlank(packageType)) {</span>
+<span class="fc" id="L95">          properties.put(NAME_PACKAGE_TYPE, packageType);</span>
+        }
+
+<span class="fc" id="L98">        fileContext.getModelOptions().put(MODEL_OPTIONS_PROPERTY, properties);</span>
+<span class="fc" id="L99">        logger.info(&quot;Extracted properties from AEM content package.&quot;);</span>
+      }
+    }
+<span class="nc" id="L102">    catch (IOException ex) {</span>
+<span class="nc" id="L103">      throw new GeneratorException(&quot;Unable to extract properties from AEM package &quot; + fileContext.getCanonicalPath(), ex);</span>
+<span class="fc" id="L104">    }</span>
+
+<span class="fc" id="L106">    return ImmutableList.of();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
