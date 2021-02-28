@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfigurationHandler_ConfigAdmin184.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Sling Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.sling.util</a> &gt; <span class="el_source">ConfigurationHandler_ConfigAdmin184.java</span></div><h1>ConfigurationHandler_ConfigAdmin184.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2019 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.sling.util;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PushbackReader;
+import java.io.Writer;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.felix.cm.file.FilePersistenceManager;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+/*
+ * This file is COPIED from the sources of org.apache.felix.configadmin 1.8.4
+ * to write the configuration using the old (single line) array style, which is required to support
+ * deploying configurations to old AEM version like AEM 6.1 and lower.
+ */
+/**
+ * The &lt;code&gt;ConfigurationHandler&lt;/code&gt; class implements configuration reading
+ * form a &lt;code&gt;java.io.InputStream&lt;/code&gt; and writing to a
+ * &lt;code&gt;java.io.OutputStream&lt;/code&gt; on behalf of the
+ * {@link FilePersistenceManager} class.
+ *
+ * &lt;pre&gt;
+ * cfg = prop &amp;quot;=&amp;quot; value .
+ *  prop = symbolic-name . // 1.4.2 of OSGi Core Specification
+ *  symbolic-name = token { &amp;quot;.&amp;quot; token } .
+ *  token = { [ 0..9 ] | [ a..z ] | [ A..Z ] | '_' | '-' } .
+ *  value = [ type ] ( &amp;quot;[&amp;quot; values &amp;quot;]&amp;quot; | &amp;quot;(&amp;quot; values &amp;quot;)&amp;quot; | simple ) .
+ *  values = simple { &amp;quot;,&amp;quot; simple } .
+ *  simple = &amp;quot;&amp;quot;&amp;quot; stringsimple &amp;quot;&amp;quot;&amp;quot; .
+ *  type = // 1-char type code .
+ *  stringsimple = // quoted string representation of the value .
+ * &lt;/pre&gt;
+ */
+//CHECKSTYLE:OFF
+@SuppressWarnings({ &quot;unchecked&quot;, &quot;unused&quot;, &quot;javadoc&quot;, &quot;PMD&quot; })
+@SuppressFBWarnings({ &quot;PERFORMANCE&quot;, &quot;STYLE&quot; })
+class ConfigurationHandler_ConfigAdmin184 {
+
+  protected static final String ENCODING = &quot;UTF-8&quot;;
+
+  protected static final int TOKEN_NAME = 'N';
+  protected static final int TOKEN_EQ = '=';
+  protected static final int TOKEN_ARR_OPEN = '[';
+  protected static final int TOKEN_ARR_CLOS = ']';
+  protected static final int TOKEN_VEC_OPEN = '(';
+  protected static final int TOKEN_VEC_CLOS = ')';
+  protected static final int TOKEN_COMMA = ',';
+  protected static final int TOKEN_VAL_OPEN = '&quot;'; // '{';
+  protected static final int TOKEN_VAL_CLOS = '&quot;'; // '}';
+
+  // simple types (string &amp; primitive wrappers)
+  protected static final int TOKEN_SIMPLE_STRING = 'T';
+  protected static final int TOKEN_SIMPLE_INTEGER = 'I';
+  protected static final int TOKEN_SIMPLE_LONG = 'L';
+  protected static final int TOKEN_SIMPLE_FLOAT = 'F';
+  protected static final int TOKEN_SIMPLE_DOUBLE = 'D';
+  protected static final int TOKEN_SIMPLE_BYTE = 'X';
+  protected static final int TOKEN_SIMPLE_SHORT = 'S';
+  protected static final int TOKEN_SIMPLE_CHARACTER = 'C';
+  protected static final int TOKEN_SIMPLE_BOOLEAN = 'B';
+
+  // primitives
+  protected static final int TOKEN_PRIMITIVE_INT = 'i';
+  protected static final int TOKEN_PRIMITIVE_LONG = 'l';
+  protected static final int TOKEN_PRIMITIVE_FLOAT = 'f';
+  protected static final int TOKEN_PRIMITIVE_DOUBLE = 'd';
+  protected static final int TOKEN_PRIMITIVE_BYTE = 'x';
+  protected static final int TOKEN_PRIMITIVE_SHORT = 's';
+  protected static final int TOKEN_PRIMITIVE_CHAR = 'c';
+  protected static final int TOKEN_PRIMITIVE_BOOLEAN = 'b';
+
+  protected static final String CRLF = &quot;\r\n&quot;;
+
+  protected static final Map code2Type;
+  protected static final Map type2Code;
+
+  // set of valid characters for &quot;symblic-name&quot;
+  private static final BitSet NAME_CHARS;
+  private static final BitSet TOKEN_CHARS;
+
+  static {
+<span class="fc" id="L118">    type2Code = new HashMap();</span>
+
+    // simple (exclusive String whose type code is not written)
+<span class="fc" id="L121">    type2Code.put(Integer.class, new Integer(TOKEN_SIMPLE_INTEGER));</span>
+<span class="fc" id="L122">    type2Code.put(Long.class, new Integer(TOKEN_SIMPLE_LONG));</span>
+<span class="fc" id="L123">    type2Code.put(Float.class, new Integer(TOKEN_SIMPLE_FLOAT));</span>
+<span class="fc" id="L124">    type2Code.put(Double.class, new Integer(TOKEN_SIMPLE_DOUBLE));</span>
+<span class="fc" id="L125">    type2Code.put(Byte.class, new Integer(TOKEN_SIMPLE_BYTE));</span>
+<span class="fc" id="L126">    type2Code.put(Short.class, new Integer(TOKEN_SIMPLE_SHORT));</span>
+<span class="fc" id="L127">    type2Code.put(Character.class, new Integer(TOKEN_SIMPLE_CHARACTER));</span>
+<span class="fc" id="L128">    type2Code.put(Boolean.class, new Integer(TOKEN_SIMPLE_BOOLEAN));</span>
+
+    // primitives
+<span class="fc" id="L131">    type2Code.put(Integer.TYPE, new Integer(TOKEN_PRIMITIVE_INT));</span>
+<span class="fc" id="L132">    type2Code.put(Long.TYPE, new Integer(TOKEN_PRIMITIVE_LONG));</span>
+<span class="fc" id="L133">    type2Code.put(Float.TYPE, new Integer(TOKEN_PRIMITIVE_FLOAT));</span>
+<span class="fc" id="L134">    type2Code.put(Double.TYPE, new Integer(TOKEN_PRIMITIVE_DOUBLE));</span>
+<span class="fc" id="L135">    type2Code.put(Byte.TYPE, new Integer(TOKEN_PRIMITIVE_BYTE));</span>
+<span class="fc" id="L136">    type2Code.put(Short.TYPE, new Integer(TOKEN_PRIMITIVE_SHORT));</span>
+<span class="fc" id="L137">    type2Code.put(Character.TYPE, new Integer(TOKEN_PRIMITIVE_CHAR));</span>
+<span class="fc" id="L138">    type2Code.put(Boolean.TYPE, new Integer(TOKEN_PRIMITIVE_BOOLEAN));</span>
+
+    // reverse map to map type codes to classes, string class mapping
+    // to be added manually, as the string type code is not written and
+    // hence not included in the type2Code map
+<span class="fc" id="L143">    code2Type = new HashMap();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    for (Iterator ti = type2Code.entrySet().iterator(); ti.hasNext();) {</span>
+<span class="fc" id="L145">      Map.Entry entry = (Map.Entry)ti.next();</span>
+<span class="fc" id="L146">      code2Type.put(entry.getValue(), entry.getKey());</span>
+<span class="fc" id="L147">    }</span>
+<span class="fc" id="L148">    code2Type.put(new Integer(TOKEN_SIMPLE_STRING), String.class);</span>
+
+<span class="fc" id="L150">    NAME_CHARS = new BitSet();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">    for (int i = '0'; i &lt;= '9'; i++) {</span>
+<span class="fc" id="L152">      NAME_CHARS.set(i);</span>
+    }
+<span class="fc bfc" id="L154" title="All 2 branches covered.">    for (int i = 'a'; i &lt;= 'z'; i++) {</span>
+<span class="fc" id="L155">      NAME_CHARS.set(i);</span>
+    }
+<span class="fc bfc" id="L157" title="All 2 branches covered.">    for (int i = 'A'; i &lt;= 'Z'; i++) {</span>
+<span class="fc" id="L158">      NAME_CHARS.set(i);</span>
+    }
+<span class="fc" id="L160">    NAME_CHARS.set('_');</span>
+<span class="fc" id="L161">    NAME_CHARS.set('-');</span>
+<span class="fc" id="L162">    NAME_CHARS.set('.');</span>
+<span class="fc" id="L163">    NAME_CHARS.set('\\');</span>
+
+<span class="fc" id="L165">    TOKEN_CHARS = new BitSet();</span>
+<span class="fc" id="L166">    TOKEN_CHARS.set(TOKEN_EQ);</span>
+<span class="fc" id="L167">    TOKEN_CHARS.set(TOKEN_ARR_OPEN);</span>
+<span class="fc" id="L168">    TOKEN_CHARS.set(TOKEN_ARR_CLOS);</span>
+<span class="fc" id="L169">    TOKEN_CHARS.set(TOKEN_VEC_OPEN);</span>
+<span class="fc" id="L170">    TOKEN_CHARS.set(TOKEN_VEC_CLOS);</span>
+<span class="fc" id="L171">    TOKEN_CHARS.set(TOKEN_COMMA);</span>
+<span class="fc" id="L172">    TOKEN_CHARS.set(TOKEN_VAL_OPEN);</span>
+<span class="fc" id="L173">    TOKEN_CHARS.set(TOKEN_VAL_CLOS);</span>
+<span class="fc" id="L174">    TOKEN_CHARS.set(TOKEN_SIMPLE_STRING);</span>
+<span class="fc" id="L175">    TOKEN_CHARS.set(TOKEN_SIMPLE_INTEGER);</span>
+<span class="fc" id="L176">    TOKEN_CHARS.set(TOKEN_SIMPLE_LONG);</span>
+<span class="fc" id="L177">    TOKEN_CHARS.set(TOKEN_SIMPLE_FLOAT);</span>
+<span class="fc" id="L178">    TOKEN_CHARS.set(TOKEN_SIMPLE_DOUBLE);</span>
+<span class="fc" id="L179">    TOKEN_CHARS.set(TOKEN_SIMPLE_BYTE);</span>
+<span class="fc" id="L180">    TOKEN_CHARS.set(TOKEN_SIMPLE_SHORT);</span>
+<span class="fc" id="L181">    TOKEN_CHARS.set(TOKEN_SIMPLE_CHARACTER);</span>
+<span class="fc" id="L182">    TOKEN_CHARS.set(TOKEN_SIMPLE_BOOLEAN);</span>
+
+    // primitives
+<span class="fc" id="L185">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_INT);</span>
+<span class="fc" id="L186">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_LONG);</span>
+<span class="fc" id="L187">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_FLOAT);</span>
+<span class="fc" id="L188">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_DOUBLE);</span>
+<span class="fc" id="L189">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_BYTE);</span>
+<span class="fc" id="L190">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_SHORT);</span>
+<span class="fc" id="L191">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_CHAR);</span>
+<span class="fc" id="L192">    TOKEN_CHARS.set(TOKEN_PRIMITIVE_BOOLEAN);</span>
+<span class="fc" id="L193">  }</span>
+
+
+  /**
+   * Writes the configuration data from the &lt;code&gt;Dictionary&lt;/code&gt; to the
+   * given &lt;code&gt;OutputStream&lt;/code&gt;.
+   * &lt;p&gt;
+   * This method writes at the current location in the stream and does not
+   * close the outputstream.
+   * @param out
+   *          The &lt;code&gt;OutputStream&lt;/code&gt; to write the configurtion data
+   *          to.
+   * @param properties
+   *          The &lt;code&gt;Dictionary&lt;/code&gt; to write.
+   * @throws IOException
+   *           If an error occurrs writing to the output stream.
+   */
+  public static void write(OutputStream out, Dictionary properties) throws IOException {
+<span class="fc" id="L211">    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, ENCODING));</span>
+
+<span class="fc bfc" id="L213" title="All 2 branches covered.">    for (Enumeration ce = properties.keys(); ce.hasMoreElements();) {</span>
+<span class="fc" id="L214">      String key = (String)ce.nextElement();</span>
+
+      // cfg = prop &quot;=&quot; value &quot;.&quot; .
+<span class="fc" id="L217">      writeQuoted(bw, key);</span>
+<span class="fc" id="L218">      bw.write(TOKEN_EQ);</span>
+<span class="fc" id="L219">      writeValue(bw, properties.get(key));</span>
+<span class="fc" id="L220">      bw.write(CRLF);</span>
+<span class="fc" id="L221">    }</span>
+
+<span class="fc" id="L223">    bw.flush();</span>
+<span class="fc" id="L224">  }</span>
+
+
+  /**
+   * Reads configuration data from the given &lt;code&gt;InputStream&lt;/code&gt; and
+   * returns a new &lt;code&gt;Dictionary&lt;/code&gt; object containing the data.
+   * &lt;p&gt;
+   * This method reads from the current location in the stream upto the end of
+   * the stream but does not close the stream at the end.
+   * @param ins
+   *          The &lt;code&gt;InputStream&lt;/code&gt; from which to read the
+   *          configuration data.
+   * @return A &lt;code&gt;Dictionary&lt;/code&gt; object containing the configuration
+   *         data. This object may be empty if the stream contains no
+   *         configuration data.
+   * @throws IOException
+   *           If an error occurrs reading from the stream. This exception
+   *           is also thrown if a syntax error is encountered.
+   */
+  public static Dictionary read(InputStream ins) throws IOException {
+<span class="nc" id="L244">    return new ConfigurationHandler_ConfigAdmin184().readInternal(ins);</span>
+  }
+
+
+  // private constructor, this class is not to be instantiated from the
+  // outside
+  private ConfigurationHandler_ConfigAdmin184() {}
+
+  // ---------- Configuration Input Implementation ---------------------------
+
+  private int token;
+  private String tokenValue;
+  private int line;
+  private int pos;
+
+
+  private Dictionary readInternal(InputStream ins) throws IOException {
+<span class="nc" id="L261">    BufferedReader br = new BufferedReader(new InputStreamReader(ins, ENCODING));</span>
+<span class="nc" id="L262">    PushbackReader pr = new PushbackReader(br, 1);</span>
+
+<span class="nc" id="L264">    token = 0;</span>
+<span class="nc" id="L265">    tokenValue = null;</span>
+<span class="nc" id="L266">    line = 0;</span>
+<span class="nc" id="L267">    pos = 0;</span>
+
+<span class="nc" id="L269">    Hashtable configuration = new Hashtable();</span>
+<span class="nc" id="L270">    token = 0;</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">    while (nextToken(pr) == TOKEN_NAME) {</span>
+<span class="nc" id="L272">      String key = tokenValue;</span>
+
+      // expect equal sign
+<span class="nc bnc" id="L275" title="All 2 branches missed.">      if (nextToken(pr) != TOKEN_EQ) {</span>
+<span class="nc" id="L276">        throw readFailure(token, TOKEN_EQ);</span>
+      }
+
+      // expect the token value
+<span class="nc" id="L280">      Object value = readValue(pr);</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">      if (value != null) {</span>
+<span class="nc" id="L282">        configuration.put(key, value);</span>
+      }
+<span class="nc" id="L284">    }</span>
+
+<span class="nc" id="L286">    return configuration;</span>
+  }
+
+
+  /**
+   * value = type ( &quot;[&quot; values &quot;]&quot; | &quot;(&quot; values &quot;)&quot; | simple ) . values =
+   * value { &quot;,&quot; value } . simple = &quot;{&quot; stringsimple &quot;}&quot; . type = // 1-char
+   * type code . stringsimple = // quoted string representation of the value .
+   * @param pr
+   * @return
+   * @throws IOException
+   */
+  private Object readValue(PushbackReader pr) throws IOException {
+    // read (optional) type code
+<span class="nc" id="L300">    int type = read(pr);</span>
+
+    // read value kind code if type code is not a value kinde code
+    int code;
+<span class="nc bnc" id="L304" title="All 2 branches missed.">    if (code2Type.containsKey(new Integer(type))) {</span>
+<span class="nc" id="L305">      code = read(pr);</span>
+    }
+    else {
+<span class="nc" id="L308">      code = type;</span>
+<span class="nc" id="L309">      type = TOKEN_SIMPLE_STRING;</span>
+    }
+
+<span class="nc bnc" id="L312" title="All 4 branches missed.">    switch (code) {</span>
+      case TOKEN_ARR_OPEN:
+<span class="nc" id="L314">        return readArray(type, pr);</span>
+
+      case TOKEN_VEC_OPEN:
+<span class="nc" id="L317">        return readCollection(type, pr);</span>
+
+      case TOKEN_VAL_OPEN:
+<span class="nc" id="L320">        Object value = readSimple(type, pr);</span>
+<span class="nc" id="L321">        ensureNext(pr, TOKEN_VAL_CLOS);</span>
+<span class="nc" id="L322">        return value;</span>
+
+      default:
+<span class="nc" id="L325">        return null;</span>
+    }
+  }
+
+
+  private Object readArray(int typeCode, PushbackReader pr) throws IOException {
+<span class="nc" id="L331">    List list = new ArrayList();</span>
+    for (;;) {
+<span class="nc" id="L333">      int c = read(pr);</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">      if (c == TOKEN_VAL_OPEN) {</span>
+<span class="nc" id="L335">        Object value = readSimple(typeCode, pr);</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">        if (value == null) {</span>
+          // abort due to error
+<span class="nc" id="L338">          return null;</span>
+        }
+
+<span class="nc" id="L341">        ensureNext(pr, TOKEN_VAL_CLOS);</span>
+
+<span class="nc" id="L343">        list.add(value);</span>
+
+<span class="nc" id="L345">        c = read(pr);</span>
+      }
+
+<span class="nc bnc" id="L348" title="All 2 branches missed.">      if (c == TOKEN_ARR_CLOS) {</span>
+<span class="nc" id="L349">        Class type = (Class)code2Type.get(new Integer(typeCode));</span>
+<span class="nc" id="L350">        Object array = Array.newInstance(type, list.size());</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">        for (int i = 0; i &lt; list.size(); i++) {</span>
+<span class="nc" id="L352">          Array.set(array, i, list.get(i));</span>
+        }
+<span class="nc" id="L354">        return array;</span>
+      }
+<span class="nc bnc" id="L356" title="All 2 branches missed.">      else if (c &lt; 0) {</span>
+<span class="nc" id="L357">        return null;</span>
+      }
+<span class="nc bnc" id="L359" title="All 2 branches missed.">      else if (c != TOKEN_COMMA) {</span>
+<span class="nc" id="L360">        return null;</span>
+      }
+<span class="nc" id="L362">    }</span>
+  }
+
+
+  private Collection readCollection(int typeCode, PushbackReader pr) throws IOException {
+<span class="nc" id="L367">    Collection collection = new ArrayList();</span>
+    for (;;) {
+<span class="nc" id="L369">      int c = read(pr);</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">      if (c == TOKEN_VAL_OPEN) {</span>
+<span class="nc" id="L371">        Object value = readSimple(typeCode, pr);</span>
+<span class="nc bnc" id="L372" title="All 2 branches missed.">        if (value == null) {</span>
+          // abort due to error
+<span class="nc" id="L374">          return null;</span>
+        }
+
+<span class="nc" id="L377">        ensureNext(pr, TOKEN_VAL_CLOS);</span>
+
+<span class="nc" id="L379">        collection.add(value);</span>
+
+<span class="nc" id="L381">        c = read(pr);</span>
+      }
+
+<span class="nc bnc" id="L384" title="All 2 branches missed.">      if (c == TOKEN_VEC_CLOS) {</span>
+<span class="nc" id="L385">        return collection;</span>
+      }
+<span class="nc bnc" id="L387" title="All 2 branches missed.">      else if (c &lt; 0) {</span>
+<span class="nc" id="L388">        return null;</span>
+      }
+<span class="nc bnc" id="L390" title="All 2 branches missed.">      else if (c != TOKEN_COMMA) {</span>
+<span class="nc" id="L391">        return null;</span>
+      }
+<span class="nc" id="L393">    }</span>
+  }
+
+
+  private Object readSimple(int code, PushbackReader pr) throws IOException {
+<span class="nc bnc" id="L398" title="All 11 branches missed.">    switch (code) {</span>
+      case -1:
+<span class="nc" id="L400">        return null;</span>
+
+      case TOKEN_SIMPLE_STRING:
+<span class="nc" id="L403">        return readQuoted(pr);</span>
+
+      // Simple/Primitive, only use wrapper classes
+      case TOKEN_SIMPLE_INTEGER:
+      case TOKEN_PRIMITIVE_INT:
+<span class="nc" id="L408">        return Integer.valueOf(readQuoted(pr));</span>
+
+      case TOKEN_SIMPLE_LONG:
+      case TOKEN_PRIMITIVE_LONG:
+<span class="nc" id="L412">        return Long.valueOf(readQuoted(pr));</span>
+
+      case TOKEN_SIMPLE_FLOAT:
+      case TOKEN_PRIMITIVE_FLOAT:
+<span class="nc" id="L416">        int fBits = Integer.parseInt(readQuoted(pr));</span>
+<span class="nc" id="L417">        return new Float(Float.intBitsToFloat(fBits));</span>
+
+      case TOKEN_SIMPLE_DOUBLE:
+      case TOKEN_PRIMITIVE_DOUBLE:
+<span class="nc" id="L421">        long dBits = Long.parseLong(readQuoted(pr));</span>
+<span class="nc" id="L422">        return new Double(Double.longBitsToDouble(dBits));</span>
+
+      case TOKEN_SIMPLE_BYTE:
+      case TOKEN_PRIMITIVE_BYTE:
+<span class="nc" id="L426">        return Byte.valueOf(readQuoted(pr));</span>
+
+      case TOKEN_SIMPLE_SHORT:
+      case TOKEN_PRIMITIVE_SHORT:
+<span class="nc" id="L430">        return Short.valueOf(readQuoted(pr));</span>
+
+      case TOKEN_SIMPLE_CHARACTER:
+      case TOKEN_PRIMITIVE_CHAR:
+<span class="nc" id="L434">        String cString = readQuoted(pr);</span>
+<span class="nc bnc" id="L435" title="All 4 branches missed.">        if (cString != null &amp;&amp; cString.length() &gt; 0) {</span>
+<span class="nc" id="L436">          return new Character(cString.charAt(0));</span>
+        }
+<span class="nc" id="L438">        return null;</span>
+
+      case TOKEN_SIMPLE_BOOLEAN:
+      case TOKEN_PRIMITIVE_BOOLEAN:
+<span class="nc" id="L442">        return Boolean.valueOf(readQuoted(pr));</span>
+
+      // unknown type code
+      default:
+<span class="nc" id="L446">        return null;</span>
+    }
+  }
+
+
+  private void ensureNext(PushbackReader pr, int expected) throws IOException {
+<span class="nc" id="L452">    int next = read(pr);</span>
+<span class="nc bnc" id="L453" title="All 2 branches missed.">    if (next != expected) {</span>
+<span class="nc" id="L454">      readFailure(next, expected);</span>
+    }
+<span class="nc" id="L456">  }</span>
+
+
+  private boolean checkNext(PushbackReader pr, int expected) throws IOException {
+<span class="nc" id="L460">    int next = read(pr);</span>
+<span class="nc bnc" id="L461" title="All 2 branches missed.">    if (next &lt; 0) {</span>
+<span class="nc" id="L462">      return false;</span>
+    }
+
+<span class="nc bnc" id="L465" title="All 2 branches missed.">    if (next == expected) {</span>
+<span class="nc" id="L466">      return true;</span>
+    }
+
+<span class="nc" id="L469">    return false;</span>
+  }
+
+
+  private String readQuoted(PushbackReader pr) throws IOException {
+<span class="nc" id="L474">    StringBuffer buf = new StringBuffer();</span>
+    for (;;) {
+<span class="nc" id="L476">      int c = read(pr);</span>
+<span class="nc bnc" id="L477" title="All 3 branches missed.">      switch (c) {</span>
+        // escaped character
+        case '\\':
+<span class="nc" id="L480">          c = read(pr);</span>
+<span class="nc bnc" id="L481" title="All 7 branches missed.">          switch (c) {</span>
+            // well known escapes
+            case 'b':
+<span class="nc" id="L484">              buf.append('\b');</span>
+<span class="nc" id="L485">              break;</span>
+            case 't':
+<span class="nc" id="L487">              buf.append('\t');</span>
+<span class="nc" id="L488">              break;</span>
+            case 'n':
+<span class="nc" id="L490">              buf.append('\n');</span>
+<span class="nc" id="L491">              break;</span>
+            case 'f':
+<span class="nc" id="L493">              buf.append('\f');</span>
+<span class="nc" id="L494">              break;</span>
+            case 'r':
+<span class="nc" id="L496">              buf.append('\r');</span>
+<span class="nc" id="L497">              break;</span>
+            case 'u':// need 4 characters !
+<span class="nc" id="L499">              char[] cbuf = new char[4];</span>
+<span class="nc bnc" id="L500" title="All 2 branches missed.">              if (read(pr, cbuf) == 4) {</span>
+<span class="nc" id="L501">                c = Integer.parseInt(new String(cbuf), 16);</span>
+<span class="nc" id="L502">                buf.append((char)c);</span>
+              }
+              break;
+
+            // just an escaped character, unescape
+            default:
+<span class="nc" id="L508">              buf.append((char)c);</span>
+          }
+<span class="nc" id="L510">          break;</span>
+
+        // eof
+        case -1: // fall through
+
+          // separator token
+        case TOKEN_EQ:
+        case TOKEN_VAL_CLOS:
+<span class="nc" id="L518">          pr.unread(c);</span>
+<span class="nc" id="L519">          return buf.toString();</span>
+
+        // no escaping
+        default:
+<span class="nc" id="L523">          buf.append((char)c);</span>
+      }
+<span class="nc" id="L525">    }</span>
+  }
+
+
+  private int nextToken(PushbackReader pr) throws IOException {
+<span class="nc" id="L530">    int c = ignorableWhiteSpace(pr);</span>
+
+    // immediately return EOF
+<span class="nc bnc" id="L533" title="All 2 branches missed.">    if (c &lt; 0) {</span>
+<span class="nc" id="L534">      return (token = c);</span>
+    }
+
+    // check whether there is a name
+<span class="nc bnc" id="L538" title="All 4 branches missed.">    if (NAME_CHARS.get(c) || !TOKEN_CHARS.get(c)) {</span>
+      // read the property name
+<span class="nc" id="L540">      pr.unread(c);</span>
+<span class="nc" id="L541">      tokenValue = readQuoted(pr);</span>
+<span class="nc" id="L542">      return (token = TOKEN_NAME);</span>
+    }
+
+    // check another token
+<span class="nc bnc" id="L546" title="All 2 branches missed.">    if (TOKEN_CHARS.get(c)) {</span>
+<span class="nc" id="L547">      return (token = c);</span>
+    }
+
+    // unexpected character -&gt; so what ??
+<span class="nc" id="L551">    return (token = -1);</span>
+  }
+
+
+  private int ignorableWhiteSpace(PushbackReader pr) throws IOException {
+<span class="nc" id="L556">    int c = read(pr);</span>
+<span class="nc bnc" id="L557" title="All 4 branches missed.">    while (c &gt;= 0 &amp;&amp; Character.isWhitespace((char)c)) {</span>
+<span class="nc" id="L558">      c = read(pr);</span>
+    }
+<span class="nc" id="L560">    return c;</span>
+  }
+
+
+  private int read(PushbackReader pr) throws IOException {
+<span class="nc" id="L565">    int c = pr.read();</span>
+<span class="nc bnc" id="L566" title="All 2 branches missed.">    if (c == '\r') {</span>
+<span class="nc" id="L567">      int c1 = pr.read();</span>
+<span class="nc bnc" id="L568" title="All 2 branches missed.">      if (c1 != '\n') {</span>
+<span class="nc" id="L569">        pr.unread(c1);</span>
+      }
+<span class="nc" id="L571">      c = '\n';</span>
+    }
+
+<span class="nc bnc" id="L574" title="All 2 branches missed.">    if (c == '\n') {</span>
+<span class="nc" id="L575">      line++;</span>
+<span class="nc" id="L576">      pos = 0;</span>
+    }
+    else {
+<span class="nc" id="L579">      pos++;</span>
+    }
+
+<span class="nc" id="L582">    return c;</span>
+  }
+
+
+  private int read(PushbackReader pr, char[] buf) throws IOException {
+<span class="nc bnc" id="L587" title="All 2 branches missed.">    for (int i = 0; i &lt; buf.length; i++) {</span>
+<span class="nc" id="L588">      int c = read(pr);</span>
+<span class="nc bnc" id="L589" title="All 2 branches missed.">      if (c &gt;= 0) {</span>
+<span class="nc" id="L590">        buf[i] = (char)c;</span>
+      }
+      else {
+<span class="nc" id="L593">        return i;</span>
+      }
+    }
+
+<span class="nc" id="L597">    return buf.length;</span>
+  }
+
+
+  private IOException readFailure(int current, int expected) {
+<span class="nc" id="L602">    return new IOException(&quot;Unexpected token &quot; + current + &quot;; expected: &quot; + expected + &quot; (line=&quot; + line + &quot;, pos=&quot;</span>
+        + pos + &quot;)&quot;);
+  }
+
+
+  // ---------- Configuration Output Implementation --------------------------
+
+  private static void writeValue(Writer out, Object value) throws IOException {
+<span class="fc" id="L610">    Class clazz = value.getClass();</span>
+<span class="fc bfc" id="L611" title="All 2 branches covered.">    if (clazz.isArray()) {</span>
+<span class="fc" id="L612">      writeArray(out, value);</span>
+    }
+<span class="pc bpc" id="L614" title="1 of 2 branches missed.">    else if (value instanceof Collection) {</span>
+<span class="nc" id="L615">      writeCollection(out, (Collection)value);</span>
+    }
+    else {
+<span class="fc" id="L618">      writeType(out, clazz);</span>
+<span class="fc" id="L619">      writeSimple(out, value);</span>
+    }
+<span class="fc" id="L621">  }</span>
+
+
+  private static void writeArray(Writer out, Object arrayValue) throws IOException {
+<span class="fc" id="L625">    int size = Array.getLength(arrayValue);</span>
+<span class="fc" id="L626">    writeType(out, arrayValue.getClass().getComponentType());</span>
+<span class="fc" id="L627">    out.write(TOKEN_ARR_OPEN);</span>
+<span class="fc bfc" id="L628" title="All 2 branches covered.">    for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc bfc" id="L629" title="All 2 branches covered.">      if (i &gt; 0) {</span>
+<span class="fc" id="L630">        out.write(TOKEN_COMMA);</span>
+      }
+<span class="fc" id="L632">      writeSimple(out, Array.get(arrayValue, i));</span>
+    }
+<span class="fc" id="L634">    out.write(TOKEN_ARR_CLOS);</span>
+<span class="fc" id="L635">  }</span>
+
+
+  private static void writeCollection(Writer out, Collection collection) throws IOException {
+<span class="nc bnc" id="L639" title="All 2 branches missed.">    if (collection.isEmpty()) {</span>
+<span class="nc" id="L640">      out.write(TOKEN_VEC_OPEN);</span>
+<span class="nc" id="L641">      out.write(TOKEN_VEC_CLOS);</span>
+    }
+    else {
+<span class="nc" id="L644">      Iterator ci = collection.iterator();</span>
+<span class="nc" id="L645">      Object firstElement = ci.next();</span>
+
+<span class="nc" id="L647">      writeType(out, firstElement.getClass());</span>
+<span class="nc" id="L648">      out.write(TOKEN_VEC_OPEN);</span>
+<span class="nc" id="L649">      writeSimple(out, firstElement);</span>
+
+<span class="nc bnc" id="L651" title="All 2 branches missed.">      while (ci.hasNext()) {</span>
+<span class="nc" id="L652">        out.write(TOKEN_COMMA);</span>
+<span class="nc" id="L653">        writeSimple(out, ci.next());</span>
+      }
+<span class="nc" id="L655">      out.write(TOKEN_VEC_CLOS);</span>
+    }
+<span class="nc" id="L657">  }</span>
+
+
+  private static void writeType(Writer out, Class valueType) throws IOException {
+<span class="fc" id="L661">    Integer code = (Integer)type2Code.get(valueType);</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">    if (code != null) {</span>
+<span class="fc" id="L663">      out.write((char)code.intValue());</span>
+    }
+<span class="fc" id="L665">  }</span>
+
+
+  private static void writeSimple(Writer out, Object value) throws IOException {
+<span class="pc bpc" id="L669" title="1 of 2 branches missed.">    if (value instanceof Double) {</span>
+<span class="nc" id="L670">      double dVal = ((Double)value).doubleValue();</span>
+<span class="nc" id="L671">      value = new Long(Double.doubleToRawLongBits(dVal));</span>
+<span class="nc" id="L672">    }</span>
+<span class="pc bpc" id="L673" title="1 of 2 branches missed.">    else if (value instanceof Float) {</span>
+<span class="nc" id="L674">      float fVal = ((Float)value).floatValue();</span>
+<span class="nc" id="L675">      value = new Integer(Float.floatToRawIntBits(fVal));</span>
+    }
+
+<span class="fc" id="L678">    out.write(TOKEN_VAL_OPEN);</span>
+<span class="fc" id="L679">    writeQuoted(out, String.valueOf(value));</span>
+<span class="fc" id="L680">    out.write(TOKEN_VAL_CLOS);</span>
+<span class="fc" id="L681">  }</span>
+
+
+  private static void writeQuoted(Writer out, String simple) throws IOException {
+<span class="pc bpc" id="L685" title="2 of 4 branches missed.">    if (simple == null || simple.length() == 0) {</span>
+<span class="nc" id="L686">      return;</span>
+    }
+
+<span class="fc" id="L689">    char c = 0;</span>
+<span class="fc" id="L690">    int len = simple.length();</span>
+<span class="fc bfc" id="L691" title="All 2 branches covered.">    for (int i = 0; i &lt; len; i++) {</span>
+<span class="fc" id="L692">      c = simple.charAt(i);</span>
+<span class="pc bpc" id="L693" title="4 of 7 branches missed.">      switch (c) {</span>
+        case '\\':
+        case TOKEN_VAL_CLOS:
+        case ' ':
+        case TOKEN_EQ:
+<span class="fc" id="L698">          out.write('\\');</span>
+<span class="fc" id="L699">          out.write(c);</span>
+<span class="fc" id="L700">          break;</span>
+
+        // well known escapes
+        case '\b':
+<span class="nc" id="L704">          out.write(&quot;\\b&quot;);</span>
+<span class="nc" id="L705">          break;</span>
+        case '\t':
+<span class="nc" id="L707">          out.write(&quot;\\t&quot;);</span>
+<span class="nc" id="L708">          break;</span>
+        case '\n':
+<span class="fc" id="L710">          out.write(&quot;\\n&quot;);</span>
+<span class="fc" id="L711">          break;</span>
+        case '\f':
+<span class="nc" id="L713">          out.write(&quot;\\f&quot;);</span>
+<span class="nc" id="L714">          break;</span>
+        case '\r':
+<span class="nc" id="L716">          out.write(&quot;\\r&quot;);</span>
+<span class="nc" id="L717">          break;</span>
+
+        // other escaping
+        default:
+<span class="pc bpc" id="L721" title="1 of 2 branches missed.">          if (c &lt; ' ') {</span>
+<span class="nc" id="L722">            String t = &quot;000&quot; + Integer.toHexString(c);</span>
+<span class="nc" id="L723">            out.write(&quot;\\u&quot; + t.substring(t.length() - 4));</span>
+<span class="nc" id="L724">          }</span>
+          else {
+<span class="fc" id="L726">            out.write(c);</span>
+          }
+      }
+    }
+<span class="fc" id="L730">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

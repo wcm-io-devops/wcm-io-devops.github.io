@@ -1,0 +1,5 @@
+io.wcm.devops.conga.plugins.sling.fileheader
+io.wcm.devops.conga.plugins.sling.handlebars.escaping
+io.wcm.devops.conga.plugins.sling.postprocessor
+io.wcm.devops.conga.plugins.sling.util
+io.wcm.devops.conga.plugins.sling.validator

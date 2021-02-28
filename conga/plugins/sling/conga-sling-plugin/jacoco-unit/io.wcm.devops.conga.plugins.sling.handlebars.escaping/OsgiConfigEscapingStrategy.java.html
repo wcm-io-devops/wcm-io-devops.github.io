@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OsgiConfigEscapingStrategy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Sling Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.sling.handlebars.escaping</a> &gt; <span class="el_source">OsgiConfigEscapingStrategy.java</span></div><h1>OsgiConfigEscapingStrategy.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2015 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.sling.handlebars.escaping;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.text.translate.AggregateTranslator;
+import org.apache.commons.text.translate.CharSequenceTranslator;
+import org.apache.commons.text.translate.LookupTranslator;
+
+import io.wcm.devops.conga.generator.spi.handlebars.EscapingStrategyPlugin;
+import io.wcm.devops.conga.generator.spi.handlebars.context.EscapingStrategyContext;
+import io.wcm.devops.conga.generator.util.FileUtil;
+
+/**
+ * Escapes for JSON files.
+ */
+<span class="fc" id="L38">public class OsgiConfigEscapingStrategy implements EscapingStrategyPlugin {</span>
+
+  /**
+   * Plugin name
+   */
+  public static final String NAME = &quot;osgi-config&quot;;
+
+  private static final String FILE_EXTENSION = &quot;config&quot;;
+
+  /*
+   * Defines translations for strings in Apache Felix OSGi configuration files.
+   * The rules are taken from
+   * http://svn.apache.org/repos/asf/felix/trunk/configadmin/src/main/java/org/apache/felix/cm/file/ConfigurationHandler.java
+   * method 'writeQuoted'.
+   */
+<span class="fc" id="L53">  private static final Map&lt;CharSequence, CharSequence&gt; ESCAPE_OSGI_CONFIG_TRANSLATION = new HashMap&lt;&gt;();</span>
+  static {
+<span class="fc" id="L55">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot; &quot;, &quot;\\ &quot;);</span>
+<span class="fc" id="L56">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);</span>
+<span class="fc" id="L57">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\\&quot;, &quot;\\\\&quot;);</span>
+<span class="fc" id="L58">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;=&quot;, &quot;\\=&quot;);</span>
+    // well known escapes
+<span class="fc" id="L60">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\b&quot;, &quot;\\b&quot;);</span>
+<span class="fc" id="L61">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\t&quot;, &quot;\\t&quot;);</span>
+<span class="fc" id="L62">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\n&quot;, &quot;\\n&quot;);</span>
+<span class="fc" id="L63">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\f&quot;, &quot;\\f&quot;);</span>
+<span class="fc" id="L64">    ESCAPE_OSGI_CONFIG_TRANSLATION.put(&quot;\r&quot;, &quot;\\r&quot;);</span>
+  }
+<span class="fc" id="L66">  static final CharSequenceTranslator ESCAPE_OSGI_CONFIG =</span>
+      new AggregateTranslator(
+          new LookupTranslator(ESCAPE_OSGI_CONFIG_TRANSLATION),
+<span class="fc" id="L69">          new CharSequenceTranslator() {</span>
+            @Override
+            public int translate(CharSequence input, int index, Writer out) throws IOException {
+<span class="fc" id="L72">              char c = input.charAt(index);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">              if (c &lt; ' ') {</span>
+<span class="fc" id="L74">                String t = &quot;000&quot; + Integer.toHexString(c);</span>
+<span class="fc" id="L75">                out.write(&quot;\\u&quot; + t.substring(t.length() - 4));</span>
+<span class="fc" id="L76">                return 1;</span>
+              }
+<span class="fc" id="L78">              return 0;</span>
+            }
+          }
+      );
+
+  @Override
+  public String getName() {
+<span class="fc" id="L85">    return NAME;</span>
+  }
+
+  @Override
+  public boolean accepts(String fileExtension, EscapingStrategyContext pluginContext) {
+<span class="fc" id="L90">    return FileUtil.matchesExtension(fileExtension, FILE_EXTENSION);</span>
+  }
+
+  @Override
+  public String escape(CharSequence value, EscapingStrategyContext pluginContext) {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    return value == null ? null : ESCAPE_OSGI_CONFIG.translate(value);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
