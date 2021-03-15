@@ -20,5 +20,5 @@ CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,VersionInfoUtil
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,TemplateValidator,62,0,2,0,13,0,3,0,2,0
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,NoValueProviderInRoleValidator,78,0,8,0,17,0,8,0,4,0
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,ModelValidator,35,0,0,0,7,0,2,0,2,0
-CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,RoleTemplateFileValidator,97,0,14,0,20,0,9,0,2,0
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,NoValueProviderInRoleValidator.MapReader,14,0,0,0,4,0,2,0,2,0
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,RoleTemplateFileValidator,97,0,14,0,20,0,9,0,2,0
