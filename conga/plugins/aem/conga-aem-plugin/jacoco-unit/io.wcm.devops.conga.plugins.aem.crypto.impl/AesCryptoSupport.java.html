@@ -22,6 +22,7 @@ package io.wcm.devops.conga.plugins.aem.crypto.impl;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -30,12 +31,13 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.plugins.aem.crypto.CryptoSupport;
 
 /**
  * AES crypto support implementation with the same algorithms as used by AEM 6.3 and up.
  */
-public class AesCryptoSupport extends CryptoSupport {
+<span class="fc" id="L40">public class AesCryptoSupport extends CryptoSupport {</span>
 
   private static final String AES_KEY_ALGORITHM = &quot;AES&quot;;
   private static final int AES_KEY_SIZE = 128;
@@ -45,57 +47,60 @@ public class AesCryptoSupport extends CryptoSupport {
 
   private static final String SECURE_RANDOM_ALGORITHM = &quot;SHA1PRNG&quot;;
 
-  private final Random random;
+<span class="fc" id="L50">  private static final Random RANDOM = initRandom();</span>
 
-  /**
-   * @throws GeneralSecurityException Security exception
-   */
-<span class="fc" id="L53">  public AesCryptoSupport() throws GeneralSecurityException {</span>
-<span class="fc" id="L54">    this.random = SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM);</span>
-<span class="fc" id="L55">  }</span>
+  private static Random initRandom() {
+    try {
+<span class="fc" id="L54">      return SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM);</span>
+    }
+<span class="nc" id="L56">    catch (NoSuchAlgorithmException ex) {</span>
+<span class="nc" id="L57">      throw new RuntimeException(ex);</span>
+    }
+  }
 
   @Override
   public Key generateKey() throws GeneralSecurityException {
-<span class="fc" id="L59">    KeyGenerator keyGenerator = KeyGenerator.getInstance(AES_KEY_ALGORITHM);</span>
-<span class="fc" id="L60">    keyGenerator.init(AES_KEY_SIZE);</span>
-<span class="fc" id="L61">    return keyGenerator.generateKey();</span>
+<span class="fc" id="L63">    KeyGenerator keyGenerator = KeyGenerator.getInstance(AES_KEY_ALGORITHM);</span>
+<span class="fc" id="L64">    keyGenerator.init(AES_KEY_SIZE);</span>
+<span class="fc" id="L65">    return keyGenerator.generateKey();</span>
   }
 
   @Override
   public Key readKey(byte[] keyData) {
-<span class="fc" id="L66">    return new SecretKeySpec(keyData, AES_KEY_ALGORITHM);</span>
+<span class="fc" id="L70">    return new SecretKeySpec(keyData, AES_KEY_ALGORITHM);</span>
   }
 
   @Override
   public byte[] encrypt(byte[] data, Key key) throws GeneralSecurityException {
-<span class="fc" id="L71">    byte[] iv = generateIV();</span>
-<span class="fc" id="L72">    byte[] byteEncyrpted = getCipher(Cipher.ENCRYPT_MODE, iv, key).doFinal(data);</span>
-<span class="fc" id="L73">    ByteBuffer buffer = ByteBuffer.allocate(iv.length + byteEncyrpted.length);</span>
-<span class="fc" id="L74">    buffer.put(iv).put(byteEncyrpted);</span>
-<span class="fc" id="L75">    return buffer.array();</span>
+<span class="fc" id="L75">    byte[] iv = generateIV();</span>
+<span class="fc" id="L76">    byte[] byteEncyrpted = getCipher(Cipher.ENCRYPT_MODE, iv, key).doFinal(data);</span>
+<span class="fc" id="L77">    ByteBuffer buffer = ByteBuffer.allocate(iv.length + byteEncyrpted.length);</span>
+<span class="fc" id="L78">    buffer.put(iv).put(byteEncyrpted);</span>
+<span class="fc" id="L79">    return buffer.array();</span>
   }
 
   @Override
   public byte[] decrypt(byte[] data, Key key) throws GeneralSecurityException {
-<span class="fc" id="L80">    byte[] iv = new byte[IV_SIZE];</span>
-<span class="fc" id="L81">    byte[] byteEncrypted = new byte[data.length - IV_SIZE];</span>
-<span class="fc" id="L82">    ByteBuffer buffer = ByteBuffer.wrap(data);</span>
-<span class="fc" id="L83">    buffer.get(iv).get(byteEncrypted);</span>
-<span class="fc" id="L84">    return getCipher(Cipher.DECRYPT_MODE, iv, key).doFinal(byteEncrypted);</span>
+<span class="fc" id="L84">    byte[] iv = new byte[IV_SIZE];</span>
+<span class="fc" id="L85">    byte[] byteEncrypted = new byte[data.length - IV_SIZE];</span>
+<span class="fc" id="L86">    ByteBuffer buffer = ByteBuffer.wrap(data);</span>
+<span class="fc" id="L87">    buffer.get(iv).get(byteEncrypted);</span>
+<span class="fc" id="L88">    return getCipher(Cipher.DECRYPT_MODE, iv, key).doFinal(byteEncrypted);</span>
   }
 
   private Cipher getCipher(int cipherMode, byte[] iv, Key key) throws GeneralSecurityException {
-<span class="fc" id="L88">    IvParameterSpec spec = new IvParameterSpec(iv);</span>
-<span class="fc" id="L89">    Cipher cipher = Cipher.getInstance(AES_CYPHER_ALGORITHM);</span>
-<span class="fc" id="L90">    cipher.init(cipherMode, key, spec);</span>
-<span class="fc" id="L91">    return cipher;</span>
+<span class="fc" id="L92">    IvParameterSpec spec = new IvParameterSpec(iv);</span>
+<span class="fc" id="L93">    Cipher cipher = Cipher.getInstance(AES_CYPHER_ALGORITHM);</span>
+<span class="fc" id="L94">    cipher.init(cipherMode, key, spec);</span>
+<span class="fc" id="L95">    return cipher;</span>
   }
 
+  @SuppressFBWarnings(&quot;DMI_RANDOM_USED_ONLY_ONCE&quot;)
   private byte[] generateIV() {
-<span class="fc" id="L95">    byte[] iv = new byte[IV_SIZE];</span>
-<span class="fc" id="L96">    random.nextBytes(iv);</span>
-<span class="fc" id="L97">    return iv;</span>
+<span class="fc" id="L100">    byte[] iv = new byte[IV_SIZE];</span>
+<span class="fc" id="L101">    RANDOM.nextBytes(iv);</span>
+<span class="fc" id="L102">    return iv;</span>
   }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
