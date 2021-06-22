@@ -216,35 +216,36 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
   private void buildAllPackage(AllPackageBuilder builder) throws MojoExecutionException {
     try {
-<span class="nc bnc" id="L219" title="All 2 branches missed.">      if (builder.build(properties)) {</span>
-<span class="nc" id="L220">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        if (attachArtifact) {</span>
-<span class="nc" id="L222">          projectHelper.attachArtifact(this.project, &quot;zip&quot;, builder.getPackageName(), builder.getTargetFile());</span>
+<span class="nc" id="L219">      getLog().debug(&quot;Start generating &quot; + getCanonicalPath(builder.getTargetFile()) + &quot;...&quot;);</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">      if (builder.build(properties)) {</span>
+<span class="nc" id="L221">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (attachArtifact) {</span>
+<span class="nc" id="L223">          projectHelper.attachArtifact(this.project, &quot;zip&quot;, builder.getPackageName(), builder.getTargetFile());</span>
         }
       }
       else {
-<span class="nc" id="L226">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
+<span class="nc" id="L227">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
       }
     }
-<span class="nc" id="L229">    catch (IOException ex) {</span>
-<span class="nc" id="L230">      throw new MojoExecutionException(&quot;Unable to generate &quot; + getCanonicalPath(builder.getTargetFile()), ex);</span>
-<span class="nc" id="L231">    }</span>
-<span class="nc" id="L232">  }</span>
+<span class="nc" id="L230">    catch (IOException ex) {</span>
+<span class="nc" id="L231">      throw new MojoExecutionException(&quot;Unable to generate &quot; + getCanonicalPath(builder.getTargetFile()), ex);</span>
+<span class="nc" id="L232">    }</span>
+<span class="nc" id="L233">  }</span>
 
   private void visitEnvironmentsNodes(EnvironmentNodeVisitor visitor) throws MojoExecutionException, MojoFailureException {
-<span class="nc" id="L235">    ModelParser modelParser = new ModelParser();</span>
-<span class="nc" id="L236">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
-<span class="nc bnc" id="L237" title="All 2 branches missed.">    for (File environmentDir : environmentDirs) {</span>
-<span class="nc" id="L238">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
-<span class="nc bnc" id="L239" title="All 2 branches missed.">      for (File nodeDir : nodeDirs) {</span>
-<span class="nc" id="L240">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
-<span class="nc bnc" id="L241" title="All 2 branches missed.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
-<span class="nc" id="L242">          List&lt;ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
-<span class="nc" id="L243">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
+<span class="nc" id="L236">    ModelParser modelParser = new ModelParser();</span>
+<span class="nc" id="L237">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">    for (File environmentDir : environmentDirs) {</span>
+<span class="nc" id="L239">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">      for (File nodeDir : nodeDirs) {</span>
+<span class="nc" id="L241">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
+<span class="nc" id="L243">          List&lt;ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
+<span class="nc" id="L244">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
         }
-<span class="nc" id="L245">      }</span>
-<span class="nc" id="L246">    }</span>
-<span class="nc" id="L247">  }</span>
+<span class="nc" id="L246">      }</span>
+<span class="nc" id="L247">    }</span>
+<span class="nc" id="L248">  }</span>
 
   interface EnvironmentNodeVisitor {
     void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,

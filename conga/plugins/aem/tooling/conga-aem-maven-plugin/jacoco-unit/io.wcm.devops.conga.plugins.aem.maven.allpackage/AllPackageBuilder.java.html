@@ -339,46 +339,52 @@ public final class AllPackageBuilder {
 
     // open original content package
 <span class="fc" id="L341">    try (ZipFile zipFileIn = new ZipFile(pkg.getFile())) {</span>
+<span class="fc" id="L342">      String dependenciesString = null;</span>
 
       // iterate through entries and write them to the temp. zip file
-<span class="fc" id="L344">      try (FileOutputStream fos = new FileOutputStream(tempFile);</span>
-<span class="fc" id="L345">          ZipOutputStream zipOut = new ZipOutputStream(fos)) {</span>
-<span class="fc" id="L346">        Enumeration&lt;? extends ZipEntry&gt; zipInEntries = zipFileIn.entries();</span>
-<span class="fc bfc" id="L347" title="All 2 branches covered.">        while (zipInEntries.hasMoreElements()) {</span>
-<span class="fc" id="L348">          ZipEntry zipInEntry = zipInEntries.nextElement();</span>
-<span class="fc" id="L349">          ZipEntry zipOutEntry = new ZipEntry(zipInEntry.getName());</span>
-<span class="fc bfc" id="L350" title="All 2 branches covered.">          if (!zipInEntry.isDirectory()) {</span>
-<span class="fc" id="L351">            zipOut.putNextEntry(zipOutEntry);</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">            if (StringUtils.equals(zipInEntry.getName(), &quot;META-INF/vault/properties.xml&quot;)) {</span>
+<span class="fc" id="L345">      try (FileOutputStream fos = new FileOutputStream(tempFile);</span>
+<span class="fc" id="L346">          ZipOutputStream zipOut = new ZipOutputStream(fos)) {</span>
+<span class="fc" id="L347">        Enumeration&lt;? extends ZipEntry&gt; zipInEntries = zipFileIn.entries();</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        while (zipInEntries.hasMoreElements()) {</span>
+<span class="fc" id="L349">          ZipEntry zipInEntry = zipInEntries.nextElement();</span>
+<span class="fc" id="L350">          ZipEntry zipOutEntry = new ZipEntry(zipInEntry.getName());</span>
+<span class="fc bfc" id="L351" title="All 2 branches covered.">          if (!zipInEntry.isDirectory()) {</span>
+<span class="fc" id="L352">            zipOut.putNextEntry(zipOutEntry);</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            if (StringUtils.equals(zipInEntry.getName(), &quot;META-INF/vault/properties.xml&quot;)) {</span>
               // if entry is properties.xml, update dependency information
-<span class="fc" id="L354">              try (InputStream is = zipFileIn.getInputStream(zipInEntry)) {</span>
-<span class="fc" id="L355">                Properties props = new Properties();</span>
-<span class="fc" id="L356">                props.loadFromXML(is);</span>
-<span class="fc" id="L357">                addSuffixToPackageName(props, pkg, environmentRunMode);</span>
-<span class="fc bfc" id="L358" title="All 2 branches covered.">                if (autoDependenciesMode != AutoDependenciesMode.OFF) {</span>
-<span class="fc" id="L359">                  updateDependencies(props, previousPkg, environmentRunMode, allPackagesFromFileSets);</span>
+<span class="fc" id="L355">              try (InputStream is = zipFileIn.getInputStream(zipInEntry)) {</span>
+<span class="fc" id="L356">                Properties props = new Properties();</span>
+<span class="fc" id="L357">                props.loadFromXML(is);</span>
+<span class="fc" id="L358">                addSuffixToPackageName(props, pkg, environmentRunMode);</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">                if (autoDependenciesMode != AutoDependenciesMode.OFF) {</span>
+<span class="fc" id="L360">                  dependenciesString = updateDependencies(props, previousPkg, environmentRunMode, allPackagesFromFileSets);</span>
                 }
-<span class="fc" id="L361">                props.storeToXML(zipOut, null);</span>
-<span class="fc" id="L362">              }</span>
+<span class="fc" id="L362">                props.storeToXML(zipOut, null);</span>
+<span class="fc" id="L363">              }</span>
             }
             else {
               // otherwise transfer the binary data 1:1
-<span class="fc" id="L366">              try (InputStream is = zipFileIn.getInputStream(zipInEntry)) {</span>
-<span class="fc" id="L367">                IOUtils.copy(is, zipOut);</span>
+<span class="fc" id="L367">              try (InputStream is = zipFileIn.getInputStream(zipInEntry)) {</span>
+<span class="fc" id="L368">                IOUtils.copy(is, zipOut);</span>
               }
             }
-<span class="fc" id="L370">            zipOut.closeEntry();</span>
+<span class="fc" id="L371">            zipOut.closeEntry();</span>
           }
-<span class="fc" id="L372">        }</span>
+<span class="fc" id="L373">        }</span>
+
+<span class="pc bpc" id="L375" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L376" title="All 2 branches missed.">          log.debug(&quot;Adding package &quot; + getCanonicalPath(pkg.getFile())</span>
+              + (dependenciesString != null ? &quot; with dependencies: &quot; + dependenciesString : &quot;&quot;));
+        }
       }
 
       // add temp zip file to &quot;all&quot; content package
-<span class="fc" id="L376">      contentPackage.addFile(path, tempFile);</span>
+<span class="fc" id="L382">      contentPackage.addFile(path, tempFile);</span>
     }
     finally {
-<span class="fc" id="L379">      FileUtils.deleteQuietly(tempFile);</span>
+<span class="fc" id="L385">      FileUtils.deleteQuietly(tempFile);</span>
     }
-<span class="fc" id="L381">  }</span>
+<span class="fc" id="L387">  }</span>
 
   /**
    * Add dependency information to dependencies string in properties (if it does not exist already).
@@ -387,58 +393,63 @@ public final class AllPackageBuilder {
    * @param allPackagesFromFileSets Set with all packages from all file sets as dependency instances
    * @throws IOException I/O exception
    */
-  private static void updateDependencies(Properties props, ContentPackageFile dependencyFile, String environmentRunMode,
+  private static String updateDependencies(Properties props, ContentPackageFile dependencyFile, String environmentRunMode,
       Set&lt;Dependency&gt; allPackagesFromFileSets) throws IOException {
-<span class="fc" id="L392">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
-<span class="fc" id="L393">    Dependency[] existingDeps = null;</span>
-<span class="pc bpc" id="L394" title="1 of 4 branches missed.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
-<span class="fc" id="L395">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
+<span class="fc" id="L398">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
+<span class="fc" id="L399">    Dependency[] existingDeps = null;</span>
+<span class="pc bpc" id="L400" title="1 of 4 branches missed.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
+<span class="fc" id="L401">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
     }
-<span class="fc bfc" id="L397" title="All 2 branches covered.">    if (existingDeps != null) {</span>
-<span class="fc" id="L398">      existingDeps = removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">    if (existingDeps != null) {</span>
+<span class="fc" id="L404">      existingDeps = removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);</span>
     }
 
-<span class="fc" id="L401">    Dependency[] deps = null;</span>
-<span class="fc bfc" id="L402" title="All 2 branches covered.">    if (dependencyFile == null) {</span>
-<span class="fc" id="L403">      deps = existingDeps;</span>
+<span class="fc" id="L407">    Dependency[] deps = null;</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">    if (dependencyFile == null) {</span>
+<span class="fc" id="L409">      deps = existingDeps;</span>
     }
     else {
       // if package is container package: check for embedded sub packages
-<span class="fc" id="L407">      List&lt;ContentPackageFile&gt; containerSubPackageFiles = null;</span>
-<span class="fc bfc" id="L408" title="All 2 branches covered.">      if (isContainerPackage(dependencyFile)) {</span>
-<span class="fc" id="L409">        containerSubPackageFiles = getContainerSubPackageFiles(dependencyFile);</span>
+<span class="fc" id="L413">      List&lt;ContentPackageFile&gt; containerSubPackageFiles = null;</span>
+<span class="fc bfc" id="L414" title="All 2 branches covered.">      if (isContainerPackage(dependencyFile)) {</span>
+<span class="fc" id="L415">        containerSubPackageFiles = getContainerSubPackageFiles(dependencyFile);</span>
       }
       // if sub packages are present: add dependencies to sub packages instead of the container package
       // nested sub packages are referenced without any runmode suffix
-<span class="fc bfc" id="L413" title="All 2 branches covered.">      if (containerSubPackageFiles != null) {</span>
-<span class="fc bfc" id="L414" title="All 2 branches covered.">        for (ContentPackageFile subPackageFileItem : containerSubPackageFiles) {</span>
-<span class="fc" id="L415">          Dependency newDependency = new Dependency(subPackageFileItem.getGroup(),</span>
-<span class="fc" id="L416">              subPackageFileItem.getName(),</span>
-<span class="fc" id="L417">              VersionRange.fromString(subPackageFileItem.getVersion()));</span>
-<span class="fc" id="L418">          deps = addDependency(existingDeps, newDependency);</span>
-<span class="fc" id="L419">        }</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">      if (containerSubPackageFiles != null) {</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        for (ContentPackageFile subPackageFileItem : containerSubPackageFiles) {</span>
+<span class="fc" id="L421">          Dependency newDependency = new Dependency(subPackageFileItem.getGroup(),</span>
+<span class="fc" id="L422">              subPackageFileItem.getName(),</span>
+<span class="fc" id="L423">              VersionRange.fromString(subPackageFileItem.getVersion()));</span>
+<span class="fc" id="L424">          deps = addDependency(existingDeps, newDependency);</span>
+<span class="fc" id="L425">        }</span>
       }
       // otherwise add dependency to package itself
       else {
-<span class="fc" id="L423">        String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);</span>
-<span class="fc" id="L424">        Dependency newDependency = new Dependency(dependencyFile.getGroup(),</span>
-<span class="fc" id="L425">            dependencyFile.getName() + runModeSuffix,</span>
-<span class="fc" id="L426">            VersionRange.fromString(dependencyFile.getVersion()));</span>
-<span class="fc" id="L427">        deps = addDependency(existingDeps, newDependency);</span>
+<span class="fc" id="L429">        String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);</span>
+<span class="fc" id="L430">        Dependency newDependency = new Dependency(dependencyFile.getGroup(),</span>
+<span class="fc" id="L431">            dependencyFile.getName() + runModeSuffix,</span>
+<span class="fc" id="L432">            VersionRange.fromString(dependencyFile.getVersion()));</span>
+<span class="fc" id="L433">        deps = addDependency(existingDeps, newDependency);</span>
       }
     }
 
-<span class="fc bfc" id="L431" title="All 2 branches covered.">    if (deps != null) {</span>
-<span class="fc" id="L432">      props.put(NAME_DEPENDENCIES, Dependency.toString(deps));</span>
-    }
-<span class="fc" id="L434">  }</span>
-
-  private static Dependency[] addDependency(Dependency[] existingDeps, Dependency newDependency) {
-<span class="fc bfc" id="L437" title="All 2 branches covered.">    if (existingDeps != null) {</span>
-<span class="fc" id="L438">      return DependencyUtil.add(existingDeps, newDependency);</span>
+<span class="fc bfc" id="L437" title="All 2 branches covered.">    if (deps != null) {</span>
+<span class="fc" id="L438">      String dependenciesString = Dependency.toString(deps);</span>
+<span class="fc" id="L439">      props.put(NAME_DEPENDENCIES, dependenciesString);</span>
+<span class="fc" id="L440">      return dependenciesString;</span>
     }
     else {
-<span class="fc" id="L441">      return new Dependency[] { newDependency };</span>
+<span class="fc" id="L443">      return null;</span>
+    }
+  }
+
+  private static Dependency[] addDependency(Dependency[] existingDeps, Dependency newDependency) {
+<span class="fc bfc" id="L448" title="All 2 branches covered.">    if (existingDeps != null) {</span>
+<span class="fc" id="L449">      return DependencyUtil.add(existingDeps, newDependency);</span>
+    }
+    else {
+<span class="fc" id="L452">      return new Dependency[] { newDependency };</span>
     }
   }
 
@@ -453,49 +464,49 @@ public final class AllPackageBuilder {
    */
   private static List&lt;ContentPackageFile&gt; getContainerSubPackageFiles(@NotNull ContentPackageFile dependencyFile) throws IOException {
     // introspect container package file - check for sub packages
-<span class="fc" id="L456">    List&lt;ContentPackageFile&gt; dependencyFiles = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L457">    try (ZipFile zipFileIn = new ZipFile(dependencyFile.getFile())) {</span>
-<span class="fc" id="L458">      Enumeration&lt;? extends ZipEntry&gt; zipInEntries = zipFileIn.entries();</span>
-<span class="fc bfc" id="L459" title="All 2 branches covered.">      while (zipInEntries.hasMoreElements()) {</span>
-<span class="fc" id="L460">        ZipEntry zipInEntry = zipInEntries.nextElement();</span>
-<span class="fc bfc" id="L461" title="All 2 branches covered.">        if (StringUtils.equals(&quot;zip&quot;, FilenameUtils.getExtension(zipInEntry.getName()))) {</span>
-<span class="fc" id="L462">          File tempFile = File.createTempFile(zipInEntry.getName() + &quot;-subpackage-&quot;, &quot;.zip&quot;);</span>
+<span class="fc" id="L467">    List&lt;ContentPackageFile&gt; dependencyFiles = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L468">    try (ZipFile zipFileIn = new ZipFile(dependencyFile.getFile())) {</span>
+<span class="fc" id="L469">      Enumeration&lt;? extends ZipEntry&gt; zipInEntries = zipFileIn.entries();</span>
+<span class="fc bfc" id="L470" title="All 2 branches covered.">      while (zipInEntries.hasMoreElements()) {</span>
+<span class="fc" id="L471">        ZipEntry zipInEntry = zipInEntries.nextElement();</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        if (StringUtils.equals(&quot;zip&quot;, FilenameUtils.getExtension(zipInEntry.getName()))) {</span>
+<span class="fc" id="L473">          File tempFile = File.createTempFile(zipInEntry.getName() + &quot;-subpackage-&quot;, &quot;.zip&quot;);</span>
           try {
-<span class="fc" id="L464">            try (FileOutputStream fos = new FileOutputStream(tempFile);</span>
-<span class="fc" id="L465">                InputStream zis = zipFileIn.getInputStream(zipInEntry)) {</span>
-<span class="fc" id="L466">              IOUtils.copy(zis, fos);</span>
+<span class="fc" id="L475">            try (FileOutputStream fos = new FileOutputStream(tempFile);</span>
+<span class="fc" id="L476">                InputStream zis = zipFileIn.getInputStream(zipInEntry)) {</span>
+<span class="fc" id="L477">              IOUtils.copy(zis, fos);</span>
             }
-<span class="fc" id="L468">            Map&lt;String, Object&gt; props = ContentPackageProperties.get(tempFile);</span>
-<span class="fc" id="L469">            ContentPackageFile subPackageFile = new ContentPackageFile(tempFile,</span>
-<span class="fc" id="L470">                ImmutableMap.of(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY, props),</span>
-<span class="fc" id="L471">                ImmutableMap.of(&quot;variants&quot;, dependencyFile.getVariants()));</span>
-<span class="pc bpc" id="L472" title="1 of 2 branches missed.">            if (StringUtils.isNoneBlank(subPackageFile.getGroup(), subPackageFile.getName(), subPackageFile.getVersion())) {</span>
-<span class="fc" id="L473">              dependencyFiles.add(subPackageFile);</span>
+<span class="fc" id="L479">            Map&lt;String, Object&gt; props = ContentPackageProperties.get(tempFile);</span>
+<span class="fc" id="L480">            ContentPackageFile subPackageFile = new ContentPackageFile(tempFile,</span>
+<span class="fc" id="L481">                ImmutableMap.of(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY, props),</span>
+<span class="fc" id="L482">                ImmutableMap.of(&quot;variants&quot;, dependencyFile.getVariants()));</span>
+<span class="pc bpc" id="L483" title="1 of 2 branches missed.">            if (StringUtils.isNoneBlank(subPackageFile.getGroup(), subPackageFile.getName(), subPackageFile.getVersion())) {</span>
+<span class="fc" id="L484">              dependencyFiles.add(subPackageFile);</span>
             }
           }
           finally {
-<span class="fc" id="L477">            Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L488">            Files.delete(tempFile.toPath());</span>
           }
         }
-<span class="fc" id="L480">      }</span>
+<span class="fc" id="L491">      }</span>
     }
-<span class="fc bfc" id="L482" title="All 2 branches covered.">    if (dependencyFiles.isEmpty()) {</span>
-<span class="fc" id="L483">      return null;</span>
+<span class="fc bfc" id="L493" title="All 2 branches covered.">    if (dependencyFiles.isEmpty()) {</span>
+<span class="fc" id="L494">      return null;</span>
     }
     else {
-<span class="fc" id="L486">      return dependencyFiles;</span>
+<span class="fc" id="L497">      return dependencyFiles;</span>
     }
   }
 
   private static boolean isContainerPackage(@NotNull ContentPackageFile packageFile) {
-<span class="fc" id="L491">    return StringUtils.equals(packageFile.getPackageType(), PackageType.CONTAINER.name().toLowerCase());</span>
+<span class="fc" id="L502">    return StringUtils.equals(packageFile.getPackageType(), PackageType.CONTAINER.name().toLowerCase());</span>
   }
 
   private static void addSuffixToPackageName(Properties props, ContentPackageFile pkg, String environmentRunMode) {
-<span class="fc" id="L495">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
-<span class="fc" id="L496">    String packageName = props.getProperty(NAME_NAME) + runModeSuffix;</span>
-<span class="fc" id="L497">    props.put(NAME_NAME, packageName);</span>
-<span class="fc" id="L498">  }</span>
+<span class="fc" id="L506">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
+<span class="fc" id="L507">    String packageName = props.getProperty(NAME_NAME) + runModeSuffix;</span>
+<span class="fc" id="L508">    props.put(NAME_NAME, packageName);</span>
+<span class="fc" id="L509">  }</span>
 
   /**
    * Removes existing references to packages contained in the list of packages to manage by this builder because
@@ -505,21 +516,21 @@ public final class AllPackageBuilder {
    * @return Dependencies list
    */
   private static Dependency[] removeReferencesToManagedPackages(Dependency[] deps, Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<span class="fc" id="L508">    return Arrays.stream(deps)</span>
-<span class="fc bfc" id="L509" title="All 2 branches covered.">        .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))</span>
-<span class="fc" id="L510">        .toArray(size -&gt; new Dependency[size]);</span>
+<span class="fc" id="L519">    return Arrays.stream(deps)</span>
+<span class="fc bfc" id="L520" title="All 2 branches covered.">        .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))</span>
+<span class="fc" id="L521">        .toArray(size -&gt; new Dependency[size]);</span>
   }
 
   public String getGroupName() {
-<span class="nc" id="L514">    return this.groupName;</span>
+<span class="nc" id="L525">    return this.groupName;</span>
   }
 
   public String getPackageName() {
-<span class="nc" id="L518">    return this.packageName;</span>
+<span class="nc" id="L529">    return this.packageName;</span>
   }
 
   public File getTargetFile() {
-<span class="nc" id="L522">    return this.targetFile;</span>
+<span class="nc" id="L533">    return this.targetFile;</span>
   }
 
 }
