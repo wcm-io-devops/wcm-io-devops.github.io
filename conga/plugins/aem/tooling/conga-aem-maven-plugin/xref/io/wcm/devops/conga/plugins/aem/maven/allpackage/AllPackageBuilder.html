@@ -386,7 +386,7 @@
 <a class="jxr_linenumber" name="L378" href="#L378">378</a>                 <strong class="jxr_keyword">try</strong> (FileOutputStream subPackageFos = <strong class="jxr_keyword">new</strong> FileOutputStream(tempSubPackageFile)) {
 <a class="jxr_linenumber" name="L379" href="#L379">379</a>                   IOUtils.copy(is, subPackageFos);
 <a class="jxr_linenumber" name="L380" href="#L380">380</a>                 }
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>                 File resultSubPackageFile = processContentPackage(tempSubPackageFile, pkg, previousPkg, environmentRunMode, allPackagesFromFileSets);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>                 File resultSubPackageFile = processContentPackage(tempSubPackageFile, pkg, <strong class="jxr_keyword">null</strong>, environmentRunMode, allPackagesFromFileSets);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a>                 <strong class="jxr_keyword">try</strong> (FileInputStream subPackageFis = <strong class="jxr_keyword">new</strong> FileInputStream(resultSubPackageFile)) {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a>                   ZipEntry zipOutEntry = <strong class="jxr_keyword">new</strong> ZipEntry(path + basename + runModeSuffix + <span class="jxr_string">".zip"</span>);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a>                   zipOut.putNextEntry(zipOutEntry);

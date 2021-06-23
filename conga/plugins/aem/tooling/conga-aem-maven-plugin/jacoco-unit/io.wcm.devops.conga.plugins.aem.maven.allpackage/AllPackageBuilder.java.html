@@ -378,7 +378,7 @@ public final class AllPackageBuilder {
 <span class="fc" id="L378">                try (FileOutputStream subPackageFos = new FileOutputStream(tempSubPackageFile)) {</span>
 <span class="fc" id="L379">                  IOUtils.copy(is, subPackageFos);</span>
                 }
-<span class="fc" id="L381">                File resultSubPackageFile = processContentPackage(tempSubPackageFile, pkg, previousPkg, environmentRunMode, allPackagesFromFileSets);</span>
+<span class="fc" id="L381">                File resultSubPackageFile = processContentPackage(tempSubPackageFile, pkg, null, environmentRunMode, allPackagesFromFileSets);</span>
 <span class="fc" id="L382">                try (FileInputStream subPackageFis = new FileInputStream(resultSubPackageFile)) {</span>
 <span class="fc" id="L383">                  ZipEntry zipOutEntry = new ZipEntry(path + basename + runModeSuffix + &quot;.zip&quot;);</span>
 <span class="fc" id="L384">                  zipOut.putNextEntry(zipOutEntry);</span>
