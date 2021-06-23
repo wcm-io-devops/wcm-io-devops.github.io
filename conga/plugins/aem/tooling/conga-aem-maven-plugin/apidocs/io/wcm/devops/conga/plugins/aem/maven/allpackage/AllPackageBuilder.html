@@ -111,7 +111,22 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public final class <span class="typeNameLabel">AllPackageBuilder</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">Builds "all" package based on given set of content packages.</div>
+<div class="block">Builds "all" package based on given set of content packages.
+ <p>
+ General concept:
+ </p>
+ <ul>
+ <li>Iterates through all content packages that are generated or collected by CONGA and contained in the
+ model.json</li>
+ <li>Enforces the order defined in CONGA by automatically adding dependencies to all packages reflecting the file
+ order in model.json</li>
+ <li>Because the dependency chain may be different for each runmode (author/publish), each package is added once for
+ each runmode (so usually twice, for author+publish)</li>
+ <li>To avoid conflicts with duplicate packages with different dependencies all package names are changed and a
+ runmode suffix (.author or .publish) is added, same applies to the install folder</li>
+ <li>To avoid problems with nested sub packages, the sub packages are extracted from the packages and treated in the
+ same way as other packages</li>
+ </ul></div>
 </li>
 </ul>
 </div>
@@ -151,7 +166,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#add-java.util.List-java.util.Set-">add</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a>&gt;&nbsp;contentPackages,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#add-java.util.List-java.util.Set-">add</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a>&gt;&nbsp;contentPackages,
    <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;cloudManagerTarget)</code>
 <div class="block">Add content packages to be contained in "all" content package.</div>
 </td>
@@ -285,7 +300,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;void&nbsp;add(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a>&gt;&nbsp;contentPackages,
+<pre>public&nbsp;void&nbsp;add(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a>&gt;&nbsp;contentPackages,
                 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;cloudManagerTarget)</pre>
 <div class="block">Add content packages to be contained in "all" content package.</div>
 <dl>

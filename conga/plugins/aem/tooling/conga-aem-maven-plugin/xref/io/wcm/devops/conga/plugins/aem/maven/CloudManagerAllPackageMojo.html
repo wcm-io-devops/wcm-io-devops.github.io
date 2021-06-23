@@ -248,7 +248,7 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a>       <strong class="jxr_keyword">for</strong> (File nodeDir : nodeDirs) {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>         Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a>         <strong class="jxr_keyword">if</strong> (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>           List&lt;ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>           List&lt;? <strong class="jxr_keyword">extends</strong> ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>           visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>         }
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>       }
@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>   <strong class="jxr_keyword">interface</strong> EnvironmentNodeVisitor {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">void</strong> visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>         List&lt;ContentPackageFile&gt; contentPackages) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>         List&lt;? <strong class="jxr_keyword">extends</strong> ContentPackageFile&gt; contentPackages) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a>   }
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> }

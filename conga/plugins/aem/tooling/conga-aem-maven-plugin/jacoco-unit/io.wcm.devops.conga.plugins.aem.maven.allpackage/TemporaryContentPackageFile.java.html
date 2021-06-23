@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemporaryContentPackageFile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA AEM Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.plugins.aem.maven.allpackage</a> &gt; <span class="el_source">TemporaryContentPackageFile.java</span></div><h1>TemporaryContentPackageFile.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2021 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.plugins.aem.maven.allpackage;
+
+import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_DEPENDENCIES;
+import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_GROUP;
+import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_NAME;
+import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_PACKAGE_TYPE;
+import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_VERSION;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import io.wcm.devops.conga.plugins.aem.maven.model.ContentPackageFile;
+import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
+
+/**
+ * References a temporary file representing an partially processed content package to be included in the &quot;all&quot; package.
+ */
+final class TemporaryContentPackageFile implements ContentPackageFile {
+
+  private final File file;
+
+  private final String name;
+  private final String group;
+  private final String version;
+  private final String packageType;
+  private final String dependencies;
+
+  private final List&lt;String&gt; variants;
+
+<span class="fc" id="L51">  TemporaryContentPackageFile(File file, List&lt;String&gt; variants) throws IOException {</span>
+<span class="fc" id="L52">    this.file = file;</span>
+<span class="fc" id="L53">    Map&lt;String, Object&gt; props = ContentPackageProperties.get(file);</span>
+<span class="fc" id="L54">    this.name = (String)props.get(NAME_NAME);</span>
+<span class="fc" id="L55">    this.group = (String)props.get(NAME_GROUP);</span>
+<span class="fc" id="L56">    this.version = (String)props.get(NAME_VERSION);</span>
+<span class="fc" id="L57">    this.packageType = (String)props.get(NAME_PACKAGE_TYPE);</span>
+<span class="fc" id="L58">    this.dependencies = (String)props.get(NAME_DEPENDENCIES);</span>
+<span class="fc" id="L59">    this.variants = variants;</span>
+<span class="fc" id="L60">  }</span>
+
+  @Override
+  public File getFile() {
+<span class="fc" id="L64">    return this.file;</span>
+  }
+
+  @Override
+  public String getName() {
+<span class="fc" id="L69">    return this.name;</span>
+  }
+
+  @Override
+  public String getGroup() {
+<span class="fc" id="L74">    return this.group;</span>
+  }
+
+  @Override
+  public String getVersion() {
+<span class="fc" id="L79">    return this.version;</span>
+  }
+
+  @Override
+  public String getPackageType() {
+<span class="fc" id="L84">    return this.packageType;</span>
+  }
+
+  public String getDependencies() {
+<span class="nc" id="L88">    return this.dependencies;</span>
+  }
+
+  @Override
+  public List&lt;String&gt; getVariants() {
+<span class="fc" id="L93">    return this.variants;</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="nc" id="L98">    return file.toString();</span>
+  }
+
+  public String getPackageInfoWithDependencies() {
+<span class="nc" id="L102">    StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L103">    sb.append(getPackageInfo());</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">    if (this.dependencies != null) {</span>
+<span class="nc" id="L105">      sb.append(&quot; (dependencies: &quot;);</span>
+<span class="nc" id="L106">      sb.append(this.dependencies);</span>
+<span class="nc" id="L107">      sb.append(&quot;)&quot;);</span>
+    }
+<span class="nc" id="L109">    return sb.toString();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

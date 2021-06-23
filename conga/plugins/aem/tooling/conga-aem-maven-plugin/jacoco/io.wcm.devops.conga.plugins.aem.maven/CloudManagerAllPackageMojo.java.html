@@ -240,7 +240,7 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 <span class="nc bnc" id="L240" title="All 2 branches missed.">      for (File nodeDir : nodeDirs) {</span>
 <span class="nc" id="L241">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
 <span class="nc bnc" id="L242" title="All 2 branches missed.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
-<span class="nc" id="L243">          List&lt;ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
+<span class="nc" id="L243">          List&lt;? extends ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
 <span class="nc" id="L244">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
         }
 <span class="nc" id="L246">      }</span>
@@ -249,7 +249,7 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
   interface EnvironmentNodeVisitor {
     void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
-        List&lt;ContentPackageFile&gt; contentPackages) throws MojoExecutionException, MojoFailureException;
+        List&lt;? extends ContentPackageFile&gt; contentPackages) throws MojoExecutionException, MojoFailureException;
   }
 
 }

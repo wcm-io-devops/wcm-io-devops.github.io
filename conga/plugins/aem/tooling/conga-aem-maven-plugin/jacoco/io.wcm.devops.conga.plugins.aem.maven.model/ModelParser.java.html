@@ -66,7 +66,7 @@ public final class ModelParser {
    * @param nodeDir Node directory
    * @return List of content packages
    */
-  public List&lt;ContentPackageFile&gt; getContentPackagesForNode(File nodeDir) {
+  public List&lt;ModelContentPackageFile&gt; getContentPackagesForNode(File nodeDir) {
 <span class="fc" id="L70">    Map&lt;String, Object&gt; data = getModelData(nodeDir);</span>
 <span class="fc" id="L71">    return collectPackages(data, nodeDir);</span>
   }
@@ -146,8 +146,8 @@ public final class ModelParser {
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
-  private List&lt;ContentPackageFile&gt; collectPackages(Map&lt;String, Object&gt; data, File nodeDir) {
-<span class="fc" id="L150">    List&lt;ContentPackageFile&gt; items = new ArrayList&lt;&gt;();</span>
+  private List&lt;ModelContentPackageFile&gt; collectPackages(Map&lt;String, Object&gt; data, File nodeDir) {
+<span class="fc" id="L150">    List&lt;ModelContentPackageFile&gt; items = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L151">    List&lt;Map&lt;String, Object&gt;&gt; roles = (List&lt;Map&lt;String, Object&gt;&gt;)data.get(&quot;roles&quot;);</span>
 <span class="pc bpc" id="L152" title="1 of 2 branches missed.">    if (roles != null) {</span>
 <span class="fc bfc" id="L153" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; role : roles) {</span>
@@ -164,11 +164,11 @@ public final class ModelParser {
 <span class="fc" id="L164">    return items;</span>
   }
 
-  private ContentPackageFile toContentPackageFile(Map&lt;String, Object&gt; fileData,
+  private ModelContentPackageFile toContentPackageFile(Map&lt;String, Object&gt; fileData,
       Map&lt;String, Object&gt; roleData, File nodeDir) {
 <span class="fc" id="L169">    String path = Objects.toString(fileData.get(&quot;path&quot;), null);</span>
 <span class="fc" id="L170">    File file = new File(nodeDir, path);</span>
-<span class="fc" id="L171">    return new ContentPackageFile(file, fileData, roleData);</span>
+<span class="fc" id="L171">    return new ModelContentPackageFile(file, fileData, roleData);</span>
   }
 
 }
