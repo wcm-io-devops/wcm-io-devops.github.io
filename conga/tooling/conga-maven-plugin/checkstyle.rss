@@ -60,20 +60,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.DefinitionPackageMojo.java">io/wcm/devops/conga/tooling/maven/plugin/DefinitionPackageMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.MavenContext.java">io/wcm/devops/conga/tooling/maven/plugin/util/MavenContext.java</a>
                 </td>
                 <td>
@@ -88,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.GenerateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.DefinitionPackageMojo.java">io/wcm/devops/conga/tooling/maven/plugin/DefinitionPackageMojo.java</a>
                 </td>
                 <td>
                   0
@@ -103,6 +89,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.valueprovider.MavenPropertyValueProviderPlugin.java">io/wcm/devops/conga/tooling/maven/plugin/valueprovider/MavenPropertyValueProviderPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.GenerateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper.java">io/wcm/devops/conga/tooling/maven/plugin/util/MavenArtifactHelper.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.ModelValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/ModelValidator.java</a>
                 </td>
                 <td>
                   0
@@ -172,7 +172,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.validation.ModelValidator.java">io/wcm/devops/conga/tooling/maven/plugin/validation/ModelValidator.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper.java">io/wcm/devops/conga/tooling/maven/plugin/util/MavenArtifactHelper.java</a>
                 </td>
                 <td>
                   0
