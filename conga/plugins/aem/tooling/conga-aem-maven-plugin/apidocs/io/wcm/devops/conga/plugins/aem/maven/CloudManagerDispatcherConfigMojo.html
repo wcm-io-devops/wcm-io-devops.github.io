@@ -118,7 +118,9 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <span class="typeNameLabel">CloudManagerDispatcherConfigMojo</span>
+<pre>@Mojo(name="cloudmanager-dispatcher-config",
+      threadSafe=true)
+public final class <span class="typeNameLabel">CloudManagerDispatcherConfigMojo</span>
 extends org.apache.maven.plugin.AbstractMojo</pre>
 <div class="block">Builds an Dispatcher configuration ZIP file dedicated for deployment via Adobe Cloud Manager
  for the given environment and node(s).

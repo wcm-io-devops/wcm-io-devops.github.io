@@ -118,7 +118,9 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <span class="typeNameLabel">CloudManagerAllPackageMojo</span>
+<pre>@Mojo(name="cloudmanager-all-package",
+      threadSafe=true)
+public final class <span class="typeNameLabel">CloudManagerAllPackageMojo</span>
 extends org.apache.maven.plugin.AbstractMojo</pre>
 <div class="block">Builds an "all" content package dedicated for deployment via Adobe Cloud Manager
  for the given environment and node(s).
