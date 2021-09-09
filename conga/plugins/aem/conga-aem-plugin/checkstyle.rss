@@ -130,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler.java">io/wcm/devops/conga/plugins/aem/util/ContentElementHandler.java</a>
+                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.handlebars.helper.WebConsolePasswordHashHelper.java">io/wcm/devops/conga/plugins/aem/handlebars/helper/WebConsolePasswordHashHelper.java</a>
                 </td>
                 <td>
                   0
@@ -144,7 +144,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.handlebars.helper.WebConsolePasswordHashHelper.java">io/wcm/devops/conga/plugins/aem/handlebars/helper/WebConsolePasswordHashHelper.java</a>
+                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler.java">io/wcm/devops/conga/plugins/aem/util/ContentElementHandler.java</a>
                 </td>
                 <td>
                   0
@@ -382,7 +382,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.crypto.package-info.java">io/wcm/devops/conga/plugins/aem/crypto/package-info.java</a>
+                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.crypto.CryptoString.java">io/wcm/devops/conga/plugins/aem/crypto/CryptoString.java</a>
                 </td>
                 <td>
                   0
@@ -410,7 +410,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.crypto.CryptoString.java">io/wcm/devops/conga/plugins/aem/crypto/CryptoString.java</a>
+                  <a href="https://devops.wcm.io/conga-aem-plugin/io.wcm.devops.conga.plugins.aem.parent/io.wcm.devops.conga.plugins.aem//checkstyle.html#io.wcm.devops.conga.plugins.aem.crypto.package-info.java">io/wcm/devops/conga/plugins/aem/crypto/package-info.java</a>
                 </td>
                 <td>
                   0
