@@ -131,22 +131,10 @@
      <td>Directory with the generated CONGA configuration containing the model.yaml.<br><b>User property is</b>: <code>conga.nodeDirectory</code>.<br></td> 
     </tr> 
     <tr class="a"> 
-     <td><code><a href="#password">&lt;password&gt;</a></code></td> 
-     <td><code>String</code></td> 
-     <td><code>-</code></td> 
-     <td>The password to authenticate against the remote CRX system (package manager).<br><b>Default value is</b>: <code>admin</code>.<br><b>User property is</b>: <code>vault.password</code>.<br></td> 
-    </tr> 
-    <tr class="b"> 
      <td><code><a href="#serviceURL">&lt;serviceURL&gt;</a></code></td> 
      <td><code>String</code></td> 
      <td><code>-</code></td> 
      <td> <p>The URL of the HTTP service API of the CRX package manager.</p> <p>See <a class="externalLink" href="http://dev.day.com/docs/en/crx/current/how_to/package_manager.html#Managing%20Packages%20on%20the%20Command%20Line">CRX HTTP service Interface</a> for details on this interface.</p><br><b>Default value is</b>: <code>http://localhost:4502/crx/packmgr/service</code>.<br><b>User property is</b>: <code>vault.serviceURL</code>.<br></td> 
-    </tr> 
-    <tr class="a"> 
-     <td><code><a href="#userId">&lt;userId&gt;</a></code></td> 
-     <td><code>String</code></td> 
-     <td><code>-</code></td> 
-     <td>The user name to authenticate as against the remote CRX system (package manager).<br><b>Default value is</b>: <code>admin</code>.<br><b>User property is</b>: <code>vault.userId</code>.<br></td> 
     </tr> 
    </tbody> 
   </table> 
@@ -188,24 +176,30 @@
      <td>Patterns for symbolic names of bundles that are ignored in bundle list. The state of these bundles has no effect on the bundle status check.<br><b>Default value is</b>: <code>^com\.day\.crx\.crxde-support$,^com\.adobe\.granite\.crx-explorer$,^com\.adobe\.granite\.crxde-lite$,^org\.apache\.sling\.jcr\.webdav$,^org\.apache\.sling\.jcr\.davex$</code>.<br><b>User property is</b>: <code>vault.bundleStatusWhitelistBundleNames</code>.<br></td> 
     </tr> 
     <tr class="b"> 
+     <td><code><a href="#consoleOauth2AccessToken">&lt;consoleOauth2AccessToken&gt;</a></code></td> 
+     <td><code>String</code></td> 
+     <td><code>-</code></td> 
+     <td>OAuth 2 access token to authenticate against the remote CRX system (Felix console). If this is configured, username and password are ignored. Defaults to value from <code>authenticationBearerToken</code>.<br><b>User property is</b>: <code>console.consoleOauth2AccessToken</code>.<br></td> 
+    </tr> 
+    <tr class="a"> 
      <td><code><a href="#consolePassword">&lt;consolePassword&gt;</a></code></td> 
      <td><code>String</code></td> 
      <td><code>-</code></td> 
      <td>The password to authenticate against the remote CRX system (Felix console). Defaults to the value from <code>password</code>.<br><b>User property is</b>: <code>console.password</code>.<br></td> 
     </tr> 
-    <tr class="a"> 
+    <tr class="b"> 
      <td><code><a href="#consoleUserId">&lt;consoleUserId&gt;</a></code></td> 
      <td><code>String</code></td> 
      <td><code>-</code></td> 
      <td>The user name to authenticate as against the remote CRX system (Felix console). Defaults to the value from <code>userId</code>.<br><b>User property is</b>: <code>console.userId</code>.<br></td> 
     </tr> 
-    <tr class="b"> 
+    <tr class="a"> 
      <td><code><a href="#delayAfterInstallSec">&lt;delayAfterInstallSec&gt;</a></code></td> 
      <td><code>Integer</code></td> 
      <td><code>-</code></td> 
      <td>Delay further steps after package installation by this amount of seconds<br><b>User property is</b>: <code>vault.delayAfterInstallSec</code>.<br></td> 
     </tr> 
-    <tr class="a"> 
+    <tr class="b"> 
      <td><code><a href="#force">&lt;force&gt;</a></code></td> 
      <td><code>Boolean</code></td> 
      <td><code>-</code></td> 
@@ -216,53 +210,71 @@
        <li>nothing (default): Force is applied to packages with the string "-SNAPSHOT" in it's filename.</li> 
       </ul><br><b>User property is</b>: <code>vault.force</code>.<br></td> 
     </tr> 
-    <tr class="b"> 
+    <tr class="a"> 
      <td><code><a href="#httpConnectTimeoutSec">&lt;httpConnectTimeoutSec&gt;</a></code></td> 
      <td><code>int</code></td> 
      <td><code>-</code></td> 
      <td>HTTP connection timeout (in seconds).<br><b>Default value is</b>: <code>10</code>.<br><b>User property is</b>: <code>vault.httpConnectTimeoutSec</code>.<br></td> 
     </tr> 
-    <tr class="a"> 
+    <tr class="b"> 
      <td><code><a href="#httpSocketTimeout">&lt;httpSocketTimeout&gt;</a></code></td> 
      <td><code>int</code></td> 
      <td><code>-</code></td> 
      <td>HTTP socket timeout (in seconds).<br><b>Default value is</b>: <code>60</code>.<br><b>User property is</b>: <code>vault.httpSocketTimeoutSec</code>.<br></td> 
     </tr> 
-    <tr class="b"> 
+    <tr class="a"> 
      <td><code><a href="#install">&lt;install&gt;</a></code></td> 
      <td><code>boolean</code></td> 
      <td><code>-</code></td> 
      <td>Whether to install (unpack) the uploaded package automatically or not.<br><b>Default value is</b>: <code>true</code>.<br><b>User property is</b>: <code>vault.install</code>.<br></td> 
     </tr> 
+    <tr class="b"> 
+     <td><code><a href="#oauth2AccessToken">&lt;oauth2AccessToken&gt;</a></code></td> 
+     <td><code>String</code></td> 
+     <td><code>-</code></td> 
+     <td>OAuth 2 access token to authenticate against the remote CRX system (package manager). If this is configured, username and password are ignored.<br><b>User property is</b>: <code>vault.oauth2AccessToken</code>.<br></td> 
+    </tr> 
     <tr class="a"> 
+     <td><code><a href="#password">&lt;password&gt;</a></code></td> 
+     <td><code>String</code></td> 
+     <td><code>-</code></td> 
+     <td>The password to authenticate against the remote CRX system (package manager).<br><b>Default value is</b>: <code>admin</code>.<br><b>User property is</b>: <code>vault.password</code>.<br></td> 
+    </tr> 
+    <tr class="b"> 
      <td><code><a href="#recursive">&lt;recursive&gt;</a></code></td> 
      <td><code>boolean</code></td> 
      <td><code>-</code></td> 
      <td>If set to true nested packages get installed as well.<br><b>Default value is</b>: <code>true</code>.<br><b>User property is</b>: <code>vault.recursive</code>.<br></td> 
     </tr> 
-    <tr class="b"> 
+    <tr class="a"> 
      <td><code><a href="#relaxedSSLCheck">&lt;relaxedSSLCheck&gt;</a></code></td> 
      <td><code>boolean</code></td> 
      <td><code>-</code></td> 
      <td>If set to true also self-signed certificates are accepted.<br><b>Default value is</b>: <code>false</code>.<br><b>User property is</b>: <code>vault.relaxedSSLCheck</code>.<br></td> 
     </tr> 
-    <tr class="a"> 
+    <tr class="b"> 
      <td><code><a href="#retryCount">&lt;retryCount&gt;</a></code></td> 
      <td><code>int</code></td> 
      <td><code>-</code></td> 
      <td>Number of times to retry upload and install via CRX HTTP interface if it fails.<br><b>Default value is</b>: <code>24</code>.<br><b>User property is</b>: <code>vault.retryCount</code>.<br></td> 
     </tr> 
-    <tr class="b"> 
+    <tr class="a"> 
      <td><code><a href="#retryDelay">&lt;retryDelay&gt;</a></code></td> 
      <td><code>int</code></td> 
      <td><code>-</code></td> 
      <td>Number of seconds between retry attempts.<br><b>Default value is</b>: <code>5</code>.<br><b>User property is</b>: <code>vault.retryDelay</code>.<br></td> 
     </tr> 
-    <tr class="a"> 
+    <tr class="b"> 
      <td><code><a href="#skip">&lt;skip&gt;</a></code></td> 
      <td><code>boolean</code></td> 
      <td><code>-</code></td> 
      <td>Set this to "true" to skip installing packages to CRX although configured in the POM.<br><b>Default value is</b>: <code>false</code>.<br><b>User property is</b>: <code>vault.skip</code>.<br></td> 
+    </tr> 
+    <tr class="a"> 
+     <td><code><a href="#userId">&lt;userId&gt;</a></code></td> 
+     <td><code>String</code></td> 
+     <td><code>-</code></td> 
+     <td>The user name to authenticate as against the remote CRX system (package manager).<br><b>Default value is</b>: <code>admin</code>.<br><b>User property is</b>: <code>vault.userId</code>.<br></td> 
     </tr> 
    </tbody> 
   </table> 
@@ -320,6 +332,18 @@
     <li><b>Required</b>: <code>No</code></li> 
     <li><b>User Property</b>: <code>vault.bundleStatusWhitelistBundleNames</code></li> 
     <li><b>Default</b>: <code>^com\.day\.crx\.crxde-support$,^com\.adobe\.granite\.crx-explorer$,^com\.adobe\.granite\.crxde-lite$,^org\.apache\.sling\.jcr\.webdav$,^org\.apache\.sling\.jcr\.davex$</code></li> 
+   </ul> 
+   <hr> 
+  </section> 
+  <section> 
+   <h4 id="a.3CconsoleOauth2AccessToken.3E"><b><a name="consoleOauth2AccessToken">&lt;consoleOauth2AccessToken&gt;</a></b></h4> 
+   <div>
+     OAuth 2 access token to authenticate against the remote CRX system (Felix console). If this is configured, username and password are ignored. Defaults to value from <code>authenticationBearerToken</code>. 
+   </div> 
+   <ul> 
+    <li><b>Type</b>: <code>java.lang.String</code></li> 
+    <li><b>Required</b>: <code>No</code></li> 
+    <li><b>User Property</b>: <code>console.consoleOauth2AccessToken</code></li> 
    </ul> 
    <hr> 
   </section> 
@@ -428,13 +452,25 @@
    <hr> 
   </section> 
   <section> 
+   <h4 id="a.3Coauth2AccessToken.3E"><b><a name="oauth2AccessToken">&lt;oauth2AccessToken&gt;</a></b></h4> 
+   <div>
+     OAuth 2 access token to authenticate against the remote CRX system (package manager). If this is configured, username and password are ignored. 
+   </div> 
+   <ul> 
+    <li><b>Type</b>: <code>java.lang.String</code></li> 
+    <li><b>Required</b>: <code>No</code></li> 
+    <li><b>User Property</b>: <code>vault.oauth2AccessToken</code></li> 
+   </ul> 
+   <hr> 
+  </section> 
+  <section> 
    <h4 id="a.3Cpassword.3E"><b><a name="password">&lt;password&gt;</a></b></h4> 
    <div>
      The password to authenticate against the remote CRX system (package manager). 
    </div> 
    <ul> 
     <li><b>Type</b>: <code>java.lang.String</code></li> 
-    <li><b>Required</b>: <code>Yes</code></li> 
+    <li><b>Required</b>: <code>No</code></li> 
     <li><b>User Property</b>: <code>vault.password</code></li> 
     <li><b>Default</b>: <code>admin</code></li> 
    </ul> 
@@ -526,7 +562,7 @@
    </div> 
    <ul> 
     <li><b>Type</b>: <code>java.lang.String</code></li> 
-    <li><b>Required</b>: <code>Yes</code></li> 
+    <li><b>Required</b>: <code>No</code></li> 
     <li><b>User Property</b>: <code>vault.userId</code></li> 
     <li><b>Default</b>: <code>admin</code></li> 
    </ul> 
@@ -550,6 +586,7 @@
     <li><a href="#a.3CbundleStatusURL.3E" title="<bundleStatusURL>"><bundleStatusURL></a>
     <li><a href="#a.3CbundleStatusWaitLimit.3E" title="<bundleStatusWaitLimit>"><bundleStatusWaitLimit></a>
     <li><a href="#a.3CbundleStatusWhitelistBundleNames.3E" title="<bundleStatusWhitelistBundleNames>"><bundleStatusWhitelistBundleNames></a>
+    <li><a href="#a.3CconsoleOauth2AccessToken.3E" title="<consoleOauth2AccessToken>"><consoleOauth2AccessToken></a>
     <li><a href="#a.3CconsolePassword.3E" title="<consolePassword>"><consolePassword></a>
     <li><a href="#a.3CconsoleUserId.3E" title="<consoleUserId>"><consoleUserId></a>
     <li><a href="#a.3CdelayAfterInstallSec.3E" title="<delayAfterInstallSec>"><delayAfterInstallSec></a>
@@ -558,6 +595,7 @@
     <li><a href="#a.3ChttpSocketTimeout.3E" title="<httpSocketTimeout>"><httpSocketTimeout></a>
     <li><a href="#a.3Cinstall.3E" title="<install>"><install></a>
     <li><a href="#a.3CnodeDirectory.3E" title="<nodeDirectory>"><nodeDirectory></a>
+    <li><a href="#a.3Coauth2AccessToken.3E" title="<oauth2AccessToken>"><oauth2AccessToken></a>
     <li><a href="#a.3Cpassword.3E" title="<password>"><password></a>
     <li><a href="#a.3Crecursive.3E" title="<recursive>"><recursive></a>
     <li><a href="#a.3CrelaxedSSLCheck.3E" title="<relaxedSSLCheck>"><relaxedSSLCheck></a>
