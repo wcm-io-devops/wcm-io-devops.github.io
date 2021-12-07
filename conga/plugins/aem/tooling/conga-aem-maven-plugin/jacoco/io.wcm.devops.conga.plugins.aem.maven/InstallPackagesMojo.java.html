@@ -97,7 +97,7 @@ import io.wcm.tooling.commons.packmgr.install.PackageInstaller;
 <span class="nc" id="L97">      getLog().warn(&quot;No file found for installing.&quot;);</span>
     }
     else {
-<span class="nc" id="L100">      PackageInstaller installer = new PackageInstaller(getPackageManagerProperties(), getLoggerWrapper());</span>
+<span class="nc" id="L100">      PackageInstaller installer = new PackageInstaller(getPackageManagerProperties());</span>
 <span class="nc" id="L101">      installer.installFiles(items);</span>
     }
 <span class="nc" id="L103">  }</span>

@@ -8,10 +8,9 @@ CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,CloudManagerAllPack
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,HelpMojo,893,0,110,0,159,0,71,0,16,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AutoDependenciesMode,0,44,0,0,0,5,0,1,0,1
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,CloudManagerDispatcherConfigMojo,237,0,22,0,47,0,17,0,6,0
-CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AbstractContentPackageMojo,159,0,7,0,34,0,10,0,6,0
+CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AbstractContentPackageMojo,148,0,7,0,33,0,9,0,5,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AbstractCloudManagerMojo,111,0,22,0,25,0,18,0,7,0
-CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AbstractContentPackageMojo.new Logger() {...},78,0,0,0,21,0,13,0,13,0
-CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,InstallPackagesMojo,150,0,18,0,33,0,12,0,3,0
+CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,InstallPackagesMojo,148,0,18,0,33,0,12,0,3,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,ContentPackageFileSet,0,15,0,0,0,6,0,3,0,3
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,TemporaryContentPackageFile,35,60,2,0,9,16,4,7,3,7
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,RunModeUtil,25,29,9,3,5,7,7,3,1,3
