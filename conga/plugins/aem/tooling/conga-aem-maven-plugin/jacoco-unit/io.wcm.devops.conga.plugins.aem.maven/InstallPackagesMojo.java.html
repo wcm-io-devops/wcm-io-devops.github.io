@@ -76,66 +76,76 @@ import io.wcm.tooling.commons.packmgr.install.PackageInstaller;
   @Parameter(property = &quot;vault.delayAfterInstallSec&quot;)
   private Integer delayAfterInstallSec;
 
+  /**
+   * Replicate package(s) to publish instance after upload.
+   */
+  @Parameter(property = &quot;vault.replicatePackage&quot;)
+  private boolean replicate;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">    if (isSkip()) {</span>
-<span class="nc" id="L82">      return;</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">    if (isSkip()) {</span>
+<span class="nc" id="L88">      return;</span>
     }
 
-<span class="nc bnc" id="L85" title="All 4 branches missed.">    if (!nodeDirectory.exists() || !nodeDirectory.isDirectory()) {</span>
-<span class="nc" id="L86">      throw new MojoFailureException(&quot;Node directory not found: &quot; + getCanonicalPath(nodeDirectory));</span>
+<span class="nc bnc" id="L91" title="All 4 branches missed.">    if (!nodeDirectory.exists() || !nodeDirectory.isDirectory()) {</span>
+<span class="nc" id="L92">      throw new MojoFailureException(&quot;Node directory not found: &quot; + getCanonicalPath(nodeDirectory));</span>
     }
 
-<span class="nc" id="L89">    getLog().info(&quot;Get AEM content packages from &quot; + getCanonicalPath(nodeDirectory));</span>
+<span class="nc" id="L95">    getLog().info(&quot;Get AEM content packages from &quot; + getCanonicalPath(nodeDirectory));</span>
 
-<span class="nc" id="L91">    ModelParser modelParser = new ModelParser();</span>
-<span class="nc" id="L92">    List&lt;PackageFile&gt; items = modelParser.getContentPackagesForNode(nodeDirectory).stream()</span>
-<span class="nc" id="L93">        .map(this::toPackageFile)</span>
-<span class="nc" id="L94">        .collect(Collectors.toList());</span>
+    // collect files to install
+<span class="nc" id="L98">    ModelParser modelParser = new ModelParser();</span>
+<span class="nc" id="L99">    List&lt;PackageFile&gt; items = modelParser.getContentPackagesForNode(nodeDirectory).stream()</span>
+<span class="nc" id="L100">        .map(this::toPackageFile)</span>
+<span class="nc" id="L101">        .collect(Collectors.toList());</span>
 
-<span class="nc bnc" id="L96" title="All 2 branches missed.">    if (items.isEmpty()) {</span>
-<span class="nc" id="L97">      getLog().warn(&quot;No file found for installing.&quot;);</span>
+    // ensure any file exist
+<span class="nc bnc" id="L104" title="All 2 branches missed.">    if (items.isEmpty()) {</span>
+<span class="nc" id="L105">      getLog().warn(&quot;No file found for installing.&quot;);</span>
+<span class="nc" id="L106">      return;</span>
     }
-    else {
-<span class="nc" id="L100">      PackageInstaller installer = new PackageInstaller(getPackageManagerProperties());</span>
-<span class="nc" id="L101">      installer.installFiles(items);</span>
-    }
-<span class="nc" id="L103">  }</span>
+
+    // install files
+<span class="nc" id="L110">    PackageInstaller installer = new PackageInstaller(getPackageManagerProperties());</span>
+<span class="nc" id="L111">    installer.setReplicate(this.replicate);</span>
+<span class="nc" id="L112">    installer.installFiles(items);</span>
+<span class="nc" id="L113">  }</span>
 
   private PackageFile toPackageFile(ModelContentPackageFile item) {
-<span class="nc" id="L106">    PackageFile output = new PackageFile();</span>
+<span class="nc" id="L116">    PackageFile output = new PackageFile();</span>
 
-<span class="nc" id="L108">    output.setFile(item.getFile());</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">    if (item.getInstall() != null) {</span>
-<span class="nc" id="L110">      output.setInstall(item.getInstall());</span>
+<span class="nc" id="L118">    output.setFile(item.getFile());</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">    if (item.getInstall() != null) {</span>
+<span class="nc" id="L120">      output.setInstall(item.getInstall());</span>
     }
     else {
-<span class="nc" id="L113">      output.setInstall(this.install);</span>
+<span class="nc" id="L123">      output.setInstall(this.install);</span>
     }
-<span class="nc bnc" id="L115" title="All 2 branches missed.">    if (item.getForce() != null) {</span>
-<span class="nc" id="L116">      output.setForce(item.getForce());</span>
-    }
-    else {
-<span class="nc" id="L119">      output.setForce(this.force);</span>
-    }
-<span class="nc bnc" id="L121" title="All 2 branches missed.">    if (item.getRecursive() != null) {</span>
-<span class="nc" id="L122">      output.setRecursive(item.getRecursive());</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">    if (item.getForce() != null) {</span>
+<span class="nc" id="L126">      output.setForce(item.getForce());</span>
     }
     else {
-<span class="nc" id="L125">      output.setRecursive(this.recursive);</span>
+<span class="nc" id="L129">      output.setForce(this.force);</span>
     }
-<span class="nc bnc" id="L127" title="All 2 branches missed.">    if (item.getDelayAfterInstallSec() != null) {</span>
-<span class="nc" id="L128">      output.setDelayAfterInstallSec(item.getDelayAfterInstallSec());</span>
-    }
-<span class="nc bnc" id="L130" title="All 2 branches missed.">    else if (this.delayAfterInstallSec != null) {</span>
-<span class="nc" id="L131">      output.setDelayAfterInstallSec(this.delayAfterInstallSec);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">    if (item.getRecursive() != null) {</span>
+<span class="nc" id="L132">      output.setRecursive(item.getRecursive());</span>
     }
     else {
-<span class="nc" id="L134">      output.setDelayAfterInstallSecAutoDetect();</span>
+<span class="nc" id="L135">      output.setRecursive(this.recursive);</span>
     }
-<span class="nc" id="L136">    output.setHttpSocketTimeoutSec(item.getHttpSocketTimeoutSec());</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">    if (item.getDelayAfterInstallSec() != null) {</span>
+<span class="nc" id="L138">      output.setDelayAfterInstallSec(item.getDelayAfterInstallSec());</span>
+    }
+<span class="nc bnc" id="L140" title="All 2 branches missed.">    else if (this.delayAfterInstallSec != null) {</span>
+<span class="nc" id="L141">      output.setDelayAfterInstallSec(this.delayAfterInstallSec);</span>
+    }
+    else {
+<span class="nc" id="L144">      output.setDelayAfterInstallSecAutoDetect();</span>
+    }
+<span class="nc" id="L146">    output.setHttpSocketTimeoutSec(item.getHttpSocketTimeoutSec());</span>
 
-<span class="nc" id="L138">    return output;</span>
+<span class="nc" id="L148">    return output;</span>
   }
 
 }
