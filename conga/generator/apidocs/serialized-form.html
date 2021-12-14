@@ -89,6 +89,31 @@
 </ul>
 </li>
 <li class="blockList">
+<h2 title="Package">Package&nbsp;io.wcm.devops.conga.generator.export</h2>
+<ul class="blockList">
+<li class="blockList"><a name="io.wcm.devops.conga.generator.export.ModelExport">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/generator/export/ModelExport.html" title="class in io.wcm.devops.conga.generator.export">io.wcm.devops.conga.generator.export.ModelExport</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>4642081520558431376L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>node</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; node</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h2 title="Package">Package&nbsp;io.wcm.devops.conga.generator.spi</h2>
 <ul class="blockList">
 <li class="blockList"><a name="io.wcm.devops.conga.generator.spi.ValidationException">
@@ -98,6 +123,354 @@
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;io.wcm.devops.conga.model.environment</h2>
+<ul class="blockList">
+<li class="blockList"><a name="io.wcm.devops.conga.model.environment.Environment">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/environment/Environment.html" title="class in io.wcm.devops.conga.model.environment">io.wcm.devops.conga.model.environment.Environment</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-3146650632389125273L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>nodes</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; nodes</pre>
+</li>
+<li class="blockList">
+<h4>roleConfig</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; roleConfig</pre>
+</li>
+<li class="blockList">
+<h4>tenants</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; tenants</pre>
+</li>
+<li class="blockList">
+<h4>dependencies</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; dependencies</pre>
+</li>
+<li class="blockListLast">
+<h4>pluginConfig</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; pluginConfig</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.environment.Node">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/environment/Node.html" title="class in io.wcm.devops.conga.model.environment">io.wcm.devops.conga.model.environment.Node</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-7827167562783775179L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>node</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> node</pre>
+</li>
+<li class="blockList">
+<h4>nodes</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; nodes</pre>
+</li>
+<li class="blockListLast">
+<h4>roles</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; roles</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.environment.NodeRole">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/environment/NodeRole.html" title="class in io.wcm.devops.conga.model.environment">io.wcm.devops.conga.model.environment.NodeRole</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>8208217702200393548L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>role</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> role</pre>
+</li>
+<li class="blockList">
+<h4>variant</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> variant</pre>
+</li>
+<li class="blockListLast">
+<h4>variants</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; variants</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.environment.RoleConfig">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/environment/RoleConfig.html" title="class in io.wcm.devops.conga.model.environment">io.wcm.devops.conga.model.environment.RoleConfig</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-8636577741823687304L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>role</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> role</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.environment.Tenant">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/environment/Tenant.html" title="class in io.wcm.devops.conga.model.environment">io.wcm.devops.conga.model.environment.Tenant</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>3984905428304600647L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>tenant</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> tenant</pre>
+</li>
+<li class="blockListLast">
+<h4>roles</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; roles</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;io.wcm.devops.conga.model.role</h2>
+<ul class="blockList">
+<li class="blockList"><a name="io.wcm.devops.conga.model.role.Role">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/role/Role.html" title="class in io.wcm.devops.conga.model.role">io.wcm.devops.conga.model.role.Role</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>4736362819976273689L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>inherits</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; inherits</pre>
+</li>
+<li class="blockList">
+<h4>variants</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; variants</pre>
+</li>
+<li class="blockList">
+<h4>templateDir</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> templateDir</pre>
+</li>
+<li class="blockList">
+<h4>files</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; files</pre>
+</li>
+<li class="blockListLast">
+<h4>sensitiveConfigParameters</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; sensitiveConfigParameters</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.role.RoleFile">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/role/RoleFile.html" title="class in io.wcm.devops.conga.model.role">io.wcm.devops.conga.model.role.RoleFile</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractModel.html" title="class in io.wcm.devops.conga.model.shared">AbstractModel</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-6027099825211623171L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>file</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> file</pre>
+</li>
+<li class="blockList">
+<h4>dir</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> dir</pre>
+</li>
+<li class="blockList">
+<h4>template</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> template</pre>
+</li>
+<li class="blockList">
+<h4>url</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> url</pre>
+</li>
+<li class="blockList">
+<h4>symlinkTarget</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> symlinkTarget</pre>
+</li>
+<li class="blockList">
+<h4>variants</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; variants</pre>
+</li>
+<li class="blockList">
+<h4>condition</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> condition</pre>
+</li>
+<li class="blockList">
+<h4>validators</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; validators</pre>
+</li>
+<li class="blockList">
+<h4>validatorOptions</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; validatorOptions</pre>
+</li>
+<li class="blockList">
+<h4>postProcessors</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">E</a>&gt; postProcessors</pre>
+</li>
+<li class="blockList">
+<h4>postProcessorOptions</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; postProcessorOptions</pre>
+</li>
+<li class="blockList">
+<h4>fileHeader</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> fileHeader</pre>
+</li>
+<li class="blockList">
+<h4>multiply</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> multiply</pre>
+</li>
+<li class="blockList">
+<h4>multiplyOptions</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; multiplyOptions</pre>
+</li>
+<li class="blockList">
+<h4>charset</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> charset</pre>
+</li>
+<li class="blockList">
+<h4>lineEndings</h4>
+<pre><a href="io/wcm/devops/conga/model/shared/LineEndings.html" title="enum in io.wcm.devops.conga.model.shared">LineEndings</a> lineEndings</pre>
+</li>
+<li class="blockList">
+<h4>escapingStrategy</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> escapingStrategy</pre>
+</li>
+<li class="blockList">
+<h4>modelOptions</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; modelOptions</pre>
+</li>
+<li class="blockListLast">
+<h4>deleteSource</h4>
+<pre>boolean deleteSource</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.role.RoleInherit">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/role/RoleInherit.html" title="class in io.wcm.devops.conga.model.role">io.wcm.devops.conga.model.role.RoleInherit</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractModel.html" title="class in io.wcm.devops.conga.model.shared">AbstractModel</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-7870095532845063259L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>role</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> role</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.role.RoleVariant">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/role/RoleVariant.html" title="class in io.wcm.devops.conga.model.role">io.wcm.devops.conga.model.role.RoleVariant</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">AbstractConfigurable</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>8927953093805130622L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>variant</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> variant</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;io.wcm.devops.conga.model.shared</h2>
+<ul class="blockList">
+<li class="blockList"><a name="io.wcm.devops.conga.model.shared.AbstractConfigurable">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/shared/AbstractConfigurable.html" title="class in io.wcm.devops.conga.model.shared">io.wcm.devops.conga.model.shared.AbstractConfigurable</a> extends <a href="io/wcm/devops/conga/model/shared/AbstractModel.html" title="class in io.wcm.devops.conga.model.shared">AbstractModel</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>5009663684342529022L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>config</h4>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; config</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="io.wcm.devops.conga.model.shared.AbstractModel">
+<!--   -->
+</a>
+<h3>Class <a href="io/wcm/devops/conga/model/shared/AbstractModel.html" title="class in io.wcm.devops.conga.model.shared">io.wcm.devops.conga.model.shared.AbstractModel</a> extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-8387881912415309523L</dd>
 </dl>
 </li>
 </ul>

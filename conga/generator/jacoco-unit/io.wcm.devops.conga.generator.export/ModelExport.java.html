@@ -27,6 +27,7 @@ import io.wcm.devops.conga.model.shared.AbstractConfigurable;
  * Defines an export configuration for model information.
  */
 <span class="fc" id="L29">public final class ModelExport extends AbstractConfigurable {</span>
+  private static final long serialVersionUID = 4642081520558431376L;
 
   private List&lt;String&gt; node;
 
@@ -35,7 +36,7 @@ import io.wcm.devops.conga.model.shared.AbstractConfigurable;
    * @return Node export plugin names.
    */
   public List&lt;String&gt; getNode() {
-<span class="fc" id="L38">    return this.node;</span>
+<span class="fc" id="L39">    return this.node;</span>
   }
 
   /**
@@ -43,8 +44,8 @@ import io.wcm.devops.conga.model.shared.AbstractConfigurable;
    * @param pluginNames Node export plugin names.
    */
   public void setNode(List&lt;String&gt; pluginNames) {
-<span class="fc" id="L46">    this.node = pluginNames;</span>
-<span class="fc" id="L47">  }</span>
+<span class="fc" id="L47">    this.node = pluginNames;</span>
+<span class="fc" id="L48">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -29,7 +29,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableList;
-import com.rits.cloning.Cloner;
 
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.model.role.Role;
@@ -62,67 +61,67 @@ public final class RoleUtil {
    */
   public static Map&lt;String, Role&gt; resolveRole(String roleName, String environmentContext, Map&lt;String, Role&gt; roles)
       throws GeneratorException {
-<span class="fc" id="L65">    return resolveRole(roleName, environmentContext, roles, 0);</span>
+<span class="fc" id="L64">    return resolveRole(roleName, environmentContext, roles, 0);</span>
   }
 
   private static Map&lt;String, Role&gt; resolveRole(String roleName, String environmentContext, Map&lt;String, Role&gt; roles, int inheritLevel)
       throws GeneratorException {
-<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (inheritLevel &gt; INHERIT_MAX_LEVEL) {</span>
-<span class="fc" id="L71">      throw new GeneratorException(&quot;Cyclic inheritance dependency for role '&quot; + roleName + &quot;'.&quot;);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">    if (inheritLevel &gt; INHERIT_MAX_LEVEL) {</span>
+<span class="fc" id="L70">      throw new GeneratorException(&quot;Cyclic inheritance dependency for role '&quot; + roleName + &quot;'.&quot;);</span>
     }
 
-<span class="fc" id="L74">    Map&lt;String, Role&gt; resolvedRoles = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L73">    Map&lt;String, Role&gt; resolvedRoles = new LinkedHashMap&lt;&gt;();</span>
 
     // get role that was directly referenced
-<span class="fc" id="L77">    Role role = getRole(roleName, environmentContext, roles);</span>
+<span class="fc" id="L76">    Role role = getRole(roleName, environmentContext, roles);</span>
 
     // add inherits of role (super roles before sub roles)
-<span class="fc bfc" id="L80" title="All 2 branches covered.">    if (!role.getInherits().isEmpty()) {</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">      for (RoleInherit inherit : role.getInherits()) {</span>
-<span class="fc" id="L82">        String superRoleName = inherit.getRole();</span>
-<span class="fc" id="L83">        Map&lt;String, Role&gt; superRoles = resolveRole(superRoleName, environmentContext + &quot; &gt; &quot; + roleName, roles, inheritLevel + 1);</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (Role superRole : superRoles.values()) {</span>
-<span class="fc" id="L85">          validateRole(roleName, role, superRoleName, superRole);</span>
-<span class="fc" id="L86">          mergeRoleConfig(role, superRole);</span>
-<span class="fc" id="L87">        }</span>
-<span class="fc" id="L88">        resolvedRoles.putAll(superRoles);</span>
-<span class="fc" id="L89">      }</span>
-<span class="fc" id="L90">      role.setInherits(null);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">    if (!role.getInherits().isEmpty()) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">      for (RoleInherit inherit : role.getInherits()) {</span>
+<span class="fc" id="L81">        String superRoleName = inherit.getRole();</span>
+<span class="fc" id="L82">        Map&lt;String, Role&gt; superRoles = resolveRole(superRoleName, environmentContext + &quot; &gt; &quot; + roleName, roles, inheritLevel + 1);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (Role superRole : superRoles.values()) {</span>
+<span class="fc" id="L84">          validateRole(roleName, role, superRoleName, superRole);</span>
+<span class="fc" id="L85">          mergeRoleConfig(role, superRole);</span>
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">        resolvedRoles.putAll(superRoles);</span>
+<span class="fc" id="L88">      }</span>
+<span class="fc" id="L89">      role.setInherits(null);</span>
     }
 
     // add role that was directly referenced last
-<span class="fc" id="L94">    resolvedRoles.put(roleName, role);</span>
+<span class="fc" id="L93">    resolvedRoles.put(roleName, role);</span>
 
     // remove duplicate file generation definitions from super roles
-<span class="fc" id="L97">    removeFileDuplicates(resolvedRoles);</span>
+<span class="fc" id="L96">    removeFileDuplicates(resolvedRoles);</span>
 
-<span class="fc" id="L99">    return resolvedRoles;</span>
+<span class="fc" id="L98">    return resolvedRoles;</span>
   }
 
   private static Role getRole(String roleName, String context, Map&lt;String, Role&gt; roles) {
-<span class="fc" id="L103">    Role role = roles.get(roleName);</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">    if (role == null) {</span>
-<span class="fc" id="L105">      throw new GeneratorException(&quot;Role '&quot; + roleName + &quot;' &quot;</span>
+<span class="fc" id="L102">    Role role = roles.get(roleName);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">    if (role == null) {</span>
+<span class="fc" id="L104">      throw new GeneratorException(&quot;Role '&quot; + roleName + &quot;' &quot;</span>
           + &quot;referenced in &quot; + context + &quot; does not exist.&quot;);
     }
     // clone role object because it may be changed when resolving inheritance
-<span class="fc" id="L109">    return Cloner.standard().deepClone(role);</span>
+<span class="fc" id="L108">    return ObjectCloner.deepClone(role);</span>
   }
 
   private static void validateRole(String roleName, Role role, String superRoleName, Role superRole) {
     // if the super role define variants: ensure the role inheriting defines the same variants (or more)
-<span class="fc bfc" id="L114" title="All 2 branches covered.">    if (!superRole.getVariants().isEmpty()) {</span>
-<span class="fc" id="L115">      Set&lt;String&gt; variants = new HashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered.">      for (RoleVariant variant : role.getVariants()) {</span>
-<span class="fc" id="L117">        variants.add(variant.getVariant());</span>
-<span class="fc" id="L118">      }</span>
-<span class="fc bfc" id="L119" title="All 2 branches covered.">      for (RoleVariant superVariant : superRole.getVariants()) {</span>
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (!variants.contains(superVariant.getVariant())) {</span>
-<span class="fc" id="L121">          throw new GeneratorException(&quot;Role '&quot; + roleName + &quot;' has to define the same variants as the super role '&quot; + superRoleName + &quot;'.&quot;);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">    if (!superRole.getVariants().isEmpty()) {</span>
+<span class="fc" id="L114">      Set&lt;String&gt; variants = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">      for (RoleVariant variant : role.getVariants()) {</span>
+<span class="fc" id="L116">        variants.add(variant.getVariant());</span>
+<span class="fc" id="L117">      }</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">      for (RoleVariant superVariant : superRole.getVariants()) {</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (!variants.contains(superVariant.getVariant())) {</span>
+<span class="fc" id="L120">          throw new GeneratorException(&quot;Role '&quot; + roleName + &quot;' has to define the same variants as the super role '&quot; + superRoleName + &quot;'.&quot;);</span>
         }
-<span class="fc" id="L123">      }</span>
+<span class="fc" id="L122">      }</span>
     }
-<span class="fc" id="L125">  }</span>
+<span class="fc" id="L124">  }</span>
 
   /**
    * Merged configuration of a role with it's super role (parameters from the role have higher precedence).
@@ -132,37 +131,37 @@ public final class RoleUtil {
    */
   private static void mergeRoleConfig(Role role, Role superRole) {
     // merge config
-<span class="fc" id="L135">    Map&lt;String, Object&gt; merged = MapMerger.merge(role.getConfig(), superRole.getConfig());</span>
-<span class="fc" id="L136">    role.setConfig(merged);</span>
-<span class="fc" id="L137">    superRole.setConfig(merged);</span>
+<span class="fc" id="L134">    Map&lt;String, Object&gt; merged = MapMerger.merge(role.getConfig(), superRole.getConfig());</span>
+<span class="fc" id="L135">    role.setConfig(merged);</span>
+<span class="fc" id="L136">    superRole.setConfig(merged);</span>
 
     // merge variant configs
-<span class="fc bfc" id="L140" title="All 2 branches covered.">    for (RoleVariant variant : role.getVariants()) {</span>
-<span class="fc" id="L141">      boolean found = false;</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">      for (RoleVariant superVariant : superRole.getVariants()) {</span>
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (StringUtils.equals(superVariant.getVariant(), variant.getVariant())) {</span>
-<span class="fc" id="L144">          Map&lt;String, Object&gt; variantMerged = MapMerger.merge(variant.getConfig(), superVariant.getConfig());</span>
-<span class="fc" id="L145">          variant.setConfig(variantMerged);</span>
-<span class="fc" id="L146">          superVariant.setConfig(variantMerged);</span>
-<span class="fc" id="L147">          found = true;</span>
-<span class="fc" id="L148">          break;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">    for (RoleVariant variant : role.getVariants()) {</span>
+<span class="fc" id="L140">      boolean found = false;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">      for (RoleVariant superVariant : superRole.getVariants()) {</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (StringUtils.equals(superVariant.getVariant(), variant.getVariant())) {</span>
+<span class="fc" id="L143">          Map&lt;String, Object&gt; variantMerged = MapMerger.merge(variant.getConfig(), superVariant.getConfig());</span>
+<span class="fc" id="L144">          variant.setConfig(variantMerged);</span>
+<span class="fc" id="L145">          superVariant.setConfig(variantMerged);</span>
+<span class="fc" id="L146">          found = true;</span>
+<span class="fc" id="L147">          break;</span>
         }
-<span class="fc" id="L150">      }</span>
-<span class="fc bfc" id="L151" title="All 2 branches covered.">      if (!found) {</span>
+<span class="fc" id="L149">      }</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">      if (!found) {</span>
         // if super role does not have the variant from the sub role, add it to super role as well
-<span class="fc" id="L153">        List&lt;RoleVariant&gt; mergedVariants = new ArrayList&lt;&gt;(superRole.getVariants());</span>
-<span class="fc" id="L154">        mergedVariants.add(Cloner.standard().deepClone(variant));</span>
-<span class="fc" id="L155">        superRole.setVariants(mergedVariants);</span>
+<span class="fc" id="L152">        List&lt;RoleVariant&gt; mergedVariants = new ArrayList&lt;&gt;(superRole.getVariants());</span>
+<span class="fc" id="L153">        mergedVariants.add(ObjectCloner.deepClone(variant));</span>
+<span class="fc" id="L154">        superRole.setVariants(mergedVariants);</span>
       }
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L156">    }</span>
 
     // merge sensitive config parameter names
-<span class="fc" id="L160">    Set&lt;String&gt; sensitiveConfigParameters = new HashSet&lt;&gt;();</span>
-<span class="fc" id="L161">    sensitiveConfigParameters.addAll(role.getSensitiveConfigParameters());</span>
-<span class="fc" id="L162">    sensitiveConfigParameters.addAll(superRole.getSensitiveConfigParameters());</span>
-<span class="fc" id="L163">    role.setSensitiveConfigParameters(ImmutableList.copyOf(sensitiveConfigParameters));</span>
-<span class="fc" id="L164">    superRole.setSensitiveConfigParameters(ImmutableList.copyOf(sensitiveConfigParameters));</span>
-<span class="fc" id="L165">  }</span>
+<span class="fc" id="L159">    Set&lt;String&gt; sensitiveConfigParameters = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L160">    sensitiveConfigParameters.addAll(role.getSensitiveConfigParameters());</span>
+<span class="fc" id="L161">    sensitiveConfigParameters.addAll(superRole.getSensitiveConfigParameters());</span>
+<span class="fc" id="L162">    role.setSensitiveConfigParameters(ImmutableList.copyOf(sensitiveConfigParameters));</span>
+<span class="fc" id="L163">    superRole.setSensitiveConfigParameters(ImmutableList.copyOf(sensitiveConfigParameters));</span>
+<span class="fc" id="L164">  }</span>
 
   /**
    * Removes file definitions resulting in a file with the same name from super roles.
@@ -171,39 +170,39 @@ public final class RoleUtil {
    * @param resolvedRoles Resolved roles
    */
   private static void removeFileDuplicates(Map&lt;String, Role&gt; resolvedRoles) {
-<span class="fc" id="L174">    List&lt;Role&gt; roles = ImmutableList.copyOf(resolvedRoles.values());</span>
+<span class="fc" id="L173">    List&lt;Role&gt; roles = ImmutableList.copyOf(resolvedRoles.values());</span>
 
     // super roles are first, sub roles last.
     // got from last to first, collect all generated file definitions and remove duplicates
-<span class="fc" id="L178">    Set&lt;String&gt; fileNames = new HashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L179" title="All 2 branches covered.">    for (int i = roles.size() - 1; i &gt;= 0; i--) {</span>
-<span class="fc" id="L180">      Role role = roles.get(i);</span>
-<span class="fc" id="L181">      List&lt;RoleFile&gt; filteredFiles = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L182" title="All 2 branches covered.">      for (RoleFile file : role.getFiles()) {</span>
-<span class="fc" id="L183">        String fileKey = getFileNameKey(file);</span>
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (!fileNames.contains(fileKey)) {</span>
-<span class="fc" id="L185">          filteredFiles.add(file);</span>
-<span class="fc" id="L186">          fileNames.add(fileKey);</span>
+<span class="fc" id="L177">    Set&lt;String&gt; fileNames = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">    for (int i = roles.size() - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L179">      Role role = roles.get(i);</span>
+<span class="fc" id="L180">      List&lt;RoleFile&gt; filteredFiles = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">      for (RoleFile file : role.getFiles()) {</span>
+<span class="fc" id="L182">        String fileKey = getFileNameKey(file);</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (!fileNames.contains(fileKey)) {</span>
+<span class="fc" id="L184">          filteredFiles.add(file);</span>
+<span class="fc" id="L185">          fileNames.add(fileKey);</span>
         }
-<span class="fc" id="L188">      }</span>
-<span class="fc" id="L189">      role.setFiles(filteredFiles);</span>
+<span class="fc" id="L187">      }</span>
+<span class="fc" id="L188">      role.setFiles(filteredFiles);</span>
     }
-<span class="fc" id="L191">  }</span>
+<span class="fc" id="L190">  }</span>
 
   private static String getFileNameKey(RoleFile file) {
-<span class="fc bfc" id="L194" title="All 2 branches covered.">    if (StringUtils.isNotBlank(file.getFile())) {</span>
-<span class="fc bfc" id="L195" title="All 2 branches covered.">      if (StringUtils.isNotBlank(file.getDir())) {</span>
-<span class="fc" id="L196">        return file.getDir() + &quot;/&quot; + file.getFile();</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">    if (StringUtils.isNotBlank(file.getFile())) {</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">      if (StringUtils.isNotBlank(file.getDir())) {</span>
+<span class="fc" id="L195">        return file.getDir() + &quot;/&quot; + file.getFile();</span>
       }
       else {
-<span class="fc" id="L199">        return file.getFile();</span>
+<span class="fc" id="L198">        return file.getFile();</span>
       }
     }
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">    else if (StringUtils.isNotBlank(file.getUrl())) {</span>
-<span class="fc" id="L203">      return file.getUrl();</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">    else if (StringUtils.isNotBlank(file.getUrl())) {</span>
+<span class="fc" id="L202">      return file.getUrl();</span>
     }
     else {
-<span class="nc" id="L206">      return file.toString();</span>
+<span class="nc" id="L205">      return file.toString();</span>
     }
   }
 
@@ -214,21 +213,21 @@ public final class RoleUtil {
    * @return true if file should be rendered
    */
   public static boolean matchesRoleFile(RoleFile roleFile, List&lt;String&gt; variants) {
-<span class="fc bfc" id="L217" title="All 2 branches covered.">    if (roleFile.getVariants().isEmpty()) {</span>
-<span class="fc" id="L218">      return true;</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">    if (roleFile.getVariants().isEmpty()) {</span>
+<span class="fc" id="L217">      return true;</span>
     }
-<span class="fc" id="L220">    Set&lt;String&gt; assignedVariants = new HashSet&lt;&gt;(variants);</span>
-<span class="fc" id="L221">    boolean foundAnyMatch = false;</span>
-<span class="fc bfc" id="L222" title="All 2 branches covered.">    for (RoleFileVariantMetadata fileVariant : roleFile.getVariantsMetadata()) {</span>
-<span class="fc" id="L223">      boolean assignedVariantMatch = assignedVariants.contains(fileVariant.getVariant());</span>
-<span class="fc bfc" id="L224" title="All 2 branches covered.">      if (assignedVariantMatch) {</span>
-<span class="fc" id="L225">        foundAnyMatch = true;</span>
+<span class="fc" id="L219">    Set&lt;String&gt; assignedVariants = new HashSet&lt;&gt;(variants);</span>
+<span class="fc" id="L220">    boolean foundAnyMatch = false;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">    for (RoleFileVariantMetadata fileVariant : roleFile.getVariantsMetadata()) {</span>
+<span class="fc" id="L222">      boolean assignedVariantMatch = assignedVariants.contains(fileVariant.getVariant());</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">      if (assignedVariantMatch) {</span>
+<span class="fc" id="L224">        foundAnyMatch = true;</span>
       }
-<span class="fc bfc" id="L227" title="All 2 branches covered.">      else if (fileVariant.isMandatory()) {</span>
-<span class="fc" id="L228">        return false;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">      else if (fileVariant.isMandatory()) {</span>
+<span class="fc" id="L227">        return false;</span>
       }
-<span class="fc" id="L230">    }</span>
-<span class="fc" id="L231">    return foundAnyMatch;</span>
+<span class="fc" id="L229">    }</span>
+<span class="fc" id="L230">    return foundAnyMatch;</span>
   }
 
 }

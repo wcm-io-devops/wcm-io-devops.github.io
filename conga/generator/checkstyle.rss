@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2015 - 2021 wcm.io DevOps</copyright>
     <item>
-      <title>File: 119,
+      <title>File: 120,
              Errors: 0,
              Warnings: 0,
              Infos: 0
@@ -298,7 +298,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.multiply.package-info.java">io/wcm/devops/conga/generator/plugins/multiply/package-info.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.fileheader.JsonFileHeader.java">io/wcm/devops/conga/generator/plugins/fileheader/JsonFileHeader.java</a>
                 </td>
                 <td>
                   0
@@ -312,7 +312,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.fileheader.JsonFileHeader.java">io/wcm/devops/conga/generator/plugins/fileheader/JsonFileHeader.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.multiply.package-info.java">io/wcm/devops/conga/generator/plugins/multiply/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -872,7 +872,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.export.package-info.java">io/wcm/devops/conga/generator/export/package-info.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.ContextPropertiesBuilder.java">io/wcm/devops/conga/generator/ContextPropertiesBuilder.java</a>
                 </td>
                 <td>
                   0
@@ -886,7 +886,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.ContextPropertiesBuilder.java">io/wcm/devops/conga/generator/ContextPropertiesBuilder.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.export.package-info.java">io/wcm/devops/conga/generator/export/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1026,7 +1026,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.export.package-info.java">io/wcm/devops/conga/generator/plugins/export/package-info.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.handlebars.escaping.NoneEscapingStrategy.java">io/wcm/devops/conga/generator/plugins/handlebars/escaping/NoneEscapingStrategy.java</a>
                 </td>
                 <td>
                   0
@@ -1040,7 +1040,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.handlebars.escaping.NoneEscapingStrategy.java">io/wcm/devops/conga/generator/plugins/handlebars/escaping/NoneEscapingStrategy.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.export.package-info.java">io/wcm/devops/conga/generator/plugins/export/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1558,6 +1558,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.util.ObjectCloner.java">io/wcm/devops/conga/generator/util/ObjectCloner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.spi.FilePlugin.java">io/wcm/devops/conga/generator/spi/FilePlugin.java</a>
                 </td>
                 <td>
@@ -1628,7 +1642,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.fileheader.package-info.java">io/wcm/devops/conga/generator/plugins/fileheader/package-info.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.valueprovider.package-info.java">io/wcm/devops/conga/generator/plugins/valueprovider/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1642,7 +1656,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.valueprovider.package-info.java">io/wcm/devops/conga/generator/plugins/valueprovider/package-info.java</a>
+                  <a href="https://devops.wcm.io/generator/io.wcm.devops.conga.parent/io.wcm.devops.conga.generator//checkstyle.html#io.wcm.devops.conga.generator.plugins.fileheader.package-info.java">io/wcm/devops/conga/generator/plugins/fileheader/package-info.java</a>
                 </td>
                 <td>
                   0

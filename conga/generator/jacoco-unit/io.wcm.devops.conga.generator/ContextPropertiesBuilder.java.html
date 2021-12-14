@@ -40,8 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import com.rits.cloning.Cloner;
 
+import io.wcm.devops.conga.generator.util.ObjectCloner;
 import io.wcm.devops.conga.generator.util.VariableObjectTreeResolver;
 import io.wcm.devops.conga.generator.util.VariableStringResolver;
 import io.wcm.devops.conga.model.environment.Environment;
@@ -94,7 +94,7 @@ public final class ContextPropertiesBuilder {
 <span class="fc" id="L94">    map.put(ENVIRONMENT, environmentName);</span>
 
     // clone environment before resolving variables to make sure they are resolved only for this context, not for file generation
-<span class="fc" id="L97">    Environment clonedEnvironemnt = Cloner.standard().deepClone(environment);</span>
+<span class="fc" id="L97">    Environment clonedEnvironemnt = ObjectCloner.deepClone(environment);</span>
 
     // resolve all variables at any level in environment
 <span class="fc" id="L100">    variableObjectTreeResolver.resolve(clonedEnvironemnt);</span>
