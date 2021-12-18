@@ -8,7 +8,7 @@
 
   <head>
     <meta charset="UTF-8" />
-    <title>Source Code Management | CONGA Ansible Plugin</title>
+    <title>CPD Results | CONGA Ansible Plugin</title>
 
     <link rel="shortcut icon" href="https://wcm.io/images/favicon.ico">
     <link rel="apple-touch-icon" href="https://wcm.io/images/favicon-152.png">
@@ -30,7 +30,7 @@
 
   </head>
 
-  <body class="page-scm project-io.wcm.devops.conga.plugins.ansible" data-spy="scroll" data-offset="60" data-target="#toc-scroll-target">
+  <body class="page-cpd project-io.wcm.devops.conga.plugins.ansible.root" data-spy="scroll" data-offset="60" data-target="#toc-scroll-target">
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
@@ -47,7 +47,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li ><a href="../../../conga/" title="CONGA - CONfiguration GenerAtor">CONGA - CONfiguration GenerAtor</a></li>
+                  <li ><a href="../../" title="CONGA - CONfiguration GenerAtor">CONGA - CONfiguration GenerAtor</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -80,6 +80,7 @@
           <p class="lead">Tools for Configuration Management and Deployment</p>
         </div>
         <div class="pull-right">
+          <div id="bannerRight"><h1><img src="https://devops.wcm.io/conga/images/conga.png" style="height:120px"/></h1></div>
         </div>
       </div>
     </div>
@@ -90,7 +91,7 @@
         <li class="divider">/</li>
         <li><a href="index.html" title="CONGA Ansible Plugin">CONGA Ansible Plugin</a></li>
         <li class="divider">/</li>
-        <li>Source Code Management</li>
+        <li>CPD Results</li>
       </ul>
     </div>
   </header>
@@ -101,34 +102,47 @@
       <div class="body-content">
 <section> 
  <div class="page-header">
-  <h2 id="Overview">Overview</h2>
- </div><a name="Overview"></a> 
- <p>This project uses <a class="externalLink" href="https://git-scm.com/">Git</a> to manage its source code. Instructions on Git use can be found at <a class="externalLink" href="https://git-scm.com/documentation">https://git-scm.com/documentation</a>.</p> 
-</section> 
-<section> 
- <h2 id="Web_Browser_Access">Web Browser Access</h2><a name="Web_Browser_Access"></a> 
- <p>The following is a link to a browsable version of the source repository:</p> 
- <div class="source"> 
-  <pre><a class="externalLink" href="https://github.com/wcm-io-devops/conga-ansible-plugin">https://github.com/wcm-io-devops/conga-ansible-plugin</a></pre> 
+  <h2 id="CPD_Results">CPD Results</h2>
  </div> 
+ <p>The following document contains the results of PMD's <a class="externalLink" href="https://pmd.github.io/latest/pmd_userdocs_cpd.html">CPD</a> 6.38.0.</p> 
 </section> 
 <section> 
- <h2 id="Anonymous_Access">Anonymous Access</h2><a name="Anonymous_Access"></a> 
- <p>The source can be checked out anonymously from Git with this command (See <a class="externalLink" href="https://git-scm.com/docs/git-clone">https://git-scm.com/docs/git-clone</a>):</p> 
- <div class="source"> 
-  <pre>$ git clone https://github.com/wcm-io-devops/conga-ansible-plugin.git</pre> 
- </div> 
-</section> 
-<section> 
- <h2 id="Developer_Access">Developer Access</h2><a name="Developer_Access"></a> 
- <p>Only project developers can access the Git tree via this method (See <a class="externalLink" href="https://git-scm.com/docs/git-clone">https://git-scm.com/docs/git-clone</a>).</p> 
- <div class="source"> 
-  <pre>$ git clone https://github.com/wcm-io-devops/conga-ansible-plugin.git</pre> 
- </div> 
-</section> 
-<section> 
- <h2 id="Access_from_Behind_a_Firewall">Access from Behind a Firewall</h2><a name="Access_from_Behind_a_Firewall"></a> 
- <p>Refer to the documentation of the SCM used for more information about access behind a firewall.</p> 
+ <h2 id="Duplications">Duplications</h2> 
+ <table border="0" class="bodyTable table table-striped table-hover"> 
+  <thead> 
+   <tr class="a"> 
+    <th>File</th> 
+    <th>Project</th> 
+    <th>Line</th> 
+   </tr> 
+  </thead> 
+  <tbody> 
+   <tr class="b"> 
+    <td>net/wedjaa/ansible/vault/crypto/decoders/implementation/CypherAES256.java</td> 
+    <td>CONGA Ansible Plugin</td> 
+    <td><a href="./xref/net/wedjaa/ansible/vault/crypto/decoders/implementation/CypherAES256.html#L180">180</a></td> 
+   </tr> 
+   <tr class="a"> 
+    <td>net/wedjaa/ansible/vault/crypto/decoders/implementation/CypherAES256.java</td> 
+    <td>CONGA Ansible Plugin</td> 
+    <td><a href="./xref/net/wedjaa/ansible/vault/crypto/decoders/implementation/CypherAES256.html#L220">220</a></td> 
+   </tr> 
+   <tr class="b"> 
+    <td colspan="3"> 
+     <div> 
+      <pre>EncryptionKeychain keys = new EncryptionKeychain(salt, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);
+    keys.createKeys();
+
+    byte[] cypherKey = keys.getEncryptionKey();
+    logger.trace("Key 1: {} - {}", cypherKey.length, Util.hexit(cypherKey, 100));
+    byte[] hmacKey = keys.getHmacKey();
+    logger.trace("Key 2: {} - {}", hmacKey.length, Util.hexit(hmacKey, 100));
+    byte[] iv = keys.getIv();
+    logger.trace("IV: {} - {}", iv.length, Util.hexit(iv, 100));</pre> 
+     </div></td> 
+   </tr> 
+  </tbody> 
+ </table> 
 </section>
       </div>
     </div>
@@ -137,11 +151,8 @@
         <div class="well">
           <ul class="nav nav-list">
             <li class="nav-header">Table of Contents</li>
-    <li><a href="#Overview" title="Overview">Overview</a>
-    <li><a href="#Web_Browser_Access" title="Web Browser Access">Web Browser Access</a>
-    <li><a href="#Anonymous_Access" title="Anonymous Access">Anonymous Access</a>
-    <li><a href="#Developer_Access" title="Developer Access">Developer Access</a>
-    <li><a href="#Access_from_Behind_a_Firewall" title="Access from Behind a Firewall">Access from Behind a Firewall</a>
+    <li><a href="#CPD_Results" title="CPD Results">CPD Results</a>
+    <li><a href="#Duplications" title="Duplications">Duplications</a>
           </ul>
         </div>
       </div>
@@ -192,7 +203,7 @@
           <ul class="nav nav-list">
             <li class="nav-header">Categories</li>
             <li >
-              <a href="../../../conga/" title="CONGA - CONfiguration GenerAtor">CONGA - CONfiguration GenerAtor</a>
+              <a href="../../" title="CONGA - CONfiguration GenerAtor">CONGA - CONfiguration GenerAtor</a>
             </li>
           </ul>
         </div>
@@ -220,27 +231,21 @@
           <ul class="nav nav-list">
             <li class="nav-header">Maven documentation</li>
             <li >
-              <a href="project-info.html" title="Project Information">Project Information <i class="icon-chevron-down"></i></a>
+              <a href="project-info.html" title="Project Information">Project Information <i class="icon-chevron-right"></i></a>
+            </li>
+            <li >
+              <a href="project-reports.html" title="Project Reports">Project Reports <i class="icon-chevron-down"></i></a>
               <ul class="nav nav-list">
             <li >
-              <a href="index.html" title="About">About</a>
-            </li>
-            <li >
-              <a href="dependencies.html" title="Dependencies">Dependencies</a>
+              <a href="changes-report.html" title="Changes">Changes</a>
             </li>
             <li class="active">
-              <a href="#" title="Source Code Management">Source Code Management</a>
+              <a href="#" title="CPD">CPD</a>
             </li>
             <li >
-              <a href="licenses.html" title="Licenses">Licenses</a>
-            </li>
-            <li >
-              <a href="summary.html" title="Summary">Summary</a>
+              <a href="pmd.html" title="PMD">PMD</a>
             </li>
               </ul>
-            </li>
-            <li >
-              <a href="project-reports.html" title="Project Reports">Project Reports <i class="icon-chevron-right"></i></a>
             </li>
           </ul>
         </div>
