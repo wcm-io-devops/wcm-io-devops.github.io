@@ -23,7 +23,7 @@ under the License.
     <link>https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin/</link>
     <description>CONGA AEM Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2015 - 2021 wcm.io DevOps</copyright>
+    <copyright>&#169;2015 - 2022 wcm.io DevOps</copyright>
     <item>
       <title>File: 16,
              Errors: 0,
