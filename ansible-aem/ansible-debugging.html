@@ -108,39 +108,31 @@
   <h3 id="Ansible_verbose_mode">Ansible verbose mode</h3> 
   <p>Ansible Commands support the verbose flag</p> 
   <div class="source"> 
-   <div class="source"> 
-    <pre>-v # simple verbose output
+   <pre><code>-v # simple verbose output
 -vv # more verbose
 -vvv # even more verbose
 -vvvv # connection debugging
 -vvvvv # even more verbose, and so on
-</pre> 
-   </div> 
+</code></pre> 
   </div> 
   <p>Which each added “v” the verbosity increases (and the readability decreases).</p> 
   <p>It is recommened to write the output to a file like:</p> 
   <div class="source"> 
-   <div class="source"> 
-    <pre>ansible-playbook playbook-setup-prod.yml | tee ansible.log
-</pre> 
-   </div> 
+   <pre><code>ansible-playbook playbook-setup-prod.yml | tee ansible.log
+</code></pre> 
   </div> 
  </section> 
  <section> 
   <h3 id="Use_--skip-tags">Use --skip-tags</h3> 
   <p>If you want to speed up debugging and want to skip the tasks/roles that are working use the parameter</p> 
   <div class="source"> 
-   <div class="source"> 
-    <pre>--skip-tags aem-cms,aem-dispatcher
-</pre> 
-   </div> 
+   <pre><code>--skip-tags aem-cms,aem-dispatcher
+</code></pre> 
   </div> 
   <p>When working with the Conga Ansible IT Automation it is recommended to skip the compile process of the wcm_io_devops.conga_maven role to save time</p> 
   <div class="source"> 
-   <div class="source"> 
-    <pre>--skip-tags conga-maven-compile
-</pre> 
-   </div> 
+   <pre><code>--skip-tags conga-maven-compile
+</code></pre> 
   </div> 
   <p>For more information refer to: <a class="externalLink" href="https://docs.ansible.com/ansible/2.6/user_guide/playbooks_tags.html">https://docs.ansible.com/ansible/2.6/user_guide/playbooks_tags.html</a></p> 
  </section> 
@@ -148,20 +140,16 @@
   <h3 id="Use_--start-at-task">Use --start-at-task</h3> 
   <p>If you want to start the playbook at a particula task you can use the –start-at-task option:</p> 
   <div class="source"> 
-   <div class="source"> 
-    <pre>ansible-playbook playbook-setup-prod.yml --start-at-task="Download AEM quickstart."
-</pre> 
-   </div> 
+   <pre><code>ansible-playbook playbook-setup-prod.yml --start-at-task="Download AEM quickstart."
+</code></pre> 
   </div> 
  </section> 
  <section> 
   <h3 id="Execute_interactively">Execute interactively</h3> 
   <p>If you want to inspect the result of each task you can run the playbook with the –step option:</p> 
   <div class="source"> 
-   <div class="source"> 
-    <pre>ansible-playbook playbook-setup-prod.yml --step
-</pre> 
-   </div> 
+   <pre><code>ansible-playbook playbook-setup-prod.yml --step
+</code></pre> 
   </div> 
   <p>This will cause Ansible to stop on each task if it should execute that task.</p> 
  </section> 
@@ -194,19 +182,16 @@
    <h4 id="Example_for_wcm_io_devops.conga_aem_packages_role">Example for wcm_io_devops.conga_aem_packages role</h4> 
    <p><i>Prepare role for local manipulation</i></p> 
    <div class="source"> 
-    <div class="source"> 
-     <pre># switch into the ansible playbook dir
+    <pre><code># switch into the ansible playbook dir
 mkdir roles &amp;&amp; cd roles
 git clone https://github.com/wcm-io-devops/ansible-conga-aem-packages.git &amp;&amp; git checkout 1.0.0
-</pre> 
-    </div> 
+</code></pre> 
    </div> 
    <p>With this setup the role “wcm_io_devops.conga_aem_packages” will be loaded from the roles directory.</p> 
    <p>You can then start manipulating the role e.g. by adding debug statements, manual inputs and fail statements to avoid continuing of the play.</p> 
    <p><i>Example: Output content of conga_config and continue</i></p> 
    <div class="source"> 
-    <div class="source"> 
-     <pre>- name: Debug conga_config
+    <pre><code class="language-yaml">- name: Debug conga_config
   debug:
     msg:
       - conga_config
@@ -214,16 +199,13 @@ git clone https://github.com/wcm-io-devops/ansible-conga-aem-packages.git &amp;&
 
 - fail:
     msg: do not continue
-</pre> 
-    </div> 
+</code></pre> 
    </div> 
    <p><i>Example: Wait for user input</i></p> 
    <div class="source"> 
-    <div class="source"> 
-     <pre>- name: "Wait for user input"
+    <pre><code class="language-yaml">- name: "Wait for user input"
   prompt: "Continue?"
-</pre> 
-    </div> 
+</code></pre> 
    </div> 
    <p>Links:</p> 
    <ul> 
