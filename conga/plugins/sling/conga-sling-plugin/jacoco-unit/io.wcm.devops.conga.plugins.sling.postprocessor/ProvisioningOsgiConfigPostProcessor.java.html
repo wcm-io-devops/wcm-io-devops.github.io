@@ -88,7 +88,7 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
       @Override
       @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
       public FileContext accept(String path, Dictionary&lt;String, Object&gt; properties) throws IOException {
-<span class="fc" id="L91">        context.getLogger().info(&quot;  Generate &quot; + path);</span>
+<span class="fc" id="L91">        context.getLogger().info(&quot;  Generate {}&quot;, path);</span>
 
 <span class="fc" id="L93">        File confFile = new File(dir, path);</span>
 <span class="fc" id="L94">        confFile.getParentFile().mkdirs();</span>

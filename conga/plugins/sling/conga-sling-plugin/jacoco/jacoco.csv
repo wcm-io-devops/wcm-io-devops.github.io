@@ -5,7 +5,7 @@ CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.handlebars.escaping,Provisi
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,ProvisioningUtil,6,263,6,26,4,46,6,14,0,4
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,OsgiConfigUtil,0,4,0,0,0,2,0,1,0,1
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,ConfigurationHandler_ConfigAdmin184,687,449,103,29,181,111,80,19,15,7
-CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.postprocessor,ProvisioningOsgiConfigPostProcessor.new ConfigConsumer() {...},0,53,0,0,0,7,0,2,0,2
+CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.postprocessor,ProvisioningOsgiConfigPostProcessor.new ConfigConsumer() {...},0,47,0,0,0,7,0,2,0,2
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.postprocessor,ProvisioningOsgiConfigPostProcessor,7,35,0,0,2,9,0,5,0,5
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.validator,ProvisioningValidator,0,29,0,0,0,8,0,4,0,4
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.fileheader,ProvisioningFileHeader,0,17,0,0,0,6,0,6,0,6

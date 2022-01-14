@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>        @Override
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>        @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        <strong class="jxr_keyword">public</strong> FileContext accept(String path, Dictionary&lt;String, Object&gt; properties) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          context.getLogger().info(<span class="jxr_string">"  Generate "</span> + path);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          context.getLogger().info(<span class="jxr_string">"  Generate {}"</span>, path);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          File confFile = <strong class="jxr_keyword">new</strong> File(dir, path);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          confFile.getParentFile().mkdirs();
