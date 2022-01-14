@@ -173,7 +173,7 @@ public final class ContentPackageUtil {
       @SuppressWarnings(&quot;null&quot;)
 <span class="fc" id="L174">      String fileHeaderString = StringUtils.trim(fileHeader.getCommentLines().stream()</span>
 <span class="fc bfc" id="L175" title="All 2 branches covered.">          .filter(line -&gt; !StringUtils.contains(line, &quot;*****&quot;))</span>
-<span class="fc" id="L176">          .map(line -&gt; StringUtils.trim(line))</span>
+<span class="fc" id="L176">          .map(StringUtils::trim)</span>
 <span class="fc" id="L177">          .collect(Collectors.joining(&quot;\n&quot;)));</span>
 <span class="fc" id="L178">      result.append(fileHeaderString);</span>
     }
