@@ -58,16 +58,16 @@ public final class ContextPropertiesBuilder {
 <span class="fc" id="L58">  static final Map&lt;String, Object&gt; EMPTY_CONTEXT_VARIABLES = ImmutableMap.&lt;String, Object&gt;builder()</span>
 <span class="fc" id="L59">      .put(VERSION, &quot;&quot;)</span>
 <span class="fc" id="L60">      .put(ENVIRONMENT, &quot;&quot;)</span>
-<span class="fc" id="L61">      .put(NODES, Collections.EMPTY_LIST)</span>
-<span class="fc" id="L62">      .put(NODES_BY_ROLE, Collections.EMPTY_MAP)</span>
-<span class="fc" id="L63">      .put(NODES_BY_ROLE_VARIANT, Collections.EMPTY_MAP)</span>
-<span class="fc" id="L64">      .put(TENANTS, Collections.EMPTY_LIST)</span>
-<span class="fc" id="L65">      .put(TENANTS_BY_ROLE, Collections.EMPTY_MAP)</span>
+<span class="fc" id="L61">      .put(NODES, Collections.emptyList())</span>
+<span class="fc" id="L62">      .put(NODES_BY_ROLE, Collections.emptyMap())</span>
+<span class="fc" id="L63">      .put(NODES_BY_ROLE_VARIANT, Collections.emptyMap())</span>
+<span class="fc" id="L64">      .put(TENANTS, Collections.emptyMap())</span>
+<span class="fc" id="L65">      .put(TENANTS_BY_ROLE, Collections.emptyMap())</span>
 <span class="fc" id="L66">      .put(ROLE, &quot;&quot;)</span>
 <span class="fc" id="L67">      .put(ROLE_VARIANT, &quot;&quot;)</span>
 <span class="fc" id="L68">      .put(NODE, &quot;&quot;)</span>
 <span class="fc" id="L69">      .put(TENANT, &quot;&quot;)</span>
-<span class="fc" id="L70">      .put(TENANT_ROLES, Collections.EMPTY_LIST)</span>
+<span class="fc" id="L70">      .put(TENANT_ROLES, Collections.emptyList())</span>
 <span class="fc" id="L71">      .build();</span>
 
   private ContextPropertiesBuilder() {

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -44,32 +45,32 @@ import io.wcm.devops.conga.model.util.MapExpander;
  */
 abstract class AbstractEachIfHelper implements HelperPlugin {
 
-<span class="fc" id="L47">  private final Helper&lt;Object&gt; delegate = new EachHelper();</span>
+<span class="fc" id="L48">  private final Helper&lt;Object&gt; delegate = new EachHelper();</span>
   private final BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator;
 
-<span class="fc" id="L50">  AbstractEachIfHelper(BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator) {</span>
-<span class="fc" id="L51">    this.propertyEvaluator = propertyEvaluator;</span>
-<span class="fc" id="L52">  }</span>
+<span class="fc" id="L51">  AbstractEachIfHelper(BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator) {</span>
+<span class="fc" id="L52">    this.propertyEvaluator = propertyEvaluator;</span>
+<span class="fc" id="L53">  }</span>
 
   @SuppressWarnings(&quot;unchecked&quot;)
   @Override
   public final Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
-<span class="pc bpc" id="L57" title="1 of 4 branches missed.">    if (context != null &amp;&amp; !options.isFalsy(context)) {</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">      if (context instanceof Iterable) {</span>
-<span class="fc" id="L59">        String propertyName = options.param(0, null);</span>
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (StringUtils.isEmpty(propertyName)) {</span>
-<span class="fc" id="L61">          return options.inverse();</span>
+<span class="pc bpc" id="L58" title="1 of 4 branches missed.">    if (context != null &amp;&amp; !options.isFalsy(context)) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">      if (context instanceof Iterable) {</span>
+<span class="fc" id="L60">        String propertyName = options.param(0, null);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (StringUtils.isEmpty(propertyName)) {</span>
+<span class="fc" id="L62">          return options.inverse();</span>
         }
         else {
-<span class="fc" id="L64">          Iterable&lt;Object&gt; filteredItems = filterIterable((Iterable&lt;Object&gt;)context, propertyName, options);</span>
-<span class="fc" id="L65">          return delegate.apply(filteredItems, options);</span>
+<span class="fc" id="L65">          Iterable&lt;Object&gt; filteredItems = filterIterable((Iterable&lt;Object&gt;)context, propertyName, options);</span>
+<span class="fc" id="L66">          return delegate.apply(filteredItems, options);</span>
         }
       }
       else {
-<span class="fc" id="L69">        return apply(ImmutableList.of(context), options, pluginContext);</span>
+<span class="fc" id="L70">        return apply(ImmutableList.of(context), options, pluginContext);</span>
       }
     }
-<span class="fc" id="L72">    return delegate.apply(context, options);</span>
+<span class="fc" id="L73">    return delegate.apply(context, options);</span>
   }
 
   /**
@@ -80,24 +81,24 @@ abstract class AbstractEachIfHelper implements HelperPlugin {
    * @return Filtered items
    */
   private Iterable&lt;Object&gt; filterIterable(Iterable&lt;Object&gt; items, String propertyName,Options options) {
-<span class="fc" id="L83">    return StreamSupport.stream(items.spliterator(), false)</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        .filter(item -&gt; item != null)</span>
-<span class="fc" id="L85">        .filter(item -&gt; checkProperty(item, propertyName, options))</span>
-<span class="fc" id="L86">        .collect(Collectors.toList());</span>
+<span class="fc" id="L84">    return StreamSupport.stream(items.spliterator(), false)</span>
+<span class="fc" id="L85">        .filter(Objects::nonNull)</span>
+<span class="fc" id="L86">        .filter(item -&gt; checkProperty(item, propertyName, options))</span>
+<span class="fc" id="L87">        .collect(Collectors.toList());</span>
   }
 
   private boolean checkProperty(Object item, String propertyName, Options options) {
-<span class="fc" id="L90">    Map&lt;String, Object&gt; propertyMap = toMap(options.propertySet(item));</span>
-<span class="fc" id="L91">    Object value = MapExpander.getDeep(propertyMap, propertyName);</span>
-<span class="fc" id="L92">    return propertyEvaluator.apply(value, options);</span>
+<span class="fc" id="L91">    Map&lt;String, Object&gt; propertyMap = toMap(options.propertySet(item));</span>
+<span class="fc" id="L92">    Object value = MapExpander.getDeep(propertyMap, propertyName);</span>
+<span class="fc" id="L93">    return propertyEvaluator.apply(value, options);</span>
   }
 
   private Map&lt;String, Object&gt; toMap(Set&lt;Entry&lt;String, Object&gt;&gt; entries) {
-<span class="fc" id="L96">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">    for (Entry&lt;String, Object&gt; entry : entries) {</span>
-<span class="fc" id="L98">      map.put(entry.getKey(), entry.getValue());</span>
-<span class="fc" id="L99">    }</span>
-<span class="fc" id="L100">    return map;</span>
+<span class="fc" id="L97">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">    for (Entry&lt;String, Object&gt; entry : entries) {</span>
+<span class="fc" id="L99">      map.put(entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L100">    }</span>
+<span class="fc" id="L101">    return map;</span>
   }
 
 }

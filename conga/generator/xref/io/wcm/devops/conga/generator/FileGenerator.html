@@ -197,8 +197,8 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>     <em class="jxr_comment">// create separator with same length as longest comment entry</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">int</strong> maxLength = lines.stream()
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>         .map(entry -&gt; entry.length())
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>         .max(Integer::compare).get();
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>         .map(String::length)
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         .max(Integer::compare).orElse(0);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>     String separator = StringUtils.repeat(<span class="jxr_string">"*"</span>, maxLength + 4);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>     formattedLines.add(separator);

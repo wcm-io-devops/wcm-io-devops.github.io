@@ -98,7 +98,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 <span class="fc" id="L98">    roleMap.put(&quot;files&quot;, roleData.getFiles().stream()</span>
 <span class="fc" id="L99">        .filter(item -&gt; item.getFileContext().getFile().exists())</span>
 <span class="fc" id="L100">        .map(item -&gt; {</span>
-<span class="fc" id="L101">          Map&lt;String, Object&gt; itemMap = new LinkedHashMap&lt;String, Object&gt;();</span>
+<span class="fc" id="L101">          Map&lt;String, Object&gt; itemMap = new LinkedHashMap&lt;&gt;();</span>
 <span class="fc" id="L102">          itemMap.put(&quot;path&quot;, cleanupFileName(item.getFileContext().getCanonicalPath(), nodeDirPath));</span>
 <span class="pc bpc" id="L103" title="1 of 2 branches missed.">          if (!item.getPostProcessors().isEmpty()) {</span>
 <span class="nc" id="L104">            itemMap.put(&quot;postProcessors&quot;, ImmutableList.copyOf(item.getPostProcessors()));</span>

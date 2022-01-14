@@ -75,13 +75,14 @@ import io.wcm.devops.conga.model.environment.Environment;
   private PluginManager pluginManager;
   private Function&lt;Environment, Collection&lt;String&gt;&gt; dependencyVersionBuilder;
   private Map&lt;String, String&gt; containerVersionInfo;
-<span class="fc" id="L78">  private Logger logger = LoggerFactory.getLogger(Generator.class);</span>
+<span class="fc" id="L78">  @SuppressWarnings(&quot;java:S3416&quot;) // uses logger for Generator by intention</span>
+<span class="fc" id="L79">  private Logger logger = LoggerFactory.getLogger(Generator.class);</span>
 
   /**
    * @return Base directory for resolving relative file references
    */
   public File getBaseDir() {
-<span class="fc" id="L84">    return this.baseDir;</span>
+<span class="fc" id="L85">    return this.baseDir;</span>
   }
 
   /**
@@ -89,8 +90,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions baseDir(File value) {
-<span class="fc" id="L92">    this.baseDir = value;</span>
-<span class="fc" id="L93">    return this;</span>
+<span class="fc" id="L93">    this.baseDir = value;</span>
+<span class="fc" id="L94">    return this;</span>
   }
 
   /**
@@ -98,7 +99,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Directory
    */
   public File getRoleDir() {
-<span class="fc" id="L101">    return this.roleDir;</span>
+<span class="fc" id="L102">    return this.roleDir;</span>
   }
 
   /**
@@ -106,8 +107,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions roleDir(File value) {
-<span class="fc" id="L109">    this.roleDir = value;</span>
-<span class="fc" id="L110">    return this;</span>
+<span class="fc" id="L110">    this.roleDir = value;</span>
+<span class="fc" id="L111">    return this;</span>
   }
 
   /**
@@ -115,7 +116,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Directory
    */
   public File getTemplateDir() {
-<span class="fc" id="L118">    return this.templateDir;</span>
+<span class="fc" id="L119">    return this.templateDir;</span>
   }
 
   /**
@@ -123,8 +124,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions templateDir(File value) {
-<span class="fc" id="L126">    this.templateDir = value;</span>
-<span class="fc" id="L127">    return this;</span>
+<span class="fc" id="L127">    this.templateDir = value;</span>
+<span class="fc" id="L128">    return this;</span>
   }
 
   /**
@@ -132,7 +133,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Directory
    */
   public File getEnvironmentDir() {
-<span class="fc" id="L135">    return this.environmentDir;</span>
+<span class="fc" id="L136">    return this.environmentDir;</span>
   }
 
   /**
@@ -140,8 +141,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions environmentDir(File value) {
-<span class="fc" id="L143">    this.environmentDir = value;</span>
-<span class="fc" id="L144">    return this;</span>
+<span class="fc" id="L144">    this.environmentDir = value;</span>
+<span class="fc" id="L145">    return this;</span>
   }
 
   /**
@@ -149,7 +150,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Directory
    */
   public File getDestDir() {
-<span class="fc" id="L152">    return this.destDir;</span>
+<span class="fc" id="L153">    return this.destDir;</span>
   }
 
   /**
@@ -157,8 +158,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions destDir(File value) {
-<span class="fc" id="L160">    this.destDir = value;</span>
-<span class="fc" id="L161">    return this;</span>
+<span class="fc" id="L161">    this.destDir = value;</span>
+<span class="fc" id="L162">    return this;</span>
   }
 
   /**
@@ -166,7 +167,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Delete before generate
    */
   public boolean isDeleteBeforeGenerate() {
-<span class="fc" id="L169">    return this.deleteBeforeGenerate;</span>
+<span class="fc" id="L170">    return this.deleteBeforeGenerate;</span>
   }
 
   /**
@@ -174,8 +175,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions deleteBeforeGenerate(boolean value) {
-<span class="nc" id="L177">    this.deleteBeforeGenerate = value;</span>
-<span class="nc" id="L178">    return this;</span>
+<span class="nc" id="L178">    this.deleteBeforeGenerate = value;</span>
+<span class="nc" id="L179">    return this;</span>
   }
 
   /**
@@ -183,7 +184,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Version
    */
   public String getVersion() {
-<span class="fc" id="L186">    return this.version;</span>
+<span class="fc" id="L187">    return this.version;</span>
   }
 
   /**
@@ -191,8 +192,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions version(String value) {
-<span class="fc" id="L194">    this.version = value;</span>
-<span class="fc" id="L195">    return this;</span>
+<span class="fc" id="L195">    this.version = value;</span>
+<span class="fc" id="L196">    return this;</span>
   }
 
   /**
@@ -200,7 +201,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Allow symlinks
    */
   public boolean isAllowSymlinks() {
-<span class="fc" id="L203">    return this.allowSymlinks;</span>
+<span class="fc" id="L204">    return this.allowSymlinks;</span>
   }
 
   /**
@@ -208,8 +209,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions setAllowSymlinks(boolean value) {
-<span class="nc" id="L211">    this.allowSymlinks = value;</span>
-<span class="nc" id="L212">    return this;</span>
+<span class="nc" id="L212">    this.allowSymlinks = value;</span>
+<span class="nc" id="L213">    return this;</span>
   }
 
   /**
@@ -217,7 +218,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Model export
    */
   public ModelExport getModelExport() {
-<span class="fc" id="L220">    return this.modelExport;</span>
+<span class="fc" id="L221">    return this.modelExport;</span>
   }
 
   /**
@@ -225,8 +226,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions modelExport(ModelExport value) {
-<span class="fc" id="L228">    this.modelExport = value;</span>
-<span class="fc" id="L229">    return this;</span>
+<span class="fc" id="L229">    this.modelExport = value;</span>
+<span class="fc" id="L230">    return this;</span>
   }
 
   /**
@@ -234,7 +235,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    *         The outer map uses the value provider plugin name as key, the inner map contain the config properties.
    */
   public Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
-<span class="fc" id="L237">    return this.valueProviderConfig;</span>
+<span class="fc" id="L238">    return this.valueProviderConfig;</span>
   }
 
   /**
@@ -242,15 +243,15 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions valueProviderConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
-<span class="nc" id="L245">    this.valueProviderConfig = value;</span>
-<span class="nc" id="L246">    return this;</span>
+<span class="nc" id="L246">    this.valueProviderConfig = value;</span>
+<span class="nc" id="L247">    return this;</span>
   }
 
   /**
    * @return Generic plugin configuration.
    */
   public Map&lt;String, Map&lt;String, Object&gt;&gt; getGenericPluginConfig() {
-<span class="fc" id="L253">    return this.genericPluginConfig;</span>
+<span class="fc" id="L254">    return this.genericPluginConfig;</span>
   }
 
   /**
@@ -258,8 +259,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions genericPluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
-<span class="fc" id="L261">    this.genericPluginConfig = value;</span>
-<span class="fc" id="L262">    return this;</span>
+<span class="fc" id="L262">    this.genericPluginConfig = value;</span>
+<span class="fc" id="L263">    return this;</span>
   }
 
   /**
@@ -267,7 +268,7 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return Context
    */
   public Object getContainerContext() {
-<span class="fc" id="L270">    return this.containerContext;</span>
+<span class="fc" id="L271">    return this.containerContext;</span>
   }
 
   /**
@@ -275,15 +276,15 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions containerContext(Object value) {
-<span class="nc" id="L278">    this.containerContext = value;</span>
-<span class="nc" id="L279">    return this;</span>
+<span class="nc" id="L279">    this.containerContext = value;</span>
+<span class="nc" id="L280">    return this;</span>
   }
 
   /**
    * @return List of classpath URLs to CONGA artifact dependencies and container classpath elements.
    */
   public List&lt;URL&gt; getContainerClasspathUrls() {
-<span class="fc" id="L286">    return this.containerClasspathUrls;</span>
+<span class="fc" id="L287">    return this.containerClasspathUrls;</span>
   }
 
   /**
@@ -291,15 +292,15 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions containerClasspathUrls(List&lt;URL&gt; value) {
-<span class="nc" id="L294">    this.containerClasspathUrls = value;</span>
-<span class="nc" id="L295">    return this;</span>
+<span class="nc" id="L295">    this.containerClasspathUrls = value;</span>
+<span class="nc" id="L296">    return this;</span>
   }
 
   /**
    * @return Plugin manager
    */
   public PluginManager getPluginManager() {
-<span class="fc" id="L302">    return this.pluginManager;</span>
+<span class="fc" id="L303">    return this.pluginManager;</span>
   }
 
   /**
@@ -307,15 +308,15 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions pluginManager(PluginManager value) {
-<span class="fc" id="L310">    this.pluginManager = value;</span>
-<span class="fc" id="L311">    return this;</span>
+<span class="fc" id="L311">    this.pluginManager = value;</span>
+<span class="fc" id="L312">    return this;</span>
   }
 
   /**
    * @return Function to build a list of dependency versions for a given environment
    */
   public Function&lt;Environment, Collection&lt;String&gt;&gt; getDependencyVersionBuilder() {
-<span class="fc" id="L318">    return this.dependencyVersionBuilder;</span>
+<span class="fc" id="L319">    return this.dependencyVersionBuilder;</span>
   }
 
   /**
@@ -323,15 +324,15 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions dependencyVersionBuilder(Function&lt;Environment, Collection&lt;String&gt;&gt; value) {
-<span class="nc" id="L326">    this.dependencyVersionBuilder = value;</span>
-<span class="nc" id="L327">    return this;</span>
+<span class="nc" id="L327">    this.dependencyVersionBuilder = value;</span>
+<span class="nc" id="L328">    return this;</span>
   }
 
   /**
    * @return Version information from container, e.g. configured Maven plugin versions
    */
   public Map&lt;String, String&gt; getContainerVersionInfo() {
-<span class="fc" id="L334">    return this.containerVersionInfo;</span>
+<span class="fc" id="L335">    return this.containerVersionInfo;</span>
   }
 
   /**
@@ -339,15 +340,15 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions containerVersionInfo(Map&lt;String, String&gt; value) {
-<span class="nc" id="L342">    this.containerVersionInfo = value;</span>
-<span class="nc" id="L343">    return this;</span>
+<span class="nc" id="L343">    this.containerVersionInfo = value;</span>
+<span class="nc" id="L344">    return this;</span>
   }
 
   /**
    * @return Logger
    */
   public Logger getLogger() {
-<span class="fc" id="L350">    return this.logger;</span>
+<span class="fc" id="L351">    return this.logger;</span>
   }
 
   /**
@@ -355,8 +356,8 @@ import io.wcm.devops.conga.model.environment.Environment;
    * @return this
    */
   public GeneratorOptions logger(Logger value) {
-<span class="nc" id="L358">    this.logger = value;</span>
-<span class="nc" id="L359">    return this;</span>
+<span class="nc" id="L359">    this.logger = value;</span>
+<span class="nc" id="L360">    return this;</span>
   }
 
 }
