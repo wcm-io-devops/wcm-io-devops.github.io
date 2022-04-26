@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      }
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>    }
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">public</strong> Object getFromVault(Class objectClass, String yaml, String password) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">public</strong> Object getFromVault(Class&lt;?&gt; objectClass, String yaml, String password) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      byte[] clearYaml = VaultHandler.decrypt(yaml.getBytes(CHAR_ENCODING), password);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">return</strong> getFromYaml(objectClass, <strong class="jxr_keyword">new</strong> String(clearYaml, CHAR_ENCODING));
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>    }

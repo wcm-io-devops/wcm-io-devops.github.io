@@ -119,74 +119,75 @@ public class AnsibleVariable {
 <span class="nc" id="L119">        return str.replace(&quot;\\&quot;, &quot;\\\\&quot;);</span>
     }
 
+    @SuppressWarnings({ &quot;PMD.AvoidAccessibilityAlteration&quot;, &quot;java:S3011&quot; })
     public String objToString(Object value) {
-<span class="nc" id="L123">        final StringBuilder buf = new StringBuilder();</span>
+<span class="nc" id="L124">        final StringBuilder buf = new StringBuilder();</span>
 
-<span class="nc bnc" id="L125" title="All 2 branches missed.">        for (Field f : value.getClass().getDeclaredFields()) {</span>
-<span class="nc" id="L126">            f.setAccessible(true);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        for (Field f : value.getClass().getDeclaredFields()) {</span>
+<span class="nc" id="L127">            f.setAccessible(true);</span>
 
             try {
-<span class="nc" id="L129">                buf.append(&quot;'&quot; + f.getName() + &quot;': &quot;);</span>
-<span class="nc bnc" id="L130" title="All 4 branches missed.">                if (ClassUtils.isPrimitiveOrWrapper(value.getClass()) || value instanceof String) {</span>
-<span class="nc" id="L131">                    buf.append(&quot;'&quot; + value + &quot;'&quot;);</span>
+<span class="nc" id="L130">                buf.append('\'').append(f.getName()).append(&quot;': &quot;);</span>
+<span class="nc bnc" id="L131" title="All 4 branches missed.">                if (ClassUtils.isPrimitiveOrWrapper(value.getClass()) || value instanceof String) {</span>
+<span class="nc" id="L132">                    buf.append('\'').append(value).append('\'');</span>
                 } else {
-<span class="nc" id="L133">                    buf.append(valueToString(f.get(value)));</span>
+<span class="nc" id="L134">                    buf.append(valueToString(f.get(value)));</span>
                 }
-<span class="nc" id="L135">                buf.append(&quot;, &quot;);</span>
-<span class="nc" id="L136">            } catch (IllegalArgumentException | IllegalAccessException e) {</span>
+<span class="nc" id="L136">                buf.append(&quot;, &quot;);</span>
+<span class="nc" id="L137">            } catch (IllegalArgumentException | IllegalAccessException e) {</span>
                 // Silently ignore errors
-<span class="nc" id="L138">            }</span>
+<span class="nc" id="L139">            }</span>
         }
-<span class="nc" id="L140">        buf.replace(buf.length() - 2, buf.length(), &quot;&quot;);</span>
+<span class="nc" id="L141">        buf.replace(buf.length() - 2, buf.length(), &quot;&quot;);</span>
 
-<span class="nc" id="L142">        return buf.toString();</span>
+<span class="nc" id="L143">        return buf.toString();</span>
     }
 
     public String listToString(Collection&lt;?&gt; list) {
-<span class="nc" id="L146">        final StringBuilder buf = new StringBuilder();</span>
-<span class="nc" id="L147">        buf.append(&quot;'[&quot;);</span>
+<span class="nc" id="L147">        final StringBuilder buf = new StringBuilder();</span>
+<span class="nc" id="L148">        buf.append(&quot;'[&quot;);</span>
 
-<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (!list.isEmpty()) {</span>
-<span class="nc bnc" id="L150" title="All 2 branches missed.">            for (Object o : list) {</span>
-<span class="nc bnc" id="L151" title="All 4 branches missed.">                if (ClassUtils.isPrimitiveOrWrapper(o.getClass()) || o instanceof String) {</span>
-<span class="nc" id="L152">                    buf.append(&quot;'&quot; + o + &quot;'&quot;);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (!list.isEmpty()) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            for (Object o : list) {</span>
+<span class="nc bnc" id="L152" title="All 4 branches missed.">                if (ClassUtils.isPrimitiveOrWrapper(o.getClass()) || o instanceof String) {</span>
+<span class="nc" id="L153">                    buf.append('\'').append(o).append('\'');</span>
                 } else {
-<span class="nc" id="L154">                    buf.append(valueToString(o));</span>
+<span class="nc" id="L155">                    buf.append(valueToString(o));</span>
                 }
-<span class="nc" id="L156">                buf.append(&quot;, &quot;);</span>
-<span class="nc" id="L157">            }</span>
-<span class="nc" id="L158">            buf.replace(buf.length() - 2, buf.length(), &quot;&quot;);</span>
+<span class="nc" id="L157">                buf.append(&quot;, &quot;);</span>
+<span class="nc" id="L158">            }</span>
+<span class="nc" id="L159">            buf.replace(buf.length() - 2, buf.length(), &quot;&quot;);</span>
         }
 
-<span class="nc" id="L161">        buf.append(&quot;]'&quot;);</span>
+<span class="nc" id="L162">        buf.append(&quot;]'&quot;);</span>
 
-<span class="nc" id="L163">        return buf.toString();</span>
+<span class="nc" id="L164">        return buf.toString();</span>
     }
 
     public String mapToString(Map&lt;?, ?&gt; map) {
-<span class="nc" id="L167">        final StringBuilder buf = new StringBuilder();</span>
-<span class="nc" id="L168">        buf.append(&quot;{&quot;);</span>
+<span class="nc" id="L168">        final StringBuilder buf = new StringBuilder();</span>
+<span class="nc" id="L169">        buf.append(&quot;{&quot;);</span>
 
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (!map.isEmpty()) {</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">            for (Entry&lt;?, ?&gt; o : map.entrySet()) {</span>
-<span class="nc" id="L172">                final Object v = o.getValue();</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if (!map.isEmpty()) {</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">            for (Entry&lt;?, ?&gt; o : map.entrySet()) {</span>
+<span class="nc" id="L173">                final Object v = o.getValue();</span>
 
-<span class="nc bnc" id="L174" title="All 2 branches missed.">                if (v != null) {</span>
-<span class="nc" id="L175">                    buf.append(&quot;'&quot; + o.getKey() + &quot;': &quot;);</span>
-<span class="nc bnc" id="L176" title="All 4 branches missed.">                    if (ClassUtils.isPrimitiveOrWrapper(v.getClass()) || v instanceof String) {</span>
-<span class="nc" id="L177">                        buf.append(&quot;'&quot; + v + &quot;'&quot;);</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                if (v != null) {</span>
+<span class="nc" id="L176">                    buf.append('\'').append(o.getKey()).append('\'');</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">                    if (ClassUtils.isPrimitiveOrWrapper(v.getClass()) || v instanceof String) {</span>
+<span class="nc" id="L178">                        buf.append(&quot;'&quot; + v + &quot;'&quot;);</span>
                     } else {
-<span class="nc" id="L179">                        buf.append(valueToString(v));</span>
+<span class="nc" id="L180">                        buf.append(valueToString(v));</span>
                     }
-<span class="nc" id="L181">                    buf.append(&quot;, &quot;);</span>
+<span class="nc" id="L182">                    buf.append(&quot;, &quot;);</span>
                 }
-<span class="nc" id="L183">            }</span>
-<span class="nc" id="L184">            buf.replace(buf.length() - 2, buf.length(), &quot;&quot;);</span>
+<span class="nc" id="L184">            }</span>
+<span class="nc" id="L185">            buf.replace(buf.length() - 2, buf.length(), &quot;&quot;);</span>
         }
 
-<span class="nc" id="L187">        buf.append(&quot;}&quot;);</span>
+<span class="nc" id="L188">        buf.append(&quot;}&quot;);</span>
 
-<span class="nc" id="L189">        return buf.toString();</span>
+<span class="nc" id="L190">        return buf.toString();</span>
     }
 
 }

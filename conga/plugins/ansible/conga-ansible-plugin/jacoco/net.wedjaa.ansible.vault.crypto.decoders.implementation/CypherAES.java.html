@@ -24,7 +24,7 @@ import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
 
 <span class="nc" id="L25">public class CypherAES implements CypherInterface {</span>
 
-  public final static String CYPHER_ID = &quot;AES&quot;;
+  public static final String CYPHER_ID = &quot;AES&quot;;
 
   @Override
   public void decrypt(OutputStream decodedStream, byte[] data, String password) throws IOException {
