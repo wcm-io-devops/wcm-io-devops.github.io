@@ -123,8 +123,8 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder logger(Log value) {
-<span class="nc" id="L126">    this.log = value;</span>
-<span class="nc" id="L127">    return this;</span>
+<span class="fc" id="L126">    this.log = value;</span>
+<span class="fc" id="L127">    return this;</span>
   }
 
   /**
@@ -132,8 +132,8 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder version(String value) {
-<span class="nc" id="L135">    this.version = value;</span>
-<span class="nc" id="L136">    return this;</span>
+<span class="fc" id="L135">    this.version = value;</span>
+<span class="fc" id="L136">    return this;</span>
   }
 
   private Log getLog() {
@@ -182,7 +182,7 @@ public final class AllPackageBuilder {
 <span class="fc" id="L182">        .filter(AllPackageBuilder::hasPackageType)</span>
 <span class="fc" id="L183">        .collect(Collectors.toList());</span>
 
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">    if (!validContentPackages.isEmpty()) {</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">    if (!validContentPackages.isEmpty()) {</span>
 <span class="fc" id="L186">      fileSets.add(new ContentPackageFileSet(validContentPackages, environmentRunModes));</span>
     }
 <span class="fc" id="L188">  }</span>
@@ -195,8 +195,8 @@ public final class AllPackageBuilder {
    */
   public boolean build(Map&lt;String, String&gt; properties) throws IOException {
 
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">    if (fileSets.isEmpty()) {</span>
-<span class="nc" id="L199">      return false;</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">    if (fileSets.isEmpty()) {</span>
+<span class="fc" id="L199">      return false;</span>
     }
 
     // prepare content package metadata
@@ -204,8 +204,8 @@ public final class AllPackageBuilder {
 <span class="fc" id="L204">        .group(groupName)</span>
 <span class="fc" id="L205">        .name(packageName)</span>
 <span class="fc" id="L206">        .packageType(&quot;container&quot;);</span>
-<span class="pc bpc" id="L207" title="1 of 2 branches missed.">    if (version != null) {</span>
-<span class="nc" id="L208">      builder.version(version);</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">    if (version != null) {</span>
+<span class="fc" id="L208">      builder.version(version);</span>
     }
 
     // define root path for &quot;all&quot; package
@@ -311,11 +311,11 @@ public final class AllPackageBuilder {
    */
   private static String buildRunModeSuffix(ContentPackageFile pkg, String environmentRunMode) {
 <span class="fc" id="L313">    StringBuilder runModeSuffix = new StringBuilder();</span>
-<span class="pc bpc" id="L314" title="1 of 2 branches missed.">    if (RunModeUtil.isOnlyAuthor(pkg)) {</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">    if (RunModeUtil.isOnlyAuthor(pkg)) {</span>
 <span class="fc" id="L315">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_AUTHOR);</span>
     }
-<span class="nc bnc" id="L317" title="All 2 branches missed.">    else if (RunModeUtil.isOnlyPublish(pkg)) {</span>
-<span class="nc" id="L318">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_PUBLISH);</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">    else if (RunModeUtil.isOnlyPublish(pkg)) {</span>
+<span class="fc" id="L318">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_PUBLISH);</span>
     }
 <span class="fc bfc" id="L320" title="All 2 branches covered.">    if (!StringUtils.equals(environmentRunMode, RUNMODE_DEFAULT)) {</span>
 <span class="fc" id="L321">      runModeSuffix.append(&quot;.&quot;).append(environmentRunMode);</span>
@@ -534,7 +534,7 @@ public final class AllPackageBuilder {
   }
 
   public File getTargetFile() {
-<span class="nc" id="L537">    return this.targetFile;</span>
+<span class="fc" id="L537">    return this.targetFile;</span>
   }
 
 }

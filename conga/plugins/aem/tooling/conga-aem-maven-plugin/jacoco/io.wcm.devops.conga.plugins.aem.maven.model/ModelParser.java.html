@@ -104,12 +104,12 @@ public final class ModelParser {
 <span class="pc bpc" id="L104" title="1 of 2 branches missed.">      if (config != null) {</span>
 <span class="fc" id="L105">        Object targetValue = MapExpander.getDeep(config, &quot;cloudManager.target&quot;);</span>
 <span class="fc bfc" id="L106" title="All 2 branches covered.">        if (targetValue != null) {</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">          if (targetValue instanceof String) {</span>
-<span class="nc" id="L108">            String target = (String)targetValue;</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">            if (StringUtils.isNotBlank(target)) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">          if (targetValue instanceof String) {</span>
+<span class="fc" id="L108">            String target = (String)targetValue;</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (StringUtils.isNotBlank(target)) {</span>
 <span class="nc" id="L110">              targets.add(target);</span>
             }
-<span class="nc" id="L112">          }</span>
+<span class="fc" id="L112">          }</span>
 <span class="pc bpc" id="L113" title="1 of 2 branches missed.">          else if (targetValue instanceof List) {</span>
 <span class="fc" id="L114">            targets.addAll(((List&lt;String&gt;)targetValue).stream()</span>
 <span class="fc" id="L115">                .filter(StringUtils::isNotBlank)</span>

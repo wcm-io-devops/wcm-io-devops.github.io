@@ -54,7 +54,7 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
  * &lt;/ul&gt;
  */
 @Mojo(name = &quot;cloudmanager-all-package&quot;, threadSafe = true)
-<span class="nc" id="L57">public final class CloudManagerAllPackageMojo extends AbstractCloudManagerMojo {</span>
+<span class="fc" id="L57">public final class CloudManagerAllPackageMojo extends AbstractCloudManagerMojo {</span>
 
   /**
    * Package name for the &quot;all&quot; content package.
@@ -135,17 +135,17 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-<span class="nc bnc" id="L138" title="All 2 branches missed.">    if (skip) {</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">    if (skip) {</span>
 <span class="nc" id="L139">      return;</span>
     }
 
-<span class="nc bnc" id="L142" title="All 2 branches missed.">    if (this.autoDependenciesMode == null) {</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">      if (this.autoDependencies) {</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (this.autoDependenciesSeparateMutable) {</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">    if (this.autoDependenciesMode == null) {</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">      if (this.autoDependencies) {</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (this.autoDependenciesSeparateMutable) {</span>
 <span class="nc" id="L145">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_SEPARATE;</span>
         }
         else {
-<span class="nc" id="L148">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED;</span>
+<span class="fc" id="L148">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED;</span>
         }
       }
       else {
@@ -153,32 +153,32 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
       }
     }
 
-<span class="nc bnc" id="L156" title="All 2 branches missed.">    if (singlePackage) {</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">    if (singlePackage) {</span>
 <span class="nc" id="L157">      buildSingleAllPackage();</span>
     }
     else {
-<span class="nc" id="L160">      buildAllPackagesPerEnvironmentNode();</span>
+<span class="fc" id="L160">      buildAllPackagesPerEnvironmentNode();</span>
     }
-<span class="nc" id="L162">  }</span>
+<span class="fc" id="L162">  }</span>
 
   /**
    * Build an &quot;all&quot; package for each environment and node.
    */
   private void buildAllPackagesPerEnvironmentNode() throws MojoExecutionException, MojoFailureException {
-<span class="nc" id="L168">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
-<span class="nc" id="L169">      String packageName = environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.&quot; + this.name;</span>
-<span class="nc" id="L170">      AllPackageBuilder builder = createBuilder(packageName);</span>
+<span class="fc" id="L168">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+<span class="fc" id="L169">      String packageName = environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.&quot; + this.name;</span>
+<span class="fc" id="L170">      AllPackageBuilder builder = createBuilder(packageName);</span>
 
       try {
-<span class="nc" id="L173">        builder.add(contentPackages, cloudManagerTarget);</span>
+<span class="fc" id="L173">        builder.add(contentPackages, cloudManagerTarget);</span>
       }
 <span class="nc" id="L175">      catch (IllegalArgumentException ex) {</span>
 <span class="nc" id="L176">        throw new MojoFailureException(ex.getMessage(), ex);</span>
-<span class="nc" id="L177">      }</span>
+<span class="fc" id="L177">      }</span>
 
-<span class="nc" id="L179">      buildAllPackage(builder);</span>
-<span class="nc" id="L180">    });</span>
-<span class="nc" id="L181">  }</span>
+<span class="fc" id="L179">      buildAllPackage(builder);</span>
+<span class="fc" id="L180">    });</span>
+<span class="fc" id="L181">  }</span>
 
   /**
    * Build a single &quot;all&quot; package containing packages from all environments and nodes.
@@ -201,51 +201,51 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
   private AllPackageBuilder createBuilder(String packageName) {
     String fileName;
-<span class="nc bnc" id="L204" title="All 2 branches missed.">    if (attachArtifact) {</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (attachArtifact) {</span>
 <span class="nc" id="L205">      fileName = project.getArtifactId() + &quot;.&quot; + packageName + &quot;-&quot; + project.getVersion() + &quot;.zip&quot;;</span>
     }
     else {
-<span class="nc" id="L208">      fileName = packageName + &quot;.zip&quot;;</span>
+<span class="fc" id="L208">      fileName = packageName + &quot;.zip&quot;;</span>
     }
-<span class="nc" id="L210">    File targetFile = new File(getTargetDir(), fileName);</span>
-<span class="nc" id="L211">    return new AllPackageBuilder(targetFile, this.group, packageName)</span>
-<span class="nc" id="L212">        .version(project.getVersion())</span>
-<span class="nc" id="L213">        .autoDependenciesMode(this.autoDependenciesMode)</span>
-<span class="nc" id="L214">        .logger(getLog());</span>
+<span class="fc" id="L210">    File targetFile = new File(getTargetDir(), fileName);</span>
+<span class="fc" id="L211">    return new AllPackageBuilder(targetFile, this.group, packageName)</span>
+<span class="fc" id="L212">        .version(project.getVersion())</span>
+<span class="fc" id="L213">        .autoDependenciesMode(this.autoDependenciesMode)</span>
+<span class="fc" id="L214">        .logger(getLog());</span>
   }
 
   private void buildAllPackage(AllPackageBuilder builder) throws MojoExecutionException {
     try {
-<span class="nc" id="L219">      getLog().debug(&quot;Start generating &quot; + getCanonicalPath(builder.getTargetFile()) + &quot;...&quot;);</span>
-<span class="nc bnc" id="L220" title="All 2 branches missed.">      if (builder.build(properties)) {</span>
-<span class="nc" id="L221">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (attachArtifact) {</span>
+<span class="fc" id="L219">      getLog().debug(&quot;Start generating &quot; + getCanonicalPath(builder.getTargetFile()) + &quot;...&quot;);</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">      if (builder.build(properties)) {</span>
+<span class="fc" id="L221">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        if (attachArtifact) {</span>
 <span class="nc" id="L223">          projectHelper.attachArtifact(this.project, &quot;zip&quot;, builder.getPackageName(), builder.getTargetFile());</span>
         }
       }
       else {
-<span class="nc" id="L227">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
+<span class="fc" id="L227">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
       }
     }
 <span class="nc" id="L230">    catch (IOException ex) {</span>
 <span class="nc" id="L231">      throw new MojoExecutionException(&quot;Unable to generate &quot; + getCanonicalPath(builder.getTargetFile()), ex);</span>
-<span class="nc" id="L232">    }</span>
-<span class="nc" id="L233">  }</span>
+<span class="fc" id="L232">    }</span>
+<span class="fc" id="L233">  }</span>
 
   private void visitEnvironmentsNodes(EnvironmentNodeVisitor visitor) throws MojoExecutionException, MojoFailureException {
-<span class="nc" id="L236">    ModelParser modelParser = new ModelParser();</span>
-<span class="nc" id="L237">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
-<span class="nc bnc" id="L238" title="All 2 branches missed.">    for (File environmentDir : environmentDirs) {</span>
-<span class="nc" id="L239">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
-<span class="nc bnc" id="L240" title="All 2 branches missed.">      for (File nodeDir : nodeDirs) {</span>
-<span class="nc" id="L241">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
-<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
-<span class="nc" id="L243">          List&lt;? extends ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
-<span class="nc" id="L244">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
+<span class="fc" id="L236">    ModelParser modelParser = new ModelParser();</span>
+<span class="fc" id="L237">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
+<span class="fc" id="L239">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
+<span class="fc" id="L241">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
+<span class="fc" id="L243">          List&lt;? extends ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
+<span class="fc" id="L244">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
         }
-<span class="nc" id="L246">      }</span>
-<span class="nc" id="L247">    }</span>
-<span class="nc" id="L248">  }</span>
+<span class="fc" id="L246">      }</span>
+<span class="fc" id="L247">    }</span>
+<span class="fc" id="L248">  }</span>
 
   interface EnvironmentNodeVisitor {
     void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,

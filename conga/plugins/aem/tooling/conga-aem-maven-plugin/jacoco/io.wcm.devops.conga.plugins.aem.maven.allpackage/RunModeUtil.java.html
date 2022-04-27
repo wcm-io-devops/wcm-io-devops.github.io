@@ -41,7 +41,7 @@ final class RunModeUtil {
    */
   public static boolean isOnlyAuthor(ContentPackageFile pkg) {
 <span class="fc" id="L43">    Set&lt;String&gt; runModes = mapVariantsToRunModes(pkg.getVariants());</span>
-<span class="pc bpc" id="L44" title="2 of 4 branches missed.">    return runModes.contains(RUNMODE_AUTHOR) &amp;&amp; !runModes.contains(RUNMODE_PUBLISH);</span>
+<span class="pc bpc" id="L44" title="1 of 4 branches missed.">    return runModes.contains(RUNMODE_AUTHOR) &amp;&amp; !runModes.contains(RUNMODE_PUBLISH);</span>
   }
 
   /**
@@ -50,8 +50,8 @@ final class RunModeUtil {
    * @return true if only publish run modes
    */
   public static boolean isOnlyPublish(ContentPackageFile pkg) {
-<span class="nc" id="L53">    Set&lt;String&gt; runModes = mapVariantsToRunModes(pkg.getVariants());</span>
-<span class="nc bnc" id="L54" title="All 4 branches missed.">    return runModes.contains(RUNMODE_PUBLISH) &amp;&amp; !runModes.contains(RUNMODE_AUTHOR);</span>
+<span class="fc" id="L53">    Set&lt;String&gt; runModes = mapVariantsToRunModes(pkg.getVariants());</span>
+<span class="pc bpc" id="L54" title="2 of 4 branches missed.">    return runModes.contains(RUNMODE_PUBLISH) &amp;&amp; !runModes.contains(RUNMODE_AUTHOR);</span>
   }
 
   private static Set&lt;String&gt; mapVariantsToRunModes(List&lt;String&gt; variants) {
@@ -68,11 +68,11 @@ final class RunModeUtil {
    */
   private static String mapVariantToRunMode(String variant) {
     //
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">    if (&quot;aem-author&quot;.equals(variant)) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">    if (&quot;aem-author&quot;.equals(variant)) {</span>
 <span class="fc" id="L72">      return RUNMODE_AUTHOR;</span>
     }
-<span class="nc bnc" id="L74" title="All 2 branches missed.">    else if (&quot;aem-publish&quot;.equals(variant)) {</span>
-<span class="nc" id="L75">      return RUNMODE_PUBLISH;</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    else if (&quot;aem-publish&quot;.equals(variant)) {</span>
+<span class="fc" id="L75">      return RUNMODE_PUBLISH;</span>
     }
 <span class="nc" id="L77">    return variant;</span>
   }
