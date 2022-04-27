@@ -62,8 +62,8 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
     // escape variables ${...} with \${...} - otherwise lead to &quot;Unknown variable&quot; error when validating sling provisioning file
 <span class="fc" id="L63">    StringBuffer result = new StringBuffer();</span>
 <span class="fc" id="L64">    Matcher matcher = VARIABLE_PATTERN.matcher(escapedValue);</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">    while (matcher.find()) {</span>
-<span class="nc" id="L66">      matcher.appendReplacement(result, &quot;\\\\\\$\\{&quot; + matcher.group(1) + &quot;\\}&quot;);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L66">      matcher.appendReplacement(result, &quot;\\\\\\$\\{&quot; + matcher.group(1) + &quot;\\}&quot;);</span>
     }
 <span class="fc" id="L68">    matcher.appendTail(result);</span>
 

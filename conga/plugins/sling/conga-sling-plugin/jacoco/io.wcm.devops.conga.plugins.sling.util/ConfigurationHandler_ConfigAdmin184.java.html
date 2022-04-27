@@ -608,8 +608,8 @@ class ConfigurationHandler_ConfigAdmin184 {
 
   private static void writeValue(Writer out, Object value) throws IOException {
 <span class="fc" id="L610">    Class clazz = value.getClass();</span>
-<span class="pc bpc" id="L611" title="1 of 2 branches missed.">    if (clazz.isArray()) {</span>
-<span class="nc" id="L612">      writeArray(out, value);</span>
+<span class="fc bfc" id="L611" title="All 2 branches covered.">    if (clazz.isArray()) {</span>
+<span class="fc" id="L612">      writeArray(out, value);</span>
     }
 <span class="pc bpc" id="L614" title="1 of 2 branches missed.">    else if (value instanceof Collection) {</span>
 <span class="nc" id="L615">      writeCollection(out, (Collection)value);</span>
@@ -622,17 +622,17 @@ class ConfigurationHandler_ConfigAdmin184 {
 
 
   private static void writeArray(Writer out, Object arrayValue) throws IOException {
-<span class="nc" id="L625">    int size = Array.getLength(arrayValue);</span>
-<span class="nc" id="L626">    writeType(out, arrayValue.getClass().getComponentType());</span>
-<span class="nc" id="L627">    out.write(TOKEN_ARR_OPEN);</span>
-<span class="nc bnc" id="L628" title="All 2 branches missed.">    for (int i = 0; i &lt; size; i++) {</span>
-<span class="nc bnc" id="L629" title="All 2 branches missed.">      if (i &gt; 0) {</span>
-<span class="nc" id="L630">        out.write(TOKEN_COMMA);</span>
+<span class="fc" id="L625">    int size = Array.getLength(arrayValue);</span>
+<span class="fc" id="L626">    writeType(out, arrayValue.getClass().getComponentType());</span>
+<span class="fc" id="L627">    out.write(TOKEN_ARR_OPEN);</span>
+<span class="fc bfc" id="L628" title="All 2 branches covered.">    for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc bfc" id="L629" title="All 2 branches covered.">      if (i &gt; 0) {</span>
+<span class="fc" id="L630">        out.write(TOKEN_COMMA);</span>
       }
-<span class="nc" id="L632">      writeSimple(out, Array.get(arrayValue, i));</span>
+<span class="fc" id="L632">      writeSimple(out, Array.get(arrayValue, i));</span>
     }
-<span class="nc" id="L634">    out.write(TOKEN_ARR_CLOS);</span>
-<span class="nc" id="L635">  }</span>
+<span class="fc" id="L634">    out.write(TOKEN_ARR_CLOS);</span>
+<span class="fc" id="L635">  }</span>
 
 
   private static void writeCollection(Writer out, Collection collection) throws IOException {
@@ -659,8 +659,8 @@ class ConfigurationHandler_ConfigAdmin184 {
 
   private static void writeType(Writer out, Class valueType) throws IOException {
 <span class="fc" id="L661">    Integer code = (Integer)type2Code.get(valueType);</span>
-<span class="pc bpc" id="L662" title="1 of 2 branches missed.">    if (code != null) {</span>
-<span class="nc" id="L663">      out.write((char)code.intValue());</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">    if (code != null) {</span>
+<span class="fc" id="L663">      out.write((char)code.intValue());</span>
     }
 <span class="fc" id="L665">  }</span>
 
@@ -690,7 +690,7 @@ class ConfigurationHandler_ConfigAdmin184 {
 <span class="fc" id="L690">    int len = simple.length();</span>
 <span class="fc bfc" id="L691" title="All 2 branches covered.">    for (int i = 0; i &lt; len; i++) {</span>
 <span class="fc" id="L692">      c = simple.charAt(i);</span>
-<span class="pc bpc" id="L693" title="5 of 7 branches missed.">      switch (c) {</span>
+<span class="pc bpc" id="L693" title="4 of 7 branches missed.">      switch (c) {</span>
         case '\\':
         case TOKEN_VAL_CLOS:
         case ' ':
@@ -707,8 +707,8 @@ class ConfigurationHandler_ConfigAdmin184 {
 <span class="nc" id="L707">          out.write(&quot;\\t&quot;);</span>
 <span class="nc" id="L708">          break;</span>
         case '\n':
-<span class="nc" id="L710">          out.write(&quot;\\n&quot;);</span>
-<span class="nc" id="L711">          break;</span>
+<span class="fc" id="L710">          out.write(&quot;\\n&quot;);</span>
+<span class="fc" id="L711">          break;</span>
         case '\f':
 <span class="nc" id="L713">          out.write(&quot;\\f&quot;);</span>
 <span class="nc" id="L714">          break;</span>

@@ -91,12 +91,12 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   @Override
   public FileHeaderContext extract(FileContext file) {
     try {
-<span class="nc" id="L94">      String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
-<span class="nc" id="L95">      String[] contentLines = StringUtils.split(content, &quot;\n&quot;);</span>
-<span class="nc bnc" id="L96" title="All 4 branches missed.">      if (contentLines.length &gt; 0 &amp;&amp; StringUtils.startsWith(contentLines[0], getCommentLinePrefix())) {</span>
-<span class="nc" id="L97">        String fullComment = StringUtils.trim(StringUtils.substringAfter(contentLines[0], getCommentBlockStart()));</span>
-<span class="nc" id="L98">        List&lt;String&gt; lines = ImmutableList.of(fullComment);</span>
-<span class="nc" id="L99">        return new FileHeaderContext().commentLines(lines);</span>
+<span class="fc" id="L94">      String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
+<span class="fc" id="L95">      String[] contentLines = StringUtils.split(content, &quot;\n&quot;);</span>
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">      if (contentLines.length &gt; 0 &amp;&amp; StringUtils.startsWith(contentLines[0], getCommentLinePrefix())) {</span>
+<span class="fc" id="L97">        String fullComment = StringUtils.trim(StringUtils.substringAfter(contentLines[0], getCommentBlockStart()));</span>
+<span class="fc" id="L98">        List&lt;String&gt; lines = ImmutableList.of(fullComment);</span>
+<span class="fc" id="L99">        return new FileHeaderContext().commentLines(lines);</span>
       }
     }
 <span class="nc" id="L102">    catch (IOException ex) {</span>

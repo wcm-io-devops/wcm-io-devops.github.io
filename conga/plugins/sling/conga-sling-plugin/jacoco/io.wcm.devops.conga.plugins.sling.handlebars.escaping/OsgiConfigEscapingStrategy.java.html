@@ -70,10 +70,10 @@ import io.wcm.devops.conga.generator.util.FileUtil;
             @Override
             public int translate(CharSequence input, int index, Writer out) throws IOException {
 <span class="fc" id="L72">              char c = input.charAt(index);</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">              if (c &lt; ' ') {</span>
-<span class="nc" id="L74">                String t = &quot;000&quot; + Integer.toHexString(c);</span>
-<span class="nc" id="L75">                out.write(&quot;\\u&quot; + t.substring(t.length() - 4));</span>
-<span class="nc" id="L76">                return 1;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">              if (c &lt; ' ') {</span>
+<span class="fc" id="L74">                String t = &quot;000&quot; + Integer.toHexString(c);</span>
+<span class="fc" id="L75">                out.write(&quot;\\u&quot; + t.substring(t.length() - 4));</span>
+<span class="fc" id="L76">                return 1;</span>
               }
 <span class="fc" id="L78">              return 0;</span>
             }
@@ -92,7 +92,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 
   @Override
   public String escape(CharSequence value, EscapingStrategyContext pluginContext) {
-<span class="nc bnc" id="L95" title="All 2 branches missed.">    return value == null ? null : ESCAPE_OSGI_CONFIG.translate(value);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    return value == null ? null : ESCAPE_OSGI_CONFIG.translate(value);</span>
   }
 
 }
