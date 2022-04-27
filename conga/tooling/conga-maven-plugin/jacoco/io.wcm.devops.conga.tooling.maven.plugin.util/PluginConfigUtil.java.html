@@ -44,19 +44,19 @@ public final class PluginConfigUtil {
    * @return Nested configuration map
    */
   public static Map&lt;String, Map&lt;String, Object&gt;&gt; getConfigMap(String pluginConfig) {
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">    if (StringUtils.isEmpty(pluginConfig)) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    if (StringUtils.isEmpty(pluginConfig)) {</span>
 <span class="fc" id="L48">      return Collections.emptyMap();</span>
     }
-<span class="nc" id="L50">    Map&lt;String, Map&lt;String, Object&gt;&gt; valueProviderConfig = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L51">    ManifestHeader header = ManifestHeader.parse(pluginConfig);</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">    for (ManifestHeader.Entry entry : header.getEntries()) {</span>
-<span class="nc" id="L53">      Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">      for (NameValuePair nameValue : entry.getAttributes()) {</span>
-<span class="nc" id="L55">        config.put(nameValue.getName(), ValueUtil.stringToValue(nameValue.getValue()));</span>
+<span class="fc" id="L50">    Map&lt;String, Map&lt;String, Object&gt;&gt; valueProviderConfig = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L51">    ManifestHeader header = ManifestHeader.parse(pluginConfig);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">    for (ManifestHeader.Entry entry : header.getEntries()) {</span>
+<span class="fc" id="L53">      Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">      for (NameValuePair nameValue : entry.getAttributes()) {</span>
+<span class="fc" id="L55">        config.put(nameValue.getName(), ValueUtil.stringToValue(nameValue.getValue()));</span>
       }
-<span class="nc" id="L57">      valueProviderConfig.put(entry.getValue(), Collections.unmodifiableMap(config));</span>
+<span class="fc" id="L57">      valueProviderConfig.put(entry.getValue(), Collections.unmodifiableMap(config));</span>
     }
-<span class="nc" id="L59">    return Collections.unmodifiableMap(valueProviderConfig);</span>
+<span class="fc" id="L59">    return Collections.unmodifiableMap(valueProviderConfig);</span>
   }
 
 }

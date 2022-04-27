@@ -351,11 +351,11 @@ class MavenSlf4jLogFacade implements Logger {
 <span class="fc" id="L351">    Matcher matcher = ARGUMENT_PATTERN.matcher(format);</span>
 <span class="fc bfc" id="L352" title="All 2 branches covered.">    while (matcher.find()) {</span>
       String value;
-<span class="pc bpc" id="L354" title="2 of 4 branches missed.">      if (arguments.length &gt; index &amp;&amp; arguments[index] != null) {</span>
+<span class="pc bpc" id="L354" title="1 of 4 branches missed.">      if (arguments.length &gt; index &amp;&amp; arguments[index] != null) {</span>
 <span class="fc" id="L355">        value = arguments[index].toString();</span>
       }
       else {
-<span class="nc" id="L358">        value = &quot;{}&quot;;</span>
+<span class="fc" id="L358">        value = &quot;{}&quot;;</span>
       }
 <span class="fc" id="L360">      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));</span>
 <span class="fc" id="L361">      index++;</span>

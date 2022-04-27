@@ -71,10 +71,10 @@ public final class VersionInfoUtil {
   public static String cleanupSnapshotVersion(String versionLine) {
 <span class="fc" id="L72">    Matcher matcher = SNAPSHOT_VERSION_PATTERN.matcher(versionLine);</span>
 <span class="fc" id="L73">    StringBuffer sb = new StringBuffer();</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    while (matcher.find()) {</span>
-<span class="nc" id="L75">      String version = matcher.group(1) + &quot;-SNAPSHOT&quot;;</span>
-<span class="nc" id="L76">      matcher.appendReplacement(sb, version);</span>
-<span class="nc" id="L77">    }</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L75">      String version = matcher.group(1) + &quot;-SNAPSHOT&quot;;</span>
+<span class="fc" id="L76">      matcher.appendReplacement(sb, version);</span>
+<span class="fc" id="L77">    }</span>
 <span class="fc" id="L78">    matcher.appendTail(sb);</span>
 <span class="fc" id="L79">    return sb.toString();</span>
   }
