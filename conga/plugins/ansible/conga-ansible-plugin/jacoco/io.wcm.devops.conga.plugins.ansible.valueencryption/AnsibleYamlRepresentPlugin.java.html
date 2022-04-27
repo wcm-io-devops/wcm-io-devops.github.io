@@ -25,7 +25,7 @@ import io.wcm.devops.conga.generator.spi.yaml.context.YamlRepresentContext;
 /**
  * Register YAML represent for rendering a !vault encrypted value.
  */
-<span class="nc" id="L28">public class AnsibleYamlRepresentPlugin implements YamlRepresentPlugin {</span>
+<span class="fc" id="L28">public class AnsibleYamlRepresentPlugin implements YamlRepresentPlugin {</span>
 
   /**
    * Plugin name
@@ -34,13 +34,13 @@ import io.wcm.devops.conga.generator.spi.yaml.context.YamlRepresentContext;
 
   @Override
   public String getName() {
-<span class="nc" id="L37">    return NAME;</span>
+<span class="fc" id="L37">    return NAME;</span>
   }
 
   @Override
   public void register(YamlRepresentContext context) {
-<span class="nc" id="L42">    context.getYamlRepresenter().registerRepresent(YamlVaultValue.class, new YamlVaultValueRepresent());</span>
-<span class="nc" id="L43">  }</span>
+<span class="fc" id="L42">    context.getYamlRepresenter().registerRepresent(YamlVaultValue.class, new YamlVaultValueRepresent());</span>
+<span class="fc" id="L43">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
