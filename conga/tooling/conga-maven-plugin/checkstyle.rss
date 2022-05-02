@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.valueprovider.MavenPropertyValueProviderPlugin.java">io/wcm/devops/conga/tooling/maven/plugin/valueprovider/MavenPropertyValueProviderPlugin.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.GenerateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.GenerateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.valueprovider.MavenPropertyValueProviderPlugin.java">io/wcm/devops/conga/tooling/maven/plugin/valueprovider/MavenPropertyValueProviderPlugin.java</a>
                 </td>
                 <td>
                   0
@@ -340,7 +340,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.ValidateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil.java">io/wcm/devops/conga/tooling/maven/plugin/util/VersionInfoUtil.java</a>
                 </td>
                 <td>
                   0
@@ -354,7 +354,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil.java">io/wcm/devops/conga/tooling/maven/plugin/util/VersionInfoUtil.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.ValidateMojo.java">io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.java</a>
                 </td>
                 <td>
                   0

@@ -188,10 +188,10 @@ public class MavenArtifactHelper {
 <span class="fc" id="L188">    String packaging = null;</span>
 <span class="fc" id="L189">    String classifier = null;</span>
 
-<span class="pc bpc" id="L191" title="4 of 5 branches missed.">    switch (parts.length) {</span>
+<span class="pc bpc" id="L191" title="3 of 5 branches missed.">    switch (parts.length) {</span>
       case 2:
         // groupId/artifactId
-<span class="nc" id="L194">        break;</span>
+<span class="fc" id="L194">        break;</span>
 
       case 3:
         // groupId/artifactId/version
@@ -223,27 +223,26 @@ public class MavenArtifactHelper {
 
   private Artifact createArtifact(String groupId, String artifactId, String type, String classifier, String version) throws IOException {
 
-<span class="fc" id="L226">    String artifactVersion = version;</span>
-<span class="fc bfc" id="L227" title="All 2 branches covered.">    if (artifactVersion == null) {</span>
-<span class="fc" id="L228">      artifactVersion = resolveArtifactVersion(groupId, artifactId, type, classifier);</span>
-    }
-<span class="fc" id="L230">    String artifactExtension = type;</span>
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">    if (artifactExtension == null) {</span>
-<span class="nc" id="L232">      artifactExtension = &quot;jar&quot;;</span>
-    }
+<span class="fc" id="L226">    String artifactTypeString = StringUtils.defaultString(type, &quot;jar&quot;);</span>
+<span class="fc" id="L227">    String artifactExtension = artifactTypeString;</span>
 
-<span class="fc" id="L235">    ArtifactType artifactType = repoSession.getArtifactTypeRegistry().get(artifactExtension);</span>
-<span class="pc bpc" id="L236" title="1 of 2 branches missed.">    if (artifactType != null) {</span>
-<span class="fc" id="L237">      artifactExtension = artifactType.getExtension();</span>
+<span class="fc" id="L229">    ArtifactType artifactType = repoSession.getArtifactTypeRegistry().get(artifactExtension);</span>
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">    if (artifactType != null) {</span>
+<span class="fc" id="L231">      artifactExtension = artifactType.getExtension();</span>
     }
 
     // apply custom mapping from artifact type to extension if defined in plugin config
-<span class="pc bpc" id="L241" title="2 of 4 branches missed.">    if (artifactTypeMappings != null &amp;&amp; artifactTypeMappings.containsKey(artifactExtension)) {</span>
-<span class="nc" id="L242">      artifactExtension = artifactTypeMappings.get(artifactExtension);</span>
+<span class="pc bpc" id="L235" title="2 of 4 branches missed.">    if (artifactTypeMappings != null &amp;&amp; artifactTypeMappings.containsKey(artifactExtension)) {</span>
+<span class="nc" id="L236">      artifactExtension = artifactTypeMappings.get(artifactExtension);</span>
     }
 
-<span class="pc bpc" id="L245" title="3 of 6 branches missed.">    if (StringUtils.isBlank(groupId) || StringUtils.isBlank(artifactId) || StringUtils.isBlank(artifactVersion)) {</span>
-<span class="nc" id="L246">      throw new IOException(&quot;Invalid Maven artifact reference: &quot;</span>
+<span class="fc" id="L239">    String artifactVersion = version;</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">    if (artifactVersion == null) {</span>
+<span class="fc" id="L241">      artifactVersion = resolveArtifactVersion(groupId, artifactId, artifactTypeString, classifier);</span>
+    }
+
+<span class="pc bpc" id="L244" title="3 of 6 branches missed.">    if (StringUtils.isBlank(groupId) || StringUtils.isBlank(artifactId) || StringUtils.isBlank(artifactVersion)) {</span>
+<span class="nc" id="L245">      throw new IOException(&quot;Invalid Maven artifact reference: &quot;</span>
           + &quot;artifactId=&quot; + artifactId + &quot;, &quot;
           + &quot;groupId=&quot; + groupId + &quot;, &quot;
           + &quot;version=&quot; + artifactVersion + &quot;, &quot;
@@ -252,66 +251,66 @@ public class MavenArtifactHelper {
           + &quot;type=&quot; + artifactType);
     }
 
-<span class="fc" id="L255">    return new DefaultArtifact(groupId, artifactId, classifier, artifactExtension, artifactVersion, artifactType);</span>
+<span class="fc" id="L254">    return new DefaultArtifact(groupId, artifactId, classifier, artifactExtension, artifactVersion, artifactType);</span>
   }
 
   private Artifact resolveArtifact(Artifact artifact) throws IOException {
-<span class="fc" id="L259">    ArtifactRequest artifactRequest = new ArtifactRequest();</span>
-<span class="fc" id="L260">    artifactRequest.setArtifact(artifact);</span>
-<span class="fc" id="L261">    artifactRequest.setRepositories(remoteRepos);</span>
+<span class="fc" id="L258">    ArtifactRequest artifactRequest = new ArtifactRequest();</span>
+<span class="fc" id="L259">    artifactRequest.setArtifact(artifact);</span>
+<span class="fc" id="L260">    artifactRequest.setRepositories(remoteRepos);</span>
     try {
-<span class="fc" id="L263">      ArtifactResult result = repoSystem.resolveArtifact(repoSession, artifactRequest);</span>
-<span class="fc" id="L264">      return result.getArtifact();</span>
+<span class="fc" id="L262">      ArtifactResult result = repoSystem.resolveArtifact(repoSession, artifactRequest);</span>
+<span class="fc" id="L263">      return result.getArtifact();</span>
     }
-<span class="nc" id="L266">    catch (final ArtifactResolutionException ex) {</span>
-<span class="nc" id="L267">      throw new IOException(&quot;Unable to get artifact for '&quot; + artifact + &quot;': &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L265">    catch (final ArtifactResolutionException ex) {</span>
+<span class="nc" id="L266">      throw new IOException(&quot;Unable to get artifact for '&quot; + artifact + &quot;': &quot; + ex.getMessage(), ex);</span>
     }
   }
 
   private String resolveArtifactVersion(String groupId, String artifactId, String type, String classifier) throws IOException {
-<span class="fc" id="L272">    String version = findVersionInMavenProject(groupId, artifactId, type, classifier);</span>
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">    if (version == null) {</span>
-<span class="nc" id="L274">      version = findVersionInEnvironmentDependencies(groupId, artifactId, type, classifier);</span>
+<span class="fc" id="L271">    String version = findVersionInMavenProject(groupId, artifactId, type, classifier);</span>
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">    if (version == null) {</span>
+<span class="nc" id="L273">      version = findVersionInEnvironmentDependencies(groupId, artifactId, type, classifier);</span>
     }
-<span class="fc" id="L276">    return version;</span>
+<span class="fc" id="L275">    return version;</span>
   }
 
   private String findVersionInMavenProject(String groupId, String artifactId, String type, String classifier) {
-<span class="fc" id="L280">    Set&lt;org.apache.maven.artifact.Artifact&gt; dependencies = project.getArtifacts();</span>
-<span class="pc bpc" id="L281" title="1 of 2 branches missed.">    if (dependencies != null) {</span>
-<span class="pc bpc" id="L282" title="1 of 2 branches missed.">      for (org.apache.maven.artifact.Artifact dependency : dependencies) {</span>
-<span class="fc bfc" id="L283" title="All 2 branches covered.">        if (artifactEquals(dependency, artifactId, groupId, type, classifier)) {</span>
-<span class="fc" id="L284">          return dependency.getVersion();</span>
+<span class="fc" id="L279">    Set&lt;org.apache.maven.artifact.Artifact&gt; dependencies = project.getArtifacts();</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">    if (dependencies != null) {</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">      for (org.apache.maven.artifact.Artifact dependency : dependencies) {</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (artifactEquals(dependency, artifactId, groupId, type, classifier)) {</span>
+<span class="fc" id="L283">          return dependency.getVersion();</span>
         }
-<span class="fc" id="L286">      }</span>
+<span class="fc" id="L285">      }</span>
     }
-<span class="nc" id="L288">    return null;</span>
+<span class="nc" id="L287">    return null;</span>
   }
 
   private boolean artifactEquals(org.apache.maven.artifact.Artifact dependency, String artifactId, String groupId, String type, String classifier) {
-<span class="fc bfc" id="L292" title="All 2 branches covered.">    return StringUtils.equals(dependency.getGroupId(), groupId)</span>
-<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getArtifactId(), artifactId)</span>
-<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        &amp;&amp; StringUtils.equals(StringUtils.defaultString(dependency.getClassifier()), StringUtils.defaultString(classifier))</span>
-<span class="pc bpc" id="L295" title="1 of 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getType(), type);</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">    return StringUtils.equals(dependency.getGroupId(), groupId)</span>
+<span class="pc bpc" id="L292" title="1 of 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getArtifactId(), artifactId)</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        &amp;&amp; StringUtils.equals(StringUtils.defaultString(dependency.getClassifier()), StringUtils.defaultString(classifier))</span>
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getType(), type);</span>
   }
 
   private String findVersionInEnvironmentDependencies(String groupId, String artifactId, String packaging, String classifier) throws IOException {
-<span class="nc" id="L299">    List&lt;Artifact&gt; dependencies = dependencyUrlsToArtifactsWithTransitiveDependencies(environmentDependencyUrls);</span>
+<span class="nc" id="L298">    List&lt;Artifact&gt; dependencies = dependencyUrlsToArtifactsWithTransitiveDependencies(environmentDependencyUrls);</span>
 
-<span class="nc bnc" id="L301" title="All 2 branches missed.">    for (Artifact dependency : dependencies) {</span>
-<span class="nc bnc" id="L302" title="All 2 branches missed.">      if (artifactEquals(dependency, groupId, artifactId, packaging, classifier)) {</span>
-<span class="nc" id="L303">        return dependency.getVersion();</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">    for (Artifact dependency : dependencies) {</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">      if (artifactEquals(dependency, groupId, artifactId, packaging, classifier)) {</span>
+<span class="nc" id="L302">        return dependency.getVersion();</span>
       }
-<span class="nc" id="L305">    }</span>
+<span class="nc" id="L304">    }</span>
 
-<span class="nc" id="L307">    return null;</span>
+<span class="nc" id="L306">    return null;</span>
   }
 
   private boolean artifactEquals(Artifact dependency, String groupId, String artifactId, String type, String classifier) {
-<span class="nc bnc" id="L311" title="All 2 branches missed.">    return StringUtils.equals(dependency.getGroupId(), groupId)</span>
-<span class="nc bnc" id="L312" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getArtifactId(), artifactId)</span>
-<span class="nc bnc" id="L313" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(StringUtils.defaultString(dependency.getClassifier()), StringUtils.defaultString(classifier))</span>
-<span class="nc bnc" id="L314" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getExtension(), type);</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">    return StringUtils.equals(dependency.getGroupId(), groupId)</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getArtifactId(), artifactId)</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(StringUtils.defaultString(dependency.getClassifier()), StringUtils.defaultString(classifier))</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        &amp;&amp; StringUtils.equals(dependency.getExtension(), type);</span>
   }
 
 }

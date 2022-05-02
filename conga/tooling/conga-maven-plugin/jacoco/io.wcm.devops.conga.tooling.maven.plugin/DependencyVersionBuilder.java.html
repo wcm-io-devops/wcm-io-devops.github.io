@@ -107,7 +107,7 @@ class DependencyVersionBuilder implements Function&lt;Environment, Collection&lt
 <span class="fc" id="L107">      fileInfo = FileUtil.getCanonicalPath(artifact.getFile());</span>
 <span class="fc" id="L108">      try (ZipFile zipFile = new ZipFile(artifact.getFile())) {</span>
 <span class="fc" id="L109">        Enumeration&lt;? extends ZipEntry&gt; entries = zipFile.entries();</span>
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        while (entries.hasMoreElements()) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        while (entries.hasMoreElements()) {</span>
 <span class="fc" id="L111">          ZipEntry entry = entries.nextElement();</span>
 <span class="fc bfc" id="L112" title="All 2 branches covered.">          if (StringUtils.startsWith(entry.getName(), GeneratorOptions.CLASSPATH_PREFIX)) {</span>
 <span class="fc" id="L113">            return true;</span>
@@ -117,8 +117,8 @@ class DependencyVersionBuilder implements Function&lt;Environment, Collection&lt
     }
 <span class="nc" id="L118">    catch (IOException ex) {</span>
 <span class="nc" id="L119">      throw new GeneratorException(&quot;Unable to read from JAR file: &quot; + fileInfo, ex);</span>
-<span class="nc" id="L120">    }</span>
-<span class="nc" id="L121">    return false;</span>
+<span class="fc" id="L120">    }</span>
+<span class="fc" id="L121">    return false;</span>
   }
 
   /**
