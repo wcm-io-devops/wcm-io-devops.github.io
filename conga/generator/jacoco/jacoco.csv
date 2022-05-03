@@ -75,7 +75,7 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,Contains
 CONGA Generator,io.wcm.devops.conga.generator.plugins.validator,JsonValidator,0,49,0,0,0,10,0,4,0,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.validator,NoneValidator,2,9,0,0,1,4,1,4,1,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.validator,XmlValidator,7,40,0,0,2,12,0,4,0,4
-CONGA Generator,io.wcm.devops.conga.generator.plugins.export,YamlNodeModelExport,28,288,6,18,4,62,6,16,0,10
+CONGA Generator,io.wcm.devops.conga.generator.plugins.export,YamlNodeModelExport,28,291,6,18,4,62,6,16,0,10
 CONGA Generator,io.wcm.devops.conga.generator.plugins.export,NoneNodeModelExport,1,5,0,0,1,2,1,2,1,2
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,JsonEscapingStrategy,2,40,1,1,0,6,1,5,0,5
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,NoneEscapingStrategy,4,10,1,1,1,3,2,3,1,3

@@ -141,28 +141,29 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 
 <span class="fc" id="L142">    tenantMap.put(&quot;tenant&quot;, context.getVariableStringResolver().resolve(tenantData.getTenant(), tenantData.getConfig()));</span>
 <span class="fc bfc" id="L143" title="All 2 branches covered.">    if (!tenantData.getRoles().isEmpty()) {</span>
-<span class="fc" id="L144">      tenantMap.put(&quot;roles&quot;, tenantData.getRoles());</span>
+      // copy role list for each tenant to avoid alias in YAML export
+<span class="fc" id="L145">      tenantMap.put(&quot;roles&quot;, new ArrayList&lt;&gt;(tenantData.getRoles()));</span>
     }
-<span class="fc" id="L146">    tenantMap.put(&quot;config&quot;, context.getModelExportConfigProcessor().apply(tenantData.getConfig()));</span>
+<span class="fc" id="L147">    tenantMap.put(&quot;config&quot;, context.getModelExportConfigProcessor().apply(tenantData.getConfig()));</span>
 
-<span class="fc" id="L148">    tenants.add(tenantMap);</span>
-<span class="fc" id="L149">  }</span>
+<span class="fc" id="L149">    tenants.add(tenantMap);</span>
+<span class="fc" id="L150">  }</span>
 
   private void save(Map&lt;String, Object&gt; modelMap, NodeModelExportContext context) {
-<span class="fc" id="L152">    File file = new File(context.getNodeDir(), MODEL_FILE);</span>
-<span class="fc" id="L153">    try (FileOutputStream os = new FileOutputStream(file);</span>
-<span class="fc" id="L154">        OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L155">      Yaml yaml = new Yaml(context.getYamlRepresenter());</span>
-<span class="fc" id="L156">      yaml.dump(modelMap, writer);</span>
+<span class="fc" id="L153">    File file = new File(context.getNodeDir(), MODEL_FILE);</span>
+<span class="fc" id="L154">    try (FileOutputStream os = new FileOutputStream(file);</span>
+<span class="fc" id="L155">        OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L156">      Yaml yaml = new Yaml(context.getYamlRepresenter());</span>
+<span class="fc" id="L157">      yaml.dump(modelMap, writer);</span>
     }
-<span class="nc" id="L158">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L159">      throw new GeneratorException(&quot;Unable to write model file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
-<span class="fc" id="L160">    }</span>
-<span class="fc" id="L161">  }</span>
+<span class="nc" id="L159">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L160">      throw new GeneratorException(&quot;Unable to write model file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+<span class="fc" id="L161">    }</span>
+<span class="fc" id="L162">  }</span>
 
   private String cleanupFileName(String fileName, String basePath) {
-<span class="fc" id="L164">    String relativePath = StringUtils.substring(fileName, basePath.length() + 1);</span>
-<span class="fc" id="L165">    return StringUtils.replace(relativePath, File.separator, &quot;/&quot;);</span>
+<span class="fc" id="L165">    String relativePath = StringUtils.substring(fileName, basePath.length() + 1);</span>
+<span class="fc" id="L166">    return StringUtils.replace(relativePath, File.separator, &quot;/&quot;);</span>
   }
 
 }
