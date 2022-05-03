@@ -99,6 +99,21 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
   private AutoDependenciesMode autoDependenciesMode;
 
   /**
+   * How to validate package types to be included in &quot;all&quot; package.
+   * &lt;p&gt;
+   * Possible values:
+   * &lt;/p&gt;
+   * &lt;ul&gt;
+   * &lt;li&gt;&lt;code&gt;STRICT&lt;/code&gt;: Strict mode: Ignores packages without content type (with warning), fails build if &quot;mixed&quot;
+   * package types are used. For AEMaaCS it is mandatory to use this mode.&lt;/li&gt;
+   * &lt;li&gt;&lt;code&gt;WARN&lt;/code&gt;: Includes all packages, but generated warnings about packages without content type or &quot;mixed&quot;
+   * package types.&lt;/li&gt;
+   * &lt;/ul&gt;
+   */
+  @Parameter(property = &quot;conga.cloudManager.allPackage.packageTypeValidation&quot;, defaultValue = &quot;STRICT&quot;)
+  private PackageTypeValidation packageTypeValidation;
+
+  /**
    * Automatically generate dependencies between content packages based on file order in CONGA configuration.
    * @deprecated Please use autoDependenciesMode instead.
    */
@@ -135,117 +150,118 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-<span class="pc bpc" id="L138" title="1 of 2 branches missed.">    if (skip) {</span>
-<span class="nc" id="L139">      return;</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">    if (skip) {</span>
+<span class="nc" id="L154">      return;</span>
     }
 
-<span class="pc bpc" id="L142" title="1 of 2 branches missed.">    if (this.autoDependenciesMode == null) {</span>
-<span class="pc bpc" id="L143" title="1 of 2 branches missed.">      if (this.autoDependencies) {</span>
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (this.autoDependenciesSeparateMutable) {</span>
-<span class="nc" id="L145">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_SEPARATE;</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">    if (this.autoDependenciesMode == null) {</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">      if (this.autoDependencies) {</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if (this.autoDependenciesSeparateMutable) {</span>
+<span class="nc" id="L160">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_SEPARATE;</span>
         }
         else {
-<span class="fc" id="L148">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED;</span>
+<span class="fc" id="L163">          this.autoDependenciesMode = AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED;</span>
         }
       }
       else {
-<span class="nc" id="L152">        this.autoDependenciesMode = AutoDependenciesMode.OFF;</span>
+<span class="nc" id="L167">        this.autoDependenciesMode = AutoDependenciesMode.OFF;</span>
       }
     }
 
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">    if (singlePackage) {</span>
-<span class="nc" id="L157">      buildSingleAllPackage();</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">    if (singlePackage) {</span>
+<span class="nc" id="L172">      buildSingleAllPackage();</span>
     }
     else {
-<span class="fc" id="L160">      buildAllPackagesPerEnvironmentNode();</span>
+<span class="fc" id="L175">      buildAllPackagesPerEnvironmentNode();</span>
     }
-<span class="fc" id="L162">  }</span>
+<span class="fc" id="L177">  }</span>
 
   /**
    * Build an &quot;all&quot; package for each environment and node.
    */
   private void buildAllPackagesPerEnvironmentNode() throws MojoExecutionException, MojoFailureException {
-<span class="fc" id="L168">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
-<span class="fc" id="L169">      String packageName = environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.&quot; + this.name;</span>
-<span class="fc" id="L170">      AllPackageBuilder builder = createBuilder(packageName);</span>
+<span class="fc" id="L183">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+<span class="fc" id="L184">      String packageName = environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.&quot; + this.name;</span>
+<span class="fc" id="L185">      AllPackageBuilder builder = createBuilder(packageName);</span>
 
       try {
-<span class="fc" id="L173">        builder.add(contentPackages, cloudManagerTarget);</span>
+<span class="fc" id="L188">        builder.add(contentPackages, cloudManagerTarget);</span>
       }
-<span class="nc" id="L175">      catch (IllegalArgumentException ex) {</span>
-<span class="nc" id="L176">        throw new MojoFailureException(ex.getMessage(), ex);</span>
-<span class="fc" id="L177">      }</span>
+<span class="nc" id="L190">      catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L191">        throw new MojoFailureException(ex.getMessage(), ex);</span>
+<span class="fc" id="L192">      }</span>
 
-<span class="fc" id="L179">      buildAllPackage(builder);</span>
-<span class="fc" id="L180">    });</span>
-<span class="fc" id="L181">  }</span>
+<span class="fc" id="L194">      buildAllPackage(builder);</span>
+<span class="fc" id="L195">    });</span>
+<span class="fc" id="L196">  }</span>
 
   /**
    * Build a single &quot;all&quot; package containing packages from all environments and nodes.
    */
   private void buildSingleAllPackage() throws MojoExecutionException, MojoFailureException {
-<span class="nc" id="L187">    String packageName = this.name;</span>
-<span class="nc" id="L188">    AllPackageBuilder builder = createBuilder(packageName);</span>
+<span class="nc" id="L202">    String packageName = this.name;</span>
+<span class="nc" id="L203">    AllPackageBuilder builder = createBuilder(packageName);</span>
 
-<span class="nc" id="L190">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+<span class="nc" id="L205">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
       try {
-<span class="nc" id="L192">        builder.add(contentPackages, cloudManagerTarget);</span>
+<span class="nc" id="L207">        builder.add(contentPackages, cloudManagerTarget);</span>
       }
-<span class="nc" id="L194">      catch (IllegalArgumentException ex) {</span>
-<span class="nc" id="L195">        throw new MojoFailureException(ex.getMessage(), ex);</span>
-<span class="nc" id="L196">      }</span>
-<span class="nc" id="L197">    });</span>
+<span class="nc" id="L209">      catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L210">        throw new MojoFailureException(ex.getMessage(), ex);</span>
+<span class="nc" id="L211">      }</span>
+<span class="nc" id="L212">    });</span>
 
-<span class="nc" id="L199">    buildAllPackage(builder);</span>
-<span class="nc" id="L200">  }</span>
+<span class="nc" id="L214">    buildAllPackage(builder);</span>
+<span class="nc" id="L215">  }</span>
 
   private AllPackageBuilder createBuilder(String packageName) {
     String fileName;
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (attachArtifact) {</span>
-<span class="nc" id="L205">      fileName = project.getArtifactId() + &quot;.&quot; + packageName + &quot;-&quot; + project.getVersion() + &quot;.zip&quot;;</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">    if (attachArtifact) {</span>
+<span class="nc" id="L220">      fileName = project.getArtifactId() + &quot;.&quot; + packageName + &quot;-&quot; + project.getVersion() + &quot;.zip&quot;;</span>
     }
     else {
-<span class="fc" id="L208">      fileName = packageName + &quot;.zip&quot;;</span>
+<span class="fc" id="L223">      fileName = packageName + &quot;.zip&quot;;</span>
     }
-<span class="fc" id="L210">    File targetFile = new File(getTargetDir(), fileName);</span>
-<span class="fc" id="L211">    return new AllPackageBuilder(targetFile, this.group, packageName)</span>
-<span class="fc" id="L212">        .version(project.getVersion())</span>
-<span class="fc" id="L213">        .autoDependenciesMode(this.autoDependenciesMode)</span>
-<span class="fc" id="L214">        .logger(getLog());</span>
+<span class="fc" id="L225">    File targetFile = new File(getTargetDir(), fileName);</span>
+<span class="fc" id="L226">    return new AllPackageBuilder(targetFile, this.group, packageName)</span>
+<span class="fc" id="L227">        .version(project.getVersion())</span>
+<span class="fc" id="L228">        .autoDependenciesMode(this.autoDependenciesMode)</span>
+<span class="fc" id="L229">        .packageTypeValidation(this.packageTypeValidation)</span>
+<span class="fc" id="L230">        .logger(getLog());</span>
   }
 
   private void buildAllPackage(AllPackageBuilder builder) throws MojoExecutionException {
     try {
-<span class="fc" id="L219">      getLog().debug(&quot;Start generating &quot; + getCanonicalPath(builder.getTargetFile()) + &quot;...&quot;);</span>
-<span class="fc bfc" id="L220" title="All 2 branches covered.">      if (builder.build(properties)) {</span>
-<span class="fc" id="L221">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
-<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        if (attachArtifact) {</span>
-<span class="nc" id="L223">          projectHelper.attachArtifact(this.project, &quot;zip&quot;, builder.getPackageName(), builder.getTargetFile());</span>
+<span class="fc" id="L235">      getLog().debug(&quot;Start generating &quot; + getCanonicalPath(builder.getTargetFile()) + &quot;...&quot;);</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">      if (builder.build(properties)) {</span>
+<span class="fc" id="L237">        getLog().info(&quot;Generated &quot; + getCanonicalPath(builder.getTargetFile()));</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (attachArtifact) {</span>
+<span class="nc" id="L239">          projectHelper.attachArtifact(this.project, &quot;zip&quot;, builder.getPackageName(), builder.getTargetFile());</span>
         }
       }
       else {
-<span class="fc" id="L227">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
+<span class="fc" id="L243">        getLog().debug(&quot;Skipped &quot; + getCanonicalPath(builder.getTargetFile()) + &quot; - no valid package.&quot;);</span>
       }
     }
-<span class="nc" id="L230">    catch (IOException ex) {</span>
-<span class="nc" id="L231">      throw new MojoExecutionException(&quot;Unable to generate &quot; + getCanonicalPath(builder.getTargetFile()), ex);</span>
-<span class="fc" id="L232">    }</span>
-<span class="fc" id="L233">  }</span>
+<span class="nc" id="L246">    catch (IOException ex) {</span>
+<span class="nc" id="L247">      throw new MojoExecutionException(&quot;Unable to generate &quot; + getCanonicalPath(builder.getTargetFile()), ex);</span>
+<span class="fc" id="L248">    }</span>
+<span class="fc" id="L249">  }</span>
 
   private void visitEnvironmentsNodes(EnvironmentNodeVisitor visitor) throws MojoExecutionException, MojoFailureException {
-<span class="fc" id="L236">    ModelParser modelParser = new ModelParser();</span>
-<span class="fc" id="L237">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
-<span class="fc bfc" id="L238" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
-<span class="fc" id="L239">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
-<span class="fc bfc" id="L240" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
-<span class="fc" id="L241">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
-<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
-<span class="fc" id="L243">          List&lt;? extends ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
-<span class="fc" id="L244">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
+<span class="fc" id="L252">    ModelParser modelParser = new ModelParser();</span>
+<span class="fc" id="L253">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
+<span class="fc" id="L255">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
+<span class="fc" id="L257">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
+<span class="fc" id="L259">          List&lt;? extends ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
+<span class="fc" id="L260">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
         }
-<span class="fc" id="L246">      }</span>
-<span class="fc" id="L247">    }</span>
-<span class="fc" id="L248">  }</span>
+<span class="fc" id="L262">      }</span>
+<span class="fc" id="L263">    }</span>
+<span class="fc" id="L264">  }</span>
 
   interface EnvironmentNodeVisitor {
     void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,

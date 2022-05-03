@@ -51,7 +51,7 @@ final class RunModeUtil {
    */
   public static boolean isOnlyPublish(ContentPackageFile pkg) {
 <span class="fc" id="L53">    Set&lt;String&gt; runModes = mapVariantsToRunModes(pkg.getVariants());</span>
-<span class="pc bpc" id="L54" title="2 of 4 branches missed.">    return runModes.contains(RUNMODE_PUBLISH) &amp;&amp; !runModes.contains(RUNMODE_AUTHOR);</span>
+<span class="pc bpc" id="L54" title="1 of 4 branches missed.">    return runModes.contains(RUNMODE_PUBLISH) &amp;&amp; !runModes.contains(RUNMODE_AUTHOR);</span>
   }
 
   private static Set&lt;String&gt; mapVariantsToRunModes(List&lt;String&gt; variants) {

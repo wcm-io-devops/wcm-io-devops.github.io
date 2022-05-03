@@ -244,6 +244,30 @@ packages.</li>
           
 <tr class="b">
             
+<td align="left"><code><a href="#packageTypeValidation">&lt;packageTypeValidation&gt;</a></code></td>
+            
+<td><code>PackageTypeValidation</code></td>
+            
+<td><code>-</code></td>
+            
+<td>How to validate package types to be included in &quot;all&quot; package. 
+
+<p>Possible values:</p>
+
+<ul>
+
+<li><code>STRICT</code>: Strict mode: Ignores packages without
+content type (with warning), fails build if &quot;mixed&quot; package types
+are used. For AEMaaCS it is mandatory to use this mode.</li>
+
+<li><code>WARN</code>: Includes all packages, but generated
+warnings about packages without content type or &quot;mixed&quot; package
+types.</li>
+</ul><br /><b>Default value is</b>: <code>STRICT</code>.<br /><b>User property is</b>: <code>conga.cloudManager.allPackage.packageTypeValidation</code>.<br /></td>
+          </tr>
+          
+<tr class="a">
+            
 <td align="left"><code><a href="#properties">&lt;properties&gt;</a></code></td>
             
 <td><code>Map</code></td>
@@ -254,7 +278,7 @@ packages.</li>
 file.<br /></td>
           </tr>
           
-<tr class="a">
+<tr class="b">
             
 <td align="left"><code><a href="#singlePackage">&lt;singlePackage&gt;</a></code></td>
             
@@ -265,7 +289,7 @@ file.<br /></td>
 <td>Build one single content package for all environments and nodes.<br /><b>Default value is</b>: <code>false</code>.<br /><b>User property is</b>: <code>conga.cloudManager.allPackage.singlePackage</code>.<br /></td>
           </tr>
           
-<tr class="b">
+<tr class="a">
             
 <td align="left"><code><a href="#skip">&lt;skip&gt;</a></code></td>
             
@@ -277,7 +301,7 @@ file.<br /></td>
 configured in the POM.<br /><b>Default value is</b>: <code>false</code>.<br /><b>User property is</b>: <code>conga.cloudManager.allPackage.skip</code>.<br /></td>
           </tr>
           
-<tr class="a">
+<tr class="b">
             
 <td align="left"><code><a href="#target">&lt;target&gt;</a></code></td>
             
@@ -432,6 +456,33 @@ packages.</li>
 <li><b>Required</b>: <code>No</code></li>
           
 <li><b>User Property</b>: <code>conga.nodes</code></li>
+        </ul><hr /></section><section>
+<h4><a name="a.3CpackageTypeValidation.3E"></a><b><a name="packageTypeValidation">&lt;packageTypeValidation&gt;</a></b></h4>
+        
+<div>How to validate package types to be included in &quot;all&quot; package. 
+
+<p>Possible values:</p>
+
+<ul>
+
+<li><code>STRICT</code>: Strict mode: Ignores packages without
+content type (with warning), fails build if &quot;mixed&quot; package types
+are used. For AEMaaCS it is mandatory to use this mode.</li>
+
+<li><code>WARN</code>: Includes all packages, but generated
+warnings about packages without content type or &quot;mixed&quot; package
+types.</li>
+</ul></div>
+        
+<ul>
+          
+<li><b>Type</b>: <code>io.wcm.devops.conga.plugins.aem.maven.PackageTypeValidation</code></li>
+          
+<li><b>Required</b>: <code>No</code></li>
+          
+<li><b>User Property</b>: <code>conga.cloudManager.allPackage.packageTypeValidation</code></li>
+          
+<li><b>Default</b>: <code>STRICT</code></li>
         </ul><hr /></section><section>
 <h4><a name="a.3Cproperties.3E"></a><b><a name="properties">&lt;properties&gt;</a></b></h4>
         
