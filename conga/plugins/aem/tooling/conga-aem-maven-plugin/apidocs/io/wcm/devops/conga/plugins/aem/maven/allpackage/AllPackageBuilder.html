@@ -166,9 +166,9 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#add-java.util.List-java.util.Set-">add</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a>&gt;&nbsp;contentPackages,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#add-java.util.List-java.util.Set-">add</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">InstallableFile</a>&gt;&nbsp;files,
    <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;cloudManagerTarget)</code>
-<div class="block">Add content packages to be contained in "all" content package.</div>
+<div class="block">Add content packages and OSGi bundles to be contained in "all" content package.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -319,12 +319,12 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;void&nbsp;add(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a>&gt;&nbsp;contentPackages,
+<pre>public&nbsp;void&nbsp;add(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">InstallableFile</a>&gt;&nbsp;files,
                 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;cloudManagerTarget)</pre>
-<div class="block">Add content packages to be contained in "all" content package.</div>
+<div class="block">Add content packages and OSGi bundles to be contained in "all" content package.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>contentPackages</code> - Content packages (invalid will be filtered out)</dd>
+<dd><code>files</code> - Content packages (invalid will be filtered out) and OSGi bundles</dd>
 <dd><code>cloudManagerTarget</code> - Target environments/run modes the packages should be attached to</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - If and invalid package type is detected</dd>

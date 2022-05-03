@@ -94,30 +94,40 @@ import com.google.common.collect.ImmutableSet;
   }
 
   /**
+   * Checks if the given environment was configured explicitly in plugin configuration.
+   * @param environment Environment name
+   * @return true if configured explicitly
+   */
+  protected boolean isEnvironmentConfiguredExplicitely(String environment) {
+<span class="fc" id="L102">    Set&lt;String&gt; selectedEnvironments = toSet(this.environments);</span>
+<span class="fc" id="L103">    return selectedEnvironments.contains(environment);</span>
+  }
+
+  /**
    * Get matching node directories from environment.
    * @param environmentDir Environment directory
    * @return List of directories
    */
   protected List&lt;File&gt; getNodeDirs(File environmentDir) {
-<span class="fc" id="L102">    Set&lt;String&gt; selectedNodes = toSet(this.nodes);</span>
-<span class="fc" id="L103">    File[] files = environmentDir.listFiles();</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">    if (files != null) {</span>
-<span class="fc" id="L105">      return Arrays.stream(files)</span>
-<span class="fc" id="L106">          .filter(File::isDirectory)</span>
-<span class="pc bpc" id="L107" title="3 of 4 branches missed.">          .filter(dir -&gt; selectedNodes.isEmpty() || selectedNodes.contains(dir.getName()))</span>
-<span class="fc" id="L108">          .collect(Collectors.toList());</span>
+<span class="fc" id="L112">    Set&lt;String&gt; selectedNodes = toSet(this.nodes);</span>
+<span class="fc" id="L113">    File[] files = environmentDir.listFiles();</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">    if (files != null) {</span>
+<span class="fc" id="L115">      return Arrays.stream(files)</span>
+<span class="fc" id="L116">          .filter(File::isDirectory)</span>
+<span class="pc bpc" id="L117" title="3 of 4 branches missed.">          .filter(dir -&gt; selectedNodes.isEmpty() || selectedNodes.contains(dir.getName()))</span>
+<span class="fc" id="L118">          .collect(Collectors.toList());</span>
     }
     else {
-<span class="nc" id="L111">      return Collections.emptyList();</span>
+<span class="nc" id="L121">      return Collections.emptyList();</span>
     }
   }
 
   private static Set&lt;String&gt; toSet(String[] values) {
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">    if (values != null) {</span>
-<span class="fc" id="L117">      return ImmutableSet.copyOf(values);</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">    if (values != null) {</span>
+<span class="fc" id="L127">      return ImmutableSet.copyOf(values);</span>
     }
     else {
-<span class="nc" id="L120">      return ImmutableSet.of();</span>
+<span class="nc" id="L130">      return ImmutableSet.of();</span>
     }
   }
 

@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.project.MavenProjectHelper;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.plugins.aem.maven.allpackage.AllPackageBuilder;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.plugins.aem.maven.model.ContentPackageFile;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.plugins.aem.maven.model.InstallableFile;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">/**</em>
@@ -188,12 +188,12 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">   * Build an "all" package for each environment and node.</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> buildAllPackagesPerEnvironmentNode() <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>     visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>     visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, files) -&gt; {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>       String packageName = environmentDir.getName() + <span class="jxr_string">"."</span> + nodeDir.getName() + <span class="jxr_string">"."</span> + <strong class="jxr_keyword">this</strong>.name;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>       <a name="AllPackageBuilder" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#AllPackageBuilder">AllPackageBuilder</a> builder = createBuilder(packageName);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>       <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>         builder.add(contentPackages, cloudManagerTarget);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>         builder.add(files, cloudManagerTarget);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>       }
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>       <strong class="jxr_keyword">catch</strong> (IllegalArgumentException ex) {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoFailureException(ex.getMessage(), ex);
@@ -210,9 +210,9 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>     String packageName = <strong class="jxr_keyword">this</strong>.name;
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>     <a name="AllPackageBuilder" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#AllPackageBuilder">AllPackageBuilder</a> builder = createBuilder(packageName);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>     visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, files) -&gt; {
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>       <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>         builder.add(contentPackages, cloudManagerTarget);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         builder.add(files, cloudManagerTarget);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>       }
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>       <strong class="jxr_keyword">catch</strong> (IllegalArgumentException ex) {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoFailureException(ex.getMessage(), ex);
@@ -257,26 +257,40 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a>   }
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> visitEnvironmentsNodes(EnvironmentNodeVisitor visitor) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>     <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a> modelParser = <strong class="jxr_keyword">new</strong> <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a>();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>     List&lt;File&gt; environmentDirs = getEnvironmentDir();
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <strong class="jxr_keyword">for</strong> (File environmentDir : environmentDirs) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>       List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>       <strong class="jxr_keyword">for</strong> (File nodeDir : nodeDirs) {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>         Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <strong class="jxr_keyword">if</strong> (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>           List&lt;? <strong class="jxr_keyword">extends</strong> ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>           visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>         }
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>       }
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>     }
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>   }
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>   <strong class="jxr_keyword">interface</strong> EnvironmentNodeVisitor {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">void</strong> visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>         List&lt;? <strong class="jxr_keyword">extends</strong> ContentPackageFile&gt; contentPackages) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>   }
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>     List&lt;File&gt; environmentDirs = getEnvironmentDir();
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <strong class="jxr_keyword">for</strong> (File environmentDir : environmentDirs) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>       List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       <strong class="jxr_keyword">for</strong> (File nodeDir : nodeDirs) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>         <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a> modelParser = <strong class="jxr_keyword">new</strong> <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a>(nodeDir);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>         Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">boolean</strong> validNodeForAllPackage = false;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>         <strong class="jxr_keyword">if</strong> (cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>           <strong class="jxr_keyword">if</strong> (isEnvironmentConfiguredExplicitely(environmentDir.getName())) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>             <em class="jxr_comment">// cloud manager target is set to "none" - but environment is configured explicitly, so include it</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>             validNodeForAllPackage = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>             cloudManagerTarget.remove(CLOUDMANAGER_TARGET_NONE);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>           }
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         }
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>           <em class="jxr_comment">// cloud manager target is not set to "none" - include node</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>           validNodeForAllPackage = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>         <strong class="jxr_keyword">if</strong> (validNodeForAllPackage) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>           List&lt;InstallableFile&gt; files = modelParser.getInstallableFilesForNode();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>           visitor.visit(environmentDir, nodeDir, cloudManagerTarget, files);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>         }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       }
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>   }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>   <strong class="jxr_keyword">interface</strong> EnvironmentNodeVisitor {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>     <strong class="jxr_keyword">void</strong> visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>         List&lt;InstallableFile&gt; files) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>   }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2015&#x2013;2022 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All rights reserved.</div>

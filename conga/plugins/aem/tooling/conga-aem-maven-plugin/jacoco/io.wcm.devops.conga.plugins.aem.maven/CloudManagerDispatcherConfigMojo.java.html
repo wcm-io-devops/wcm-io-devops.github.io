@@ -69,9 +69,9 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 <span class="fc" id="L69">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
 <span class="fc bfc" id="L70" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
 <span class="fc" id="L71">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
-<span class="fc" id="L72">      ModelParser modelParser = new ModelParser();</span>
-<span class="fc bfc" id="L73" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (modelParser.hasRole(nodeDir, ROLE_AEM_DISPATCHER_CLOUD)) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
+<span class="fc" id="L73">        ModelParser modelParser = new ModelParser(nodeDir);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (modelParser.hasRole(ROLE_AEM_DISPATCHER_CLOUD)) {</span>
 <span class="fc" id="L75">          buildDispatcherConfig(environmentDir, nodeDir);</span>
 <span class="fc" id="L76">          dispatcherNodeCount++;</span>
         }

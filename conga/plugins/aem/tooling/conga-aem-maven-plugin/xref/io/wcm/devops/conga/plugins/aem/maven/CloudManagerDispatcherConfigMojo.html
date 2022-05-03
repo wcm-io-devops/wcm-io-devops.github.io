@@ -77,9 +77,9 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      List&lt;File&gt; environmentDirs = getEnvironmentDir();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">for</strong> (File environmentDir : environmentDirs) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>        List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>        <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a> modelParser = <strong class="jxr_keyword">new</strong> <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a>();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>        <strong class="jxr_keyword">for</strong> (File nodeDir : nodeDirs) {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">if</strong> (modelParser.hasRole(nodeDir, ROLE_AEM_DISPATCHER_CLOUD)) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>        <strong class="jxr_keyword">for</strong> (File nodeDir : nodeDirs) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a> modelParser = <strong class="jxr_keyword">new</strong> <a name="ModelParser" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser">ModelParser</a>(nodeDir);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">if</strong> (modelParser.hasRole(ROLE_AEM_DISPATCHER_CLOUD)) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>            buildDispatcherConfig(environmentDir, nodeDir);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>            dispatcherNodeCount++;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          }

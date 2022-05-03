@@ -151,9 +151,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser--">ModelParser</a></span>()</code>
-<div class="block">Constructor</div>
-</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser-java.io.File-">ModelParser</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -172,20 +170,19 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getCloudManagerTarget-java.io.File-">getCloudManagerTarget</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getCloudManagerTarget--">getCloudManagerTarget</a></span>()</code>
 <div class="block">Collects all assigned "cloudManager.target" values (lists or single values) to any role from the node.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getContentPackagesForNode-java.io.File-">getContentPackagesForNode</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir)</code>
-<div class="block">Parses model.yaml file for given node and returns all content packages references in this fileData.</div>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">InstallableFile</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getInstallableFilesForNode--">getInstallableFilesForNode</a></span>()</code>
+<div class="block">Returns all content packages and OSGi bundles referenced in this model file.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#hasRole-java.io.File-java.lang.String-">hasRole</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir,
-       <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;roleName)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#hasRole-java.lang.String-">hasRole</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;roleName)</code>
 <div class="block">Checks if the node has the given node role assigned.</div>
 </td>
 </tr>
@@ -233,14 +230,17 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="ModelParser--">
+<a name="ModelParser-java.io.File-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ModelParser</h4>
-<pre>public&nbsp;ModelParser()</pre>
-<div class="block">Constructor</div>
+<pre>public&nbsp;ModelParser(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nodeDir</code> - Node directory</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -251,51 +251,45 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getContentPackagesForNode-java.io.File-">
+<a name="getInstallableFilesForNode--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getContentPackagesForNode</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a>&gt;&nbsp;getContentPackagesForNode(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir)</pre>
-<div class="block">Parses model.yaml file for given node and returns all content packages references in this fileData.</div>
+<h4>getInstallableFilesForNode</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">InstallableFile</a>&gt;&nbsp;getInstallableFilesForNode()</pre>
+<div class="block">Returns all content packages and OSGi bundles referenced in this model file.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nodeDir</code> - Node directory</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>List of content packages</dd>
+<dd>List of content packages and OSGi bundles.</dd>
 </dl>
 </li>
 </ul>
-<a name="hasRole-java.io.File-java.lang.String-">
+<a name="hasRole-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>hasRole</h4>
-<pre>public&nbsp;boolean&nbsp;hasRole(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir,
-                       <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;roleName)</pre>
+<pre>public&nbsp;boolean&nbsp;hasRole(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;roleName)</pre>
 <div class="block">Checks if the node has the given node role assigned.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nodeDir</code> - Node directory</dd>
 <dd><code>roleName</code> - Node role name</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if role is assigned</dd>
 </dl>
 </li>
 </ul>
-<a name="getCloudManagerTarget-java.io.File-">
+<a name="getCloudManagerTarget--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getCloudManagerTarget</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getCloudManagerTarget(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;nodeDir)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getCloudManagerTarget()</pre>
 <div class="block">Collects all assigned "cloudManager.target" values (lists or single values) to any role from the node.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nodeDir</code> - Node directory</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>List of cloud manager environment names or "none"</dd>
 </dl>

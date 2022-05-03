@@ -74,9 +74,9 @@
 </a>
 <h2 class="title">A</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#add-java.util.List-java.util.Set-">add(List&lt;? extends ContentPackageFile&gt;, Set&lt;String&gt;)</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.allpackage.<a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage">AllPackageBuilder</a></dt>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#add-java.util.List-java.util.Set-">add(List&lt;InstallableFile&gt;, Set&lt;String&gt;)</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.allpackage.<a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage">AllPackageBuilder</a></dt>
 <dd>
-<div class="block">Add content packages to be contained in "all" content package.</div>
+<div class="block">Add content packages and OSGi bundles to be contained in "all" content package.</div>
 </dd>
 <dt><a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage"><span class="typeNameLink">AllPackageBuilder</span></a> - Class in <a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/package-summary.html">io.wcm.devops.conga.plugins.aem.maven.allpackage</a></dt>
 <dd>
@@ -100,6 +100,12 @@
 <dd>
 <div class="block">Build "all" content package.</div>
 </dd>
+<dt><a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model"><span class="typeNameLink">BundleFile</span></a> - Class in <a href="io/wcm/devops/conga/plugins/aem/maven/model/package-summary.html">io.wcm.devops.conga.plugins.aem.maven.model</a></dt>
+<dd>
+<div class="block">Represents an OSGi bundle file referenced by CONGA.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html#BundleFile-java.io.File-java.util.Map-java.util.List-">BundleFile(File, Map&lt;String, Object&gt;, List&lt;String&gt;)</a></span> - Constructor for class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">BundleFile</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <a name="I:C">
 <!--   -->
@@ -143,17 +149,15 @@
 </a>
 <h2 class="title">G</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getCloudManagerTarget-java.io.File-">getCloudManagerTarget(File)</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getCloudManagerTarget--">getCloudManagerTarget()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
 <dd>
 <div class="block">Collects all assigned "cloudManager.target" values (lists or single values) to any role from the node.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getContentPackagesForNode-java.io.File-">getContentPackagesForNode(File)</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
-<dd>
-<div class="block">Parses model.yaml file for given node and returns all content packages references in this fileData.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#getDelayAfterInstallSec--">getDelayAfterInstallSec()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#getFile--">getFile()</a></span> - Method in interface io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a></dt>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html#getFile--">getFile()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">BundleFile</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html#getFile--">getFile()</a></span> - Method in interface io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">InstallableFile</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#getFile--">getFile()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
@@ -167,8 +171,14 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#getHttpSocketTimeoutSec--">getHttpSocketTimeoutSec()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html#getInstall--">getInstall()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">BundleFile</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#getInstall--">getInstall()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#getInstallableFilesForNode--">getInstallableFilesForNode()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
+<dd>
+<div class="block">Returns all content packages and OSGi bundles referenced in this model file.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#getName--">getName()</a></span> - Method in interface io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#getName--">getName()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
@@ -185,7 +195,9 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#getTargetFile--">getTargetFile()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.allpackage.<a href="io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage">AllPackageBuilder</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#getVariants--">getVariants()</a></span> - Method in interface io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">ContentPackageFile</a></dt>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html#getVariants--">getVariants()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">BundleFile</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html#getVariants--">getVariants()</a></span> - Method in interface io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model">InstallableFile</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#getVariants--">getVariants()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
@@ -199,7 +211,7 @@
 </a>
 <h2 class="title">H</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#hasRole-java.io.File-java.lang.String-">hasRole(File, String)</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#hasRole-java.lang.String-">hasRole(String)</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
 <dd>
 <div class="block">Checks if the node has the given node role assigned.</div>
 </dd>
@@ -216,9 +228,14 @@
 </a>
 <h2 class="title">I</h2>
 <dl>
+<dt><a href="io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.html" title="interface in io.wcm.devops.conga.plugins.aem.maven.model"><span class="typeNameLink">InstallableFile</span></a> - Interface in <a href="io/wcm/devops/conga/plugins/aem/maven/model/package-summary.html">io.wcm.devops.conga.plugins.aem.maven.model</a></dt>
+<dd>
+<div class="block">Generic representation of an installable file (content package or OSGi bundle).</div>
+</dd>
 <dt><a href="io/wcm/devops/conga/plugins/aem/maven/InstallPackagesMojo.html" title="class in io.wcm.devops.conga.plugins.aem.maven"><span class="typeNameLink">InstallPackagesMojo</span></a> - Class in <a href="io/wcm/devops/conga/plugins/aem/maven/package-summary.html">io.wcm.devops.conga.plugins.aem.maven</a></dt>
 <dd>
-<div class="block">Installs all AEM content packages to AEM which are referenced in a model.yaml generated by CONGA for a node.</div>
+<div class="block">Installs all AEM content packages and OSGi bundles to AEM which are referenced in a model.yaml
+ generated by CONGA for a node.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/InstallPackagesMojo.html#InstallPackagesMojo--">InstallPackagesMojo()</a></span> - Constructor for class io.wcm.devops.conga.plugins.aem.maven.<a href="io/wcm/devops/conga/plugins/aem/maven/InstallPackagesMojo.html" title="class in io.wcm.devops.conga.plugins.aem.maven">InstallPackagesMojo</a></dt>
 <dd>&nbsp;</dd>
@@ -248,18 +265,16 @@
 </dd>
 <dt><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model"><span class="typeNameLink">ModelContentPackageFile</span></a> - Class in <a href="io/wcm/devops/conga/plugins/aem/maven/model/package-summary.html">io.wcm.devops.conga.plugins.aem.maven.model</a></dt>
 <dd>
-<div class="block">References a content package file generated by CONGA.</div>
+<div class="block">Represents a content package file generated or referenced by CONGA.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#ModelContentPackageFile-java.io.File-java.util.Map-java.util.Map-">ModelContentPackageFile(File, Map&lt;String, Object&gt;, Map&lt;String, Object&gt;)</a></span> - Constructor for class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#ModelContentPackageFile-java.io.File-java.util.Map-java.util.List-">ModelContentPackageFile(File, Map&lt;String, Object&gt;, List&lt;String&gt;)</a></span> - Constructor for class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model"><span class="typeNameLink">ModelParser</span></a> - Class in <a href="io/wcm/devops/conga/plugins/aem/maven/model/package-summary.html">io.wcm.devops.conga.plugins.aem.maven.model</a></dt>
 <dd>
 <div class="block">Parsers model.yaml files generated by CONGA.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser--">ModelParser()</a></span> - Constructor for class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
-<dd>
-<div class="block">Constructor</div>
-</dd>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html#ModelParser-java.io.File-">ModelParser(File)</a></span> - Constructor for class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelParser</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <a name="I:P">
 <!--   -->
@@ -278,6 +293,8 @@
 </a>
 <h2 class="title">T</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html#toString--">toString()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">BundleFile</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html#toString--">toString()</a></span> - Method in class io.wcm.devops.conga.plugins.aem.maven.model.<a href="io/wcm/devops/conga/plugins/aem/maven/model/ModelContentPackageFile.html" title="class in io.wcm.devops.conga.plugins.aem.maven.model">ModelContentPackageFile</a></dt>
 <dd>&nbsp;</dd>
 </dl>

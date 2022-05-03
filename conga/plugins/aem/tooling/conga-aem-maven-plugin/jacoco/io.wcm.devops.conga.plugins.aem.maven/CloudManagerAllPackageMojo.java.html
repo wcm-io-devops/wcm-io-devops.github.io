@@ -36,7 +36,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
 import io.wcm.devops.conga.plugins.aem.maven.allpackage.AllPackageBuilder;
-import io.wcm.devops.conga.plugins.aem.maven.model.ContentPackageFile;
+import io.wcm.devops.conga.plugins.aem.maven.model.InstallableFile;
 import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
 /**
@@ -180,12 +180,12 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
    * Build an &quot;all&quot; package for each environment and node.
    */
   private void buildAllPackagesPerEnvironmentNode() throws MojoExecutionException, MojoFailureException {
-<span class="fc" id="L183">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+<span class="fc" id="L183">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, files) -&gt; {</span>
 <span class="fc" id="L184">      String packageName = environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.&quot; + this.name;</span>
 <span class="fc" id="L185">      AllPackageBuilder builder = createBuilder(packageName);</span>
 
       try {
-<span class="fc" id="L188">        builder.add(contentPackages, cloudManagerTarget);</span>
+<span class="fc" id="L188">        builder.add(files, cloudManagerTarget);</span>
       }
 <span class="nc" id="L190">      catch (IllegalArgumentException ex) {</span>
 <span class="nc" id="L191">        throw new MojoFailureException(ex.getMessage(), ex);</span>
@@ -202,9 +202,9 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 <span class="nc" id="L202">    String packageName = this.name;</span>
 <span class="nc" id="L203">    AllPackageBuilder builder = createBuilder(packageName);</span>
 
-<span class="nc" id="L205">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, contentPackages) -&gt; {</span>
+<span class="nc" id="L205">    visitEnvironmentsNodes((environmentDir, nodeDir, cloudManagerTarget, files) -&gt; {</span>
       try {
-<span class="nc" id="L207">        builder.add(contentPackages, cloudManagerTarget);</span>
+<span class="nc" id="L207">        builder.add(files, cloudManagerTarget);</span>
       }
 <span class="nc" id="L209">      catch (IllegalArgumentException ex) {</span>
 <span class="nc" id="L210">        throw new MojoFailureException(ex.getMessage(), ex);</span>
@@ -249,23 +249,37 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 <span class="fc" id="L249">  }</span>
 
   private void visitEnvironmentsNodes(EnvironmentNodeVisitor visitor) throws MojoExecutionException, MojoFailureException {
-<span class="fc" id="L252">    ModelParser modelParser = new ModelParser();</span>
-<span class="fc" id="L253">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
-<span class="fc bfc" id="L254" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
-<span class="fc" id="L255">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
-<span class="fc bfc" id="L256" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
-<span class="fc" id="L257">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget(nodeDir);</span>
-<span class="fc bfc" id="L258" title="All 2 branches covered.">        if (!cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
-<span class="fc" id="L259">          List&lt;? extends ContentPackageFile&gt; contentPackages = modelParser.getContentPackagesForNode(nodeDir);</span>
-<span class="fc" id="L260">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, contentPackages);</span>
+<span class="fc" id="L252">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
+<span class="fc" id="L254">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
+<span class="fc" id="L256">        ModelParser modelParser = new ModelParser(nodeDir);</span>
+<span class="fc" id="L257">        Set&lt;String&gt; cloudManagerTarget = modelParser.getCloudManagerTarget();</span>
+
+<span class="fc" id="L259">        boolean validNodeForAllPackage = false;</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (cloudManagerTarget.contains(CLOUDMANAGER_TARGET_NONE)) {</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">          if (isEnvironmentConfiguredExplicitely(environmentDir.getName())) {</span>
+            // cloud manager target is set to &quot;none&quot; - but environment is configured explicitly, so include it
+<span class="nc" id="L263">            validNodeForAllPackage = true;</span>
+<span class="nc" id="L264">            cloudManagerTarget.remove(CLOUDMANAGER_TARGET_NONE);</span>
+          }
         }
-<span class="fc" id="L262">      }</span>
-<span class="fc" id="L263">    }</span>
-<span class="fc" id="L264">  }</span>
+        else {
+          // cloud manager target is not set to &quot;none&quot; - include node
+<span class="fc" id="L269">          validNodeForAllPackage = true;</span>
+        }
+
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        if (validNodeForAllPackage) {</span>
+<span class="fc" id="L273">          List&lt;InstallableFile&gt; files = modelParser.getInstallableFilesForNode();</span>
+<span class="fc" id="L274">          visitor.visit(environmentDir, nodeDir, cloudManagerTarget, files);</span>
+        }
+<span class="fc" id="L276">      }</span>
+<span class="fc" id="L277">    }</span>
+<span class="fc" id="L278">  }</span>
 
   interface EnvironmentNodeVisitor {
     void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
-        List&lt;? extends ContentPackageFile&gt; contentPackages) throws MojoExecutionException, MojoFailureException;
+        List&lt;InstallableFile&gt; files) throws MojoExecutionException, MojoFailureException;
   }
 
 }
