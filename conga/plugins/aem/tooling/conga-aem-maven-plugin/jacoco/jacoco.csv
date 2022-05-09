@@ -9,7 +9,7 @@ CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,BundleFi
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,ContentPackageFileSet,0,15,0,0,0,6,0,3,0,3
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,RunModeUtil,2,52,3,9,1,11,3,7,0,4
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,TemporaryContentPackageFile,35,60,2,0,9,16,4,7,3,7
-CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,AllPackageBuilder,83,1128,10,107,9,229,12,89,2,40
+CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.allpackage,AllPackageBuilder,83,1132,9,110,9,229,11,91,2,40
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,ProxySupport,78,0,12,0,22,0,8,0,2,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,HelpMojo,856,0,108,0,153,0,70,0,16,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,CloudManagerAllPackageMojo,104,216,8,18,22,48,10,12,2,7

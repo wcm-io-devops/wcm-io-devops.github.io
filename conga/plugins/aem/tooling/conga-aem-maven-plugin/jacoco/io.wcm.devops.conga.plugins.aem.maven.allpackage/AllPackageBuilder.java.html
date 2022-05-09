@@ -512,7 +512,7 @@ public final class AllPackageBuilder {
                 // then process it as well, remove if from the content package is was contained it
                 // and add it as &quot;1st level package&quot; to the all package
 <span class="fc" id="L514">                TemporaryContentPackageFile tempSubPackage = new TemporaryContentPackageFile(tempSubPackageFile, pkg.getVariants());</span>
-<span class="pc bpc" id="L515" title="1 of 2 branches missed.">                if (!isValidPackageType(tempSubPackage)) {</span>
+<span class="pc bpc" id="L515" title="1 of 4 branches missed.">                if (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(tempSubPackage)) {</span>
 <span class="nc" id="L516">                  throw new IllegalArgumentException(&quot;Package &quot; + pkg.getPackageInfo() + &quot; contains sub package &quot; + tempSubPackage.getPackageInfo()</span>
 <span class="nc" id="L517">                      + &quot; with invalid package type: '&quot; + StringUtils.defaultString(tempSubPackage.getPackageType()) + &quot;'&quot;);</span>
                 }
@@ -563,7 +563,7 @@ public final class AllPackageBuilder {
       Set&lt;Dependency&gt; allPackagesFromFileSets) {
 <span class="fc" id="L564">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
 <span class="fc" id="L565">    Dependency[] existingDeps = null;</span>
-<span class="pc bpc" id="L566" title="1 of 4 branches missed.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
+<span class="fc bfc" id="L566" title="All 4 branches covered.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
 <span class="fc" id="L567">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
     }
 <span class="fc bfc" id="L569" title="All 2 branches covered.">    if (existingDeps != null) {</span>
