@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.Constants;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public final class ModelParser {
   private static final String PROP_CONFIG = &quot;config&quot;;
   private static final String PROP_FILES = &quot;files&quot;;
 
-<span class="fc" id="L67">  private static final Logger log = LoggerFactory.getLogger(ModelParser.class);</span>
+<span class="fc" id="L68">  private static final Logger log = LoggerFactory.getLogger(ModelParser.class);</span>
 
   private final Yaml yaml;
   private final File nodeDir;
@@ -73,32 +74,32 @@ public final class ModelParser {
   /**
    * @param nodeDir Node directory
    */
-<span class="fc" id="L76">  public ModelParser(File nodeDir) {</span>
-<span class="fc" id="L77">    this.yaml = YamlUtil.createYaml();</span>
-<span class="fc" id="L78">    this.nodeDir = nodeDir;</span>
-<span class="fc" id="L79">    this.modelData = getModelData();</span>
-<span class="fc" id="L80">  }</span>
+<span class="fc" id="L77">  public ModelParser(File nodeDir) {</span>
+<span class="fc" id="L78">    this.yaml = YamlUtil.createYaml();</span>
+<span class="fc" id="L79">    this.nodeDir = nodeDir;</span>
+<span class="fc" id="L80">    this.modelData = getModelData();</span>
+<span class="fc" id="L81">  }</span>
 
   /**
    * Returns all content packages and OSGi bundles referenced in this model file.
    * @return List of content packages and OSGi bundles.
    */
   public List&lt;InstallableFile&gt; getInstallableFilesForNode() {
-<span class="fc" id="L87">    List&lt;InstallableFile&gt; items = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; role : children(modelData, PROP_ROLES)) {</span>
-<span class="fc" id="L89">      List&lt;String&gt; variants = getVariants(role);</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; fileData : children(role, PROP_FILES)) {</span>
-<span class="fc" id="L91">        String path = Objects.toString(fileData.get(&quot;path&quot;), null);</span>
-<span class="fc" id="L92">        File file = new File(nodeDir, path);</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (isContentPackage(fileData)) {</span>
-<span class="fc" id="L94">          items.add(new ModelContentPackageFile(file, fileData, variants));</span>
+<span class="fc" id="L88">    List&lt;InstallableFile&gt; items = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; role : children(modelData, PROP_ROLES)) {</span>
+<span class="fc" id="L90">      List&lt;String&gt; variants = getVariants(role);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; fileData : children(role, PROP_FILES)) {</span>
+<span class="fc" id="L92">        String path = Objects.toString(fileData.get(&quot;path&quot;), null);</span>
+<span class="fc" id="L93">        File file = new File(nodeDir, path);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (isContentPackage(fileData)) {</span>
+<span class="fc" id="L95">          items.add(new ModelContentPackageFile(file, fileData, variants));</span>
         }
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        else if (isOsgiBundle(file)) {</span>
-<span class="fc" id="L97">          items.add(new BundleFile(file, fileData, variants));</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        else if (isOsgiBundle(file)) {</span>
+<span class="fc" id="L98">          items.add(new BundleFile(file, fileData, variants));</span>
         }
-<span class="fc" id="L99">      }</span>
-<span class="fc" id="L100">    }</span>
-<span class="fc" id="L101">    return items;</span>
+<span class="fc" id="L100">      }</span>
+<span class="fc" id="L101">    }</span>
+<span class="fc" id="L102">    return items;</span>
   }
 
   /**
@@ -107,12 +108,12 @@ public final class ModelParser {
    * @return true if role is assigned
    */
   public boolean hasRole(String roleName) {
-<span class="fc bfc" id="L110" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; role : children(modelData, PROP_ROLES)) {</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">      if (StringUtils.equals(Objects.toString(role.get(PROP_ROLE), null), roleName)) {</span>
-<span class="fc" id="L112">        return true;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; role : children(modelData, PROP_ROLES)) {</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">      if (StringUtils.equals(Objects.toString(role.get(PROP_ROLE), null), roleName)) {</span>
+<span class="fc" id="L113">        return true;</span>
       }
-<span class="fc" id="L114">    }</span>
-<span class="fc" id="L115">    return false;</span>
+<span class="fc" id="L115">    }</span>
+<span class="fc" id="L116">    return false;</span>
   }
 
   /**
@@ -121,55 +122,58 @@ public final class ModelParser {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public Set&lt;String&gt; getCloudManagerTarget() {
-<span class="fc" id="L124">    Set&lt;String&gt; targets = new LinkedHashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; role : children(modelData, PROP_ROLES)) {</span>
-<span class="fc" id="L126">      Map&lt;String, Object&gt; config = (Map&lt;String, Object&gt;)role.get(PROP_CONFIG);</span>
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">      if (config != null) {</span>
-<span class="fc" id="L128">        Object targetValue = MapExpander.getDeep(config, &quot;cloudManager.target&quot;);</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (targetValue != null) {</span>
-<span class="fc" id="L130">          targets.addAll(toStringSet(targetValue));</span>
+<span class="fc" id="L125">    Set&lt;String&gt; targets = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; role : children(modelData, PROP_ROLES)) {</span>
+<span class="fc" id="L127">      Map&lt;String, Object&gt; config = (Map&lt;String, Object&gt;)role.get(PROP_CONFIG);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">      if (config != null) {</span>
+<span class="fc" id="L129">        Object targetValue = MapExpander.getDeep(config, &quot;cloudManager.target&quot;);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (targetValue != null) {</span>
+<span class="fc" id="L131">          targets.addAll(toStringSet(targetValue));</span>
         }
       }
-<span class="fc" id="L133">    }</span>
-<span class="fc" id="L134">    return targets;</span>
+<span class="fc" id="L134">    }</span>
+<span class="fc" id="L135">    return targets;</span>
   }
 
   private Map&lt;String, Object&gt; getModelData() {
-<span class="fc" id="L138">    File modelFile = new File(nodeDir, MODEL_FILE);</span>
-<span class="pc bpc" id="L139" title="2 of 4 branches missed.">    if (!modelFile.exists() || !modelFile.isFile()) {</span>
-<span class="nc" id="L140">      throw new RuntimeException(&quot;Model file not found: &quot; + getCanonicalPath(modelFile));</span>
+<span class="fc" id="L139">    File modelFile = new File(nodeDir, MODEL_FILE);</span>
+<span class="pc bpc" id="L140" title="2 of 4 branches missed.">    if (!modelFile.exists() || !modelFile.isFile()) {</span>
+<span class="nc" id="L141">      throw new RuntimeException(&quot;Model file not found: &quot; + getCanonicalPath(modelFile));</span>
     }
-<span class="fc" id="L142">    return parseYaml(modelFile);</span>
+<span class="fc" id="L143">    return parseYaml(modelFile);</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private Map&lt;String, Object&gt; parseYaml(File modelFile) {
     try {
-<span class="fc" id="L148">      try (InputStream is = new FileInputStream(modelFile);</span>
-<span class="fc" id="L149">          Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L150">        return yaml.loadAs(reader, Map.class);</span>
+<span class="fc" id="L149">      try (InputStream is = new FileInputStream(modelFile);</span>
+<span class="fc" id="L150">          Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L151">        return yaml.loadAs(reader, Map.class);</span>
       }
     }
-<span class="nc" id="L153">    catch (IOException ex) {</span>
-<span class="nc" id="L154">      throw new RuntimeException(&quot;Unable to parse &quot; + getCanonicalPath(modelFile), ex);</span>
+<span class="nc" id="L154">    catch (IOException ex) {</span>
+<span class="nc" id="L155">      throw new RuntimeException(&quot;Unable to parse &quot; + getCanonicalPath(modelFile), ex);</span>
     }
   }
 
   private boolean isContentPackage(Map&lt;String, Object&gt; fileData) {
-<span class="fc bfc" id="L159" title="All 2 branches covered.">    return fileData.get(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY) != null;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">    return fileData.get(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY) != null;</span>
   }
 
   private boolean isOsgiBundle(File file) {
-<span class="fc" id="L163">    try (JarFile jarFile = new JarFile(file)) {</span>
-<span class="fc" id="L164">      Manifest manifest = jarFile.getManifest();</span>
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">      if (manifest != null) {</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME) != null;</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">    if (!StringUtils.equals(FilenameUtils.getExtension((file.getName())), &quot;jar&quot;)) {</span>
+<span class="fc" id="L165">      return false;</span>
+    }
+<span class="fc" id="L167">    try (JarFile jarFile = new JarFile(file)) {</span>
+<span class="fc" id="L168">      Manifest manifest = jarFile.getManifest();</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">      if (manifest != null) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME) != null;</span>
       }
     }
-<span class="fc" id="L169">    catch (IOException ex) {</span>
-<span class="fc" id="L170">      log.debug(&quot;Unable to check for OSGi bundle: {}&quot;, file, ex);</span>
-<span class="nc" id="L171">    }</span>
-<span class="fc" id="L172">    return false;</span>
+<span class="nc" id="L173">    catch (IOException ex) {</span>
+<span class="nc" id="L174">      log.debug(&quot;Unable to check for OSGi bundle: {}&quot;, file, ex);</span>
+<span class="nc" id="L175">    }</span>
+<span class="nc" id="L176">    return false;</span>
   }
 
 }
