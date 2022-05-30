@@ -61,20 +61,19 @@ final class RunModeUtil {
   }
 
   /**
-   * Maps well-known variant names from CONG AEM definitions to the corresponding run modes.
+   * Maps well-known variant names from CONGA AEM definitions to the corresponding run modes.
    * If the variant name is not well-known the variant name is used as run mode.
    * @param variant Variant
    * @return Run mode
    */
   private static String mapVariantToRunMode(String variant) {
-    //
-<span class="fc bfc" id="L71" title="All 2 branches covered.">    if (&quot;aem-author&quot;.equals(variant)) {</span>
-<span class="fc" id="L72">      return RUNMODE_AUTHOR;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (&quot;aem-author&quot;.equals(variant)) {</span>
+<span class="fc" id="L71">      return RUNMODE_AUTHOR;</span>
     }
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    else if (&quot;aem-publish&quot;.equals(variant)) {</span>
-<span class="fc" id="L75">      return RUNMODE_PUBLISH;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    else if (&quot;aem-publish&quot;.equals(variant)) {</span>
+<span class="fc" id="L74">      return RUNMODE_PUBLISH;</span>
     }
-<span class="nc" id="L77">    return variant;</span>
+<span class="nc" id="L76">    return variant;</span>
   }
 
 }
