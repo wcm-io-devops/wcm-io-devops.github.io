@@ -26,44 +26,22 @@ import java.util.Map;
 /**
  * Represents an OSGi bundle file referenced by CONGA.
  */
-public final class BundleFile implements InstallableFile {
-
-  private final File file;
+public final class BundleFile extends AbstractInstallableFile {
 
   private final Boolean install;
-
-  private final List&lt;String&gt; variants;
 
   /**
    * @param file JAR file
    * @param fileData File data
    * @param variants Variants
    */
-<span class="fc" id="L42">  public BundleFile(File file, Map&lt;String, Object&gt; fileData, List&lt;String&gt; variants) {</span>
-<span class="fc" id="L43">    this.file = file;</span>
-
-<span class="fc" id="L45">    this.install = (Boolean)fileData.get(&quot;install&quot;);</span>
-
-<span class="fc" id="L47">    this.variants = variants;</span>
-<span class="fc" id="L48">  }</span>
-
-  @Override
-  public File getFile() {
-<span class="fc" id="L52">    return this.file;</span>
-  }
+  public BundleFile(File file, Map&lt;String, Object&gt; fileData, List&lt;String&gt; variants) {
+<span class="fc" id="L39">    super(file, variants);</span>
+<span class="fc" id="L40">    this.install = (Boolean)fileData.get(&quot;install&quot;);</span>
+<span class="fc" id="L41">  }</span>
 
   public Boolean getInstall() {
-<span class="fc" id="L56">    return this.install;</span>
-  }
-
-  @Override
-  public List&lt;String&gt; getVariants() {
-<span class="fc" id="L61">    return this.variants;</span>
-  }
-
-  @Override
-  public String toString() {
-<span class="nc" id="L66">    return file.toString();</span>
+<span class="fc" id="L44">    return this.install;</span>
   }
 
 }

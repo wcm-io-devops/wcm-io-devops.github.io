@@ -23,22 +23,32 @@ import java.util.List;
 
 import io.wcm.devops.conga.plugins.aem.maven.model.ContentPackageFile;
 
-class ContentPackageFileSet {
+/**
+ * Set of content package files.
+ */
+class ContentPackageFileSet implements FileSet&lt;ContentPackageFile&gt; {
 
   private final List&lt;ContentPackageFile&gt; contentPackages;
   private final List&lt;String&gt; environmentRunModes;
 
-<span class="fc" id="L31">  ContentPackageFileSet(List&lt;ContentPackageFile&gt; contentPackages, List&lt;String&gt; environmentRunModes) {</span>
-<span class="fc" id="L32">    this.contentPackages = contentPackages;</span>
-<span class="fc" id="L33">    this.environmentRunModes = environmentRunModes;</span>
-<span class="fc" id="L34">  }</span>
+<span class="fc" id="L34">  ContentPackageFileSet(List&lt;ContentPackageFile&gt; contentPackages, List&lt;String&gt; environmentRunModes) {</span>
+<span class="fc" id="L35">    this.contentPackages = contentPackages;</span>
+<span class="fc" id="L36">    this.environmentRunModes = environmentRunModes;</span>
+<span class="fc" id="L37">  }</span>
 
-  public List&lt;ContentPackageFile&gt; getContentPackages() {
-<span class="fc" id="L37">    return this.contentPackages;</span>
+  @Override
+  public List&lt;ContentPackageFile&gt; getFiles() {
+<span class="fc" id="L41">    return this.contentPackages;</span>
   }
 
+  @Override
   public List&lt;String&gt; getEnvironmentRunModes() {
-<span class="fc" id="L41">    return this.environmentRunModes;</span>
+<span class="fc" id="L46">    return this.environmentRunModes;</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="nc" id="L51">    return environmentRunModes + &quot;: &quot; + contentPackages;</span>
   }
 
 }

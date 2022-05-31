@@ -19,9 +19,16 @@
  */
 package io.wcm.devops.conga.plugins.aem.maven.allpackage;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 import io.wcm.devops.conga.plugins.aem.maven.model.InstallableFile;
 
@@ -35,13 +42,24 @@ final class RunModeUtil {
   }
 
   /**
+   * Checks if the given package is to be installed on both author and publish instances
+   * @param file Content package
+   * @return true if author and publish run mode (or no run mode = no restriction)
+   */
+  public static boolean isAuthorAndPublish(InstallableFile file) {
+<span class="fc" id="L50">    Set&lt;String&gt; runModes = mapVariantsToRunModes(file.getVariants());</span>
+<span class="fc bfc" id="L51" title="All 4 branches covered.">    return (!runModes.contains(RUNMODE_AUTHOR) &amp;&amp; !runModes.contains(RUNMODE_PUBLISH))</span>
+<span class="fc bfc" id="L52" title="All 4 branches covered.">        || (runModes.contains(RUNMODE_AUTHOR) &amp;&amp; runModes.contains(RUNMODE_PUBLISH));</span>
+  }
+
+  /**
    * Checks if the given variants map to author run mode, but not to publish run mode.
    * @param file Content package
    * @return true if only author run modes
    */
   public static boolean isOnlyAuthor(InstallableFile file) {
-<span class="fc" id="L43">    Set&lt;String&gt; runModes = mapVariantsToRunModes(file.getVariants());</span>
-<span class="pc bpc" id="L44" title="1 of 4 branches missed.">    return runModes.contains(RUNMODE_AUTHOR) &amp;&amp; !runModes.contains(RUNMODE_PUBLISH);</span>
+<span class="fc" id="L61">    Set&lt;String&gt; runModes = mapVariantsToRunModes(file.getVariants());</span>
+<span class="fc bfc" id="L62" title="All 4 branches covered.">    return runModes.contains(RUNMODE_AUTHOR) &amp;&amp; !runModes.contains(RUNMODE_PUBLISH);</span>
   }
 
   /**
@@ -50,14 +68,14 @@ final class RunModeUtil {
    * @return true if only publish run modes
    */
   public static boolean isOnlyPublish(InstallableFile file) {
-<span class="fc" id="L53">    Set&lt;String&gt; runModes = mapVariantsToRunModes(file.getVariants());</span>
-<span class="pc bpc" id="L54" title="1 of 4 branches missed.">    return runModes.contains(RUNMODE_PUBLISH) &amp;&amp; !runModes.contains(RUNMODE_AUTHOR);</span>
+<span class="fc" id="L71">    Set&lt;String&gt; runModes = mapVariantsToRunModes(file.getVariants());</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">    return runModes.contains(RUNMODE_PUBLISH) &amp;&amp; !runModes.contains(RUNMODE_AUTHOR);</span>
   }
 
-  private static Set&lt;String&gt; mapVariantsToRunModes(List&lt;String&gt; variants) {
-<span class="fc" id="L58">    return variants.stream()</span>
-<span class="fc" id="L59">        .map(RunModeUtil::mapVariantToRunMode)</span>
-<span class="fc" id="L60">        .collect(Collectors.toSet());</span>
+  private static Set&lt;String&gt; mapVariantsToRunModes(Collection&lt;String&gt; variants) {
+<span class="fc" id="L76">    return variants.stream()</span>
+<span class="fc" id="L77">        .map(RunModeUtil::mapVariantToRunMode)</span>
+<span class="fc" id="L78">        .collect(Collectors.toSet());</span>
   }
 
   /**
@@ -67,14 +85,65 @@ final class RunModeUtil {
    * @return Run mode
    */
   private static String mapVariantToRunMode(String variant) {
-<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (&quot;aem-author&quot;.equals(variant)) {</span>
-<span class="fc" id="L71">      return RUNMODE_AUTHOR;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">    if (&quot;aem-author&quot;.equals(variant)) {</span>
+<span class="fc" id="L89">      return RUNMODE_AUTHOR;</span>
     }
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    else if (&quot;aem-publish&quot;.equals(variant)) {</span>
-<span class="fc" id="L74">      return RUNMODE_PUBLISH;</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    else if (&quot;aem-publish&quot;.equals(variant)) {</span>
+<span class="fc" id="L92">      return RUNMODE_PUBLISH;</span>
     }
-<span class="nc" id="L76">    return variant;</span>
+<span class="nc" id="L94">    return variant;</span>
   }
+
+  /**
+   * Builds an optimized list of file sets separated for each environment run mode, but combined for author and publish
+   * variant files. Those files are reduced to single items if they are present in both author and publish variants. The
+   * order of the resulting file sets if driven by the first file set(s) in the list, additional files from other file
+   * sets are added at the end of the result list(s).
+   * @param fileSets Existing list of filesets
+   * @param fileSetFactory Creates a new (empty) file set for given environment run mode
+   * @return Optimized list of file sets (one per environment run mode)
+   */
+  public static &lt;T extends InstallableFile, S extends FileSet&lt;T&gt;&gt; Collection&lt;S&gt; eliminateAuthorPublishDuplicates(
+      List&lt;S&gt; fileSets, Function&lt;String, S&gt; fileSetFactory) {
+<span class="fc" id="L108">    Map&lt;String, S&gt; result = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L109">    fileSets.forEach(fileSet -&gt; fileSet.getEnvironmentRunModes().forEach(environmentRunMode -&gt; {</span>
+<span class="fc" id="L110">        FileSet&lt;T&gt; resultFileSet = result.computeIfAbsent(environmentRunMode, fileSetFactory);</span>
+<span class="fc" id="L111">        fileSet.getFiles().forEach(file -&gt; {</span>
+<span class="fc" id="L112">          Optional&lt;T&gt; existingFile = resultFileSet.getFiles().stream()</span>
+<span class="fc" id="L113">              .filter(item -&gt; isSameFileNameHash(item, file))</span>
+<span class="fc" id="L114">              .findFirst();</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">          if (existingFile.isPresent()) {</span>
+            // if file was already added from other file set: eliminate duplicate, but add run modes
+<span class="fc" id="L117">            existingFile.get().getVariants().addAll(file.getVariants());</span>
+          }
+          else {
+<span class="fc" id="L120">            resultFileSet.getFiles().add(file);</span>
+          }
+<span class="fc" id="L122">        });</span>
+<span class="fc" id="L123">    }));</span>
+    // eliminate author+publish run modes if both are set on same file
+<span class="fc" id="L125">    result.values().forEach(</span>
+<span class="fc" id="L126">        fileSet -&gt; fileSet.getFiles().forEach(file -&gt; removeAuthorPublishRunModeIfBothPresent(file.getVariants())));</span>
+<span class="fc" id="L127">    return result.values();</span>
+  }
+
+  private static boolean isSameFileNameHash(InstallableFile file1, InstallableFile file2) {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">    if (!StringUtils.equals(file1.getFile().getName(), file2.getFile().getName())) {</span>
+<span class="fc" id="L132">      return false;</span>
+    }
+<span class="fc" id="L134">    return file1.getHashCode().equals(file2.getHashCode());</span>
+  }
+
+  /**
+   * Removes author and publish runmodes from given set if both are present.
+   * @param runModes Run modes
+   */
+  private static void removeAuthorPublishRunModeIfBothPresent(Set&lt;String&gt; runModes) {
+<span class="pc bpc" id="L142" title="3 of 4 branches missed.">    if (runModes.contains(RUNMODE_AUTHOR) &amp;&amp; runModes.contains(RUNMODE_PUBLISH)) {</span>
+<span class="nc" id="L143">      runModes.remove(RUNMODE_AUTHOR);</span>
+<span class="nc" id="L144">      runModes.remove(RUNMODE_PUBLISH);</span>
+    }
+<span class="fc" id="L146">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

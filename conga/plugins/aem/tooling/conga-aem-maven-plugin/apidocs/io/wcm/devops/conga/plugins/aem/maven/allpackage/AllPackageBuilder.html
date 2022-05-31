@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -121,11 +121,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  <li>Enforces the order defined in CONGA by automatically adding dependencies to all packages reflecting the file
  order in model.json</li>
  <li>Because the dependency chain may be different for each runmode (author/publish), each package is added once for
- each runmode (so usually twice, for author+publish)</li>
- <li>To avoid conflicts with duplicate packages with different dependencies all package names are changed and a
- runmode suffix (.author or .publish) is added, same applies to the install folder</li>
+ each runmode. Internally this separate dependency change for author and publish is optimized to have each package
+ included only once for author+publish, unless it has a different chain of dependencies for both runmodes, in which
+ case it is included separately for each run mode.</li>
+ <li>To avoid conflicts with duplicate packages with different dependency chains the names of packages that are
+ included in different versions for author/publish are changed and a runmode suffix (.author or .publish) is added,
+ and it is put in a corresponding install folder.</li>
  <li>To avoid problems with nested sub packages, the sub packages are extracted from the packages and treated in the
- same way as other packages</li>
+ same way as other packages.</li>
  </ul></div>
 </li>
 </ul>
@@ -203,6 +206,10 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage">AllPackageBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#runModeOptimization-io.wcm.devops.conga.plugins.aem.maven.RunModeOptimization-">runModeOptimization</a></span>(<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/RunModeOptimization.html" title="enum in io.wcm.devops.conga.plugins.aem.maven">RunModeOptimization</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage">AllPackageBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#version-java.lang.String-">version</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </table>
@@ -263,6 +270,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - Automatically generate dependencies between content packages based on file order in CONGA
           configuration.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
+</li>
+</ul>
+<a name="runModeOptimization-io.wcm.devops.conga.plugins.aem.maven.RunModeOptimization-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>runModeOptimization</h4>
+<pre>public&nbsp;<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html" title="class in io.wcm.devops.conga.plugins.aem.maven.allpackage">AllPackageBuilder</a>&nbsp;runModeOptimization(<a href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/RunModeOptimization.html" title="enum in io.wcm.devops.conga.plugins.aem.maven">RunModeOptimization</a>&nbsp;value)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - Configure run mode optimization.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this</dd>
 </dl>
