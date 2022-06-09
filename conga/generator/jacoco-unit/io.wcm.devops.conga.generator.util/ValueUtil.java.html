@@ -59,20 +59,26 @@ public final class ValueUtil {
 <span class="fc" id="L59">      return false;</span>
     }
 <span class="fc bfc" id="L61" title="All 2 branches covered.">    else if (NumberUtils.isCreatable(valueString)) {</span>
-<span class="fc" id="L62">      return NumberUtils.createNumber(valueString);</span>
+<span class="fc" id="L62">      Number number = NumberUtils.createNumber(valueString);</span>
+      // edge case: a version number like 1.20 which looks like a double should be treated as string
+      // so convert number back to string, and if it's different keep it as a string
+<span class="fc bfc" id="L65" title="All 2 branches covered.">      if (!StringUtils.equals(number.toString(), valueString)) {</span>
+<span class="fc" id="L66">        return valueString;</span>
+      }
+<span class="fc" id="L68">      return number;</span>
     }
     else {
-<span class="fc" id="L65">      return valueString;</span>
+<span class="fc" id="L71">      return valueString;</span>
     }
   }
 
   private static Object stringToValueList(String valueStringList) {
-<span class="fc" id="L70">    List&lt;Object&gt; list = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L71">    String[] valueStrings = StringUtils.splitPreserveAllTokens(valueStringList, LIST_SEPARATOR);</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">    for (String valueString : valueStrings) {</span>
-<span class="fc" id="L73">      list.add(stringToValue(valueString));</span>
+<span class="fc" id="L76">    List&lt;Object&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L77">    String[] valueStrings = StringUtils.splitPreserveAllTokens(valueStringList, LIST_SEPARATOR);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">    for (String valueString : valueStrings) {</span>
+<span class="fc" id="L79">      list.add(stringToValue(valueString));</span>
     }
-<span class="fc" id="L75">    return list;</span>
+<span class="fc" id="L81">    return list;</span>
   }
 
   /**
@@ -82,35 +88,35 @@ public final class ValueUtil {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public static String valueToString(Object value) {
-<span class="fc bfc" id="L85" title="All 2 branches covered.">    if (value == null) {</span>
-<span class="fc" id="L86">      return &quot;&quot;;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L92">      return &quot;&quot;;</span>
     }
-<span class="fc bfc" id="L88" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L89">      StringBuilder sb = new StringBuilder();</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">      for (Object item : ((List)value)) {</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
-<span class="fc" id="L92">          sb.append(&quot;,&quot;);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L95">      StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">      for (Object item : ((List)value)) {</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc" id="L98">          sb.append(&quot;,&quot;);</span>
         }
-<span class="fc" id="L94">        sb.append(valueToString(item));</span>
-<span class="fc" id="L95">      }</span>
-<span class="fc" id="L96">      return sb.toString();</span>
+<span class="fc" id="L100">        sb.append(valueToString(item));</span>
+<span class="fc" id="L101">      }</span>
+<span class="fc" id="L102">      return sb.toString();</span>
     }
-<span class="fc bfc" id="L98" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L99">      StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L105">      StringBuilder sb = new StringBuilder();</span>
       // use sorted map to ensure consistent order of keys
-<span class="fc" id="L101">      SortedMap&lt;Object, Object&gt; sortedMap = new TreeMap&lt;&gt;((Map&lt;Object, Object&gt;)value);</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">      for (Map.Entry&lt;Object, Object&gt; entry : sortedMap.entrySet()) {</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
-<span class="fc" id="L104">          sb.append(&quot;,&quot;);</span>
+<span class="fc" id="L107">      SortedMap&lt;Object, Object&gt; sortedMap = new TreeMap&lt;&gt;((Map&lt;Object, Object&gt;)value);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">      for (Map.Entry&lt;Object, Object&gt; entry : sortedMap.entrySet()) {</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc" id="L110">          sb.append(&quot;,&quot;);</span>
         }
-<span class="fc" id="L106">        sb.append(valueToString(entry.getKey()));</span>
-<span class="fc" id="L107">        sb.append(&quot;=&quot;);</span>
-<span class="fc" id="L108">        sb.append(valueToString(entry.getValue()));</span>
-<span class="fc" id="L109">      }</span>
-<span class="fc" id="L110">      return sb.toString();</span>
+<span class="fc" id="L112">        sb.append(valueToString(entry.getKey()));</span>
+<span class="fc" id="L113">        sb.append(&quot;=&quot;);</span>
+<span class="fc" id="L114">        sb.append(valueToString(entry.getValue()));</span>
+<span class="fc" id="L115">      }</span>
+<span class="fc" id="L116">      return sb.toString();</span>
     }
     else {
-<span class="fc" id="L113">      return value.toString();</span>
+<span class="fc" id="L119">      return value.toString();</span>
     }
   }
 
