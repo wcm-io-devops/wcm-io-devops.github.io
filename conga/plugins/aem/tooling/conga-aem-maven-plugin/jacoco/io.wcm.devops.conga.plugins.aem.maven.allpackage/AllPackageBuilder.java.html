@@ -557,7 +557,7 @@ public final class AllPackageBuilder {
 <span class="fc" id="L557">                  props.put(NAME_PACKAGE_TYPE, packageType);</span>
                 }
 
-<span class="fc" id="L560">                ZipEntry zipOutEntry = new ZipEntry(zipInEntry.getName());</span>
+<span class="fc" id="L560">                ZipEntry zipOutEntry = newZipEntry(zipInEntry);</span>
 <span class="fc" id="L561">                zipOut.putNextEntry(zipOutEntry);</span>
 <span class="fc" id="L562">                props.storeToXML(zipOut, null);</span>
 <span class="fc" id="L563">                processedEntry = true;</span>
@@ -589,7 +589,7 @@ public final class AllPackageBuilder {
 
               // otherwise transfer the binary data 1:1
 <span class="fc bfc" id="L591" title="All 2 branches covered.">              if (!processedEntry) {</span>
-<span class="fc" id="L592">                ZipEntry zipOutEntry = new ZipEntry(zipInEntry.getName());</span>
+<span class="fc" id="L592">                ZipEntry zipOutEntry = newZipEntry(zipInEntry);</span>
 <span class="fc" id="L593">                zipOut.putNextEntry(zipOutEntry);</span>
 <span class="fc" id="L594">                IOUtils.copy(is, zipOut);</span>
               }
@@ -615,6 +615,17 @@ public final class AllPackageBuilder {
 <span class="fc" id="L615">    return result;</span>
   }
 
+  private static ZipEntry newZipEntry(ZipEntry in) {
+<span class="fc" id="L619">    ZipEntry out = new ZipEntry(in.getName());</span>
+<span class="fc bfc" id="L620" title="All 2 branches covered.">    if (in.getCreationTime() != null) {</span>
+<span class="fc" id="L621">      out.setCreationTime(in.getCreationTime());</span>
+    }
+<span class="pc bpc" id="L623" title="1 of 2 branches missed.">    if (in.getLastModifiedTime() != null) {</span>
+<span class="fc" id="L624">      out.setLastModifiedTime(in.getLastModifiedTime());</span>
+    }
+<span class="fc" id="L626">    return out;</span>
+  }
+
   /**
    * Add dependency information to dependencies string in properties (if it does not exist already).
    * @param props Properties
@@ -623,47 +634,47 @@ public final class AllPackageBuilder {
    */
   private static void updateDependencies(Properties props, ContentPackageFile dependencyFile, String environmentRunMode,
       Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<span class="fc" id="L626">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
-<span class="fc" id="L627">    Dependency[] existingDeps = null;</span>
-<span class="fc bfc" id="L628" title="All 4 branches covered.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
-<span class="fc" id="L629">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
+<span class="fc" id="L637">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
+<span class="fc" id="L638">    Dependency[] existingDeps = null;</span>
+<span class="fc bfc" id="L639" title="All 4 branches covered.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
+<span class="fc" id="L640">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
     }
-<span class="fc bfc" id="L631" title="All 2 branches covered.">    if (existingDeps != null) {</span>
-<span class="fc" id="L632">      existingDeps = removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);</span>
+<span class="fc bfc" id="L642" title="All 2 branches covered.">    if (existingDeps != null) {</span>
+<span class="fc" id="L643">      existingDeps = removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);</span>
     }
 
     Dependency[] deps;
-<span class="fc bfc" id="L636" title="All 2 branches covered.">    if (dependencyFile != null) {</span>
-<span class="fc" id="L637">      String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);</span>
-<span class="fc" id="L638">      Dependency newDependency = new Dependency(dependencyFile.getGroup(),</span>
-<span class="fc" id="L639">          dependencyFile.getName() + runModeSuffix,</span>
-<span class="fc" id="L640">          VersionRange.fromString(dependencyFile.getVersion()));</span>
-<span class="fc" id="L641">      deps = addDependency(existingDeps, newDependency);</span>
-<span class="fc" id="L642">    }</span>
+<span class="fc bfc" id="L647" title="All 2 branches covered.">    if (dependencyFile != null) {</span>
+<span class="fc" id="L648">      String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);</span>
+<span class="fc" id="L649">      Dependency newDependency = new Dependency(dependencyFile.getGroup(),</span>
+<span class="fc" id="L650">          dependencyFile.getName() + runModeSuffix,</span>
+<span class="fc" id="L651">          VersionRange.fromString(dependencyFile.getVersion()));</span>
+<span class="fc" id="L652">      deps = addDependency(existingDeps, newDependency);</span>
+<span class="fc" id="L653">    }</span>
     else {
-<span class="fc" id="L644">      deps = existingDeps;</span>
+<span class="fc" id="L655">      deps = existingDeps;</span>
     }
 
-<span class="fc bfc" id="L647" title="All 2 branches covered.">    if (deps != null) {</span>
-<span class="fc" id="L648">      String dependenciesString = Dependency.toString(deps);</span>
-<span class="fc" id="L649">      props.put(NAME_DEPENDENCIES, dependenciesString);</span>
+<span class="fc bfc" id="L658" title="All 2 branches covered.">    if (deps != null) {</span>
+<span class="fc" id="L659">      String dependenciesString = Dependency.toString(deps);</span>
+<span class="fc" id="L660">      props.put(NAME_DEPENDENCIES, dependenciesString);</span>
     }
-<span class="fc" id="L651">  }</span>
+<span class="fc" id="L662">  }</span>
 
   private static Dependency[] addDependency(Dependency[] existingDeps, Dependency newDependency) {
-<span class="fc bfc" id="L654" title="All 2 branches covered.">    if (existingDeps != null) {</span>
-<span class="fc" id="L655">      return DependencyUtil.add(existingDeps, newDependency);</span>
+<span class="fc bfc" id="L665" title="All 2 branches covered.">    if (existingDeps != null) {</span>
+<span class="fc" id="L666">      return DependencyUtil.add(existingDeps, newDependency);</span>
     }
     else {
-<span class="fc" id="L658">      return new Dependency[] { newDependency };</span>
+<span class="fc" id="L669">      return new Dependency[] { newDependency };</span>
     }
   }
 
   private static void addSuffixToPackageName(Properties props, ContentPackageFile pkg, String environmentRunMode) {
-<span class="fc" id="L663">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
-<span class="fc" id="L664">    String packageName = props.getProperty(NAME_NAME) + runModeSuffix;</span>
-<span class="fc" id="L665">    props.put(NAME_NAME, packageName);</span>
-<span class="fc" id="L666">  }</span>
+<span class="fc" id="L674">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
+<span class="fc" id="L675">    String packageName = props.getProperty(NAME_NAME) + runModeSuffix;</span>
+<span class="fc" id="L676">    props.put(NAME_NAME, packageName);</span>
+<span class="fc" id="L677">  }</span>
 
   /**
    * Removes existing references to packages contained in the list of packages to manage by this builder because
@@ -673,25 +684,25 @@ public final class AllPackageBuilder {
    * @return Dependencies list
    */
   private static Dependency[] removeReferencesToManagedPackages(Dependency[] deps, Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<span class="fc" id="L676">    return Arrays.stream(deps)</span>
-<span class="fc bfc" id="L677" title="All 2 branches covered.">        .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))</span>
-<span class="fc" id="L678">        .toArray(size -&gt; new Dependency[size]);</span>
+<span class="fc" id="L687">    return Arrays.stream(deps)</span>
+<span class="fc bfc" id="L688" title="All 2 branches covered.">        .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))</span>
+<span class="fc" id="L689">        .toArray(size -&gt; new Dependency[size]);</span>
   }
 
   private static void addDependencyInformation(Set&lt;Dependency&gt; allPackagesFromFileSets, ContentPackageFile pkg) {
-<span class="fc" id="L682">    allPackagesFromFileSets.add(new Dependency(pkg.getGroup(), pkg.getName(), VersionRange.fromString(pkg.getVersion())));</span>
-<span class="fc" id="L683">  }</span>
+<span class="fc" id="L693">    allPackagesFromFileSets.add(new Dependency(pkg.getGroup(), pkg.getName(), VersionRange.fromString(pkg.getVersion())));</span>
+<span class="fc" id="L694">  }</span>
 
   public String getGroupName() {
-<span class="nc" id="L686">    return this.groupName;</span>
+<span class="nc" id="L697">    return this.groupName;</span>
   }
 
   public String getPackageName() {
-<span class="nc" id="L690">    return this.packageName;</span>
+<span class="nc" id="L701">    return this.packageName;</span>
   }
 
   public File getTargetFile() {
-<span class="fc" id="L694">    return this.targetFile;</span>
+<span class="fc" id="L705">    return this.targetFile;</span>
   }
 
 }

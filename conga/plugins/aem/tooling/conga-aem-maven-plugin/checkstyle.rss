@@ -144,7 +144,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.PackageTypeValidation.java">io/wcm/devops/conga/plugins/aem/maven/PackageTypeValidation.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.BundleFile.java">io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.java</a>
                 </td>
                 <td>
                   0
@@ -158,7 +158,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.BundleFile.java">io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.PackageTypeValidation.java">io/wcm/devops/conga/plugins/aem/maven/PackageTypeValidation.java</a>
                 </td>
                 <td>
                   0
@@ -228,7 +228,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.CloudManagerAllPackageMojo.java">io/wcm/devops/conga/plugins/aem/maven/CloudManagerAllPackageMojo.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.ModelParser.java">io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.java</a>
                 </td>
                 <td>
                   0
@@ -242,7 +242,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.ModelParser.java">io/wcm/devops/conga/plugins/aem/maven/model/ModelParser.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.CloudManagerAllPackageMojo.java">io/wcm/devops/conga/plugins/aem/maven/CloudManagerAllPackageMojo.java</a>
                 </td>
                 <td>
                   0
@@ -270,7 +270,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.AutoDependenciesMode.java">io/wcm/devops/conga/plugins/aem/maven/AutoDependenciesMode.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.ParserUtil.java">io/wcm/devops/conga/plugins/aem/maven/model/ParserUtil.java</a>
                 </td>
                 <td>
                   0
@@ -298,21 +298,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.ParserUtil.java">io/wcm/devops/conga/plugins/aem/maven/model/ParserUtil.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.FileSet.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/FileSet.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.AutoDependenciesMode.java">io/wcm/devops/conga/plugins/aem/maven/AutoDependenciesMode.java</a>
                 </td>
                 <td>
                   0
@@ -327,6 +313,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.RunModeOptimization.java">io/wcm/devops/conga/plugins/aem/maven/RunModeOptimization.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.FileSet.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/FileSet.java</a>
                 </td>
                 <td>
                   0
