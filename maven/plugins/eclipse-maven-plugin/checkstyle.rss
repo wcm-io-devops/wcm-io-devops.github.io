@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>wcm.io DevOps Eclipse Maven Plugin - Checkstyle report</title>
+    <link>https://devops.wcm.io/maven/plugins/eclipse-maven-plugin/</link>
+    <description>wcm.io DevOps Eclipse Maven Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2015 - 2022 wcm.io DevOps</copyright>
+    <item>
+      <title>File: 63,
+             Errors: 0,
+             Warnings: 6149,
+             Infos: 0
+      </title>
+            <link>https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadManifestWriter.java">org/apache/maven/plugin/eclipse/writers/rad/RadManifestWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseLaunchConfigurationWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseLaunchConfigurationWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  84
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadLibCopier.java">org/apache/maven/plugin/eclipse/writers/rad/RadLibCopier.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  42
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.RemoveCacheMojo.java">org/apache/maven/plugin/eclipse/RemoveCacheMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.osgiplugin.PackagedPlugin.java">org/apache/maven/plugin/eclipse/osgiplugin/PackagedPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseClasspathWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseClasspathWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  279
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.AbstractEclipseWriter.java">org/apache/maven/plugin/eclipse/writers/AbstractEclipseWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.MonitoredResource.java">org/apache/maven/plugin/eclipse/writers/MonitoredResource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.reader.ReadWorkspaceLocations.java">org/apache/maven/plugin/eclipse/reader/ReadWorkspaceLocations.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  318
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.ide.IdeDependency.java">org/apache/maven/plugin/ide/IdeDependency.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  79
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseProjectWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseProjectWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  200
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponent15Writer.java">org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpComponent15Writer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponentWriter.java">org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpComponentWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  100
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadWebsiteConfigWriter.java">org/apache/maven/plugin/eclipse/writers/rad/RadWebsiteConfigWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.LinkedResource.java">org/apache/maven/plugin/eclipse/LinkedResource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  64
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseHibernateWriter.java">org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseHibernateWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  75
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadApplicationXMLWriter.java">org/apache/maven/plugin/eclipse/writers/rad/RadApplicationXMLWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  282
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.WorkspaceConfiguration.java">org/apache/maven/plugin/eclipse/WorkspaceConfiguration.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.workspace.EclipseCodeFormatterProfile.java">org/apache/maven/plugin/eclipse/writers/workspace/EclipseCodeFormatterProfile.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  39
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseStrutsDataWriter.java">org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseStrutsDataWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  85
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.EclipseSourceDir.java">org/apache/maven/plugin/eclipse/EclipseSourceDir.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  80
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.ide.JeeUtils.java">org/apache/maven/plugin/ide/JeeUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  164
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.RadPlugin.java">org/apache/maven/plugin/eclipse/RadPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  162
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.InstallPluginsMojo.java">org/apache/maven/plugin/eclipse/InstallPluginsMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  107
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter.java">org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  80
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.AbstractEclipseManifestWriter.java">org/apache/maven/plugin/eclipse/writers/AbstractEclipseManifestWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  118
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseAntExternalLaunchConfigurationWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseAntExternalLaunchConfigurationWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.RadCleanMojo.java">org/apache/maven/plugin/eclipse/RadCleanMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  46
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.HelpMojo.java">org/apache/maven/plugin/eclipse/HelpMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  64
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.messages.properties">org/apache/maven/plugin/eclipse/messages.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadEjbClasspathWriter.java">org/apache/maven/plugin/eclipse/writers/rad/RadEjbClasspathWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  123
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpFacetsWriter.java">org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpFacetsWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  121
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.ide.JeeDescriptor.java">org/apache/maven/plugin/ide/JeeDescriptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.osgiplugin.AbstractEclipseOsgiPlugin.java">org/apache/maven/plugin/eclipse/osgiplugin/AbstractEclipseOsgiPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  39
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.ConfigureWorkspaceMojo.java">org/apache/maven/plugin/eclipse/ConfigureWorkspaceMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.WorkspaceDependencyResolveMojo.java">org/apache/maven/plugin/eclipse/WorkspaceDependencyResolveMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  83
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadWebSettingsWriter.java">org/apache/maven/plugin/eclipse/writers/rad/RadWebSettingsWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  85
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.EclipseConfigFile.java">org/apache/maven/plugin/eclipse/EclipseConfigFile.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.osgiplugin.EclipseOsgiPlugin.java">org/apache/maven/plugin/eclipse/osgiplugin/EclipseOsgiPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpmodulesWriter.java">org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpmodulesWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  54
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseSpringBeansWriter.java">org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseSpringBeansWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  74
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.MyEclipseCleanMojo.java">org/apache/maven/plugin/eclipse/MyEclipseCleanMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.ide.IdeUtils.java">org/apache/maven/plugin/ide/IdeUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  253
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.rad.RadJ2EEWriter.java">org/apache/maven/plugin/eclipse/writers/rad/RadJ2EEWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  72
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter.java">org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  310
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.EclipseCleanMojo.java">org/apache/maven/plugin/eclipse/EclipseCleanMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.EclipseToMavenMojo.java">org/apache/maven/plugin/eclipse/EclipseToMavenMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  449
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseMetadataWriter.java">org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseMetadataWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  73
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.Messages.java">org/apache/maven/plugin/eclipse/Messages.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.MyEclipsePlugin.java">org/apache/maven/plugin/eclipse/MyEclipsePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  133
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.BuildCommand.java">org/apache/maven/plugin/eclipse/BuildCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  88
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.workspace.WorkspaceWriter.java">org/apache/maven/plugin/eclipse/writers/workspace/WorkspaceWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.EclipsePlugin.java">org/apache/maven/plugin/eclipse/EclipsePlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  772
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.ide.AbstractIdeSupportMojo.java">org/apache/maven/plugin/ide/AbstractIdeSupportMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  284
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseManifestWriter.java">org/apache/maven/plugin/eclipse/writers/EclipseManifestWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  51
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.wtp.AbstractWtpResourceWriter.java">org/apache/maven/plugin/eclipse/writers/wtp/AbstractWtpResourceWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  155
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.Constants.java">org/apache/maven/plugin/eclipse/Constants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.workspace.EclipseWorkspaceWriter.java">org/apache/maven/plugin/eclipse/writers/workspace/EclipseWorkspaceWriter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  51
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.osgiplugin.ExplodedPlugin.java">org/apache/maven/plugin/eclipse/osgiplugin/ExplodedPlugin.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  31
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.writers.EclipseWriterConfig.java">org/apache/maven/plugin/eclipse/writers/EclipseWriterConfig.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  50
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/maven/plugins/eclipse-maven-plugin//checkstyle.html#org.apache.maven.plugin.eclipse.AbstractWorkspaceMojo.java">org/apache/maven/plugin/eclipse/AbstractWorkspaceMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

@@ -1,0 +1,9 @@
+org.apache.maven.plugin.eclipse
+org.apache.maven.plugin.eclipse.osgiplugin
+org.apache.maven.plugin.eclipse.reader
+org.apache.maven.plugin.eclipse.writers
+org.apache.maven.plugin.eclipse.writers.myeclipse
+org.apache.maven.plugin.eclipse.writers.rad
+org.apache.maven.plugin.eclipse.writers.workspace
+org.apache.maven.plugin.eclipse.writers.wtp
+org.apache.maven.plugin.ide
