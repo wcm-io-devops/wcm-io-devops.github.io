@@ -116,20 +116,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.BundleFileSet.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/BundleFileSet.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.AllPackageBuilder.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.java</a>
                 </td>
                 <td>
@@ -144,7 +130,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.BundleFile.java">io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.BundleFileSet.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/BundleFileSet.java</a>
                 </td>
                 <td>
                   0
@@ -159,6 +145,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.PackageTypeValidation.java">io/wcm/devops/conga/plugins/aem/maven/PackageTypeValidation.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.BundleFile.java">io/wcm/devops/conga/plugins/aem/maven/model/BundleFile.java</a>
                 </td>
                 <td>
                   0
@@ -200,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.AbstractInstallableFile.java">io/wcm/devops/conga/plugins/aem/maven/model/AbstractInstallableFile.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.InstallableFile.java">io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.java</a>
                 </td>
                 <td>
                   0
@@ -214,7 +214,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.InstallableFile.java">io/wcm/devops/conga/plugins/aem/maven/model/InstallableFile.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.AbstractInstallableFile.java">io/wcm/devops/conga/plugins/aem/maven/model/AbstractInstallableFile.java</a>
                 </td>
                 <td>
                   0
@@ -312,7 +312,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.RunModeOptimization.java">io/wcm/devops/conga/plugins/aem/maven/RunModeOptimization.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.FileSet.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/FileSet.java</a>
                 </td>
                 <td>
                   0
@@ -326,7 +326,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.FileSet.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/FileSet.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.RunModeOptimization.java">io/wcm/devops/conga/plugins/aem/maven/RunModeOptimization.java</a>
                 </td>
                 <td>
                   0
@@ -354,7 +354,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.AbstractContentPackageMojo.java">io/wcm/devops/conga/plugins/aem/maven/AbstractContentPackageMojo.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.YamlUtil.java">io/wcm/devops/conga/plugins/aem/maven/model/YamlUtil.java</a>
                 </td>
                 <td>
                   0
@@ -368,7 +368,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.model.YamlUtil.java">io/wcm/devops/conga/plugins/aem/maven/model/YamlUtil.java</a>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.AbstractContentPackageMojo.java">io/wcm/devops/conga/plugins/aem/maven/AbstractContentPackageMojo.java</a>
                 </td>
                 <td>
                   0
