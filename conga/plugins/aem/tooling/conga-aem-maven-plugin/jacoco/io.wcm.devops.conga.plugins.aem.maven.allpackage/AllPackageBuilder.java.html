@@ -45,10 +45,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -65,6 +65,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.ImmutableSet;
 
 import io.wcm.devops.conga.plugins.aem.maven.AutoDependenciesMode;
+import io.wcm.devops.conga.plugins.aem.maven.BuildOutputTimestamp;
 import io.wcm.devops.conga.plugins.aem.maven.PackageTypeValidation;
 import io.wcm.devops.conga.plugins.aem.maven.RunModeOptimization;
 import io.wcm.devops.conga.plugins.aem.maven.model.BundleFile;
@@ -101,30 +102,31 @@ public final class AllPackageBuilder {
   private final String groupName;
   private final String packageName;
   private String version;
-<span class="fc" id="L104">  private AutoDependenciesMode autoDependenciesMode = AutoDependenciesMode.OFF;</span>
-<span class="fc" id="L105">  private RunModeOptimization runModeOptimization = RunModeOptimization.OFF;</span>
-<span class="fc" id="L106">  private PackageTypeValidation packageTypeValidation = PackageTypeValidation.STRICT;</span>
+<span class="fc" id="L105">  private AutoDependenciesMode autoDependenciesMode = AutoDependenciesMode.OFF;</span>
+<span class="fc" id="L106">  private RunModeOptimization runModeOptimization = RunModeOptimization.OFF;</span>
+<span class="fc" id="L107">  private PackageTypeValidation packageTypeValidation = PackageTypeValidation.STRICT;</span>
   private Log log;
+  private BuildOutputTimestamp buildOutputTimestamp;
 
   private static final String RUNMODE_DEFAULT = &quot;$default$&quot;;
-<span class="fc" id="L110">  private static final Set&lt;String&gt; ALLOWED_PACKAGE_TYPES = ImmutableSet.of(</span>
-<span class="fc" id="L111">      PackageType.APPLICATION.name().toLowerCase(),</span>
-<span class="fc" id="L112">      PackageType.CONTAINER.name().toLowerCase(),</span>
-<span class="fc" id="L113">      PackageType.CONTENT.name().toLowerCase());</span>
+<span class="fc" id="L112">  private static final Set&lt;String&gt; ALLOWED_PACKAGE_TYPES = ImmutableSet.of(</span>
+<span class="fc" id="L113">      PackageType.APPLICATION.name().toLowerCase(),</span>
+<span class="fc" id="L114">      PackageType.CONTAINER.name().toLowerCase(),</span>
+<span class="fc" id="L115">      PackageType.CONTENT.name().toLowerCase());</span>
 
-<span class="fc" id="L115">  private final List&lt;ContentPackageFileSet&gt; contentPackageFileSets = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L116">  private final List&lt;BundleFileSet&gt; bundleFileSets = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L117">  private final List&lt;ContentPackageFileSet&gt; contentPackageFileSets = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L118">  private final List&lt;BundleFileSet&gt; bundleFileSets = new ArrayList&lt;&gt;();</span>
 
   /**
    * @param targetFile Target file
    * @param groupName Group name
    * @param packageName Package name
    */
-<span class="fc" id="L123">  public AllPackageBuilder(File targetFile, String groupName, String packageName) {</span>
-<span class="fc" id="L124">    this.targetFile = targetFile;</span>
-<span class="fc" id="L125">    this.groupName = groupName;</span>
-<span class="fc" id="L126">    this.packageName = packageName;</span>
-<span class="fc" id="L127">  }</span>
+<span class="fc" id="L125">  public AllPackageBuilder(File targetFile, String groupName, String packageName) {</span>
+<span class="fc" id="L126">    this.targetFile = targetFile;</span>
+<span class="fc" id="L127">    this.groupName = groupName;</span>
+<span class="fc" id="L128">    this.packageName = packageName;</span>
+<span class="fc" id="L129">  }</span>
 
   /**
    * @param value Automatically generate dependencies between content packages based on file order in CONGA
@@ -132,8 +134,8 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder autoDependenciesMode(AutoDependenciesMode value) {
-<span class="fc" id="L135">    this.autoDependenciesMode = value;</span>
-<span class="fc" id="L136">    return this;</span>
+<span class="fc" id="L137">    this.autoDependenciesMode = value;</span>
+<span class="fc" id="L138">    return this;</span>
   }
 
   /**
@@ -141,8 +143,8 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder runModeOptimization(RunModeOptimization value) {
-<span class="fc" id="L144">    this.runModeOptimization = value;</span>
-<span class="fc" id="L145">    return this;</span>
+<span class="fc" id="L146">    this.runModeOptimization = value;</span>
+<span class="fc" id="L147">    return this;</span>
   }
 
   /**
@@ -150,8 +152,8 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder packageTypeValidation(PackageTypeValidation value) {
-<span class="fc" id="L153">    this.packageTypeValidation = value;</span>
-<span class="fc" id="L154">    return this;</span>
+<span class="fc" id="L155">    this.packageTypeValidation = value;</span>
+<span class="fc" id="L156">    return this;</span>
   }
 
   /**
@@ -159,8 +161,8 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder logger(Log value) {
-<span class="fc" id="L162">    this.log = value;</span>
-<span class="fc" id="L163">    return this;</span>
+<span class="fc" id="L164">    this.log = value;</span>
+<span class="fc" id="L165">    return this;</span>
   }
 
   /**
@@ -168,15 +170,24 @@ public final class AllPackageBuilder {
    * @return this
    */
   public AllPackageBuilder version(String value) {
-<span class="fc" id="L171">    this.version = value;</span>
-<span class="fc" id="L172">    return this;</span>
+<span class="fc" id="L173">    this.version = value;</span>
+<span class="fc" id="L174">    return this;</span>
+  }
+
+  /**
+   * @param value Build output timestamp
+   * @return this
+   */
+  public AllPackageBuilder buildOutputTimestamp(BuildOutputTimestamp value) {
+<span class="fc" id="L182">    this.buildOutputTimestamp = value;</span>
+<span class="fc" id="L183">    return this;</span>
   }
 
   private Log getLog() {
-<span class="fc bfc" id="L176" title="All 2 branches covered.">    if (this.log == null) {</span>
-<span class="fc" id="L177">      this.log = new SystemStreamLog();</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">    if (this.log == null) {</span>
+<span class="fc" id="L188">      this.log = new SystemStreamLog();</span>
     }
-<span class="fc" id="L179">    return this.log;</span>
+<span class="fc" id="L190">    return this.log;</span>
   }
 
   /**
@@ -186,39 +197,39 @@ public final class AllPackageBuilder {
    * @throws IllegalArgumentException If and invalid package type is detected
    */
   public void add(List&lt;InstallableFile&gt; files, Set&lt;String&gt; cloudManagerTarget) {
-<span class="fc" id="L189">    List&lt;ContentPackageFile&gt; contentPackages = filterFiles(files, ContentPackageFile.class);</span>
+<span class="fc" id="L200">    List&lt;ContentPackageFile&gt; contentPackages = filterFiles(files, ContentPackageFile.class);</span>
 
     // collect list of cloud manager environment run modes
-<span class="fc" id="L192">    List&lt;String&gt; environmentRunModes = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">    if (cloudManagerTarget.isEmpty()) {</span>
-<span class="fc" id="L194">      environmentRunModes.add(RUNMODE_DEFAULT);</span>
+<span class="fc" id="L203">    List&lt;String&gt; environmentRunModes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">    if (cloudManagerTarget.isEmpty()) {</span>
+<span class="fc" id="L205">      environmentRunModes.add(RUNMODE_DEFAULT);</span>
     }
     else {
-<span class="fc" id="L197">      environmentRunModes.addAll(cloudManagerTarget);</span>
+<span class="fc" id="L208">      environmentRunModes.addAll(cloudManagerTarget);</span>
     }
 
     List&lt;ContentPackageFile&gt; validContentPackages;
-<span class="pc bpc" id="L201" title="1 of 3 branches missed.">    switch (packageTypeValidation) {</span>
+<span class="pc bpc" id="L212" title="1 of 3 branches missed.">    switch (packageTypeValidation) {</span>
       case STRICT:
-<span class="fc" id="L203">        validContentPackages = getValidContentPackagesStrictValidation(contentPackages);</span>
-<span class="fc" id="L204">        break;</span>
+<span class="fc" id="L214">        validContentPackages = getValidContentPackagesStrictValidation(contentPackages);</span>
+<span class="fc" id="L215">        break;</span>
       case WARN:
-<span class="fc" id="L206">        validContentPackages = getValidContentPackagesWarnValidation(contentPackages);</span>
-<span class="fc" id="L207">        break;</span>
+<span class="fc" id="L217">        validContentPackages = getValidContentPackagesWarnValidation(contentPackages);</span>
+<span class="fc" id="L218">        break;</span>
       default:
-<span class="nc" id="L209">        throw new IllegalArgumentException(&quot;Unsupported package type validation: &quot; + packageTypeValidation);</span>
+<span class="nc" id="L220">        throw new IllegalArgumentException(&quot;Unsupported package type validation: &quot; + packageTypeValidation);</span>
     }
 
-<span class="fc bfc" id="L212" title="All 2 branches covered.">    if (!validContentPackages.isEmpty()) {</span>
-<span class="fc" id="L213">      contentPackageFileSets.add(new ContentPackageFileSet(validContentPackages, environmentRunModes));</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">    if (!validContentPackages.isEmpty()) {</span>
+<span class="fc" id="L224">      contentPackageFileSets.add(new ContentPackageFileSet(validContentPackages, environmentRunModes));</span>
     }
 
     // add OSGi bundles
-<span class="fc" id="L217">    List&lt;BundleFile&gt; bundles = filterFiles(files, BundleFile.class);</span>
-<span class="fc bfc" id="L218" title="All 2 branches covered.">    if (!bundles.isEmpty()) {</span>
-<span class="fc" id="L219">      bundleFileSets.add(new BundleFileSet(bundles, environmentRunModes));</span>
+<span class="fc" id="L228">    List&lt;BundleFile&gt; bundles = filterFiles(files, BundleFile.class);</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">    if (!bundles.isEmpty()) {</span>
+<span class="fc" id="L230">      bundleFileSets.add(new BundleFileSet(bundles, environmentRunModes));</span>
     }
-<span class="fc" id="L221">  }</span>
+<span class="fc" id="L232">  }</span>
 
   /**
    * Get valid content packages in strict mode: Ignore content packages without package type (with warning),
@@ -228,26 +239,26 @@ public final class AllPackageBuilder {
    */
   private List&lt;ContentPackageFile&gt; getValidContentPackagesStrictValidation(List&lt;? extends ContentPackageFile&gt; contentPackages) {
     // generate warning for each content packages without package type that is skipped
-<span class="fc" id="L231">    contentPackages.stream()</span>
-<span class="fc bfc" id="L232" title="All 2 branches covered.">        .filter(pkg -&gt; !hasPackageType(pkg))</span>
-<span class="fc" id="L233">        .forEach(pkg -&gt; getLog().warn(&quot;Skipping content package without package type: &quot; + getCanonicalPath(pkg.getFile())));</span>
+<span class="fc" id="L242">    contentPackages.stream()</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        .filter(pkg -&gt; !hasPackageType(pkg))</span>
+<span class="fc" id="L244">        .forEach(pkg -&gt; getLog().warn(&quot;Skipping content package without package type: &quot; + getCanonicalPath(pkg.getFile())));</span>
 
     // fail build if content packages with non-allowed package types exist
-<span class="fc" id="L236">    List&lt;ContentPackageFile&gt; invalidPackageTypeContentPackages = contentPackages.stream()</span>
-<span class="fc" id="L237">        .filter(AllPackageBuilder::hasPackageType)</span>
-<span class="fc bfc" id="L238" title="All 2 branches covered.">        .filter(pkg -&gt; !isValidPackageType(pkg))</span>
-<span class="fc" id="L239">        .collect(Collectors.toList());</span>
-<span class="fc bfc" id="L240" title="All 2 branches covered.">    if (!invalidPackageTypeContentPackages.isEmpty()) {</span>
-<span class="fc" id="L241">      throw new IllegalArgumentException(&quot;Content packages found with unsupported package types: &quot; +</span>
-<span class="fc" id="L242">          invalidPackageTypeContentPackages.stream()</span>
-<span class="fc" id="L243">              .map(pkg -&gt; pkg.getName() + &quot; -&gt; &quot; + pkg.getPackageType())</span>
-<span class="fc" id="L244">              .collect(Collectors.joining(&quot;, &quot;)));</span>
+<span class="fc" id="L247">    List&lt;ContentPackageFile&gt; invalidPackageTypeContentPackages = contentPackages.stream()</span>
+<span class="fc" id="L248">        .filter(AllPackageBuilder::hasPackageType)</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        .filter(pkg -&gt; !isValidPackageType(pkg))</span>
+<span class="fc" id="L250">        .collect(Collectors.toList());</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">    if (!invalidPackageTypeContentPackages.isEmpty()) {</span>
+<span class="fc" id="L252">      throw new IllegalArgumentException(&quot;Content packages found with unsupported package types: &quot; +</span>
+<span class="fc" id="L253">          invalidPackageTypeContentPackages.stream()</span>
+<span class="fc" id="L254">              .map(pkg -&gt; pkg.getName() + &quot; -&gt; &quot; + pkg.getPackageType())</span>
+<span class="fc" id="L255">              .collect(Collectors.joining(&quot;, &quot;)));</span>
     }
 
     // collect AEM content packages with package type
-<span class="fc" id="L248">    return contentPackages.stream()</span>
-<span class="fc" id="L249">        .filter(AllPackageBuilder::hasPackageType)</span>
-<span class="fc" id="L250">        .collect(Collectors.toList());</span>
+<span class="fc" id="L259">    return contentPackages.stream()</span>
+<span class="fc" id="L260">        .filter(AllPackageBuilder::hasPackageType)</span>
+<span class="fc" id="L261">        .collect(Collectors.toList());</span>
   }
 
   /**
@@ -257,26 +268,26 @@ public final class AllPackageBuilder {
    */
   private List&lt;ContentPackageFile&gt; getValidContentPackagesWarnValidation(List&lt;? extends ContentPackageFile&gt; contentPackages) {
     // generate warning for each content packages without package type
-<span class="fc" id="L260">    contentPackages.stream()</span>
-<span class="fc bfc" id="L261" title="All 2 branches covered.">        .filter(pkg -&gt; !hasPackageType(pkg))</span>
-<span class="fc" id="L262">        .forEach(pkg -&gt; getLog().warn(&quot;Found content package without package type: &quot; + getCanonicalPath(pkg.getFile())));</span>
+<span class="fc" id="L271">    contentPackages.stream()</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        .filter(pkg -&gt; !hasPackageType(pkg))</span>
+<span class="fc" id="L273">        .forEach(pkg -&gt; getLog().warn(&quot;Found content package without package type: &quot; + getCanonicalPath(pkg.getFile())));</span>
 
     // generate warning for each content packages with invalid package type
-<span class="fc" id="L265">    contentPackages.stream()</span>
-<span class="fc" id="L266">        .filter(AllPackageBuilder::hasPackageType)</span>
-<span class="fc bfc" id="L267" title="All 2 branches covered.">        .filter(pkg -&gt; !isValidPackageType(pkg))</span>
-<span class="fc" id="L268">        .forEach(pkg -&gt; getLog().warn(&quot;Found content package with invalid package type: &quot;</span>
-<span class="fc" id="L269">            + getCanonicalPath(pkg.getFile()) + &quot; -&gt; &quot; + pkg.getPackageType()));</span>
+<span class="fc" id="L276">    contentPackages.stream()</span>
+<span class="fc" id="L277">        .filter(AllPackageBuilder::hasPackageType)</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        .filter(pkg -&gt; !isValidPackageType(pkg))</span>
+<span class="fc" id="L279">        .forEach(pkg -&gt; getLog().warn(&quot;Found content package with invalid package type: &quot;</span>
+<span class="fc" id="L280">            + getCanonicalPath(pkg.getFile()) + &quot; -&gt; &quot; + pkg.getPackageType()));</span>
 
     // return all content packages
-<span class="fc" id="L272">    return contentPackages.stream().collect(Collectors.toList());</span>
+<span class="fc" id="L283">    return contentPackages.stream().collect(Collectors.toList());</span>
   }
 
   private static &lt;T&gt; List&lt;T&gt; filterFiles(List&lt;? extends InstallableFile&gt; files, Class&lt;T&gt; fileClass) {
-<span class="fc" id="L276">    return files.stream()</span>
-<span class="fc" id="L277">        .filter(fileClass::isInstance)</span>
-<span class="fc" id="L278">        .map(fileClass::cast)</span>
-<span class="fc" id="L279">        .collect(Collectors.toList());</span>
+<span class="fc" id="L287">    return files.stream()</span>
+<span class="fc" id="L288">        .filter(fileClass::isInstance)</span>
+<span class="fc" id="L289">        .map(fileClass::cast)</span>
+<span class="fc" id="L290">        .collect(Collectors.toList());</span>
   }
 
   /**
@@ -287,86 +298,86 @@ public final class AllPackageBuilder {
    */
   public boolean build(Map&lt;String, String&gt; properties) throws IOException {
 
-<span class="fc bfc" id="L290" title="All 2 branches covered.">    if (contentPackageFileSets.isEmpty()) {</span>
-<span class="fc" id="L291">      return false;</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">    if (contentPackageFileSets.isEmpty()) {</span>
+<span class="fc" id="L302">      return false;</span>
     }
 
     // prepare content package metadata
-<span class="fc" id="L295">    ContentPackageBuilder builder = new ContentPackageBuilder()</span>
-<span class="fc" id="L296">        .group(groupName)</span>
-<span class="fc" id="L297">        .name(packageName)</span>
-<span class="fc" id="L298">        .packageType(&quot;container&quot;);</span>
-<span class="fc bfc" id="L299" title="All 2 branches covered.">    if (version != null) {</span>
-<span class="fc" id="L300">      builder.version(version);</span>
+<span class="fc" id="L306">    ContentPackageBuilder builder = new ContentPackageBuilder()</span>
+<span class="fc" id="L307">        .group(groupName)</span>
+<span class="fc" id="L308">        .name(packageName)</span>
+<span class="fc" id="L309">        .packageType(&quot;container&quot;);</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">    if (version != null) {</span>
+<span class="fc" id="L311">      builder.version(version);</span>
     }
 
     // define root path for &quot;all&quot; package
-<span class="fc" id="L304">    String rootPath = buildRootPath(groupName, packageName);</span>
-<span class="fc" id="L305">    builder.filter(new PackageFilter(rootPath));</span>
+<span class="fc" id="L315">    String rootPath = buildRootPath(groupName, packageName);</span>
+<span class="fc" id="L316">    builder.filter(new PackageFilter(rootPath));</span>
 
     // additional package properties
-<span class="fc bfc" id="L308" title="All 2 branches covered.">    if (properties != null) {</span>
-<span class="fc" id="L309">      properties.entrySet().forEach(entry -&gt; builder.property(entry.getKey(), entry.getValue()));</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">    if (properties != null) {</span>
+<span class="fc" id="L320">      properties.entrySet().forEach(entry -&gt; builder.property(entry.getKey(), entry.getValue()));</span>
     }
 
     // build content package
-<span class="fc" id="L313">    try (ContentPackage contentPackage = builder.build(targetFile)) {</span>
-<span class="fc" id="L314">      buildAddContentPackages(contentPackage, rootPath);</span>
-<span class="fc" id="L315">      buildAddBundles(contentPackage, rootPath);</span>
+<span class="fc" id="L324">    try (ContentPackage contentPackage = builder.build(targetFile)) {</span>
+<span class="fc" id="L325">      buildAddContentPackages(contentPackage, rootPath);</span>
+<span class="fc" id="L326">      buildAddBundles(contentPackage, rootPath);</span>
     }
 
-<span class="fc" id="L318">    return true;</span>
+<span class="fc" id="L329">    return true;</span>
   }
 
   private void buildAddContentPackages(ContentPackage contentPackage, String rootPath) throws IOException {
     // build set with dependencies instances for each package contained in all filesets
-<span class="fc" id="L323">    Set&lt;Dependency&gt; allPackagesFromFileSets = new HashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L324" title="All 2 branches covered.">    for (ContentPackageFileSet fileSet : contentPackageFileSets) {</span>
-<span class="fc bfc" id="L325" title="All 2 branches covered.">      for (ContentPackageFile pkg : fileSet.getFiles()) {</span>
-<span class="fc" id="L326">        addDependencyInformation(allPackagesFromFileSets, pkg);</span>
-<span class="fc" id="L327">      }</span>
-<span class="fc" id="L328">    }</span>
+<span class="fc" id="L334">    Set&lt;Dependency&gt; allPackagesFromFileSets = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">    for (ContentPackageFileSet fileSet : contentPackageFileSets) {</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">      for (ContentPackageFile pkg : fileSet.getFiles()) {</span>
+<span class="fc" id="L337">        addDependencyInformation(allPackagesFromFileSets, pkg);</span>
+<span class="fc" id="L338">      }</span>
+<span class="fc" id="L339">    }</span>
 
     Collection&lt;ContentPackageFileSet&gt; processedFileSets;
-<span class="fc bfc" id="L331" title="All 2 branches covered.">    if (runModeOptimization == RunModeOptimization.ELIMINATE_DUPLICATES) {</span>
+<span class="fc bfc" id="L342" title="All 2 branches covered.">    if (runModeOptimization == RunModeOptimization.ELIMINATE_DUPLICATES) {</span>
       // eliminate duplicates which are same for author and publish
-<span class="fc" id="L333">      processedFileSets = eliminateAuthorPublishDuplicates(contentPackageFileSets,</span>
-<span class="fc" id="L334">        environmentRunMode -&gt; new ContentPackageFileSet(new ArrayList&lt;&gt;(), Collections.singletonList(environmentRunMode)));</span>
+<span class="fc" id="L344">      processedFileSets = eliminateAuthorPublishDuplicates(contentPackageFileSets,</span>
+<span class="fc" id="L345">        environmentRunMode -&gt; new ContentPackageFileSet(new ArrayList&lt;&gt;(), Collections.singletonList(environmentRunMode)));</span>
     }
     else {
-<span class="fc" id="L337">      processedFileSets = contentPackageFileSets;</span>
+<span class="fc" id="L348">      processedFileSets = contentPackageFileSets;</span>
     }
 
-<span class="fc bfc" id="L340" title="All 2 branches covered.">    for (ContentPackageFileSet fileSet : processedFileSets) {</span>
-<span class="fc bfc" id="L341" title="All 2 branches covered.">      for (String environmentRunMode : fileSet.getEnvironmentRunModes()) {</span>
-<span class="fc" id="L342">        List&lt;ContentPackageFile&gt; previousPackages = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L343" title="All 2 branches covered.">        for (ContentPackageFile pkg : fileSet.getFiles()) {</span>
-<span class="fc" id="L344">          ContentPackageFile previousPkg = getDependencyChainPreviousPackage(pkg, previousPackages);</span>
+<span class="fc bfc" id="L351" title="All 2 branches covered.">    for (ContentPackageFileSet fileSet : processedFileSets) {</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">      for (String environmentRunMode : fileSet.getEnvironmentRunModes()) {</span>
+<span class="fc" id="L353">        List&lt;ContentPackageFile&gt; previousPackages = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        for (ContentPackageFile pkg : fileSet.getFiles()) {</span>
+<span class="fc" id="L355">          ContentPackageFile previousPkg = getDependencyChainPreviousPackage(pkg, previousPackages);</span>
 
           // set package name, wire previous package in package dependency
-<span class="fc" id="L347">          List&lt;TemporaryContentPackageFile&gt; processedFiles = processContentPackage(pkg, previousPkg, environmentRunMode, allPackagesFromFileSets);</span>
+<span class="fc" id="L358">          List&lt;TemporaryContentPackageFile&gt; processedFiles = processContentPackage(pkg, previousPkg, environmentRunMode, allPackagesFromFileSets);</span>
 
           // add processed content packages to &quot;all&quot; content package - and delete the temporary files
           try {
-<span class="fc bfc" id="L351" title="All 2 branches covered.">            for (TemporaryContentPackageFile processedFile : processedFiles) {</span>
-<span class="fc" id="L352">              String path = buildPackagePath(processedFile, rootPath, environmentRunMode);</span>
-<span class="fc" id="L353">              contentPackage.addFile(path, processedFile.getFile());</span>
-<span class="pc bpc" id="L354" title="1 of 2 branches missed.">              if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L355">                log.debug(&quot;  Add &quot; + processedFile.getPackageInfoWithDependencies());</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">            for (TemporaryContentPackageFile processedFile : processedFiles) {</span>
+<span class="fc" id="L363">              String path = buildPackagePath(processedFile, rootPath, environmentRunMode);</span>
+<span class="fc" id="L364">              contentPackage.addFile(path, processedFile.getFile());</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">              if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L366">                log.debug(&quot;  Add &quot; + processedFile.getPackageInfoWithDependencies());</span>
               }
-<span class="fc" id="L357">            }</span>
+<span class="fc" id="L368">            }</span>
           }
           finally {
-<span class="fc" id="L360">            processedFiles.stream()</span>
-<span class="fc" id="L361">                .map(TemporaryContentPackageFile::getFile)</span>
-<span class="fc" id="L362">                .forEach(FileUtils::deleteQuietly);</span>
+<span class="fc" id="L371">            processedFiles.stream()</span>
+<span class="fc" id="L372">                .map(TemporaryContentPackageFile::getFile)</span>
+<span class="fc" id="L373">                .forEach(FileUtils::deleteQuietly);</span>
           }
 
-<span class="fc" id="L365">          previousPackages.add(pkg);</span>
-<span class="fc" id="L366">        }</span>
-<span class="fc" id="L367">      }</span>
-<span class="fc" id="L368">    }</span>
-<span class="fc" id="L369">  }</span>
+<span class="fc" id="L376">          previousPackages.add(pkg);</span>
+<span class="fc" id="L377">        }</span>
+<span class="fc" id="L378">      }</span>
+<span class="fc" id="L379">    }</span>
+<span class="fc" id="L380">  }</span>
 
   /**
    * Gets the previous package in the order defined by CONGA to define as package dependency in current package.
@@ -376,62 +387,62 @@ public final class AllPackageBuilder {
    */
   private @Nullable ContentPackageFile getDependencyChainPreviousPackage(@NotNull ContentPackageFile currentPackage,
       @NotNull List&lt;ContentPackageFile&gt; previousPackages) {
-<span class="fc bfc" id="L379" title="All 4 branches covered.">    if ((autoDependenciesMode == AutoDependenciesMode.OFF)</span>
-<span class="fc bfc" id="L380" title="All 2 branches covered.">        || (autoDependenciesMode == AutoDependenciesMode.IMMUTABLE_ONLY &amp;&amp; isMutable(currentPackage))) {</span>
-<span class="fc" id="L381">      return null;</span>
+<span class="fc bfc" id="L390" title="All 4 branches covered.">    if ((autoDependenciesMode == AutoDependenciesMode.OFF)</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        || (autoDependenciesMode == AutoDependenciesMode.IMMUTABLE_ONLY &amp;&amp; isMutable(currentPackage))) {</span>
+<span class="fc" id="L392">      return null;</span>
     }
     // get last previous package
-<span class="fc" id="L384">    return previousPackages.stream()</span>
+<span class="fc" id="L395">    return previousPackages.stream()</span>
         // if not IMMUTABLE_MUTABLE_COMBINED active only that of the same mutability type
-<span class="fc bfc" id="L386" title="All 4 branches covered.">        .filter(item -&gt; (autoDependenciesMode == AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED) || mutableMatches(item, currentPackage))</span>
+<span class="fc bfc" id="L397" title="All 4 branches covered.">        .filter(item -&gt; (autoDependenciesMode == AutoDependenciesMode.IMMUTABLE_MUTABLE_COMBINED) || mutableMatches(item, currentPackage))</span>
         // make sure author-only or publish-only packages are only taken into account if the current package has same restriction
-<span class="fc bfc" id="L388" title="All 2 branches covered.">        .filter(item -&gt; isAuthorAndPublish(item)</span>
-<span class="fc bfc" id="L389" title="All 4 branches covered.">            || (isOnlyAuthor(item) &amp;&amp; isOnlyAuthor(currentPackage))</span>
-<span class="pc bpc" id="L390" title="1 of 4 branches missed.">            || (isOnlyPublish(item) &amp;&amp; isOnlyPublish(currentPackage)))</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">        .filter(item -&gt; isAuthorAndPublish(item)</span>
+<span class="fc bfc" id="L400" title="All 4 branches covered.">            || (isOnlyAuthor(item) &amp;&amp; isOnlyAuthor(currentPackage))</span>
+<span class="pc bpc" id="L401" title="1 of 4 branches missed.">            || (isOnlyPublish(item) &amp;&amp; isOnlyPublish(currentPackage)))</span>
         // get last in list
-<span class="fc" id="L392">        .reduce((first, second) -&gt; second).orElse(null);</span>
+<span class="fc" id="L403">        .reduce((first, second) -&gt; second).orElse(null);</span>
   }
 
   private void buildAddBundles(ContentPackage contentPackage, String rootPath) throws IOException {
     Collection&lt;BundleFileSet&gt; processedFileSets;
-<span class="fc bfc" id="L397" title="All 2 branches covered.">    if (runModeOptimization == RunModeOptimization.ELIMINATE_DUPLICATES) {</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">    if (runModeOptimization == RunModeOptimization.ELIMINATE_DUPLICATES) {</span>
       // eliminate duplicates which are same for author and publish
-<span class="fc" id="L399">      processedFileSets = eliminateAuthorPublishDuplicates(bundleFileSets,</span>
-<span class="fc" id="L400">          environmentRunMode -&gt; new BundleFileSet(new ArrayList&lt;&gt;(), Collections.singletonList(environmentRunMode)));</span>
+<span class="fc" id="L410">      processedFileSets = eliminateAuthorPublishDuplicates(bundleFileSets,</span>
+<span class="fc" id="L411">          environmentRunMode -&gt; new BundleFileSet(new ArrayList&lt;&gt;(), Collections.singletonList(environmentRunMode)));</span>
     }
     else {
-<span class="fc" id="L403">      processedFileSets = bundleFileSets;</span>
+<span class="fc" id="L414">      processedFileSets = bundleFileSets;</span>
     }
 
-<span class="fc bfc" id="L406" title="All 2 branches covered.">    for (BundleFileSet bundleFileSet : processedFileSets) {</span>
-<span class="fc bfc" id="L407" title="All 2 branches covered.">      for (String environmentRunMode : bundleFileSet.getEnvironmentRunModes()) {</span>
-<span class="fc bfc" id="L408" title="All 2 branches covered.">        for (BundleFile bundleFile : bundleFileSet.getFiles()) {</span>
-<span class="fc" id="L409">          String path = buildBundlePath(bundleFile, rootPath, environmentRunMode);</span>
-<span class="fc" id="L410">          contentPackage.addFile(path, bundleFile.getFile());</span>
-<span class="fc" id="L411">        }</span>
-<span class="fc" id="L412">      }</span>
-<span class="fc" id="L413">    }</span>
-<span class="fc" id="L414">  }</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">    for (BundleFileSet bundleFileSet : processedFileSets) {</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">      for (String environmentRunMode : bundleFileSet.getEnvironmentRunModes()) {</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">        for (BundleFile bundleFile : bundleFileSet.getFiles()) {</span>
+<span class="fc" id="L420">          String path = buildBundlePath(bundleFile, rootPath, environmentRunMode);</span>
+<span class="fc" id="L421">          contentPackage.addFile(path, bundleFile.getFile());</span>
+<span class="fc" id="L422">        }</span>
+<span class="fc" id="L423">      }</span>
+<span class="fc" id="L424">    }</span>
+<span class="fc" id="L425">  }</span>
 
   private static boolean hasPackageType(ContentPackageFile pkg) {
     // accept only content packages with a package type set
-<span class="fc bfc" id="L418" title="All 2 branches covered.">    return pkg.getPackageType() != null;</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">    return pkg.getPackageType() != null;</span>
   }
 
   private static boolean isValidPackageType(ContentPackageFile pkg) {
     // check if the package type is an allowed package type
-<span class="fc" id="L423">    return ALLOWED_PACKAGE_TYPES.contains(pkg.getPackageType());</span>
+<span class="fc" id="L434">    return ALLOWED_PACKAGE_TYPES.contains(pkg.getPackageType());</span>
   }
 
   private static boolean isMutable(ContentPackageFile pkg) {
-<span class="fc" id="L427">    return StringUtils.equals(&quot;content&quot;, pkg.getPackageType());</span>
+<span class="fc" id="L438">    return StringUtils.equals(&quot;content&quot;, pkg.getPackageType());</span>
   }
 
   private static boolean mutableMatches(ContentPackageFile pkg1, ContentPackageFile pkg2) {
-<span class="pc bpc" id="L431" title="2 of 4 branches missed.">    if (pkg1 == null || pkg2 == null) {</span>
-<span class="nc" id="L432">      return false;</span>
+<span class="pc bpc" id="L442" title="2 of 4 branches missed.">    if (pkg1 == null || pkg2 == null) {</span>
+<span class="nc" id="L443">      return false;</span>
     }
-<span class="fc bfc" id="L434" title="All 2 branches covered.">    return isMutable(pkg1) == isMutable(pkg2);</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">    return isMutable(pkg1) == isMutable(pkg2);</span>
   }
 
   /**
@@ -441,7 +452,7 @@ public final class AllPackageBuilder {
    * @return Package path
    */
   private static String buildRootPath(String groupName, String packageName) {
-<span class="fc" id="L444">    return &quot;/apps/&quot; + groupName + &quot;-&quot; + packageName + &quot;-packages&quot;;</span>
+<span class="fc" id="L455">    return &quot;/apps/&quot; + groupName + &quot;-&quot; + packageName + &quot;-packages&quot;;</span>
   }
 
   /**
@@ -450,17 +461,17 @@ public final class AllPackageBuilder {
    * @return Package path
    */
   private static String buildRunModeSuffix(InstallableFile file, String environmentRunMode) {
-<span class="fc" id="L453">    StringBuilder runModeSuffix = new StringBuilder();</span>
-<span class="fc bfc" id="L454" title="All 2 branches covered.">    if (isOnlyAuthor(file)) {</span>
-<span class="fc" id="L455">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_AUTHOR);</span>
+<span class="fc" id="L464">    StringBuilder runModeSuffix = new StringBuilder();</span>
+<span class="fc bfc" id="L465" title="All 2 branches covered.">    if (isOnlyAuthor(file)) {</span>
+<span class="fc" id="L466">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_AUTHOR);</span>
     }
-<span class="fc bfc" id="L457" title="All 2 branches covered.">    else if (isOnlyPublish(file)) {</span>
-<span class="fc" id="L458">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_PUBLISH);</span>
+<span class="fc bfc" id="L468" title="All 2 branches covered.">    else if (isOnlyPublish(file)) {</span>
+<span class="fc" id="L469">      runModeSuffix.append(&quot;.&quot;).append(RUNMODE_PUBLISH);</span>
     }
-<span class="fc bfc" id="L460" title="All 2 branches covered.">    if (!StringUtils.equals(environmentRunMode, RUNMODE_DEFAULT)) {</span>
-<span class="fc" id="L461">      runModeSuffix.append(&quot;.&quot;).append(environmentRunMode);</span>
+<span class="fc bfc" id="L471" title="All 2 branches covered.">    if (!StringUtils.equals(environmentRunMode, RUNMODE_DEFAULT)) {</span>
+<span class="fc" id="L472">      runModeSuffix.append(&quot;.&quot;).append(environmentRunMode);</span>
     }
-<span class="fc" id="L463">    return runModeSuffix.toString();</span>
+<span class="fc" id="L474">    return runModeSuffix.toString();</span>
   }
 
   /**
@@ -470,23 +481,23 @@ public final class AllPackageBuilder {
    * @return Package path
    */
   private String buildPackagePath(ContentPackageFile pkg, String rootPath, String environmentRunMode) {
-<span class="pc bpc" id="L473" title="1 of 4 branches missed.">    if (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(pkg)) {</span>
-<span class="nc" id="L474">      throw new IllegalArgumentException(&quot;Package &quot; + pkg.getPackageInfo() + &quot; has invalid package type: '&quot; + pkg.getPackageType() + &quot;'.&quot;);</span>
+<span class="pc bpc" id="L484" title="1 of 4 branches missed.">    if (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(pkg)) {</span>
+<span class="nc" id="L485">      throw new IllegalArgumentException(&quot;Package &quot; + pkg.getPackageInfo() + &quot; has invalid package type: '&quot; + pkg.getPackageType() + &quot;'.&quot;);</span>
     }
 
-<span class="fc" id="L477">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
+<span class="fc" id="L488">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
 
     // add run mode suffix to both install folder path and package file name
-<span class="fc" id="L480">    String path = rootPath + &quot;/&quot; + StringUtils.defaultString(pkg.getPackageType(), &quot;misc&quot;) + &quot;/install&quot; + runModeSuffix;</span>
+<span class="fc" id="L491">    String path = rootPath + &quot;/&quot; + StringUtils.defaultString(pkg.getPackageType(), &quot;misc&quot;) + &quot;/install&quot; + runModeSuffix;</span>
 
-<span class="fc" id="L482">    String versionSuffix = &quot;&quot;;</span>
-<span class="fc" id="L483">    String packageVersion = pkg.getVersion();</span>
-<span class="pc bpc" id="L484" title="1 of 4 branches missed.">    if (packageVersion != null &amp;&amp; pkg.getFile().getName().contains(packageVersion)) {</span>
-<span class="fc" id="L485">      versionSuffix = &quot;-&quot; + packageVersion;</span>
+<span class="fc" id="L493">    String versionSuffix = &quot;&quot;;</span>
+<span class="fc" id="L494">    String packageVersion = pkg.getVersion();</span>
+<span class="pc bpc" id="L495" title="1 of 4 branches missed.">    if (packageVersion != null &amp;&amp; pkg.getFile().getName().contains(packageVersion)) {</span>
+<span class="fc" id="L496">      versionSuffix = &quot;-&quot; + packageVersion;</span>
     }
-<span class="fc" id="L487">    String fileName = pkg.getName() + versionSuffix</span>
-<span class="fc" id="L488">        + &quot;.&quot; + FilenameUtils.getExtension(pkg.getFile().getName());</span>
-<span class="fc" id="L489">    return path + &quot;/&quot; + fileName;</span>
+<span class="fc" id="L498">    String fileName = pkg.getName() + versionSuffix</span>
+<span class="fc" id="L499">        + &quot;.&quot; + FilenameUtils.getExtension(pkg.getFile().getName());</span>
+<span class="fc" id="L500">    return path + &quot;/&quot; + fileName;</span>
   }
 
   /**
@@ -496,12 +507,12 @@ public final class AllPackageBuilder {
    * @return Package path
    */
   private static String buildBundlePath(BundleFile bundleFile, String rootPath, String environmentRunMode) {
-<span class="fc" id="L499">    String runModeSuffix = buildRunModeSuffix(bundleFile, environmentRunMode);</span>
+<span class="fc" id="L510">    String runModeSuffix = buildRunModeSuffix(bundleFile, environmentRunMode);</span>
 
     // add run mode suffix to both install folder path and package file name
-<span class="fc" id="L502">    String path = rootPath + &quot;/application/install&quot; + runModeSuffix;</span>
+<span class="fc" id="L513">    String path = rootPath + &quot;/application/install&quot; + runModeSuffix;</span>
 
-<span class="fc" id="L504">    return path + &quot;/&quot; + bundleFile.getFile().getName();</span>
+<span class="fc" id="L515">    return path + &quot;/&quot; + bundleFile.getFile().getName();</span>
   }
 
   /**
@@ -519,111 +530,112 @@ public final class AllPackageBuilder {
       ContentPackageFile previousPkg, String environmentRunMode,
       Set&lt;Dependency&gt; allPackagesFromFileSets) throws IOException {
 
-<span class="fc" id="L522">    List&lt;TemporaryContentPackageFile&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L523">    List&lt;TemporaryContentPackageFile&gt; subPackages = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L533">    List&lt;TemporaryContentPackageFile&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L534">    List&lt;TemporaryContentPackageFile&gt; subPackages = new ArrayList&lt;&gt;();</span>
 
     // create temp zip file to create rewritten copy of package
-<span class="fc" id="L526">    File tempFile = File.createTempFile(FilenameUtils.getBaseName(pkg.getFile().getName()), &quot;.zip&quot;);</span>
+<span class="fc" id="L537">    File tempFile = File.createTempFile(FilenameUtils.getBaseName(pkg.getFile().getName()), &quot;.zip&quot;);</span>
 
     // open original content package
-<span class="fc" id="L529">    try (ZipFile zipFileIn = new ZipFile(pkg.getFile())) {</span>
+<span class="fc" id="L540">    try (ZipFile zipFileIn = new ZipFile(pkg.getFile())) {</span>
 
       // iterate through entries and write them to the temp. zip file
-<span class="fc" id="L532">      try (FileOutputStream fos = new FileOutputStream(tempFile);</span>
-<span class="fc" id="L533">          ZipOutputStream zipOut = new ZipOutputStream(fos)) {</span>
-<span class="fc" id="L534">        Enumeration&lt;? extends ZipEntry&gt; zipInEntries = zipFileIn.entries();</span>
-<span class="fc bfc" id="L535" title="All 2 branches covered.">        while (zipInEntries.hasMoreElements()) {</span>
-<span class="fc" id="L536">          ZipEntry zipInEntry = zipInEntries.nextElement();</span>
-<span class="fc bfc" id="L537" title="All 2 branches covered.">          if (!zipInEntry.isDirectory()) {</span>
-<span class="fc" id="L538">            try (InputStream is = zipFileIn.getInputStream(zipInEntry)) {</span>
-<span class="fc" id="L539">              boolean processedEntry = false;</span>
+<span class="fc" id="L543">      try (FileOutputStream fos = new FileOutputStream(tempFile);</span>
+<span class="fc" id="L544">          ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(fos)) {</span>
+<span class="fc" id="L545">        Enumeration&lt;? extends ZipArchiveEntry&gt; zipInEntries = zipFileIn.getEntries();</span>
+<span class="fc bfc" id="L546" title="All 2 branches covered.">        while (zipInEntries.hasMoreElements()) {</span>
+<span class="fc" id="L547">          ZipArchiveEntry zipInEntry = zipInEntries.nextElement();</span>
+<span class="fc bfc" id="L548" title="All 2 branches covered.">          if (!zipInEntry.isDirectory()) {</span>
+<span class="fc" id="L549">            try (InputStream is = zipFileIn.getInputStream(zipInEntry)) {</span>
+<span class="fc" id="L550">              boolean processedEntry = false;</span>
 
               // if entry is properties.xml, update dependency information
-<span class="fc bfc" id="L542" title="All 2 branches covered.">              if (StringUtils.equals(zipInEntry.getName(), &quot;META-INF/vault/properties.xml&quot;)) {</span>
-<span class="fc" id="L543">                Properties props = new Properties();</span>
-<span class="fc" id="L544">                props.loadFromXML(is);</span>
-<span class="fc" id="L545">                addSuffixToPackageName(props, pkg, environmentRunMode);</span>
+<span class="fc bfc" id="L553" title="All 2 branches covered.">              if (StringUtils.equals(zipInEntry.getName(), &quot;META-INF/vault/properties.xml&quot;)) {</span>
+<span class="fc" id="L554">                FileVaultProperties fileVaultProps = new FileVaultProperties(is);</span>
+<span class="fc" id="L555">                Properties props = fileVaultProps.getProperties();</span>
+<span class="fc" id="L556">                addSuffixToPackageName(props, pkg, environmentRunMode);</span>
 
                 // update package dependencies
-<span class="fc" id="L548">                ContentPackageFile dependencyFile = previousPkg;</span>
-<span class="fc bfc" id="L549" title="All 2 branches covered.">                if (autoDependenciesMode == AutoDependenciesMode.OFF) {</span>
-<span class="fc" id="L550">                  dependencyFile = null;</span>
+<span class="fc" id="L559">                ContentPackageFile dependencyFile = previousPkg;</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">                if (autoDependenciesMode == AutoDependenciesMode.OFF) {</span>
+<span class="fc" id="L561">                  dependencyFile = null;</span>
                 }
-<span class="fc" id="L552">                updateDependencies(props, dependencyFile, environmentRunMode, allPackagesFromFileSets);</span>
+<span class="fc" id="L563">                updateDependencies(props, dependencyFile, environmentRunMode, allPackagesFromFileSets);</span>
 
                 // if package type is missing package properties, put in the type defined in model
-<span class="fc" id="L555">                String packageType = pkg.getPackageType();</span>
-<span class="fc bfc" id="L556" title="All 4 branches covered.">                if (props.get(NAME_PACKAGE_TYPE) == null &amp;&amp; packageType != null) {</span>
-<span class="fc" id="L557">                  props.put(NAME_PACKAGE_TYPE, packageType);</span>
+<span class="fc" id="L566">                String packageType = pkg.getPackageType();</span>
+<span class="fc bfc" id="L567" title="All 4 branches covered.">                if (props.get(NAME_PACKAGE_TYPE) == null &amp;&amp; packageType != null) {</span>
+<span class="fc" id="L568">                  props.put(NAME_PACKAGE_TYPE, packageType);</span>
                 }
 
-<span class="fc" id="L560">                ZipEntry zipOutEntry = newZipEntry(zipInEntry);</span>
-<span class="fc" id="L561">                zipOut.putNextEntry(zipOutEntry);</span>
-<span class="fc" id="L562">                props.storeToXML(zipOut, null);</span>
-<span class="fc" id="L563">                processedEntry = true;</span>
-<span class="fc" id="L564">              }</span>
+<span class="fc" id="L571">                ZipArchiveEntry zipOutEntry = newZipEntry(zipInEntry);</span>
+<span class="fc" id="L572">                zipOut.putArchiveEntry(zipOutEntry);</span>
+<span class="fc" id="L573">                fileVaultProps.storeToXml(zipOut);</span>
+<span class="fc" id="L574">                zipOut.closeArchiveEntry();</span>
+<span class="fc" id="L575">                processedEntry = true;</span>
+<span class="fc" id="L576">              }</span>
 
               // process sub-packages as well: add runmode suffix and update dependencies
-<span class="fc bfc" id="L567" title="All 2 branches covered.">              else if (StringUtils.equals(FilenameUtils.getExtension(zipInEntry.getName()), &quot;zip&quot;)) {</span>
-<span class="fc" id="L568">                File tempSubPackageFile = File.createTempFile(FilenameUtils.getBaseName(zipInEntry.getName()), &quot;.zip&quot;);</span>
-<span class="fc" id="L569">                try (FileOutputStream subPackageFos = new FileOutputStream(tempSubPackageFile)) {</span>
-<span class="fc" id="L570">                  IOUtils.copy(is, subPackageFos);</span>
+<span class="fc bfc" id="L579" title="All 2 branches covered.">              else if (StringUtils.equals(FilenameUtils.getExtension(zipInEntry.getName()), &quot;zip&quot;)) {</span>
+<span class="fc" id="L580">                File tempSubPackageFile = File.createTempFile(FilenameUtils.getBaseName(zipInEntry.getName()), &quot;.zip&quot;);</span>
+<span class="fc" id="L581">                try (FileOutputStream subPackageFos = new FileOutputStream(tempSubPackageFile)) {</span>
+<span class="fc" id="L582">                  IOUtils.copy(is, subPackageFos);</span>
                 }
 
                 // check if contained ZIP file is really a content package
                 // then process it as well, remove if from the content package is was contained it
                 // and add it as &quot;1st level package&quot; to the all package
-<span class="fc" id="L576">                TemporaryContentPackageFile tempSubPackage = new TemporaryContentPackageFile(tempSubPackageFile, pkg.getVariants());</span>
-<span class="pc bpc" id="L577" title="1 of 4 branches missed.">                if (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(tempSubPackage)) {</span>
-<span class="nc" id="L578">                  throw new IllegalArgumentException(&quot;Package &quot; + pkg.getPackageInfo() + &quot; contains sub package &quot; + tempSubPackage.getPackageInfo()</span>
-<span class="nc" id="L579">                      + &quot; with invalid package type: '&quot; + StringUtils.defaultString(tempSubPackage.getPackageType()) + &quot;'&quot;);</span>
+<span class="fc" id="L588">                TemporaryContentPackageFile tempSubPackage = new TemporaryContentPackageFile(tempSubPackageFile, pkg.getVariants());</span>
+<span class="pc bpc" id="L589" title="1 of 4 branches missed.">                if (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(tempSubPackage)) {</span>
+<span class="nc" id="L590">                  throw new IllegalArgumentException(&quot;Package &quot; + pkg.getPackageInfo() + &quot; contains sub package &quot; + tempSubPackage.getPackageInfo()</span>
+<span class="nc" id="L591">                      + &quot; with invalid package type: '&quot; + StringUtils.defaultString(tempSubPackage.getPackageType()) + &quot;'&quot;);</span>
                 }
-<span class="pc bpc" id="L581" title="1 of 2 branches missed.">                if (StringUtils.isNoneBlank(tempSubPackage.getGroup(), tempSubPackage.getName())) {</span>
-<span class="fc" id="L582">                  subPackages.add(tempSubPackage);</span>
-<span class="fc" id="L583">                  processedEntry = true;</span>
+<span class="pc bpc" id="L593" title="1 of 2 branches missed.">                if (StringUtils.isNoneBlank(tempSubPackage.getGroup(), tempSubPackage.getName())) {</span>
+<span class="fc" id="L594">                  subPackages.add(tempSubPackage);</span>
+<span class="fc" id="L595">                  processedEntry = true;</span>
                 }
                 else {
-<span class="nc" id="L586">                  FileUtils.deleteQuietly(tempSubPackageFile);</span>
+<span class="nc" id="L598">                  FileUtils.deleteQuietly(tempSubPackageFile);</span>
                 }
               }
 
               // otherwise transfer the binary data 1:1
-<span class="fc bfc" id="L591" title="All 2 branches covered.">              if (!processedEntry) {</span>
-<span class="fc" id="L592">                ZipEntry zipOutEntry = newZipEntry(zipInEntry);</span>
-<span class="fc" id="L593">                zipOut.putNextEntry(zipOutEntry);</span>
-<span class="fc" id="L594">                IOUtils.copy(is, zipOut);</span>
+<span class="fc bfc" id="L603" title="All 2 branches covered.">              if (!processedEntry) {</span>
+<span class="fc" id="L604">                ZipArchiveEntry zipOutEntry = newZipEntry(zipInEntry);</span>
+<span class="fc" id="L605">                zipOut.putArchiveEntry(zipOutEntry);</span>
+<span class="fc" id="L606">                IOUtils.copy(is, zipOut);</span>
+<span class="fc" id="L607">                zipOut.closeArchiveEntry();</span>
               }
             }
 
-<span class="fc" id="L598">            zipOut.closeEntry();</span>
           }
-<span class="fc" id="L600">        }</span>
+<span class="fc" id="L612">        }</span>
       }
 
       // add sub package metadata to set with dependency information
-<span class="fc bfc" id="L604" title="All 2 branches covered.">      for (TemporaryContentPackageFile tempSubPackage : subPackages) {</span>
-<span class="fc" id="L605">        addDependencyInformation(allPackagesFromFileSets, tempSubPackage);</span>
-<span class="fc" id="L606">      }</span>
+<span class="fc bfc" id="L616" title="All 2 branches covered.">      for (TemporaryContentPackageFile tempSubPackage : subPackages) {</span>
+<span class="fc" id="L617">        addDependencyInformation(allPackagesFromFileSets, tempSubPackage);</span>
+<span class="fc" id="L618">      }</span>
 
       // process sub packages and add to result
-<span class="fc bfc" id="L609" title="All 2 branches covered.">      for (TemporaryContentPackageFile tempSubPackage : subPackages) {</span>
-<span class="fc" id="L610">        result.addAll(processContentPackage(tempSubPackage, previousPkg, environmentRunMode, allPackagesFromFileSets));</span>
-<span class="fc" id="L611">      }</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">      for (TemporaryContentPackageFile tempSubPackage : subPackages) {</span>
+<span class="fc" id="L622">        result.addAll(processContentPackage(tempSubPackage, previousPkg, environmentRunMode, allPackagesFromFileSets));</span>
+<span class="fc" id="L623">      }</span>
 
-<span class="fc" id="L613">      result.add(new TemporaryContentPackageFile(tempFile, pkg.getVariants()));</span>
+<span class="fc" id="L625">      result.add(new TemporaryContentPackageFile(tempFile, pkg.getVariants()));</span>
     }
-<span class="fc" id="L615">    return result;</span>
+<span class="fc" id="L627">    return result;</span>
   }
 
-  private static ZipEntry newZipEntry(ZipEntry in) {
-<span class="fc" id="L619">    ZipEntry out = new ZipEntry(in.getName());</span>
-<span class="fc bfc" id="L620" title="All 2 branches covered.">    if (in.getCreationTime() != null) {</span>
-<span class="fc" id="L621">      out.setCreationTime(in.getCreationTime());</span>
+  private ZipArchiveEntry newZipEntry(ZipArchiveEntry in) {
+<span class="fc" id="L631">    ZipArchiveEntry out = new ZipArchiveEntry(in.getName());</span>
+<span class="fc bfc" id="L632" title="All 4 branches covered.">    if (buildOutputTimestamp != null &amp;&amp; buildOutputTimestamp.isValid()) {</span>
+<span class="fc" id="L633">      out.setLastModifiedTime(buildOutputTimestamp.toFileTime());</span>
     }
-<span class="pc bpc" id="L623" title="1 of 2 branches missed.">    if (in.getLastModifiedTime() != null) {</span>
-<span class="fc" id="L624">      out.setLastModifiedTime(in.getLastModifiedTime());</span>
+<span class="pc bpc" id="L635" title="1 of 2 branches missed.">    else if (in.getLastModifiedTime() != null) {</span>
+<span class="fc" id="L636">      out.setLastModifiedTime(in.getLastModifiedTime());</span>
     }
-<span class="fc" id="L626">    return out;</span>
+<span class="fc" id="L638">    return out;</span>
   }
 
   /**
@@ -634,47 +646,47 @@ public final class AllPackageBuilder {
    */
   private static void updateDependencies(Properties props, ContentPackageFile dependencyFile, String environmentRunMode,
       Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<span class="fc" id="L637">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
-<span class="fc" id="L638">    Dependency[] existingDeps = null;</span>
-<span class="fc bfc" id="L639" title="All 4 branches covered.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
-<span class="fc" id="L640">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
+<span class="fc" id="L649">    String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), &quot;,&quot;);</span>
+<span class="fc" id="L650">    Dependency[] existingDeps = null;</span>
+<span class="fc bfc" id="L651" title="All 4 branches covered.">    if (existingDepsStrings != null &amp;&amp; existingDepsStrings.length &gt; 0) {</span>
+<span class="fc" id="L652">      existingDeps = Dependency.fromString(existingDepsStrings);</span>
     }
-<span class="fc bfc" id="L642" title="All 2 branches covered.">    if (existingDeps != null) {</span>
-<span class="fc" id="L643">      existingDeps = removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);</span>
+<span class="fc bfc" id="L654" title="All 2 branches covered.">    if (existingDeps != null) {</span>
+<span class="fc" id="L655">      existingDeps = removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);</span>
     }
 
     Dependency[] deps;
-<span class="fc bfc" id="L647" title="All 2 branches covered.">    if (dependencyFile != null) {</span>
-<span class="fc" id="L648">      String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);</span>
-<span class="fc" id="L649">      Dependency newDependency = new Dependency(dependencyFile.getGroup(),</span>
-<span class="fc" id="L650">          dependencyFile.getName() + runModeSuffix,</span>
-<span class="fc" id="L651">          VersionRange.fromString(dependencyFile.getVersion()));</span>
-<span class="fc" id="L652">      deps = addDependency(existingDeps, newDependency);</span>
-<span class="fc" id="L653">    }</span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">    if (dependencyFile != null) {</span>
+<span class="fc" id="L660">      String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);</span>
+<span class="fc" id="L661">      Dependency newDependency = new Dependency(dependencyFile.getGroup(),</span>
+<span class="fc" id="L662">          dependencyFile.getName() + runModeSuffix,</span>
+<span class="fc" id="L663">          VersionRange.fromString(dependencyFile.getVersion()));</span>
+<span class="fc" id="L664">      deps = addDependency(existingDeps, newDependency);</span>
+<span class="fc" id="L665">    }</span>
     else {
-<span class="fc" id="L655">      deps = existingDeps;</span>
+<span class="fc" id="L667">      deps = existingDeps;</span>
     }
 
-<span class="fc bfc" id="L658" title="All 2 branches covered.">    if (deps != null) {</span>
-<span class="fc" id="L659">      String dependenciesString = Dependency.toString(deps);</span>
-<span class="fc" id="L660">      props.put(NAME_DEPENDENCIES, dependenciesString);</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">    if (deps != null) {</span>
+<span class="fc" id="L671">      String dependenciesString = Dependency.toString(deps);</span>
+<span class="fc" id="L672">      props.put(NAME_DEPENDENCIES, dependenciesString);</span>
     }
-<span class="fc" id="L662">  }</span>
+<span class="fc" id="L674">  }</span>
 
   private static Dependency[] addDependency(Dependency[] existingDeps, Dependency newDependency) {
-<span class="fc bfc" id="L665" title="All 2 branches covered.">    if (existingDeps != null) {</span>
-<span class="fc" id="L666">      return DependencyUtil.add(existingDeps, newDependency);</span>
+<span class="fc bfc" id="L677" title="All 2 branches covered.">    if (existingDeps != null) {</span>
+<span class="fc" id="L678">      return DependencyUtil.add(existingDeps, newDependency);</span>
     }
     else {
-<span class="fc" id="L669">      return new Dependency[] { newDependency };</span>
+<span class="fc" id="L681">      return new Dependency[] { newDependency };</span>
     }
   }
 
   private static void addSuffixToPackageName(Properties props, ContentPackageFile pkg, String environmentRunMode) {
-<span class="fc" id="L674">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
-<span class="fc" id="L675">    String packageName = props.getProperty(NAME_NAME) + runModeSuffix;</span>
-<span class="fc" id="L676">    props.put(NAME_NAME, packageName);</span>
-<span class="fc" id="L677">  }</span>
+<span class="fc" id="L686">    String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);</span>
+<span class="fc" id="L687">    String packageName = props.getProperty(NAME_NAME) + runModeSuffix;</span>
+<span class="fc" id="L688">    props.put(NAME_NAME, packageName);</span>
+<span class="fc" id="L689">  }</span>
 
   /**
    * Removes existing references to packages contained in the list of packages to manage by this builder because
@@ -684,25 +696,25 @@ public final class AllPackageBuilder {
    * @return Dependencies list
    */
   private static Dependency[] removeReferencesToManagedPackages(Dependency[] deps, Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<span class="fc" id="L687">    return Arrays.stream(deps)</span>
-<span class="fc bfc" id="L688" title="All 2 branches covered.">        .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))</span>
-<span class="fc" id="L689">        .toArray(size -&gt; new Dependency[size]);</span>
+<span class="fc" id="L699">    return Arrays.stream(deps)</span>
+<span class="fc bfc" id="L700" title="All 2 branches covered.">        .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))</span>
+<span class="fc" id="L701">        .toArray(size -&gt; new Dependency[size]);</span>
   }
 
   private static void addDependencyInformation(Set&lt;Dependency&gt; allPackagesFromFileSets, ContentPackageFile pkg) {
-<span class="fc" id="L693">    allPackagesFromFileSets.add(new Dependency(pkg.getGroup(), pkg.getName(), VersionRange.fromString(pkg.getVersion())));</span>
-<span class="fc" id="L694">  }</span>
+<span class="fc" id="L705">    allPackagesFromFileSets.add(new Dependency(pkg.getGroup(), pkg.getName(), VersionRange.fromString(pkg.getVersion())));</span>
+<span class="fc" id="L706">  }</span>
 
   public String getGroupName() {
-<span class="nc" id="L697">    return this.groupName;</span>
+<span class="nc" id="L709">    return this.groupName;</span>
   }
 
   public String getPackageName() {
-<span class="nc" id="L701">    return this.packageName;</span>
+<span class="nc" id="L713">    return this.packageName;</span>
   }
 
   public File getTargetFile() {
-<span class="fc" id="L705">    return this.targetFile;</span>
+<span class="fc" id="L717">    return this.targetFile;</span>
   }
 
 }
