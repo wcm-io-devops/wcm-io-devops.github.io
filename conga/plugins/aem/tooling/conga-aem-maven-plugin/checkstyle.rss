@@ -228,20 +228,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.HelpMojo.java">io/wcm/devops/conga/plugins/aem/maven/HelpMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.AllPackageBuilder.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.java</a>
                 </td>
                 <td>
@@ -271,6 +257,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.aem.maven.allpackage.TemporaryContentPackageFile.java">io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://devops.wcm.io/tooling/conga-aem-maven-plugin/io.wcm.devops.conga.plugins.aem.parent/conga-aem-maven-plugin//checkstyle.html#io.wcm.devops.conga.plugins.conga_aem_maven_plugin.HelpMojo.java">io/wcm/devops/conga/plugins/conga_aem_maven_plugin/HelpMojo.java</a>
                 </td>
                 <td>
                   0

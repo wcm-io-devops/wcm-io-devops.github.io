@@ -164,7 +164,7 @@
      <td align="left"><code><a href="#autoDependencies">&lt;autoDependencies&gt;</a></code></td> 
      <td><code>boolean</code></td> 
      <td><code>-</code></td> 
-     <td><b>Deprecated.</b> Please use autoDependenciesMode instead.<br><b>Default value is</b>: <code>true</code>.<br><b>User property is</b>: <code>conga.cloudManager.allPackage.autoDependencies</code>.<br></td> 
+     <td><b>Deprecated.</b> Automatically generate dependencies between content packages based on file order in CONGA configuration.<br><b>Default value is</b>: <code>true</code>.<br><b>User property is</b>: <code>conga.cloudManager.allPackage.autoDependencies</code>.<br></td> 
     </tr> 
     <tr class="b"> 
      <td align="left"><code><a href="#autoDependenciesMode">&lt;autoDependenciesMode&gt;</a></code></td> 
@@ -176,7 +176,7 @@
      <td align="left"><code><a href="#autoDependenciesSeparateMutable">&lt;autoDependenciesSeparateMutable&gt;</a></code></td> 
      <td><code>boolean</code></td> 
      <td><code>-</code></td> 
-     <td><b>Deprecated.</b> Please use autoDependenciesMode instead.<br><b>Default value is</b>: <code>false</code>.<br><b>User property is</b>: <code>conga.cloudManager.allPackage.autoDependenciesSeparateMutable</code>.<br></td> 
+     <td><b>Deprecated.</b> Use separate dependency chains for mutable and immutable packages.<br><b>Default value is</b>: <code>false</code>.<br><b>User property is</b>: <code>conga.cloudManager.allPackage.autoDependenciesSeparateMutable</code>.<br></td> 
     </tr> 
     <tr class="b"> 
      <td align="left"><code><a href="#configurationDir">&lt;configurationDir&gt;</a></code></td> 
@@ -222,7 +222,7 @@
     </tr> 
     <tr class="a"> 
      <td align="left"><code><a href="#properties">&lt;properties&gt;</a></code></td> 
-     <td><code>Map</code></td> 
+     <td><code>Map&lt;String,String&gt;</code></td> 
      <td><code>-</code></td> 
      <td>Specifies additional properties to be set in the properties.xml file.<br></td> 
     </tr> 
@@ -418,7 +418,7 @@
      Specifies additional properties to be set in the properties.xml file. 
    </div> 
    <ul> 
-    <li><b>Type</b>: <code>java.util.Map</code></li> 
+    <li><b>Type</b>: <code>java.util.Map&lt;java.lang.String, java.lang.String&gt;</code></li> 
     <li><b>Required</b>: <code>No</code></li> 
    </ul> 
    <hr> 

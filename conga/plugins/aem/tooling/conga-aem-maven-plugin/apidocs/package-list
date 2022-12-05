@@ -1,3 +1,4 @@
 io.wcm.devops.conga.plugins.aem.maven
 io.wcm.devops.conga.plugins.aem.maven.allpackage
 io.wcm.devops.conga.plugins.aem.maven.model
+io.wcm.devops.conga.plugins.conga_aem_maven_plugin
