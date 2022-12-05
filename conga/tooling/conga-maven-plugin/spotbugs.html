@@ -142,15 +142,15 @@
   </thead> 
   <tbody> 
    <tr class="b"> 
+    <td><a href="#io.wcm.devops.conga.conga_maven_plugin.HelpMojo">io.wcm.devops.conga.conga_maven_plugin.HelpMojo</a></td> 
+    <td>1</td> 
+   </tr> 
+   <tr class="a"> 
     <td><a href="#io.wcm.devops.conga.tooling.maven.plugin.AbstractCongaMojo">io.wcm.devops.conga.tooling.maven.plugin.AbstractCongaMojo</a></td> 
     <td>5</td> 
    </tr> 
-   <tr class="a"> 
-    <td><a href="#io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo">io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo</a></td> 
-    <td>1</td> 
-   </tr> 
    <tr class="b"> 
-    <td><a href="#io.wcm.devops.conga.tooling.maven.plugin.HelpMojo">io.wcm.devops.conga.tooling.maven.plugin.HelpMojo</a></td> 
+    <td><a href="#io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo">io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo</a></td> 
     <td>1</td> 
    </tr> 
    <tr class="a"> 
@@ -160,6 +160,29 @@
    <tr class="b"> 
     <td><a href="#io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil">io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil</a></td> 
     <td>2</td> 
+   </tr> 
+  </tbody> 
+ </table> 
+</section><a name="io.wcm.devops.conga.conga_maven_plugin.HelpMojo"></a> 
+<section> 
+ <h3 id="io.wcm.devops.conga.conga_maven_plugin.HelpMojo">io.wcm.devops.conga.conga_maven_plugin.HelpMojo</h3> 
+ <table border="0" class="bodyTable table table-striped table-hover"> 
+  <thead> 
+   <tr class="a"> 
+    <th>Bug</th> 
+    <th>Category</th> 
+    <th>Details</th> 
+    <th>Line</th> 
+    <th>Priority</th> 
+   </tr> 
+  </thead> 
+  <tbody> 
+   <tr class="b"> 
+    <td>The use of DocumentBuilder.parse(...) (DocumentBuilder) is vulnerable to XML External Entity attacks</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#XXE_DOCUMENT">XXE_DOCUMENT</a></td> 
+    <td><a href="./xref/io/wcm/devops/conga/conga_maven_plugin/HelpMojo.html#L77">77</a></td> 
+    <td>Medium</td> 
    </tr> 
   </tbody> 
  </table> 
@@ -237,29 +260,6 @@
    </tr> 
   </tbody> 
  </table> 
-</section><a name="io.wcm.devops.conga.tooling.maven.plugin.HelpMojo"></a> 
-<section> 
- <h3 id="io.wcm.devops.conga.tooling.maven.plugin.HelpMojo">io.wcm.devops.conga.tooling.maven.plugin.HelpMojo</h3> 
- <table border="0" class="bodyTable table table-striped table-hover"> 
-  <thead> 
-   <tr class="a"> 
-    <th>Bug</th> 
-    <th>Category</th> 
-    <th>Details</th> 
-    <th>Line</th> 
-    <th>Priority</th> 
-   </tr> 
-  </thead> 
-  <tbody> 
-   <tr class="b"> 
-    <td>The use of DocumentBuilder.parse(...) (DocumentBuilder) is vulnerable to XML External Entity attacks</td> 
-    <td>SECURITY</td> 
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#XXE_DOCUMENT">XXE_DOCUMENT</a></td> 
-    <td><a href="./xref/io/wcm/devops/conga/tooling/maven/plugin/HelpMojo.html#L73">73</a></td> 
-    <td>Medium</td> 
-   </tr> 
-  </tbody> 
- </table> 
 </section><a name="io.wcm.devops.conga.tooling.maven.plugin.PackageMojo"></a> 
 <section> 
  <h3 id="io.wcm.devops.conga.tooling.maven.plugin.PackageMojo">io.wcm.devops.conga.tooling.maven.plugin.PackageMojo</h3> 
@@ -325,9 +325,9 @@
     <li><a href="#Summary" title="Summary">Summary</a>
     <li class="dropdown"><a href="#Files" title="Files">Files <b class="caret"></b></a>
       <ul class="nav nav-list">
+    <li><a href="#io.wcm.devops.conga.conga_maven_plugin.HelpMojo" title="io.wcm.devops.conga.conga_maven_plugin.HelpMojo">io.wcm.devops.conga.conga_maven_plugin.HelpMojo</a>
     <li><a href="#io.wcm.devops.conga.tooling.maven.plugin.AbstractCongaMojo" title="io.wcm.devops.conga.tooling.maven.plugin.AbstractCongaMojo">io.wcm.devops.conga.tooling.maven.plugin.AbstractCongaMojo</a>
     <li><a href="#io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo" title="io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo">io.wcm.devops.conga.tooling.maven.plugin.GenerateVersionInfoMojo</a>
-    <li><a href="#io.wcm.devops.conga.tooling.maven.plugin.HelpMojo" title="io.wcm.devops.conga.tooling.maven.plugin.HelpMojo">io.wcm.devops.conga.tooling.maven.plugin.HelpMojo</a>
     <li><a href="#io.wcm.devops.conga.tooling.maven.plugin.PackageMojo" title="io.wcm.devops.conga.tooling.maven.plugin.PackageMojo">io.wcm.devops.conga.tooling.maven.plugin.PackageMojo</a>
     <li><a href="#io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil" title="io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil">io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil</a>
         <li class="divider"></li>

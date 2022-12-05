@@ -144,6 +144,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.conga_maven_plugin.HelpMojo.java">io/wcm/devops/conga/conga_maven_plugin/HelpMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.urlfile.MavenUrlFilePlugin.java">io/wcm/devops/conga/tooling/maven/plugin/urlfile/MavenUrlFilePlugin.java</a>
                 </td>
                 <td>
@@ -257,20 +271,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.PackageMojo.java">io/wcm/devops/conga/tooling/maven/plugin/PackageMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://devops.wcm.io/tooling/conga-maven-plugin/io.wcm.devops.conga.parent/conga-maven-plugin//checkstyle.html#io.wcm.devops.conga.tooling.maven.plugin.HelpMojo.java">io/wcm/devops/conga/tooling/maven/plugin/HelpMojo.java</a>
                 </td>
                 <td>
                   0
