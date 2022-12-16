@@ -1,0 +1,8 @@
+io.wcm.devops.conga.plugins.aem
+io.wcm.devops.conga.plugins.aem.crypto
+io.wcm.devops.conga.plugins.aem.fileheader
+io.wcm.devops.conga.plugins.aem.handlebars.escaping
+io.wcm.devops.conga.plugins.aem.handlebars.helper
+io.wcm.devops.conga.plugins.aem.postprocessor
+io.wcm.devops.conga.plugins.aem.util
+io.wcm.devops.conga.plugins.aem.validator

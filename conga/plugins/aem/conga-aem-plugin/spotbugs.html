@@ -104,7 +104,7 @@
   <h2 id="SpotBugs_Bug_Detector_Report">SpotBugs Bug Detector Report</h2>
  </div> 
  <p>The following document contains the results of <a class="externalLink" href="https://spotbugs.github.io/">SpotBugs</a></p> 
- <p>SpotBugs Version is <i>4.6.0</i></p> 
+ <p>SpotBugs Version is <i>4.7.3</i></p> 
  <p>Threshold is <i>medium</i></p> 
  <p>Effort is <i>default</i></p> 
 </section> 
@@ -122,9 +122,9 @@
   <tbody> 
    <tr class="b"> 
     <td>50</td> 
-    <td>7</td> 
+    <td>11</td> 
     <td>0</td> 
-    <td>3</td> 
+    <td>4</td> 
    </tr> 
   </tbody> 
  </table> 
@@ -144,6 +144,14 @@
     <td>3</td> 
    </tr> 
    <tr class="a"> 
+    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a></td> 
+    <td>1</td> 
+   </tr> 
+   <tr class="b"> 
+    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a></td> 
+    <td>1</td> 
+   </tr> 
+   <tr class="a"> 
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a></td> 
     <td>1</td> 
    </tr> 
@@ -153,7 +161,7 @@
    </tr> 
    <tr class="a"> 
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a></td> 
-    <td>1</td> 
+    <td>3</td> 
    </tr> 
   </tbody> 
  </table> 
@@ -190,6 +198,52 @@
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#STATIC_IV">STATIC_IV</a></td> 
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L92">92</a></td> 
+    <td>Medium</td> 
+   </tr> 
+  </tbody> 
+ </table> 
+</section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor"></a> 
+<section> 
+ <h3 id="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</h3> 
+ <table border="0" class="bodyTable table table-striped table-hover"> 
+  <thead> 
+   <tr class="b"> 
+    <th>Bug</th> 
+    <th>Category</th> 
+    <th>Details</th> 
+    <th>Line</th> 
+    <th>Priority</th> 
+   </tr> 
+  </thead> 
+  <tbody> 
+   <tr class="a"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L98">98</a></td> 
+    <td>Medium</td> 
+   </tr> 
+  </tbody> 
+ </table> 
+</section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor"></a> 
+<section> 
+ <h3 id="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</h3> 
+ <table border="0" class="bodyTable table table-striped table-hover"> 
+  <thead> 
+   <tr class="b"> 
+    <th>Bug</th> 
+    <th>Category</th> 
+    <th>Details</th> 
+    <th>Line</th> 
+    <th>Priority</th> 
+   </tr> 
+  </thead> 
+  <tbody> 
+   <tr class="a"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackagePostProcessor.html#L87">87</a></td> 
     <td>Medium</td> 
    </tr> 
   </tbody> 
@@ -268,6 +322,20 @@
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L393">393</a></td> 
     <td>Medium</td> 
    </tr> 
+   <tr class="a"> 
+    <td>This API (java/nio/file/Paths.get(Ljava/net/URI;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L395">395</a></td> 
+    <td>Medium</td> 
+   </tr> 
+   <tr class="b"> 
+    <td>This API (java/nio/file/Paths.get(Ljava/net/URI;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L400">400</a></td> 
+    <td>Medium</td> 
+   </tr> 
   </tbody> 
  </table> 
 </section>
@@ -283,6 +351,8 @@
     <li class="dropdown"><a href="#Files" title="Files">Files <b class="caret"></b></a>
       <ul class="nav nav-list">
     <li><a href="#io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport" title="io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</a>
+    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a>
+    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler" title="io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile" title="io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil" title="io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a>
