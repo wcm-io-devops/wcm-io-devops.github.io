@@ -145,8 +145,8 @@ public final class ProvisioningUtil {
         }
 
         // prepare repoinit OSGi configuration
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        String pid = StringUtils.defaultString(feature.getName(), &quot;conga&quot;)</span>
-<span class="fc" id="L149">            + (runModesString != null ? &quot;-&quot; + StringUtils.replace(runModesString, &quot;,&quot;, &quot;-&quot;) : &quot;&quot;);</span>
+<span class="fc" id="L148">        String pid = StringUtils.defaultString(feature.getName(), &quot;conga&quot;)</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            + (runModesString != null ? &quot;-&quot; + StringUtils.replace(runModesString, &quot;,&quot;, &quot;-&quot;) : &quot;&quot;);</span>
 <span class="fc" id="L150">        Configuration configuration = new Configuration(pid, REPOINIT_PID);</span>
 <span class="fc" id="L151">        configuration.getProperties().put(&quot;scripts&quot;, new String[] { script });</span>
 <span class="fc" id="L152">        String path = getPathForConfiguration(configuration, runMode);</span>

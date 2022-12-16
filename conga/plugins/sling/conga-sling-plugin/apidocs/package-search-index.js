@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"io.wcm.devops.conga.plugins.sling.fileheader"},{"l":"io.wcm.devops.conga.plugins.sling.handlebars.escaping"},{"l":"io.wcm.devops.conga.plugins.sling.postprocessor"},{"l":"io.wcm.devops.conga.plugins.sling.util"},{"l":"io.wcm.devops.conga.plugins.sling.validator"}]
