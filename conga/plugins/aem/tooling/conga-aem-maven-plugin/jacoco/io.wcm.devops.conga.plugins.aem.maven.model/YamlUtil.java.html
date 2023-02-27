@@ -21,6 +21,7 @@ package io.wcm.devops.conga.plugins.aem.maven.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -36,25 +37,25 @@ final class YamlUtil {
     // static methods only
   }
 
-<span class="fc" id="L39">  private static final Logger log = LoggerFactory.getLogger(YamlUtil.class);</span>
+<span class="fc" id="L40">  private static final Logger log = LoggerFactory.getLogger(YamlUtil.class);</span>
 
   public static Yaml createYaml() {
     // initialize CONGA plugin manager
-<span class="fc" id="L43">    PluginManager pluginManager = new PluginManagerImpl();</span>
-<span class="fc" id="L44">    PluginContextOptions options = new PluginContextOptions()</span>
-<span class="fc" id="L45">        .pluginManager(pluginManager)</span>
-<span class="fc" id="L46">        .logger(log);</span>
+<span class="fc" id="L44">    PluginManager pluginManager = new PluginManagerImpl();</span>
+<span class="fc" id="L45">    PluginContextOptions options = new PluginContextOptions()</span>
+<span class="fc" id="L46">        .pluginManager(pluginManager)</span>
+<span class="fc" id="L47">        .logger(log);</span>
 
     // apply YAML plugins for modifying YAML constructor
-<span class="fc" id="L49">    Constructor constructor = new Constructor();</span>
-<span class="fc" id="L50">    YamlConstructorContext context = new YamlConstructorContext()</span>
-<span class="fc" id="L51">        .pluginContextOptions(options)</span>
-<span class="fc" id="L52">        .yamlConstructor(constructor);</span>
-<span class="fc bfc" id="L53" title="All 2 branches covered.">    for (YamlConstructorPlugin plugin : pluginManager.getAll(YamlConstructorPlugin.class)) {</span>
-<span class="fc" id="L54">      plugin.register(context);</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L50">    Constructor constructor = new Constructor(new LoaderOptions());</span>
+<span class="fc" id="L51">    YamlConstructorContext context = new YamlConstructorContext()</span>
+<span class="fc" id="L52">        .pluginContextOptions(options)</span>
+<span class="fc" id="L53">        .yamlConstructor(constructor);</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">    for (YamlConstructorPlugin plugin : pluginManager.getAll(YamlConstructorPlugin.class)) {</span>
+<span class="fc" id="L55">      plugin.register(context);</span>
+<span class="fc" id="L56">    }</span>
 
-<span class="fc" id="L57">    return new Yaml(constructor);</span>
+<span class="fc" id="L58">    return new Yaml(constructor);</span>
   }
 
 }

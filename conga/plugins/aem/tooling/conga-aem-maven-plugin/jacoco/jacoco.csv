@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,BundleFile,0,14,0,0,0,4,0,2,0,2
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,ContentPackageFile,11,0,0,0,3,0,1,0,1,0
-CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,YamlUtil,0,50,0,2,0,13,0,3,0,2
+CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,YamlUtil,0,53,0,2,0,13,0,3,0,2
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,ModelParser,25,233,4,26,7,47,4,20,0,9
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,ParserUtil,12,51,3,7,3,17,3,5,0,3
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven.model,ModelContentPackageFile,5,97,1,1,1,22,1,10,0,10
