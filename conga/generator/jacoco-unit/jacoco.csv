@@ -2,7 +2,7 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 CONGA Generator,io.wcm.devops.conga.generator.plugins.valueprovider,SystemPropertyValueProviderPlugin,0,11,0,0,0,4,0,3,0,3
 CONGA Generator,io.wcm.devops.conga.generator.spi.handlebars.context,HelperContext,0,3,0,0,0,1,0,1,0,1
 CONGA Generator,io.wcm.devops.conga.generator.spi.handlebars.context,EscapingStrategyContext,0,3,0,0,0,1,0,1,0,1
-CONGA Generator,io.wcm.devops.conga.generator.spi.yaml.context,YamlRepresenter,7,3,0,0,2,1,1,1,1,1
+CONGA Generator,io.wcm.devops.conga.generator.spi.yaml.context,YamlRepresenter,7,6,0,0,2,2,1,1,1,1
 CONGA Generator,io.wcm.devops.conga.generator.spi.yaml.context,YamlConstructorContext,11,0,0,0,4,0,3,0,3,0
 CONGA Generator,io.wcm.devops.conga.generator.spi.yaml.context,YamlRepresentContext,11,0,0,0,4,0,3,0,3,0
 CONGA Generator,io.wcm.devops.conga.generator.plugins.postprocessor,AbstractPostProcessor,4,80,6,8,2,20,6,7,0,6

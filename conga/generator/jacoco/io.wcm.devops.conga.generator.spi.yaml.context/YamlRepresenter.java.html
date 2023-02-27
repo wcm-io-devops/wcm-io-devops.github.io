@@ -19,13 +19,21 @@
  */
 package io.wcm.devops.conga.generator.spi.yaml.context;
 
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
 /**
  * SnakeYAML {@link Representer} implementation.
  */
-<span class="fc" id="L28">public final class YamlRepresenter extends Representer {</span>
+public final class YamlRepresenter extends Representer {
+
+  /**
+   * Constructor.
+   */
+  public YamlRepresenter() {
+<span class="fc" id="L35">    super(new DumperOptions());</span>
+<span class="fc" id="L36">  }</span>
 
   /**
    * Register a represent.
@@ -33,8 +41,8 @@ import org.yaml.snakeyaml.representer.Representer;
    * @param represent Represent implementation
    */
   public void registerRepresent(Class&lt;?&gt; clazz, Represent represent) {
-<span class="nc" id="L36">    this.representers.put(clazz, represent);</span>
-<span class="nc" id="L37">  }</span>
+<span class="nc" id="L44">    this.representers.put(clazz, represent);</span>
+<span class="nc" id="L45">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

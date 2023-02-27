@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.MojoFailureException;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -34,49 +35,49 @@ import io.wcm.devops.conga.resource.Resource;
 /**
  * Ensures that nor value providers are used in role models. They should only be used in environments.
  */
-<span class="fc" id="L37">public final class NoValueProviderInRoleValidator implements DefinitionValidator&lt;Void&gt; {</span>
+<span class="fc" id="L38">public final class NoValueProviderInRoleValidator implements DefinitionValidator&lt;Void&gt; {</span>
 
-<span class="fc" id="L39">  private final ModelReader&lt;Map&gt; mapReader = new MapReader();</span>
+<span class="fc" id="L40">  private final ModelReader&lt;Map&gt; mapReader = new MapReader();</span>
 
   @Override
   @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
       // iterate over whole value and validate all string values that are found
-<span class="fc" id="L46">      process(mapReader.read(resource));</span>
+<span class="fc" id="L47">      process(mapReader.read(resource));</span>
     }
-<span class="nc" id="L48">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L49">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
-<span class="fc" id="L50">    }</span>
-<span class="fc" id="L51">    return null;</span>
+<span class="nc" id="L49">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L50">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="fc" id="L51">    }</span>
+<span class="fc" id="L52">    return null;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private void process(Object value) {
-<span class="fc bfc" id="L56" title="All 2 branches covered.">    if (value instanceof String) {</span>
-<span class="fc" id="L57">      validate((String)value);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (value instanceof String) {</span>
+<span class="fc" id="L58">      validate((String)value);</span>
     }
-<span class="fc bfc" id="L59" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L60">      ((Map)value).values().forEach(this::process);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L61">      ((Map)value).values().forEach(this::process);</span>
     }
-<span class="fc bfc" id="L62" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L63">      ((List)value).forEach(this::process);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L64">      ((List)value).forEach(this::process);</span>
     }
-<span class="fc" id="L65">  }</span>
+<span class="fc" id="L66">  }</span>
 
   private void validate(String value) {
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">    if (VariableStringResolver.hasValueProviderReference(value)) {</span>
-<span class="nc" id="L69">      throw new RuntimeException(&quot;Role definitions must not reference value providers: &quot; + value);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    if (VariableStringResolver.hasValueProviderReference(value)) {</span>
+<span class="nc" id="L70">      throw new RuntimeException(&quot;Role definitions must not reference value providers: &quot; + value);</span>
     }
-<span class="fc" id="L71">  }</span>
+<span class="fc" id="L72">  }</span>
 
   private static class MapReader extends AbstractModelReader&lt;Map&gt; {
     MapReader() {
-<span class="fc" id="L75">      super(getYaml());</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L76">      super(getYaml());</span>
+<span class="fc" id="L77">    }</span>
     private static Yaml getYaml() {
-<span class="fc" id="L78">      Constructor constructor = new Constructor(Map.class);</span>
-<span class="fc" id="L79">      return new Yaml(constructor);</span>
+<span class="fc" id="L79">      Constructor constructor = new Constructor(Map.class, new LoaderOptions());</span>
+<span class="fc" id="L80">      return new Yaml(constructor);</span>
     }
   }
 
