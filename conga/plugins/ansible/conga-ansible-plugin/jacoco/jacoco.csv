@@ -25,4 +25,4 @@ CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVau
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleYamlRepresentPlugin,0,13,0,0,0,4,0,3,0,3
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVaultValue,0,12,0,0,0,5,0,3,0,3
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleYamlConstructorPlugin,15,0,0,0,4,0,3,0,3,0
-CONGA Ansible Plugin,net.wedjaa.ansible.vault,Manager,6,64,0,0,2,12,0,5,0,5
+CONGA Ansible Plugin,net.wedjaa.ansible.vault,Manager,6,74,0,0,2,14,0,5,0,5
