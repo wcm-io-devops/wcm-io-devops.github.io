@@ -34,9 +34,8 @@ import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlException;
 import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
+import org.apache.commons.jexl3.introspection.JexlPermissions;
 import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.collect.ImmutableMap;
 
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.model.util.MapMerger;
@@ -50,13 +49,14 @@ final class JexlResolver {
   private final JexlEngine jexl;
   private final VariableMapResolver variableMapResolver;
 
-<span class="fc" id="L53">  private static final Map&lt;String, Object&gt; JEXL_FUNCTION_NS = ImmutableMap.of(</span>
+<span class="fc" id="L52">  private static final Map&lt;String, Object&gt; JEXL_FUNCTION_NS = Map.of(</span>
       &quot;stringUtils&quot;, StringUtils.class);
 
-<span class="fc" id="L56">  JexlResolver(VariableMapResolver variableMapResolver) {</span>
-<span class="fc" id="L57">    this.jexl = new JexlBuilder()</span>
-<span class="fc" id="L58">        .cache(CACHE_SIZE)</span>
-<span class="fc" id="L59">        .namespaces(JEXL_FUNCTION_NS)</span>
+<span class="fc" id="L55">  JexlResolver(VariableMapResolver variableMapResolver) {</span>
+<span class="fc" id="L56">    this.jexl = new JexlBuilder()</span>
+<span class="fc" id="L57">        .cache(CACHE_SIZE)</span>
+<span class="fc" id="L58">        .namespaces(JEXL_FUNCTION_NS)</span>
+<span class="fc" id="L59">        .permissions(JexlPermissions.UNRESTRICTED)</span>
 <span class="fc" id="L60">        .create();</span>
 <span class="fc" id="L61">    this.variableMapResolver = variableMapResolver;</span>
 <span class="fc" id="L62">  }</span>

@@ -60,7 +60,7 @@ CONGA Generator,io.wcm.devops.conga.generator.util,RoleUtil,3,378,1,45,1,88,1,30
 CONGA Generator,io.wcm.devops.conga.generator.util,PluginManagerImpl.new CacheLoader() {...},12,37,1,3,2,8,1,3,0,2
 CONGA Generator,io.wcm.devops.conga.generator.util,FileUtil,69,48,10,6,15,14,10,8,4,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableStringResolver,12,350,3,37,2,87,3,28,0,11
-CONGA Generator,io.wcm.devops.conga.generator.util,JexlResolver,3,141,1,17,1,36,1,14,0,6
+CONGA Generator,io.wcm.devops.conga.generator.util,JexlResolver,3,143,1,17,1,37,1,14,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,ValueUtil,0,164,0,28,0,41,0,17,0,3
 CONGA Generator,io.wcm.devops.conga.generator.util,ModelExportConfigProcessor,2,141,2,14,1,34,2,12,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableObjectTreeResolver,0,22,0,0,0,6,0,2,0,2
