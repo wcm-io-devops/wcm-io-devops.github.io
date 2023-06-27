@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DisallowPropertyHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Generator</a> &gt; <a href="index.source.html" class="el_package">io.wcm.devops.conga.generator.plugins.handlebars.helper</a> &gt; <span class="el_source">DisallowPropertyHelper.java</span></div><h1>DisallowPropertyHelper.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2023 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package io.wcm.devops.conga.generator.plugins.handlebars.helper;
+
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.github.jknack.handlebars.Options;
+
+import io.wcm.devops.conga.generator.spi.handlebars.HelperPlugin;
+import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
+
+/**
+ * Handlebars helper that ensures a given property is not set/present.
+ * If it is, an exception is thrown with the property name.
+ * Optionally, a second parameter can be provided with a custom error message.
+ */
+<span class="fc" id="L36">public final class DisallowPropertyHelper implements HelperPlugin&lt;Object&gt; {</span>
+
+  /**
+   * Plugin/Helper name
+   */
+  public static final String NAME = &quot;disallowProperty&quot;;
+
+  @Override
+  public String getName() {
+<span class="fc" id="L45">    return NAME;</span>
+  }
+
+  @Override
+  public Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">    if (isPropertyPresent(context, options)) {</span>
+<span class="fc" id="L51">      String errorMessage = &quot;Disallowed property is set: &quot; + context;</span>
+<span class="pc bpc" id="L52" title="1 of 4 branches missed.">      if (options.params.length &gt; 0 &amp;&amp; options.params[0] != null) {</span>
+<span class="fc" id="L53">        errorMessage = options.params[0].toString();</span>
+      }
+<span class="fc" id="L55">      throw new IOException(errorMessage);</span>
+    }
+<span class="fc" id="L57">    return null;</span>
+  }
+
+  private boolean isPropertyPresent(Object propertyNameExpression, Options options) {
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">    if (propertyNameExpression == null) {</span>
+<span class="nc" id="L62">      return false;</span>
+    }
+<span class="fc" id="L64">    String propertyName = propertyNameExpression.toString();</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">    if (StringUtils.isBlank(propertyName)) {</span>
+<span class="nc" id="L66">      return false;</span>
+    }
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    return options.get(propertyName) != null;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

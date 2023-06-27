@@ -65,6 +65,7 @@ CONGA Generator,io.wcm.devops.conga.generator.util,ValueUtil,0,164,0,28,0,41,0,1
 CONGA Generator,io.wcm.devops.conga.generator.util,ModelExportConfigProcessor,2,141,2,14,1,34,2,12,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableObjectTreeResolver,0,22,0,0,0,6,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EachIfEqualsHelper,0,21,0,2,0,7,0,4,0,3
+CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,DisallowPropertyHelper,4,51,3,9,2,12,3,7,0,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,RegexQuoteHelper,0,15,0,2,0,5,0,4,0,3
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,AbstractEachIfHelper,0,122,1,9,0,25,1,10,0,6
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,IfEqualsHelper,0,25,0,6,0,6,0,6,0,3
