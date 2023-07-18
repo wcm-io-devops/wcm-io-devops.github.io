@@ -143,37 +143,36 @@ public final class ModelParser {
 <span class="fc" id="L143">    return parseYaml(modelFile);</span>
   }
 
-  @SuppressWarnings(&quot;unchecked&quot;)
   private Map&lt;String, Object&gt; parseYaml(File modelFile) {
     try {
-<span class="fc" id="L149">      try (InputStream is = new FileInputStream(modelFile);</span>
-<span class="fc" id="L150">          Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L151">        return yaml.loadAs(reader, Map.class);</span>
+<span class="fc" id="L148">      try (InputStream is = new FileInputStream(modelFile);</span>
+<span class="fc" id="L149">          Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L150">        return yaml.loadAs(reader, Map.class);</span>
       }
     }
-<span class="nc" id="L154">    catch (IOException ex) {</span>
-<span class="nc" id="L155">      throw new RuntimeException(&quot;Unable to parse &quot; + getCanonicalPath(modelFile), ex);</span>
+<span class="nc" id="L153">    catch (IOException ex) {</span>
+<span class="nc" id="L154">      throw new RuntimeException(&quot;Unable to parse &quot; + getCanonicalPath(modelFile), ex);</span>
     }
   }
 
   private boolean isContentPackage(Map&lt;String, Object&gt; fileData) {
-<span class="fc bfc" id="L160" title="All 2 branches covered.">    return fileData.get(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY) != null;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    return fileData.get(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY) != null;</span>
   }
 
   private boolean isOsgiBundle(File file) {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">    if (!StringUtils.equals(FilenameUtils.getExtension((file.getName())), &quot;jar&quot;)) {</span>
-<span class="fc" id="L165">      return false;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">    if (!StringUtils.equals(FilenameUtils.getExtension((file.getName())), &quot;jar&quot;)) {</span>
+<span class="fc" id="L164">      return false;</span>
     }
-<span class="fc" id="L167">    try (JarFile jarFile = new JarFile(file)) {</span>
-<span class="fc" id="L168">      Manifest manifest = jarFile.getManifest();</span>
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">      if (manifest != null) {</span>
-<span class="fc bfc" id="L170" title="All 2 branches covered.">        return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME) != null;</span>
+<span class="fc" id="L166">    try (JarFile jarFile = new JarFile(file)) {</span>
+<span class="fc" id="L167">      Manifest manifest = jarFile.getManifest();</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">      if (manifest != null) {</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME) != null;</span>
       }
-<span class="fc" id="L172">    }</span>
-<span class="nc" id="L173">    catch (IOException ex) {</span>
-<span class="nc" id="L174">      log.debug(&quot;Unable to check for OSGi bundle: {}&quot;, file, ex);</span>
-<span class="nc" id="L175">    }</span>
-<span class="nc" id="L176">    return false;</span>
+<span class="fc" id="L171">    }</span>
+<span class="nc" id="L172">    catch (IOException ex) {</span>
+<span class="nc" id="L173">      log.debug(&quot;Unable to check for OSGi bundle: {}&quot;, file, ex);</span>
+<span class="nc" id="L174">    }</span>
+<span class="nc" id="L175">    return false;</span>
   }
 
 }

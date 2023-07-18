@@ -20,7 +20,8 @@
 package io.wcm.devops.conga.plugins.aem.maven;
 
 import java.nio.file.attribute.FileTime;
-import java.util.Date;
+import java.time.Instant;
+import java.util.Optional;
 
 import org.apache.maven.archiver.MavenArchiver;
 import org.jetbrains.annotations.Nullable;
@@ -30,29 +31,20 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BuildOutputTimestamp {
 
-  private final Date date;
+  private final Optional&lt;Instant&gt; instant;
 
   /**
    * @param outputTimestamp Configured output timestamp
    */
-<span class="fc" id="L38">  public BuildOutputTimestamp(@Nullable String outputTimestamp) {</span>
-<span class="fc" id="L39">    MavenArchiver mavenArchiver = new MavenArchiver();</span>
-<span class="fc" id="L40">    this.date = mavenArchiver.parseOutputTimestamp(outputTimestamp);</span>
+<span class="fc" id="L39">  public BuildOutputTimestamp(@Nullable String outputTimestamp) {</span>
+<span class="fc" id="L40">    this.instant = MavenArchiver.parseBuildOutputTimestamp(outputTimestamp);</span>
 <span class="fc" id="L41">  }</span>
 
   /**
    * @return true if a valid timestamp is configured
    */
   public boolean isValid() {
-<span class="fc bfc" id="L47" title="All 2 branches covered.">    return date != null;</span>
-  }
-
-  /**
-   * @return Date or null if not a valid date
-   */
-  @Nullable
-  public Date toDate() {
-<span class="fc" id="L55">    return date;</span>
+<span class="fc" id="L47">    return instant.isPresent();</span>
   }
 
   /**
@@ -60,10 +52,10 @@ public class BuildOutputTimestamp {
    */
   @Nullable
   public FileTime toFileTime() {
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">    if (date != null) {</span>
-<span class="fc" id="L64">      return FileTime.fromMillis(date.toInstant().getEpochSecond());</span>
-    }
-<span class="nc" id="L66">    return null;</span>
+<span class="fc" id="L55">    return instant</span>
+<span class="fc" id="L56">        .map(Instant::toEpochMilli)</span>
+<span class="fc" id="L57">        .map(FileTime::fromMillis)</span>
+<span class="fc" id="L58">        .orElse(null);</span>
   }
 
 }
