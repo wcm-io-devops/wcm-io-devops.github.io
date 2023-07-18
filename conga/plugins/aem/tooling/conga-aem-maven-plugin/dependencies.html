@@ -395,7 +395,7 @@
     <tr class="b"> 
      <td align="left">com.google.errorprone</td> 
      <td><a class="externalLink" href="https://errorprone.info/error_prone_annotations">error_prone_annotations</a></td> 
-     <td>2.18.0</td> 
+     <td>2.11.0</td> 
      <td>jar</td> 
      <td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></td> 
     </tr> 
@@ -409,7 +409,7 @@
     <tr class="b"> 
      <td align="left">com.google.guava</td> 
      <td><a class="externalLink" href="https://github.com/google/guava">guava</a></td> 
-     <td>32.1.1-jre</td> 
+     <td>31.1-jre</td> 
      <td>jar</td> 
      <td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></td> 
     </tr> 
@@ -423,9 +423,9 @@
     <tr class="b"> 
      <td align="left">com.google.j2objc</td> 
      <td><a class="externalLink" href="https://github.com/google/j2objc/">j2objc-annotations</a></td> 
-     <td>2.8</td> 
+     <td>1.3</td> 
      <td>jar</td> 
-     <td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></td> 
+     <td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></td> 
     </tr> 
     <tr class="a"> 
      <td align="left">com.jayway.jsonpath</td> 
@@ -786,8 +786,8 @@
     </tr> 
     <tr class="b"> 
      <td align="left">org.checkerframework</td> 
-     <td><a class="externalLink" href="https://checkerframework.org/">checker-qual</a></td> 
-     <td>3.33.0</td> 
+     <td><a class="externalLink" href="https://checkerframework.org">checker-qual</a></td> 
+     <td>3.12.0</td> 
      <td>jar</td> 
      <td><a class="externalLink" href="http://opensource.org/licenses/MIT">The MIT License</a></td> 
     </tr> 
@@ -1484,9 +1484,116 @@
              </table> 
             </div></li> 
           </ul></li> 
+         <li>com.google.guava:guava:jar:31.1-jre (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep18"><i class="icon-info-sign"></i></button> 
+          <div id="_dep18" style="" class="collapse"> 
+           <table border="0" class="bodyTable table table-striped table-hover"> 
+            <thead> 
+             <tr class="a"> 
+              <th>Guava: Google Core Libraries for Java</th> 
+             </tr> 
+            </thead> 
+            <tbody> 
+             <tr class="b"> 
+              <td> <p><b>Description: </b>Guava is a suite of core and expanded libraries that include utility classes, Google's collections, I/O classes, and much more.</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/guava">https://github.com/google/guava</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></p></td> 
+             </tr> 
+            </tbody> 
+           </table> 
+          </div> 
+          <ul> 
+           <li>com.google.guava:failureaccess:jar:1.0.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep20"><i class="icon-info-sign"></i></button> 
+            <div id="_dep20" style="" class="collapse"> 
+             <table border="0" class="bodyTable table table-striped table-hover"> 
+              <thead> 
+               <tr class="a"> 
+                <th>Guava InternalFutureFailureAccess and InternalFutures</th> 
+               </tr> 
+              </thead> 
+              <tbody> 
+               <tr class="b"> 
+                <td> <p><b>Description: </b>Contains com.google.common.util.concurrent.internal.InternalFutureFailureAccess and InternalFutures. Most users will never need to use this artifact. Its classes is conceptually a part of Guava, but they're in this separate artifact so that Android libraries can use them without pulling in all of Guava (just as they can use ListenableFuture by depending on the listenablefuture artifact).</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/guava/failureaccess">https://github.com/google/guava/failureaccess</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
+               </tr> 
+              </tbody> 
+             </table> 
+            </div></li> 
+           <li>com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep22"><i class="icon-info-sign"></i></button> 
+            <div id="_dep22" style="" class="collapse"> 
+             <table border="0" class="bodyTable table table-striped table-hover"> 
+              <thead> 
+               <tr class="a"> 
+                <th>Guava ListenableFuture only</th> 
+               </tr> 
+              </thead> 
+              <tbody> 
+               <tr class="b"> 
+                <td> <p><b>Description: </b>An empty artifact that Guava depends on to signal that it is providing ListenableFuture -- but is also available in a second "version" that contains com.google.common.util.concurrent.ListenableFuture class, without any other Guava classes. The idea is: - If users want only ListenableFuture, they depend on listenablefuture-1.0. - If users want all of Guava, they depend on guava, which, as of Guava 27.0, depends on listenablefuture-9999.0-empty-to-avoid-conflict-with-guava. The 9999.0-... version number is enough for some build systems (notably, Gradle) to select that empty artifact over the "real" listenablefuture-1.0 -- avoiding a conflict with the copy of ListenableFuture in guava itself. If users are using an older version of Guava or a build system other than Gradle, they may see class conflicts. If so, they can solve them by manually excluding the listenablefuture artifact or manually forcing their build systems to use 9999.0-....</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/guava/listenablefuture">https://github.com/google/guava/listenablefuture</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
+               </tr> 
+              </tbody> 
+             </table> 
+            </div></li> 
+           <li>com.google.code.findbugs:jsr305:jar:3.0.2 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep24"><i class="icon-info-sign"></i></button> 
+            <div id="_dep24" style="" class="collapse"> 
+             <table border="0" class="bodyTable table table-striped table-hover"> 
+              <thead> 
+               <tr class="a"> 
+                <th>FindBugs-jsr305</th> 
+               </tr> 
+              </thead> 
+              <tbody> 
+               <tr class="b"> 
+                <td> <p><b>Description: </b>JSR305 Annotations for Findbugs</p> <p><b>URL: </b><a class="externalLink" href="http://findbugs.sourceforge.net/">http://findbugs.sourceforge.net/</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
+               </tr> 
+              </tbody> 
+             </table> 
+            </div></li> 
+           <li>org.checkerframework:checker-qual:jar:3.12.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep26"><i class="icon-info-sign"></i></button> 
+            <div id="_dep26" style="" class="collapse"> 
+             <table border="0" class="bodyTable table table-striped table-hover"> 
+              <thead> 
+               <tr class="a"> 
+                <th>Checker Qual</th> 
+               </tr> 
+              </thead> 
+              <tbody> 
+               <tr class="b"> 
+                <td> <p><b>Description: </b>checker-qual contains annotations (type qualifiers) that a programmer writes to specify Java code for type-checking by the Checker Framework.</p> <p><b>URL: </b><a class="externalLink" href="https://checkerframework.org">https://checkerframework.org</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://opensource.org/licenses/MIT">The MIT License</a></p></td> 
+               </tr> 
+              </tbody> 
+             </table> 
+            </div></li> 
+           <li>com.google.errorprone:error_prone_annotations:jar:2.11.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep28"><i class="icon-info-sign"></i></button> 
+            <div id="_dep28" style="" class="collapse"> 
+             <table border="0" class="bodyTable table table-striped table-hover"> 
+              <thead> 
+               <tr class="a"> 
+                <th>error-prone annotations</th> 
+               </tr> 
+              </thead> 
+              <tbody> 
+               <tr class="b"> 
+                <td> <p><b>Description: </b>Error Prone is a static analysis tool for Java that catches common programming mistakes at compile-time.</p> <p><b>URL: </b><a class="externalLink" href="https://errorprone.info/error_prone_annotations">https://errorprone.info/error_prone_annotations</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td> 
+               </tr> 
+              </tbody> 
+             </table> 
+            </div></li> 
+           <li>com.google.j2objc:j2objc-annotations:jar:1.3 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep30"><i class="icon-info-sign"></i></button> 
+            <div id="_dep30" style="" class="collapse"> 
+             <table border="0" class="bodyTable table table-striped table-hover"> 
+              <thead> 
+               <tr class="a"> 
+                <th>J2ObjC Annotations</th> 
+               </tr> 
+              </thead> 
+              <tbody> 
+               <tr class="b"> 
+                <td> <p><b>Description: </b>A set of annotations that provide additional information to the J2ObjC translator to modify the result of translation.</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/j2objc/">https://github.com/google/j2objc/</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
+               </tr> 
+              </tbody> 
+             </table> 
+            </div></li> 
+          </ul></li> 
         </ul></li> 
-       <li>org.apache.commons:commons-text:jar:1.10.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep18"><i class="icon-info-sign"></i></button> 
-        <div id="_dep18" style="" class="collapse"> 
+       <li>org.apache.commons:commons-text:jar:1.10.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep32"><i class="icon-info-sign"></i></button> 
+        <div id="_dep32" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1500,8 +1607,8 @@
           </tbody> 
          </table> 
         </div></li> 
-       <li>com.github.jknack:handlebars:jar:4.3.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep20"><i class="icon-info-sign"></i></button> 
-        <div id="_dep20" style="" class="collapse"> 
+       <li>com.github.jknack:handlebars:jar:4.3.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep34"><i class="icon-info-sign"></i></button> 
+        <div id="_dep34" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1515,8 +1622,8 @@
           </tbody> 
          </table> 
         </div></li> 
-       <li>com.github.jknack:handlebars-helpers:jar:4.3.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep22"><i class="icon-info-sign"></i></button> 
-        <div id="_dep22" style="" class="collapse"> 
+       <li>com.github.jknack:handlebars-helpers:jar:4.3.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep36"><i class="icon-info-sign"></i></button> 
+        <div id="_dep36" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1530,8 +1637,8 @@
           </tbody> 
          </table> 
         </div></li> 
-       <li>com.google.code.gson:gson:jar:2.10.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep24"><i class="icon-info-sign"></i></button> 
-        <div id="_dep24" style="" class="collapse"> 
+       <li>com.google.code.gson:gson:jar:2.10.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep38"><i class="icon-info-sign"></i></button> 
+        <div id="_dep38" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1545,8 +1652,8 @@
           </tbody> 
          </table> 
         </div></li> 
-       <li>org.apache.commons:commons-jexl3:jar:3.3 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep26"><i class="icon-info-sign"></i></button> 
-        <div id="_dep26" style="" class="collapse"> 
+       <li>org.apache.commons:commons-jexl3:jar:3.3 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep40"><i class="icon-info-sign"></i></button> 
+        <div id="_dep40" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1561,8 +1668,8 @@
          </table> 
         </div> 
         <ul> 
-         <li>commons-logging:commons-logging:jar:1.2 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep28"><i class="icon-info-sign"></i></button> 
-          <div id="_dep28" style="" class="collapse"> 
+         <li>commons-logging:commons-logging:jar:1.2 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep42"><i class="icon-info-sign"></i></button> 
+          <div id="_dep42" style="" class="collapse"> 
            <table border="0" class="bodyTable table table-striped table-hover"> 
             <thead> 
              <tr class="a"> 
@@ -1577,8 +1684,8 @@
            </table> 
           </div></li> 
         </ul></li> 
-       <li>org.slf4j:slf4j-api:jar:1.7.36 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep30"><i class="icon-info-sign"></i></button> 
-        <div id="_dep30" style="" class="collapse"> 
+       <li>org.slf4j:slf4j-api:jar:1.7.36 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep44"><i class="icon-info-sign"></i></button> 
+        <div id="_dep44" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1593,8 +1700,8 @@
          </table> 
         </div></li> 
       </ul></li> 
-     <li>io.wcm.devops.conga.plugins:io.wcm.devops.conga.plugins.aem:jar:2.19.5-SNAPSHOT (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep32"><i class="icon-info-sign"></i></button> 
-      <div id="_dep32" style="" class="collapse"> 
+     <li>io.wcm.devops.conga.plugins:io.wcm.devops.conga.plugins.aem:jar:2.19.5-SNAPSHOT (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep46"><i class="icon-info-sign"></i></button> 
+      <div id="_dep46" style="" class="collapse"> 
        <table border="0" class="bodyTable table table-striped table-hover"> 
         <thead> 
          <tr class="a"> 
@@ -1609,8 +1716,8 @@
        </table> 
       </div> 
       <ul> 
-       <li>io.wcm.devops.conga.plugins:io.wcm.devops.conga.plugins.sling:jar:1.3.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep34"><i class="icon-info-sign"></i></button> 
-        <div id="_dep34" style="" class="collapse"> 
+       <li>io.wcm.devops.conga.plugins:io.wcm.devops.conga.plugins.sling:jar:1.3.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep48"><i class="icon-info-sign"></i></button> 
+        <div id="_dep48" style="" class="collapse"> 
          <table border="0" class="bodyTable table table-striped table-hover"> 
           <thead> 
            <tr class="a"> 
@@ -1625,8 +1732,8 @@
          </table> 
         </div> 
         <ul> 
-         <li>org.apache.felix:org.apache.felix.configadmin:jar:1.9.16 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep36"><i class="icon-info-sign"></i></button> 
-          <div id="_dep36" style="" class="collapse"> 
+         <li>org.apache.felix:org.apache.felix.configadmin:jar:1.9.16 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep50"><i class="icon-info-sign"></i></button> 
+          <div id="_dep50" style="" class="collapse"> 
            <table border="0" class="bodyTable table table-striped table-hover"> 
             <thead> 
              <tr class="a"> 
@@ -1640,8 +1747,8 @@
             </tbody> 
            </table> 
           </div></li> 
-         <li>org.apache.sling:org.apache.sling.provisioning.model:jar:1.8.6 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep38"><i class="icon-info-sign"></i></button> 
-          <div id="_dep38" style="" class="collapse"> 
+         <li>org.apache.sling:org.apache.sling.provisioning.model:jar:1.8.6 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep52"><i class="icon-info-sign"></i></button> 
+          <div id="_dep52" style="" class="collapse"> 
            <table border="0" class="bodyTable table table-striped table-hover"> 
             <thead> 
              <tr class="a"> 
@@ -1651,113 +1758,6 @@
             <tbody> 
              <tr class="b"> 
               <td> <p><b>Description: </b>The provisioning model for Apache Sling</p> <p><b>URL: </b><a class="externalLink" href="https://sling.apache.org/sling-bundle-parent/org.apache.sling.provisioning.model">https://sling.apache.org/sling-bundle-parent/org.apache.sling.provisioning.model</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></p></td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          </div></li> 
-        </ul></li> 
-       <li>com.google.guava:guava:jar:32.1.1-jre (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep40"><i class="icon-info-sign"></i></button> 
-        <div id="_dep40" style="" class="collapse"> 
-         <table border="0" class="bodyTable table table-striped table-hover"> 
-          <thead> 
-           <tr class="a"> 
-            <th>Guava: Google Core Libraries for Java</th> 
-           </tr> 
-          </thead> 
-          <tbody> 
-           <tr class="b"> 
-            <td> <p><b>Description: </b>Guava is a suite of core and expanded libraries that include utility classes, Google's collections, I/O classes, and much more.</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/guava">https://github.com/google/guava</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></p></td> 
-           </tr> 
-          </tbody> 
-         </table> 
-        </div> 
-        <ul> 
-         <li>com.google.guava:failureaccess:jar:1.0.1 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep42"><i class="icon-info-sign"></i></button> 
-          <div id="_dep42" style="" class="collapse"> 
-           <table border="0" class="bodyTable table table-striped table-hover"> 
-            <thead> 
-             <tr class="a"> 
-              <th>Guava InternalFutureFailureAccess and InternalFutures</th> 
-             </tr> 
-            </thead> 
-            <tbody> 
-             <tr class="b"> 
-              <td> <p><b>Description: </b>Contains com.google.common.util.concurrent.internal.InternalFutureFailureAccess and InternalFutures. Most users will never need to use this artifact. Its classes is conceptually a part of Guava, but they're in this separate artifact so that Android libraries can use them without pulling in all of Guava (just as they can use ListenableFuture by depending on the listenablefuture artifact).</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/guava/failureaccess">https://github.com/google/guava/failureaccess</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          </div></li> 
-         <li>com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep44"><i class="icon-info-sign"></i></button> 
-          <div id="_dep44" style="" class="collapse"> 
-           <table border="0" class="bodyTable table table-striped table-hover"> 
-            <thead> 
-             <tr class="a"> 
-              <th>Guava ListenableFuture only</th> 
-             </tr> 
-            </thead> 
-            <tbody> 
-             <tr class="b"> 
-              <td> <p><b>Description: </b>An empty artifact that Guava depends on to signal that it is providing ListenableFuture -- but is also available in a second "version" that contains com.google.common.util.concurrent.ListenableFuture class, without any other Guava classes. The idea is: - If users want only ListenableFuture, they depend on listenablefuture-1.0. - If users want all of Guava, they depend on guava, which, as of Guava 27.0, depends on listenablefuture-9999.0-empty-to-avoid-conflict-with-guava. The 9999.0-... version number is enough for some build systems (notably, Gradle) to select that empty artifact over the "real" listenablefuture-1.0 -- avoiding a conflict with the copy of ListenableFuture in guava itself. If users are using an older version of Guava or a build system other than Gradle, they may see class conflicts. If so, they can solve them by manually excluding the listenablefuture artifact or manually forcing their build systems to use 9999.0-....</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/guava/listenablefuture">https://github.com/google/guava/listenablefuture</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          </div></li> 
-         <li>com.google.code.findbugs:jsr305:jar:3.0.2 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep46"><i class="icon-info-sign"></i></button> 
-          <div id="_dep46" style="" class="collapse"> 
-           <table border="0" class="bodyTable table table-striped table-hover"> 
-            <thead> 
-             <tr class="a"> 
-              <th>FindBugs-jsr305</th> 
-             </tr> 
-            </thead> 
-            <tbody> 
-             <tr class="b"> 
-              <td> <p><b>Description: </b>JSR305 Annotations for Findbugs</p> <p><b>URL: </b><a class="externalLink" href="http://findbugs.sourceforge.net/">http://findbugs.sourceforge.net/</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">The Apache Software License, Version 2.0</a></p></td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          </div></li> 
-         <li>org.checkerframework:checker-qual:jar:3.33.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep48"><i class="icon-info-sign"></i></button> 
-          <div id="_dep48" style="" class="collapse"> 
-           <table border="0" class="bodyTable table table-striped table-hover"> 
-            <thead> 
-             <tr class="a"> 
-              <th>Checker Qual</th> 
-             </tr> 
-            </thead> 
-            <tbody> 
-             <tr class="b"> 
-              <td> <p><b>Description: </b>checker-qual contains annotations (type qualifiers) that a programmer writes to specify Java code for type-checking by the Checker Framework.</p> <p><b>URL: </b><a class="externalLink" href="https://checkerframework.org/">https://checkerframework.org/</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://opensource.org/licenses/MIT">The MIT License</a></p></td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          </div></li> 
-         <li>com.google.errorprone:error_prone_annotations:jar:2.18.0 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep50"><i class="icon-info-sign"></i></button> 
-          <div id="_dep50" style="" class="collapse"> 
-           <table border="0" class="bodyTable table table-striped table-hover"> 
-            <thead> 
-             <tr class="a"> 
-              <th>error-prone annotations</th> 
-             </tr> 
-            </thead> 
-            <tbody> 
-             <tr class="b"> 
-              <td> <p><b>Description: </b>Error Prone is a static analysis tool for Java that catches common programming mistakes at compile-time.</p> <p><b>URL: </b><a class="externalLink" href="https://errorprone.info/error_prone_annotations">https://errorprone.info/error_prone_annotations</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p></td> 
-             </tr> 
-            </tbody> 
-           </table> 
-          </div></li> 
-         <li>com.google.j2objc:j2objc-annotations:jar:2.8 (compile) <button title="Information" class="btn btn-link btn-small" type="button" data-toggle="collapse" data-target="#_dep52"><i class="icon-info-sign"></i></button> 
-          <div id="_dep52" style="" class="collapse"> 
-           <table border="0" class="bodyTable table table-striped table-hover"> 
-            <thead> 
-             <tr class="a"> 
-              <th>J2ObjC Annotations</th> 
-             </tr> 
-            </thead> 
-            <tbody> 
-             <tr class="b"> 
-              <td> <p><b>Description: </b>A set of annotations that provide additional information to the J2ObjC translator to modify the result of translation.</p> <p><b>URL: </b><a class="externalLink" href="https://github.com/google/j2objc/">https://github.com/google/j2objc/</a></p> <p><b>Project Licenses: </b><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a></p></td> 
              </tr> 
             </tbody> 
            </table> 
@@ -3742,7 +3742,7 @@
  <p><b>Similar to Apache License but with the acknowledgment clause removed: </b>JDOM</p> 
  <p><b>Apache License 2.0: </b>snappy</p> 
  <p><b>The MIT License: </b>Checker Qual, mockito-core, mockito-junit-jupiter</p> 
- <p><b>Apache License, Version 2.0: </b>Apache Commons BeanUtils, Apache Commons CSV, Apache Commons Codec, Apache Commons Collections, Apache Commons Exec, Apache Commons Lang, Apache Commons Text, Apache Felix Configuration Admin Service, Apache HttpClient, Apache HttpClient Mime, Apache HttpCore, Apache Jackrabbit API, Apache Jackrabbit FileVault - Package Maven Plugin, Apache Jackrabbit FileVault Core Bundle, Apache Jackrabbit FileVault Validation, Apache Maven Archiver, Apache Maven Common Artifact Filters, Apache Maven Filtering, Apache Maven Shared Utils, Apache Maven Wagon :: API, Apache Sling Content Parser API, Apache Sling Content Parser for JSON, Apache Sling Provisioning Model, Byte Buddy (without dependencies), Byte Buddy agent, CDI APIs, Guava: Google Core Libraries for Java, J2ObjC Annotations, JCL 1.2 implemented over SLF4J, Jackrabbit API, Jackrabbit JCR Commons, Jackrabbit SPI, Jackrabbit SPI Commons, Maven Aether Provider, Maven Artifact, Maven Builder Support, Maven Compat, Maven Core, Maven Model, Maven Model Builder, Maven Plugin API, Maven Repository Metadata Model, Maven Settings, Maven Settings Builder, Objenesis, Plexus Archiver Component, Plexus IO Components, SnakeYAML, Spring Commons Logging Bridge, Spring Core, org.osgi:org.osgi.dto, org.osgi:org.osgi.framework, org.osgi:org.osgi.resource, org.osgi:org.osgi.service.component.annotations, org.osgi:org.osgi.service.log, org.osgi:org.osgi.service.metatype.annotations, org.osgi:org.osgi.service.repository</p> 
+ <p><b>Apache License, Version 2.0: </b>Apache Commons BeanUtils, Apache Commons CSV, Apache Commons Codec, Apache Commons Collections, Apache Commons Exec, Apache Commons Lang, Apache Commons Text, Apache Felix Configuration Admin Service, Apache HttpClient, Apache HttpClient Mime, Apache HttpCore, Apache Jackrabbit API, Apache Jackrabbit FileVault - Package Maven Plugin, Apache Jackrabbit FileVault Core Bundle, Apache Jackrabbit FileVault Validation, Apache Maven Archiver, Apache Maven Common Artifact Filters, Apache Maven Filtering, Apache Maven Shared Utils, Apache Maven Wagon :: API, Apache Sling Content Parser API, Apache Sling Content Parser for JSON, Apache Sling Provisioning Model, Byte Buddy (without dependencies), Byte Buddy agent, CDI APIs, Guava: Google Core Libraries for Java, JCL 1.2 implemented over SLF4J, Jackrabbit API, Jackrabbit JCR Commons, Jackrabbit SPI, Jackrabbit SPI Commons, Maven Aether Provider, Maven Artifact, Maven Builder Support, Maven Compat, Maven Core, Maven Model, Maven Model Builder, Maven Plugin API, Maven Repository Metadata Model, Maven Settings, Maven Settings Builder, Objenesis, Plexus Archiver Component, Plexus IO Components, SnakeYAML, Spring Commons Logging Bridge, Spring Core, org.osgi:org.osgi.dto, org.osgi:org.osgi.framework, org.osgi:org.osgi.resource, org.osgi:org.osgi.service.component.annotations, org.osgi:org.osgi.service.log, org.osgi:org.osgi.service.metatype.annotations, org.osgi:org.osgi.service.repository</p> 
  <p><b>Apache-2.0: </b>Apache Commons Compress, Apache Commons IO, Apache Commons JEXL, Gson, Jackrabbit Guava Wrapper, Maven Plugin Tools Java Annotations, Oak API, Oak Commons, Oak Core SPI, Oak NodeStore and Commit SPI, Oak Query SPI, Oak Security SPI, org.osgi:org.osgi.util.function, org.osgi:org.osgi.util.promise, org.osgi:org.osgi.util.tracker, org.osgi:osgi.annotation</p> 
  <p><b>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0: </b>JSR-250 Common Annotations for the JavaTM Platform</p> 
  <p><b>MIT license: </b>Animal Sniffer, Animal Sniffer Maven Plugin, Java boot classpath detector</p> 
@@ -3756,7 +3756,7 @@
  <p><b>The MIT License (MIT): </b>ClassGraph</p> 
  <p><b>EDL 1.0: </b>Jakarta Activation API jar</p> 
  <p><b>Eclipse Distribution License - v 1.0: </b>Jakarta XML Binding API, TXW2 Runtime</p> 
- <p><b>The Apache Software License, Version 2.0: </b>AEM Content Package Builder, ASM based accessors helper used by json-smart, Apache Commons Logging, Apache Geronimo JSON Spec 1.1, CONGA AEM Maven Plugin, CONGA AEM Plugin, CONGA Ansible Plugin, CONGA Generator, CONGA Model, CONGA Resource, CONGA Sling Plugin, CRX Package Manager Helper, FindBugs-jsr305, Google Guice - Core Library, Guava InternalFutureFailureAccess and InternalFutures, Guava ListenableFuture only, Handlebars, Handlebars Helpers, JSON Small and Fast Parser, JetBrains Java Annotations, Johnzon :: Core, Plexus :: Component Annotations, Plexus Classworlds, Plexus Common Utilities, Plexus Interpolation API, Subset of Spotbugs Annotations, ZT Zip, javax.inject, org.xmlunit:xmlunit-core, project ':json-path', wcm.io Node Types and Namespaces</p> 
+ <p><b>The Apache Software License, Version 2.0: </b>AEM Content Package Builder, ASM based accessors helper used by json-smart, Apache Commons Logging, Apache Geronimo JSON Spec 1.1, CONGA AEM Maven Plugin, CONGA AEM Plugin, CONGA Ansible Plugin, CONGA Generator, CONGA Model, CONGA Resource, CONGA Sling Plugin, CRX Package Manager Helper, FindBugs-jsr305, Google Guice - Core Library, Guava InternalFutureFailureAccess and InternalFutures, Guava ListenableFuture only, Handlebars, Handlebars Helpers, J2ObjC Annotations, JSON Small and Fast Parser, JetBrains Java Annotations, Johnzon :: Core, Plexus :: Component Annotations, Plexus Classworlds, Plexus Common Utilities, Plexus Interpolation API, Subset of Spotbugs Annotations, ZT Zip, javax.inject, org.xmlunit:xmlunit-core, project ':json-path', wcm.io Node Types and Namespaces</p> 
  <p><b>BSD License 2.0: </b>jaxen</p> 
 </section><a name="Dependency_File_Details"></a> 
 <section> 
@@ -3898,12 +3898,12 @@
     <td align="center">No</td> 
    </tr> 
    <tr class="a"> 
-    <td align="left">error_prone_annotations-2.18.0.jar</td> 
+    <td align="left">error_prone_annotations-2.11.0.jar</td> 
     <td align="right">16 kB</td> 
     <td align="right">38</td> 
     <td align="right">26</td> 
     <td align="right">2</td> 
-    <td align="center">1.8</td> 
+    <td align="center">1.7</td> 
     <td align="center">Yes</td> 
     <td align="center">No</td> 
    </tr> 
@@ -3918,10 +3918,10 @@
     <td align="center">No</td> 
    </tr> 
    <tr class="a"> 
-    <td align="left">guava-32.1.1-jre.jar</td> 
+    <td align="left">guava-31.1-jre.jar</td> 
     <td align="right">3 MB</td> 
-    <td align="right">2060</td> 
-    <td align="right">2020</td> 
+    <td align="right">2053</td> 
+    <td align="right">2023</td> 
     <td align="right">18</td> 
     <td align="center">1.8</td> 
     <td align="center">Yes</td> 
@@ -3948,12 +3948,12 @@
     <td align="center">No</td> 
    </tr> 
    <tr class="b"> 
-    <td align="left">j2objc-annotations-2.8.jar</td> 
-    <td align="right">9.3 kB</td> 
-    <td align="right">24</td> 
-    <td align="right">13</td> 
+    <td align="left">j2objc-annotations-1.3.jar</td> 
+    <td align="right">8.8 kB</td> 
+    <td align="right">23</td> 
+    <td align="right">12</td> 
     <td align="right">1</td> 
-    <td align="center">1.7</td> 
+    <td align="center">1.5</td> 
     <td align="center">Yes</td> 
     <td align="center">No</td> 
    </tr> 
@@ -4728,11 +4728,11 @@
     <td align="center">No</td> 
    </tr> 
    <tr class="b"> 
-    <td align="left">checker-qual-3.33.0.jar</td> 
-    <td align="right">224 kB</td> 
-    <td align="right">426</td> 
-    <td align="right">358</td> 
-    <td align="right">30</td> 
+    <td align="left">checker-qual-3.12.0.jar</td> 
+    <td align="right">208.8 kB</td> 
+    <td align="right">399</td> 
+    <td align="right">333</td> 
+    <td align="right">29</td> 
     <td align="center">1.8</td> 
     <td align="center">Yes</td> 
     <td align="center">No</td> 
@@ -5309,20 +5309,20 @@
    </tr> 
    <tr class="a"> 
     <td align="right">152</td> 
-    <td align="right">40.8 MB</td> 
-    <td align="right">30358</td> 
-    <td align="right">25193</td> 
-    <td align="right">1587</td> 
+    <td align="right">40.7 MB</td> 
+    <td align="right">30323</td> 
+    <td align="right">25170</td> 
+    <td align="right">1586</td> 
     <td align="center">1.8</td> 
     <td align="right">143</td> 
     <td align="center">1</td> 
    </tr> 
    <tr class="b"> 
     <td align="right">compile: 101</td> 
-    <td align="right">compile: 30.5 MB</td> 
-    <td align="right">compile: 22212</td> 
-    <td align="right">compile: 18076</td> 
-    <td align="right">compile: 1124</td> 
+    <td align="right">compile: 30.4 MB</td> 
+    <td align="right">compile: 22177</td> 
+    <td align="right">compile: 18053</td> 
+    <td align="right">compile: 1123</td> 
     <td align="center">-</td> 
     <td align="right">compile: 96</td> 
     <td align="center">-</td> 

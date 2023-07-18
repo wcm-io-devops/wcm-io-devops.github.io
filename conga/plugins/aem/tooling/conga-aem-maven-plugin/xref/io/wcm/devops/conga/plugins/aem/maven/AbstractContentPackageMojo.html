@@ -30,15 +30,15 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.COMPOSUM_URL;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.CRX_URL;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.execution.MavenSession;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.AbstractMojo;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoExecutionException;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Component;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Parameter;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.settings.crypto.SettingsDecrypter;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.execution.MavenSession;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.AbstractMojo;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoExecutionException;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Component;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Parameter;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.settings.crypto.SettingsDecrypter;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> io.wcm.tooling.commons.packmgr.PackageManagerProperties;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory;
@@ -245,8 +245,8 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a>     props.setRetryDelaySec(<strong class="jxr_keyword">this</strong>.retryDelay);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a>     props.setBundleStatusUrl(buildBundleStatusUrl());
 <a class="jxr_linenumber" name="L239" href="#L239">239</a>     props.setBundleStatusWaitLimitSec(<strong class="jxr_keyword">this</strong>.bundleStatusWaitLimit);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>     props.setBundleStatusBlacklistBundleNames(ImmutableList.copyOf(<strong class="jxr_keyword">this</strong>.bundleStatusBlacklistBundleNames));
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>     props.setBundleStatusWhitelistBundleNames(ImmutableList.copyOf(<strong class="jxr_keyword">this</strong>.bundleStatusWhitelistBundleNames));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     props.setBundleStatusBlacklistBundleNames(List.of(<strong class="jxr_keyword">this</strong>.bundleStatusBlacklistBundleNames));
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>     props.setBundleStatusWhitelistBundleNames(List.of(<strong class="jxr_keyword">this</strong>.bundleStatusWhitelistBundleNames));
 <a class="jxr_linenumber" name="L242" href="#L242">242</a>     props.setPackageManagerInstallStatusURL(buildPackageManagerInstallStatusUrl());
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>     props.setPackageManagerInstallStatusWaitLimitSec(<strong class="jxr_keyword">this</strong>.packageManagerInstallStatusWaitLimit);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>     props.setRelaxedSSLCheck(<strong class="jxr_keyword">this</strong>.relaxedSSLCheck);

@@ -32,12 +32,10 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import com.google.common.collect.ImmutableSet;
-
 /**
  * Common functionality for mojos that generate configuration ZIP files for Adobe Cloud Manager.
  */
-<span class="fc" id="L40">abstract class AbstractCloudManagerMojo extends AbstractMojo {</span>
+<span class="fc" id="L38">abstract class AbstractCloudManagerMojo extends AbstractMojo {</span>
 
   /**
    * Selected environments to generate.
@@ -68,10 +66,10 @@ import com.google.common.collect.ImmutableSet;
    */
   protected File getTargetDir() {
     // create directory if it does not exist already
-<span class="pc bpc" id="L71" title="1 of 4 branches missed.">    if (!target.exists() &amp;&amp; !target.mkdirs()) {</span>
-<span class="nc" id="L72">      throw new IllegalStateException(&quot;Unable to create target dir: &quot; + getCanonicalPath(target));</span>
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">    if (!target.exists() &amp;&amp; !target.mkdirs()) {</span>
+<span class="nc" id="L70">      throw new IllegalStateException(&quot;Unable to create target dir: &quot; + getCanonicalPath(target));</span>
     }
-<span class="fc" id="L74">    return target;</span>
+<span class="fc" id="L72">    return target;</span>
   }
 
   /**
@@ -80,21 +78,21 @@ import com.google.common.collect.ImmutableSet;
    * @throws MojoExecutionException if no or multiple directories found
    */
   protected List&lt;File&gt; getEnvironmentDir() throws MojoExecutionException {
-<span class="fc" id="L83">    List&lt;File&gt; directories = null;</span>
-<span class="fc" id="L84">    Set&lt;String&gt; selectedEnvironments = toSet(this.environments);</span>
-<span class="pc bpc" id="L85" title="2 of 4 branches missed.">    if (configurationDir.exists() &amp;&amp; configurationDir.isDirectory()) {</span>
-<span class="fc" id="L86">      File[] files = configurationDir.listFiles();</span>
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">      if (files != null) {</span>
-<span class="fc" id="L88">        directories = Arrays.stream(files)</span>
-<span class="fc" id="L89">            .filter(File::isDirectory)</span>
-<span class="pc bpc" id="L90" title="3 of 4 branches missed.">            .filter(dir -&gt; (selectedEnvironments.isEmpty() || selectedEnvironments.contains(dir.getName())))</span>
-<span class="fc" id="L91">            .collect(Collectors.toList());</span>
+<span class="fc" id="L81">    List&lt;File&gt; directories = null;</span>
+<span class="fc" id="L82">    Set&lt;String&gt; selectedEnvironments = toSet(this.environments);</span>
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">    if (configurationDir.exists() &amp;&amp; configurationDir.isDirectory()) {</span>
+<span class="fc" id="L84">      File[] files = configurationDir.listFiles();</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">      if (files != null) {</span>
+<span class="fc" id="L86">        directories = Arrays.stream(files)</span>
+<span class="fc" id="L87">            .filter(File::isDirectory)</span>
+<span class="pc bpc" id="L88" title="3 of 4 branches missed.">            .filter(dir -&gt; (selectedEnvironments.isEmpty() || selectedEnvironments.contains(dir.getName())))</span>
+<span class="fc" id="L89">            .collect(Collectors.toList());</span>
       }
     }
-<span class="pc bpc" id="L94" title="2 of 4 branches missed.">    if (directories == null || directories.isEmpty()) {</span>
-<span class="nc" id="L95">      throw new MojoExecutionException(&quot;No matching environment directory found in &quot; + getCanonicalPath(configurationDir));</span>
+<span class="pc bpc" id="L92" title="2 of 4 branches missed.">    if (directories == null || directories.isEmpty()) {</span>
+<span class="nc" id="L93">      throw new MojoExecutionException(&quot;No matching environment directory found in &quot; + getCanonicalPath(configurationDir));</span>
     }
-<span class="fc" id="L97">    return directories;</span>
+<span class="fc" id="L95">    return directories;</span>
   }
 
   /**
@@ -103,8 +101,8 @@ import com.google.common.collect.ImmutableSet;
    * @return true if configured explicitly
    */
   protected boolean isEnvironmentConfiguredExplicitely(String environment) {
-<span class="fc" id="L106">    Set&lt;String&gt; selectedEnvironments = toSet(this.environments);</span>
-<span class="fc" id="L107">    return selectedEnvironments.contains(environment);</span>
+<span class="fc" id="L104">    Set&lt;String&gt; selectedEnvironments = toSet(this.environments);</span>
+<span class="fc" id="L105">    return selectedEnvironments.contains(environment);</span>
   }
 
   /**
@@ -113,25 +111,25 @@ import com.google.common.collect.ImmutableSet;
    * @return List of directories
    */
   protected List&lt;File&gt; getNodeDirs(File environmentDir) {
-<span class="fc" id="L116">    Set&lt;String&gt; selectedNodes = toSet(this.nodes);</span>
-<span class="fc" id="L117">    File[] files = environmentDir.listFiles();</span>
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">    if (files != null) {</span>
-<span class="fc" id="L119">      return Arrays.stream(files)</span>
-<span class="fc" id="L120">          .filter(File::isDirectory)</span>
-<span class="pc bpc" id="L121" title="3 of 4 branches missed.">          .filter(dir -&gt; selectedNodes.isEmpty() || selectedNodes.contains(dir.getName()))</span>
-<span class="fc" id="L122">          .collect(Collectors.toList());</span>
+<span class="fc" id="L114">    Set&lt;String&gt; selectedNodes = toSet(this.nodes);</span>
+<span class="fc" id="L115">    File[] files = environmentDir.listFiles();</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">    if (files != null) {</span>
+<span class="fc" id="L117">      return Arrays.stream(files)</span>
+<span class="fc" id="L118">          .filter(File::isDirectory)</span>
+<span class="pc bpc" id="L119" title="3 of 4 branches missed.">          .filter(dir -&gt; selectedNodes.isEmpty() || selectedNodes.contains(dir.getName()))</span>
+<span class="fc" id="L120">          .collect(Collectors.toList());</span>
     }
     else {
-<span class="nc" id="L125">      return Collections.emptyList();</span>
+<span class="nc" id="L123">      return Collections.emptyList();</span>
     }
   }
 
   private static Set&lt;String&gt; toSet(String[] values) {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">    if (values != null) {</span>
-<span class="fc" id="L131">      return ImmutableSet.copyOf(values);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">    if (values != null) {</span>
+<span class="fc" id="L129">      return Set.of(values);</span>
     }
     else {
-<span class="nc" id="L134">      return ImmutableSet.of();</span>
+<span class="nc" id="L132">      return Set.of();</span>
     }
   }
 

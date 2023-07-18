@@ -22,6 +22,8 @@ package io.wcm.devops.conga.plugins.aem.maven;
 import static io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.COMPOSUM_URL;
 import static io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.CRX_URL;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -29,8 +31,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
-
-import com.google.common.collect.ImmutableList;
 
 import io.wcm.tooling.commons.packmgr.PackageManagerProperties;
 import io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory;
@@ -237,8 +237,8 @@ import io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.Service;
 <span class="nc" id="L237">    props.setRetryDelaySec(this.retryDelay);</span>
 <span class="nc" id="L238">    props.setBundleStatusUrl(buildBundleStatusUrl());</span>
 <span class="nc" id="L239">    props.setBundleStatusWaitLimitSec(this.bundleStatusWaitLimit);</span>
-<span class="nc" id="L240">    props.setBundleStatusBlacklistBundleNames(ImmutableList.copyOf(this.bundleStatusBlacklistBundleNames));</span>
-<span class="nc" id="L241">    props.setBundleStatusWhitelistBundleNames(ImmutableList.copyOf(this.bundleStatusWhitelistBundleNames));</span>
+<span class="nc" id="L240">    props.setBundleStatusBlacklistBundleNames(List.of(this.bundleStatusBlacklistBundleNames));</span>
+<span class="nc" id="L241">    props.setBundleStatusWhitelistBundleNames(List.of(this.bundleStatusWhitelistBundleNames));</span>
 <span class="nc" id="L242">    props.setPackageManagerInstallStatusURL(buildPackageManagerInstallStatusUrl());</span>
 <span class="nc" id="L243">    props.setPackageManagerInstallStatusWaitLimitSec(this.packageManagerInstallStatusWaitLimit);</span>
 <span class="nc" id="L244">    props.setRelaxedSSLCheck(this.relaxedSSLCheck);</span>
