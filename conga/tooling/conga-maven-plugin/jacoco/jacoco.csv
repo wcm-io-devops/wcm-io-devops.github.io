@@ -7,8 +7,8 @@ CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,BuildConstants,0,5,0
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,GenerateMojo,5,189,1,5,1,49,1,5,0,3
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,MavenSlf4jLogFacade,279,105,1,5,91,26,57,10,56,8
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,ValidateMojo,78,465,12,22,15,105,12,20,2,13
-CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,DependencyVersionBuilder,22,154,1,9,4,41,1,10,0,6
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,AbstractCongaMojo,43,369,9,23,9,82,9,26,0,19
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,DependencyVersionBuilder,22,154,1,9,4,41,1,10,0,6
 CONGA Maven Plugin,io.wcm.devops.conga.conga_maven_plugin,HelpMojo,773,0,112,0,156,0,72,0,16,0
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.valueprovider,MavenPropertyValueProviderPlugin,0,23,0,2,0,7,0,4,0,3
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,PluginConfigUtil,0,68,0,6,0,10,0,4,0,1
@@ -20,5 +20,5 @@ CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.util,VersionInfoUtil
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,TemplateValidator,9,38,1,1,2,11,1,2,0,2
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,NoValueProviderInRoleValidator,15,48,1,7,3,14,1,7,0,4
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,ModelValidator,11,14,0,0,2,5,0,2,0,2
-CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,RoleTemplateFileValidator,14,74,3,11,3,17,3,6,0,2
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,NoValueProviderInRoleValidator.MapReader,0,17,0,0,0,4,0,2,0,2
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin.validation,RoleTemplateFileValidator,14,74,3,11,3,17,3,6,0,2
