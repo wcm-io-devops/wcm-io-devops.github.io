@@ -111,9 +111,9 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>   <strong class="jxr_keyword">private</strong> RepositorySystem repoSystem;
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>   @Component
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>   <strong class="jxr_keyword">private</strong> BuildContext buildContext;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>   @Parameter(property = <span class="jxr_string">"repositorySystemSession"</span>, readonly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>   @Parameter(defaultValue = <span class="jxr_string">"${repositorySystemSession}"</span>, readonly = <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>   <strong class="jxr_keyword">private</strong> RepositorySystemSession repoSession;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   @Parameter(property = <span class="jxr_string">"project.remoteProjectRepositories"</span>, readonly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>   @Parameter(defaultValue = <span class="jxr_string">"${project.remoteProjectRepositories}"</span>, readonly = <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>   <strong class="jxr_keyword">private</strong> List&lt;RemoteRepository&gt; remoteRepos;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>   @Parameter(defaultValue = <span class="jxr_string">"${session}"</span>, readonly = <strong class="jxr_keyword">true</strong>, required = false)
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>   <strong class="jxr_keyword">private</strong> MavenSession session;

@@ -103,9 +103,9 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
   private RepositorySystem repoSystem;
   @Component
   private BuildContext buildContext;
-  @Parameter(property = &quot;repositorySystemSession&quot;, readonly = true)
+  @Parameter(defaultValue = &quot;${repositorySystemSession}&quot;, readonly = true)
   private RepositorySystemSession repoSession;
-  @Parameter(property = &quot;project.remoteProjectRepositories&quot;, readonly = true)
+  @Parameter(defaultValue = &quot;${project.remoteProjectRepositories}&quot;, readonly = true)
   private List&lt;RemoteRepository&gt; remoteRepos;
   @Parameter(defaultValue = &quot;${session}&quot;, readonly = true, required = false)
   private MavenSession session;
