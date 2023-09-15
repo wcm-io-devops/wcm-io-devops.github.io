@@ -10,3 +10,4 @@ net.wedjaa.ansible.vault.crypto.data
 net.wedjaa.ansible.vault.crypto.decoders
 net.wedjaa.ansible.vault.crypto.decoders.implementation
 net.wedjaa.ansible.vault.crypto.decoders.inter
+org.yaml.snakeyaml.inspector

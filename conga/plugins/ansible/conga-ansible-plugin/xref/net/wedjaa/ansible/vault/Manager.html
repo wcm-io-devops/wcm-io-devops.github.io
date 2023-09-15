@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">public</strong> Object getFromYaml(Class&lt;?&gt; objectClass, String yaml) {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      LoaderOptions options = <strong class="jxr_keyword">new</strong> LoaderOptions();
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      options.setTagInspector(<strong class="jxr_keyword">new</strong> TrustedTagInspector());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      options.setTagInspector(<strong class="jxr_keyword">new</strong> <a name="TrustedTagInspector" href="../../../../org/yaml/snakeyaml/inspector/TrustedTagInspector.html#TrustedTagInspector">TrustedTagInspector</a>());
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      Yaml reader = <strong class="jxr_keyword">new</strong> Yaml(<strong class="jxr_keyword">new</strong> Constructor(objectClass, options));
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">return</strong> reader.load(yaml);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>    }
