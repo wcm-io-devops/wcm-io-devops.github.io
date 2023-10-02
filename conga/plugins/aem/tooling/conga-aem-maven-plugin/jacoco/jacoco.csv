@@ -12,8 +12,8 @@ CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,InstallPackagesMojo
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,PackageVersionMode,0,24,0,0,0,3,0,1,0,1
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,ProxySupport,78,0,12,0,22,0,8,0,2,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,PackageTypeValidation,0,24,0,0,0,3,0,1,0,1
-CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,BuildOutputTimestamp,0,21,0,0,0,8,0,3,0,3
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,RunModeOptimization,0,24,0,0,0,3,0,1,0,1
+CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,BuildOutputTimestamp,0,21,0,0,0,8,0,3,0,3
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,CloudManagerDispatcherConfigMojo,17,200,5,19,4,46,5,13,0,6
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AbstractContentPackageMojo,180,0,13,0,48,0,16,0,9,0
 CONGA AEM Maven Plugin,io.wcm.devops.conga.plugins.aem.maven,AbstractCloudManagerMojo,32,97,14,12,4,25,12,9,0,8
