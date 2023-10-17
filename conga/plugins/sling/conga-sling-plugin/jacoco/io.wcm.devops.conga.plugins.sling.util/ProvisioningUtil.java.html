@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -74,16 +75,16 @@ public final class ProvisioningUtil {
    * @return true if it seems to be so
    */
   public static boolean isProvisioningFile(FileContext file) {
-<span class="fc bfc" id="L77" title="All 2 branches covered.">    if (FileUtil.matchesExtension(file, FILE_EXTENSION)) {</span>
-<span class="fc" id="L78">      return true;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">    if (FileUtil.matchesExtension(file, FILE_EXTENSION)) {</span>
+<span class="fc" id="L79">      return true;</span>
     }
     try {
       // check for generic txt extension and do some heuristics on the content of the file
-<span class="fc bfc" id="L82" title="All 2 branches covered.">      return FileUtil.matchesExtension(file.getFile(), TEXT_FILE_EXTENSION)</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">          &amp;&amp; StringUtils.contains(FileUtils.readFileToString(file.getFile(), file.getCharset()), &quot;[feature &quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">      return FileUtil.matchesExtension(file.getFile(), TEXT_FILE_EXTENSION)</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">          &amp;&amp; StringUtils.contains(FileUtils.readFileToString(file.getFile(), file.getCharset()), &quot;[feature &quot;);</span>
     }
-<span class="nc" id="L85">    catch (IOException ex) {</span>
-<span class="nc" id="L86">      return false;</span>
+<span class="nc" id="L86">    catch (IOException ex) {</span>
+<span class="nc" id="L87">      return false;</span>
     }
   }
 
@@ -94,11 +95,11 @@ public final class ProvisioningUtil {
    * @throws IOException I/O exception
    */
   public static Model getModel(FileContext file) throws IOException {
-<span class="fc" id="L97">    try (InputStream is = new BufferedInputStream(new FileInputStream(file.getFile()));</span>
-<span class="fc" id="L98">        Reader reader = new InputStreamReader(is, file.getCharset())) {</span>
-<span class="fc" id="L99">      Model model = ModelReader.read(reader, null);</span>
-<span class="fc" id="L100">      model = ModelUtility.getEffectiveModel(model, new ResolverOptions());</span>
-<span class="fc" id="L101">      return model;</span>
+<span class="fc" id="L98">    try (InputStream is = new BufferedInputStream(new FileInputStream(file.getFile()));</span>
+<span class="fc" id="L99">        Reader reader = new InputStreamReader(is, file.getCharset())) {</span>
+<span class="fc" id="L100">      Model model = ModelReader.read(reader, null);</span>
+<span class="fc" id="L101">      model = ModelUtility.getEffectiveModel(model, new ResolverOptions());</span>
+<span class="fc" id="L102">      return model;</span>
     }
   }
 
@@ -111,77 +112,77 @@ public final class ProvisioningUtil {
    * @throws IOException I/O exception
    */
   public static &lt;R&gt; List&lt;R&gt; visitOsgiConfigurations(Model model, ConfigConsumer&lt;R&gt; consumer) throws IOException {
-<span class="fc" id="L114">    List&lt;R&gt; results = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">    for (Feature feature : model.getFeatures()) {</span>
+<span class="fc" id="L115">    List&lt;R&gt; results = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">    for (Feature feature : model.getFeatures()) {</span>
 
       // OSGi configurations
-<span class="fc bfc" id="L118" title="All 2 branches covered.">      for (RunMode runMode : feature.getRunModes()) {</span>
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        for (Configuration configuration : runMode.getConfigurations()) {</span>
-<span class="fc" id="L120">          String path = getPathForConfiguration(configuration, runMode);</span>
-<span class="fc" id="L121">          R result = consumer.accept(path, configuration.getProperties());</span>
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">          if (result != null) {</span>
-<span class="fc" id="L123">            results.add(result);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">      for (RunMode runMode : feature.getRunModes()) {</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        for (Configuration configuration : runMode.getConfigurations()) {</span>
+<span class="fc" id="L121">          String path = getPathForConfiguration(configuration, runMode);</span>
+<span class="fc" id="L122">          R result = consumer.accept(path, configuration.getProperties());</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">          if (result != null) {</span>
+<span class="fc" id="L124">            results.add(result);</span>
           }
-<span class="fc" id="L125">        }</span>
-<span class="fc" id="L126">      }</span>
+<span class="fc" id="L126">        }</span>
+<span class="fc" id="L127">      }</span>
 
       // repoinit statements
-<span class="fc bfc" id="L129" title="All 2 branches covered.">      for (Section section : feature.getAdditionalSections(REPOINIT_SECTION)) {</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">      for (Section section : feature.getAdditionalSections(REPOINIT_SECTION)) {</span>
 
         // repoinit script
-<span class="fc" id="L132">        String script = section.getContents();</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (StringUtils.isBlank(script)) {</span>
-<span class="nc" id="L134">          continue;</span>
+<span class="fc" id="L133">        String script = section.getContents();</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (StringUtils.isBlank(script)) {</span>
+<span class="nc" id="L135">          continue;</span>
         }
 
         // associated run modes
-<span class="fc" id="L138">        String runModesString = section.getAttributes().get(&quot;runModes&quot;);</span>
+<span class="fc" id="L139">        String runModesString = section.getAttributes().get(&quot;runModes&quot;);</span>
         RunMode runMode;
-<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (runModesString != null) {</span>
-<span class="fc" id="L141">          runMode = new RunMode(StringUtils.split(runModesString, &quot;,&quot;));</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (runModesString != null) {</span>
+<span class="fc" id="L142">          runMode = new RunMode(StringUtils.split(runModesString, &quot;,&quot;));</span>
         }
         else {
-<span class="fc" id="L144">          runMode = new RunMode(null);</span>
+<span class="fc" id="L145">          runMode = new RunMode(null);</span>
         }
 
         // prepare repoinit OSGi configuration
-<span class="fc" id="L148">        String pid = StringUtils.defaultString(feature.getName(), &quot;conga&quot;)</span>
-<span class="fc bfc" id="L149" title="All 2 branches covered.">            + (runModesString != null ? &quot;-&quot; + StringUtils.replace(runModesString, &quot;,&quot;, &quot;-&quot;) : &quot;&quot;);</span>
-<span class="fc" id="L150">        Configuration configuration = new Configuration(pid, REPOINIT_PID);</span>
-<span class="fc" id="L151">        configuration.getProperties().put(&quot;scripts&quot;, new String[] { script });</span>
-<span class="fc" id="L152">        String path = getPathForConfiguration(configuration, runMode);</span>
-<span class="fc" id="L153">        R result = consumer.accept(path, configuration.getProperties());</span>
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (result != null) {</span>
-<span class="fc" id="L155">          results.add(result);</span>
+<span class="fc" id="L149">        String pid = Objects.toString(feature.getName(), &quot;conga&quot;)</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            + (runModesString != null ? &quot;-&quot; + StringUtils.replace(runModesString, &quot;,&quot;, &quot;-&quot;) : &quot;&quot;);</span>
+<span class="fc" id="L151">        Configuration configuration = new Configuration(pid, REPOINIT_PID);</span>
+<span class="fc" id="L152">        configuration.getProperties().put(&quot;scripts&quot;, new String[] { script });</span>
+<span class="fc" id="L153">        String path = getPathForConfiguration(configuration, runMode);</span>
+<span class="fc" id="L154">        R result = consumer.accept(path, configuration.getProperties());</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (result != null) {</span>
+<span class="fc" id="L156">          results.add(result);</span>
         }
-<span class="fc" id="L157">      }</span>
+<span class="fc" id="L158">      }</span>
 
-<span class="fc" id="L159">    }</span>
-<span class="fc" id="L160">    return results;</span>
+<span class="fc" id="L160">    }</span>
+<span class="fc" id="L161">    return results;</span>
   }
 
   /**
    * Get the relative path for a configuration
    */
   private static String getPathForConfiguration(Configuration configuration, RunMode runMode) {
-<span class="fc" id="L167">    SortedSet&lt;String&gt; runModesList = new TreeSet&lt;&gt;();</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">    if (runMode.getNames() != null) {</span>
-<span class="fc" id="L169">      runModesList.addAll(ImmutableList.copyOf(runMode.getNames()));</span>
+<span class="fc" id="L168">    SortedSet&lt;String&gt; runModesList = new TreeSet&lt;&gt;();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">    if (runMode.getNames() != null) {</span>
+<span class="fc" id="L170">      runModesList.addAll(ImmutableList.copyOf(runMode.getNames()));</span>
     }
 
     // run modes directory
-<span class="fc" id="L173">    StringBuilder path = new StringBuilder();</span>
-<span class="pc bpc" id="L174" title="1 of 4 branches missed.">    if (!runModesList.isEmpty() &amp;&amp; !runMode.isSpecial()) {</span>
-<span class="fc" id="L175">      path.append(StringUtils.join(runModesList, &quot;.&quot;)).append(&quot;/&quot;);</span>
+<span class="fc" id="L174">    StringBuilder path = new StringBuilder();</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">    if (!runModesList.isEmpty() &amp;&amp; !runMode.isSpecial()) {</span>
+<span class="fc" id="L176">      path.append(StringUtils.join(runModesList, &quot;.&quot;)).append(&quot;/&quot;);</span>
     }
 
     // main name
-<span class="fc bfc" id="L179" title="All 2 branches covered.">    if (configuration.getFactoryPid() != null) {</span>
-<span class="fc" id="L180">      path.append(configuration.getFactoryPid()).append(&quot;-&quot;);</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">    if (configuration.getFactoryPid() != null) {</span>
+<span class="fc" id="L181">      path.append(configuration.getFactoryPid()).append(&quot;-&quot;);</span>
     }
-<span class="fc" id="L182">    path.append(configuration.getPid()).append(&quot;.config&quot;);</span>
+<span class="fc" id="L183">    path.append(configuration.getPid()).append(&quot;.config&quot;);</span>
 
-<span class="fc" id="L184">    return path.toString();</span>
+<span class="fc" id="L185">    return path.toString();</span>
   }
 
 }

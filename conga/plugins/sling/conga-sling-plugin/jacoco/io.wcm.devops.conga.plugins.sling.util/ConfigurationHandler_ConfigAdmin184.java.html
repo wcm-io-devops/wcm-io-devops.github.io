@@ -118,24 +118,24 @@ class ConfigurationHandler_ConfigAdmin184 {
 <span class="fc" id="L118">    type2Code = new HashMap();</span>
 
     // simple (exclusive String whose type code is not written)
-<span class="fc" id="L121">    type2Code.put(Integer.class, new Integer(TOKEN_SIMPLE_INTEGER));</span>
-<span class="fc" id="L122">    type2Code.put(Long.class, new Integer(TOKEN_SIMPLE_LONG));</span>
-<span class="fc" id="L123">    type2Code.put(Float.class, new Integer(TOKEN_SIMPLE_FLOAT));</span>
-<span class="fc" id="L124">    type2Code.put(Double.class, new Integer(TOKEN_SIMPLE_DOUBLE));</span>
-<span class="fc" id="L125">    type2Code.put(Byte.class, new Integer(TOKEN_SIMPLE_BYTE));</span>
-<span class="fc" id="L126">    type2Code.put(Short.class, new Integer(TOKEN_SIMPLE_SHORT));</span>
-<span class="fc" id="L127">    type2Code.put(Character.class, new Integer(TOKEN_SIMPLE_CHARACTER));</span>
-<span class="fc" id="L128">    type2Code.put(Boolean.class, new Integer(TOKEN_SIMPLE_BOOLEAN));</span>
+<span class="fc" id="L121">    type2Code.put(Integer.class, Integer.valueOf(TOKEN_SIMPLE_INTEGER));</span>
+<span class="fc" id="L122">    type2Code.put(Long.class, Integer.valueOf(TOKEN_SIMPLE_LONG));</span>
+<span class="fc" id="L123">    type2Code.put(Float.class, Integer.valueOf(TOKEN_SIMPLE_FLOAT));</span>
+<span class="fc" id="L124">    type2Code.put(Double.class, Integer.valueOf(TOKEN_SIMPLE_DOUBLE));</span>
+<span class="fc" id="L125">    type2Code.put(Byte.class, Integer.valueOf(TOKEN_SIMPLE_BYTE));</span>
+<span class="fc" id="L126">    type2Code.put(Short.class, Integer.valueOf(TOKEN_SIMPLE_SHORT));</span>
+<span class="fc" id="L127">    type2Code.put(Character.class, Integer.valueOf(TOKEN_SIMPLE_CHARACTER));</span>
+<span class="fc" id="L128">    type2Code.put(Boolean.class, Integer.valueOf(TOKEN_SIMPLE_BOOLEAN));</span>
 
     // primitives
-<span class="fc" id="L131">    type2Code.put(Integer.TYPE, new Integer(TOKEN_PRIMITIVE_INT));</span>
-<span class="fc" id="L132">    type2Code.put(Long.TYPE, new Integer(TOKEN_PRIMITIVE_LONG));</span>
-<span class="fc" id="L133">    type2Code.put(Float.TYPE, new Integer(TOKEN_PRIMITIVE_FLOAT));</span>
-<span class="fc" id="L134">    type2Code.put(Double.TYPE, new Integer(TOKEN_PRIMITIVE_DOUBLE));</span>
-<span class="fc" id="L135">    type2Code.put(Byte.TYPE, new Integer(TOKEN_PRIMITIVE_BYTE));</span>
-<span class="fc" id="L136">    type2Code.put(Short.TYPE, new Integer(TOKEN_PRIMITIVE_SHORT));</span>
-<span class="fc" id="L137">    type2Code.put(Character.TYPE, new Integer(TOKEN_PRIMITIVE_CHAR));</span>
-<span class="fc" id="L138">    type2Code.put(Boolean.TYPE, new Integer(TOKEN_PRIMITIVE_BOOLEAN));</span>
+<span class="fc" id="L131">    type2Code.put(Integer.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_INT));</span>
+<span class="fc" id="L132">    type2Code.put(Long.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_LONG));</span>
+<span class="fc" id="L133">    type2Code.put(Float.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_FLOAT));</span>
+<span class="fc" id="L134">    type2Code.put(Double.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_DOUBLE));</span>
+<span class="fc" id="L135">    type2Code.put(Byte.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_BYTE));</span>
+<span class="fc" id="L136">    type2Code.put(Short.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_SHORT));</span>
+<span class="fc" id="L137">    type2Code.put(Character.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_CHAR));</span>
+<span class="fc" id="L138">    type2Code.put(Boolean.TYPE, Integer.valueOf(TOKEN_PRIMITIVE_BOOLEAN));</span>
 
     // reverse map to map type codes to classes, string class mapping
     // to be added manually, as the string type code is not written and
@@ -145,7 +145,7 @@ class ConfigurationHandler_ConfigAdmin184 {
 <span class="fc" id="L145">      Map.Entry entry = (Map.Entry)ti.next();</span>
 <span class="fc" id="L146">      code2Type.put(entry.getValue(), entry.getKey());</span>
 <span class="fc" id="L147">    }</span>
-<span class="fc" id="L148">    code2Type.put(new Integer(TOKEN_SIMPLE_STRING), String.class);</span>
+<span class="fc" id="L148">    code2Type.put(Integer.valueOf(TOKEN_SIMPLE_STRING), String.class);</span>
 
 <span class="fc" id="L150">    NAME_CHARS = new BitSet();</span>
 <span class="fc bfc" id="L151" title="All 2 branches covered.">    for (int i = '0'; i &lt;= '9'; i++) {</span>
@@ -301,7 +301,7 @@ class ConfigurationHandler_ConfigAdmin184 {
 
     // read value kind code if type code is not a value kinde code
     int code;
-<span class="nc bnc" id="L304" title="All 2 branches missed.">    if (code2Type.containsKey(new Integer(type))) {</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">    if (code2Type.containsKey(Integer.valueOf(type))) {</span>
 <span class="nc" id="L305">      code = read(pr);</span>
     }
     else {
@@ -346,7 +346,7 @@ class ConfigurationHandler_ConfigAdmin184 {
       }
 
 <span class="nc bnc" id="L348" title="All 2 branches missed.">      if (c == TOKEN_ARR_CLOS) {</span>
-<span class="nc" id="L349">        Class type = (Class)code2Type.get(new Integer(typeCode));</span>
+<span class="nc" id="L349">        Class type = (Class)code2Type.get(Integer.valueOf(typeCode));</span>
 <span class="nc" id="L350">        Object array = Array.newInstance(type, list.size());</span>
 <span class="nc bnc" id="L351" title="All 2 branches missed.">        for (int i = 0; i &lt; list.size(); i++) {</span>
 <span class="nc" id="L352">          Array.set(array, i, list.get(i));</span>
@@ -414,12 +414,12 @@ class ConfigurationHandler_ConfigAdmin184 {
       case TOKEN_SIMPLE_FLOAT:
       case TOKEN_PRIMITIVE_FLOAT:
 <span class="nc" id="L416">        int fBits = Integer.parseInt(readQuoted(pr));</span>
-<span class="nc" id="L417">        return new Float(Float.intBitsToFloat(fBits));</span>
+<span class="nc" id="L417">        return Float.valueOf(Float.intBitsToFloat(fBits));</span>
 
       case TOKEN_SIMPLE_DOUBLE:
       case TOKEN_PRIMITIVE_DOUBLE:
 <span class="nc" id="L421">        long dBits = Long.parseLong(readQuoted(pr));</span>
-<span class="nc" id="L422">        return new Double(Double.longBitsToDouble(dBits));</span>
+<span class="nc" id="L422">        return Double.valueOf(Double.longBitsToDouble(dBits));</span>
 
       case TOKEN_SIMPLE_BYTE:
       case TOKEN_PRIMITIVE_BYTE:
@@ -433,7 +433,7 @@ class ConfigurationHandler_ConfigAdmin184 {
       case TOKEN_PRIMITIVE_CHAR:
 <span class="nc" id="L434">        String cString = readQuoted(pr);</span>
 <span class="nc bnc" id="L435" title="All 4 branches missed.">        if (cString != null &amp;&amp; cString.length() &gt; 0) {</span>
-<span class="nc" id="L436">          return new Character(cString.charAt(0));</span>
+<span class="nc" id="L436">          return Character.valueOf(cString.charAt(0));</span>
         }
 <span class="nc" id="L438">        return null;</span>
 
@@ -668,11 +668,11 @@ class ConfigurationHandler_ConfigAdmin184 {
   private static void writeSimple(Writer out, Object value) throws IOException {
 <span class="pc bpc" id="L669" title="1 of 2 branches missed.">    if (value instanceof Double) {</span>
 <span class="nc" id="L670">      double dVal = ((Double)value).doubleValue();</span>
-<span class="nc" id="L671">      value = new Long(Double.doubleToRawLongBits(dVal));</span>
+<span class="nc" id="L671">      value = Long.valueOf(Double.doubleToRawLongBits(dVal));</span>
 <span class="nc" id="L672">    }</span>
 <span class="pc bpc" id="L673" title="1 of 2 branches missed.">    else if (value instanceof Float) {</span>
 <span class="nc" id="L674">      float fVal = ((Float)value).floatValue();</span>
-<span class="nc" id="L675">      value = new Integer(Float.floatToRawIntBits(fVal));</span>
+<span class="nc" id="L675">      value = Integer.valueOf(Float.floatToRawIntBits(fVal));</span>
     }
 
 <span class="fc" id="L678">    out.write(TOKEN_VAL_OPEN);</span>
