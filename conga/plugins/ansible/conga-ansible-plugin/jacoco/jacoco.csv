@@ -26,4 +26,4 @@ CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,Cyp
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.data,VaultInfo,4,57,4,4,1,13,5,6,1,6
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.data,Util,9,142,0,8,2,24,1,13,1,9
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.data,VaultContent,63,313,9,21,5,70,9,16,0,10
-CONGA Ansible Plugin,net.wedjaa.ansible.vault,Manager,6,74,0,0,2,14,0,5,0,5
+CONGA Ansible Plugin,net.wedjaa.ansible.vault,Manager,6,72,0,0,2,14,0,5,0,5
