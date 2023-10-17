@@ -170,7 +170,7 @@
  <h3 id="io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -179,21 +179,21 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>The cipher does not provide data integrity</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CIPHER_INTEGRITY">CIPHER_INTEGRITY</a></td> 
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L93">93</a></td> 
     <td>High</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>The cipher is susceptible to padding oracle attacks</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PADDING_ORACLE">PADDING_ORACLE</a></td> 
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L93">93</a></td> 
     <td>High</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>The initialization vector (IV) is not properly generated</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#STATIC_IV">STATIC_IV</a></td> 
@@ -207,7 +207,7 @@
  <h3 id="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -216,7 +216,7 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
@@ -230,7 +230,7 @@
  <h3 id="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -239,7 +239,7 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
@@ -253,7 +253,7 @@
  <h3 id="io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -262,7 +262,7 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>The regular expression "^((/[^/]+)*)(/([^/]+))$" is vulnerable to a denial of service attack (ReDOS)</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#REDOS">REDOS</a></td> 
@@ -276,7 +276,7 @@
  <h3 id="io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -285,14 +285,14 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L74">74</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
