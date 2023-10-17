@@ -54,7 +54,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contribute <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li ><a href="https://wcm.io/contribute.html" title="Contribute" class="externalLink">Contribute</a></li>
-                  <li ><a href="https://wcm-io.atlassian.net" title="Issues" class="externalLink">Issues</a></li>
+                  <li ><a href="https://github.com/wcm-io-devops" title="Issues" class="externalLink">Issues</a></li>
                   <li ><a href="https://wcm-io.atlassian.net/wiki/" title="Wiki" class="externalLink">Wiki</a></li>
                   <li ><a href="https://wcm.io/mailing-lists.html" title="Mailing Lists" class="externalLink">Mailing Lists</a></li>
                   <li ><a href="http://github.com/wcm-io-devops" title="Fork on GitHub" class="externalLink">Fork on GitHub</a></li>
@@ -104,7 +104,7 @@
   <h2 id="SpotBugs_Bug_Detector_Report">SpotBugs Bug Detector Report</h2>
  </div> 
  <p>The following document contains the results of <a class="externalLink" href="https://spotbugs.github.io/">SpotBugs</a></p> 
- <p>SpotBugs Version is <i>4.6.0</i></p> 
+ <p>SpotBugs Version is <i>4.7.3</i></p> 
  <p>Threshold is <i>medium</i></p> 
  <p>Effort is <i>default</i></p> 
 </section> 
@@ -122,9 +122,9 @@
   <tbody> 
    <tr class="b"> 
     <td>64</td> 
-    <td>143</td> 
+    <td>149</td> 
     <td>0</td> 
-    <td>0</td> 
+    <td>1</td> 
    </tr> 
   </tbody> 
  </table> 
@@ -225,7 +225,7 @@
    </tr> 
    <tr class="a"> 
     <td><a href="#org.apache.maven.plugin.eclipse.writers.rad.RadApplicationXMLWriter">org.apache.maven.plugin.eclipse.writers.rad.RadApplicationXMLWriter</a></td> 
-    <td>2</td> 
+    <td>4</td> 
    </tr> 
    <tr class="b"> 
     <td><a href="#org.apache.maven.plugin.eclipse.writers.rad.RadEjbClasspathWriter">org.apache.maven.plugin.eclipse.writers.rad.RadEjbClasspathWriter</a></td> 
@@ -261,7 +261,7 @@
    </tr> 
    <tr class="b"> 
     <td><a href="#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter">org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter</a></td> 
-    <td>5</td> 
+    <td>9</td> 
    </tr> 
    <tr class="a"> 
     <td><a href="#org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponentWriter">org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponentWriter</a></td> 
@@ -496,7 +496,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.EclipseToMavenMojo">org.apache.maven.plugin.eclipse.EclipseToMavenMojo</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -505,35 +505,35 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Possible null pointer dereference in org.apache.maven.plugin.eclipse.EclipseToMavenMojo.execute() due to return value of called method</td> 
     <td>STYLE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE">NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/EclipseToMavenMojo.html#L274">274</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/EclipseToMavenMojo.html#L243">243</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>The regular expression "(([0-9]+\\.)+[0-9]+)" is vulnerable to a denial of service attack (ReDOS)</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#REDOS">REDOS</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/EclipseToMavenMojo.html#L116">116</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.delete() ignored in org.apache.maven.plugin.eclipse.EclipseToMavenMojo.writeArtifact(Model, Map, ArtifactRepository)</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/EclipseToMavenMojo.html#L702">702</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.EclipseToMavenMojo.execute() makes inefficient use of keySet iterator instead of entrySet iterator</td> 
     <td>PERFORMANCE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#WMI_WRONG_MAP_ITERATOR">WMI_WRONG_MAP_ITERATOR</a></td> 
@@ -547,7 +547,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.HelpMojo">org.apache.maven.plugin.eclipse.HelpMojo</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -556,7 +556,7 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>The use of DocumentBuilder.parse(...) (DocumentBuilder) is vulnerable to XML External Entity attacks</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#XXE_DOCUMENT">XXE_DOCUMENT</a></td> 
@@ -570,7 +570,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.InstallPluginsMojo">org.apache.maven.plugin.eclipse.InstallPluginsMojo</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -579,42 +579,42 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.InstallPluginsMojo.install(Artifact, MavenProject) may fail to close stream</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OS_OPEN_STREAM">OS_OPEN_STREAM</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/InstallPluginsMojo.html#L265">265</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/InstallPluginsMojo.html#L172">172</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/InstallPluginsMojo.html#L283">283</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/InstallPluginsMojo.html#L284">284</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.InstallPluginsMojo.execute()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/InstallPluginsMojo.html#L181">181</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.InstallPluginsMojo.performFileOperations(boolean, Artifact, File, File)</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -672,7 +672,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.RadPlugin">org.apache.maven.plugin.eclipse.RadPlugin</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -681,28 +681,28 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/RadPlugin.html#L184">184</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/RadPlugin.html#L197">197</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/RadPlugin.html#L214">214</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.RadPlugin.addManifestResource(EclipseWriterConfig)</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -876,7 +876,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.AbstractEclipseManifestWriter">org.apache.maven.plugin.eclipse.writers.AbstractEclipseManifestWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -885,21 +885,21 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.writers.AbstractEclipseManifestWriter.write() may fail to clean up java.io.OutputStream on checked exception</td> 
     <td>EXPERIMENTAL</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE">OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/AbstractEclipseManifestWriter.html#L291">291</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/AbstractEclipseManifestWriter.html#L278">278</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.AbstractEclipseManifestWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -913,7 +913,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter">org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -922,56 +922,56 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter.write() may fail to clean up java.io.InputStream</td> 
     <td>EXPERIMENTAL</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OBL_UNSATISFIED_OBLIGATION">OBL_UNSATISFIED_OBLIGATION</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L122">122</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter.write() may fail to clean up java.io.OutputStream</td> 
     <td>EXPERIMENTAL</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OBL_UNSATISFIED_OBLIGATION">OBL_UNSATISFIED_OBLIGATION</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L134">134</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter.write() may fail to close stream</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OS_OPEN_STREAM">OS_OPEN_STREAM</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L122">122</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter.write() may fail to close stream</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OS_OPEN_STREAM">OS_OPEN_STREAM</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L134">134</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L185">185</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L188">188</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseAjdtWriter.html#L191">191</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.EclipseAjdtWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1029,7 +1029,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.EclipseLaunchConfigurationWriter">org.apache.maven.plugin.eclipse.writers.EclipseLaunchConfigurationWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1038,14 +1038,14 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/EclipseLaunchConfigurationWriter.html#L81">81</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.eclipse.writers.EclipseLaunchConfigurationWriter.write() concatenates strings using + in a loop</td> 
     <td>PERFORMANCE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SBSC_USE_STRINGBUFFER_CONCATENATION">SBSC_USE_STRINGBUFFER_CONCATENATION</a></td> 
@@ -1168,7 +1168,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseHibernateWriter">org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseHibernateWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1177,7 +1177,7 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Found reliance on default encoding in org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseHibernateWriter.write(): new java.io.FileWriter(File)</td> 
     <td>I18N</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td> 
@@ -1191,7 +1191,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseMetadataWriter">org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseMetadataWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1200,7 +1200,7 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Found reliance on default encoding in org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseMetadataWriter.write(): new java.io.FileWriter(File)</td> 
     <td>I18N</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td> 
@@ -1214,7 +1214,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseSpringBeansWriter">org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseSpringBeansWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1223,21 +1223,21 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Found reliance on default encoding in org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseSpringBeansWriter.write(): new java.io.FileWriter(File)</td> 
     <td>I18N</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseSpringBeansWriter.html#L90">90</a></td> 
     <td>High</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseSpringBeansWriter.html#L115">115</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
@@ -1251,7 +1251,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseStrutsDataWriter">org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseStrutsDataWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1260,14 +1260,14 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Found reliance on default encoding in org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseStrutsDataWriter.write(): new java.io.FileWriter(File)</td> 
     <td>I18N</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/myeclipse/MyEclipseStrutsDataWriter.html#L95">95</a></td> 
     <td>High</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Write to static field org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseStrutsDataWriter.strutsPatterns from instance method new org.apache.maven.plugin.eclipse.writers.myeclipse.MyEclipseStrutsDataWriter(Map)</td> 
     <td>STYLE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD</a></td> 
@@ -1298,6 +1298,20 @@
     <td>Medium</td> 
    </tr> 
    <tr class="a"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/rad/RadApplicationXMLWriter.html#L136">136</a></td> 
+    <td>Medium</td> 
+   </tr> 
+   <tr class="b"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/rad/RadApplicationXMLWriter.html#L145">145</a></td> 
+    <td>Medium</td> 
+   </tr> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.rad.RadApplicationXMLWriter.writePrettyXmlFile(File, Xpp3Dom)</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1311,7 +1325,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.rad.RadEjbClasspathWriter">org.apache.maven.plugin.eclipse.writers.rad.RadEjbClasspathWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1320,14 +1334,14 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/rad/RadEjbClasspathWriter.html#L265">265</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.rad.RadEjbClasspathWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1496,7 +1510,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter">org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1505,63 +1519,63 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter.write() may fail to clean up java.io.InputStream</td> 
     <td>EXPERIMENTAL</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OBL_UNSATISFIED_OBLIGATION">OBL_UNSATISFIED_OBLIGATION</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L148">148</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter.write() may fail to clean up java.io.OutputStream</td> 
     <td>EXPERIMENTAL</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OBL_UNSATISFIED_OBLIGATION">OBL_UNSATISFIED_OBLIGATION</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L160">160</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter.write() may fail to close stream</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OS_OPEN_STREAM">OS_OPEN_STREAM</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L148">148</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter.write() may fail to close stream</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OS_OPEN_STREAM">OS_OPEN_STREAM</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L160">160</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L85">85</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L95">95</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L106">106</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseSettingsWriter.html#L117">117</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.workspace.EclipseSettingsWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1575,7 +1589,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.workspace.EclipseWorkspaceWriter">org.apache.maven.plugin.eclipse.writers.workspace.EclipseWorkspaceWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1584,21 +1598,21 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.eclipse.writers.workspace.EclipseWorkspaceWriter.loadProperties(File) may fail to clean up java.io.InputStream</td> 
     <td>EXPERIMENTAL</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OBL_UNSATISFIED_OBLIGATION">OBL_UNSATISFIED_OBLIGATION</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseWorkspaceWriter.html#L144">144</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.eclipse.writers.workspace.EclipseWorkspaceWriter.loadProperties(File) may fail to close stream</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#OS_OPEN_STREAM">OS_OPEN_STREAM</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/workspace/EclipseWorkspaceWriter.html#L144">144</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.workspace.EclipseWorkspaceWriter.init(Log, WorkspaceConfiguration)</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1612,7 +1626,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.wtp.AbstractWtpResourceWriter">org.apache.maven.plugin.eclipse.writers.wtp.AbstractWtpResourceWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1621,21 +1635,21 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/AbstractWtpResourceWriter.html#L232">232</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/AbstractWtpResourceWriter.html#L241">241</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
@@ -1649,7 +1663,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter">org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1658,35 +1672,63 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Possible null pointer dereference in org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter.copyDirectoryStructure(File, File) due to return value of called method</td> 
     <td>STYLE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE">NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L225">225</a></td> 
     <td>Medium</td> 
    </tr> 
+   <tr class="a"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L190">190</a></td> 
+    <td>Medium</td> 
+   </tr> 
    <tr class="b"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L193">193</a></td> 
+    <td>Medium</td> 
+   </tr> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L231">231</a></td> 
     <td>Medium</td> 
    </tr> 
+   <tr class="b"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L132">132</a></td> 
+    <td>Medium</td> 
+   </tr> 
    <tr class="a"> 
+    <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
+    <td>SECURITY</td> 
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
+    <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L152">152</a></td> 
+    <td>Medium</td> 
+   </tr> 
+   <tr class="b"> 
     <td>Exceptional return value of java.io.File.delete() ignored in org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L141">141</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpApplicationXMLWriter.html#L136">136</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpApplicationXMLWriter.writePrettyXmlFile(File, Xpp3Dom)</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1700,7 +1742,7 @@
  <h3 id="org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponentWriter">org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponentWriter</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1709,28 +1751,28 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpComponentWriter.html#L146">146</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpComponentWriter.html#L165">165</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>This API (java/io/File.&lt;init&gt;(Ljava/lang/String;)V) reads a file whose location might be specified by user input</td> 
     <td>SECURITY</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/eclipse/writers/wtp/EclipseWtpComponentWriter.html#L195">195</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>Exceptional return value of java.io.File.mkdirs() ignored in org.apache.maven.plugin.eclipse.writers.wtp.EclipseWtpComponentWriter.write()</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RV_RETURN_VALUE_IGNORED_BAD_PRACTICE">RV_RETURN_VALUE_IGNORED_BAD_PRACTICE</a></td> 
@@ -1820,7 +1862,7 @@
  <h3 id="org.apache.maven.plugin.ide.IdeDependency">org.apache.maven.plugin.ide.IdeDependency</h3> 
  <table border="0" class="bodyTable table table-striped table-hover"> 
   <thead> 
-   <tr class="b"> 
+   <tr class="a"> 
     <th>Bug</th> 
     <th>Category</th> 
     <th>Details</th> 
@@ -1829,14 +1871,14 @@
    </tr> 
   </thead> 
   <tbody> 
-   <tr class="a"> 
+   <tr class="b"> 
     <td>org.apache.maven.plugin.ide.IdeDependency.equals(Object) is unusual</td> 
     <td>STYLE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EQ_UNUSUAL">EQ_UNUSUAL</a></td> 
     <td><a href="./xref/org/apache/maven/plugin/ide/IdeDependency.html#L590">590</a></td> 
     <td>Medium</td> 
    </tr> 
-   <tr class="b"> 
+   <tr class="a"> 
     <td>org.apache.maven.plugin.ide.IdeDependency.equals(Object) does not check for null argument</td> 
     <td>BAD_PRACTICE</td> 
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#NP_EQUALS_SHOULD_HANDLE_NULL_ARGUMENT">NP_EQUALS_SHOULD_HANDLE_NULL_ARGUMENT</a></td> 
