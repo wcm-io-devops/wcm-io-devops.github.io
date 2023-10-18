@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.MojoFailureException;
-import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import io.wcm.devops.conga.generator.util.VariableStringResolver;
 import io.wcm.devops.conga.model.reader.AbstractModelReader;
 import io.wcm.devops.conga.model.reader.ModelReader;
+import io.wcm.devops.conga.model.util.YamlUtil;
 import io.wcm.devops.conga.resource.Resource;
 
 /**
@@ -76,7 +76,7 @@ import io.wcm.devops.conga.resource.Resource;
 <span class="fc" id="L76">      super(getYaml());</span>
 <span class="fc" id="L77">    }</span>
     private static Yaml getYaml() {
-<span class="fc" id="L79">      Constructor constructor = new Constructor(Map.class, new LoaderOptions());</span>
+<span class="fc" id="L79">      Constructor constructor = new Constructor(Map.class, YamlUtil.createLoaderOptions());</span>
 <span class="fc" id="L80">      return new Yaml(constructor);</span>
     }
   }
