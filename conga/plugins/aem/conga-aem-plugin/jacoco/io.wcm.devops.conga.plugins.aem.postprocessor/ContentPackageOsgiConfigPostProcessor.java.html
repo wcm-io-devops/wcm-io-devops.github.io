@@ -151,7 +151,7 @@ import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
 <span class="fc" id="L151">        context.getLogger().info(&quot;  Include &quot; + contentPath);</span>
 
         // write configuration to temporary file
-<span class="fc" id="L154">        File tempFile = File.createTempFile(NAME, &quot;.config&quot;);</span>
+<span class="fc" id="L154">        File tempFile = File.createTempFile(NAME, &quot;.cfg.json&quot;);</span>
 <span class="fc" id="L155">        try (OutputStream os = new FileOutputStream(tempFile)) {</span>
 <span class="fc" id="L156">          OsgiConfigUtil.write(os, properties);</span>
         }

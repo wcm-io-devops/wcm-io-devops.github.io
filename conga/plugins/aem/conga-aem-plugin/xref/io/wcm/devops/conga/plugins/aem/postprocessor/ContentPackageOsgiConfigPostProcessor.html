@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>         context.getLogger().info(<span class="jxr_string">"  Include "</span> + contentPath);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>         <em class="jxr_comment">// write configuration to temporary file</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         File tempFile = File.createTempFile(NAME, <span class="jxr_string">".config"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         File tempFile = File.createTempFile(NAME, <span class="jxr_string">".cfg.json"</span>);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>         <strong class="jxr_keyword">try</strong> (OutputStream os = <strong class="jxr_keyword">new</strong> FileOutputStream(tempFile)) {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>           OsgiConfigUtil.write(os, properties);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>         }
@@ -187,6 +187,6 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015&#x2013;2023 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2015&#x2013;2024 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All rights reserved.</div>
 </body>
 </html>
