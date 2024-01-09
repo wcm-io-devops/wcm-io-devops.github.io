@@ -21,11 +21,15 @@ package io.wcm.devops.conga.plugins.sling.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Dictionary;
 
+import org.apache.felix.cm.json.io.Configurations;
+
 /**
- * Helper class for writing OSGi configurations in Felix ConfigAdmin format.
- * This writes the &quot;old&quot; ConfigAdmin format of Felix ConfigAdmin 1.8.4 to be compatible with AEM 6.1 and below.
+ * Helper class for writing OSGi configurations in JSON format (.cfg.json files).
  */
 public final class OsgiConfigUtil {
 
@@ -42,9 +46,11 @@ public final class OsgiConfigUtil {
    * @param properties The &lt;code&gt;Dictionary&lt;/code&gt; to write.
    * @throws IOException If an error occurs writing to the output stream.
    */
-  public static void write(OutputStream out, Dictionary properties) throws IOException {
-<span class="fc" id="L46">    ConfigurationHandler_ConfigAdmin184.write(out, properties);</span>
-<span class="fc" id="L47">  }</span>
+  public static void write(OutputStream out, Dictionary&lt;String, Object&gt; properties) throws IOException {
+<span class="fc" id="L50">    try (Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L51">      Configurations.buildWriter().build(writer).writeConfiguration(properties);</span>
+    }
+<span class="fc" id="L53">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
