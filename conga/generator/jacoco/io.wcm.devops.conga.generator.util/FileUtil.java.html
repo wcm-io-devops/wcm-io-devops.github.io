@@ -110,7 +110,16 @@ public final class FileUtil {
    * @return true if file extension matches
    */
   public static boolean matchesExtension(File file, String extension) {
-<span class="fc" id="L113">    return matchesExtension(FilenameUtils.getExtension(file.getName()), extension);</span>
+<span class="fc" id="L113">    String fileName = file.getName();</span>
+    String fileExtension;
+    // special handling for OSGi configuration resource file extension
+<span class="fc bfc" id="L116" title="All 2 branches covered.">    if (fileName.endsWith(&quot;.cfg.json&quot;)) {</span>
+<span class="fc" id="L117">      fileExtension = &quot;cfg.json&quot;;</span>
+    }
+    else {
+<span class="fc" id="L120">      fileExtension = FilenameUtils.getExtension(fileName);</span>
+    }
+<span class="fc" id="L122">    return matchesExtension(fileExtension, extension);</span>
   }
 
   /**
@@ -120,7 +129,7 @@ public final class FileUtil {
    * @return true if file extension matches
    */
   public static boolean matchesExtension(FileContext fileContext, String extension) {
-<span class="fc" id="L123">    return matchesExtension(fileContext.getFile(), extension);</span>
+<span class="fc" id="L132">    return matchesExtension(fileContext.getFile(), extension);</span>
   }
 
   /**
@@ -130,14 +139,14 @@ public final class FileUtil {
    * @return Path or null if not defined
    */
   public static String getTemplatePath(Role role, RoleFile roleFile) {
-<span class="fc" id="L133">    String path = roleFile.getTemplate();</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">    if (StringUtils.isEmpty(path)) {</span>
-<span class="fc" id="L135">      return null;</span>
+<span class="fc" id="L142">    String path = roleFile.getTemplate();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">    if (StringUtils.isEmpty(path)) {</span>
+<span class="fc" id="L144">      return null;</span>
     }
-<span class="fc bfc" id="L137" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(role.getTemplateDir())) {</span>
-<span class="fc" id="L138">      path = FilenameUtils.concat(role.getTemplateDir(), path);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(role.getTemplateDir())) {</span>
+<span class="fc" id="L147">      path = FilenameUtils.concat(role.getTemplateDir(), path);</span>
     }
-<span class="fc" id="L140">    return path;</span>
+<span class="fc" id="L149">    return path;</span>
   }
 
   /**
@@ -147,7 +156,7 @@ public final class FileUtil {
    * @return Info string for role and file
    */
   public static String getFileInfo(NodeRole nodeRole, RoleFile roleFile) {
-<span class="nc" id="L150">    return getFileInfo(nodeRole.getRole(), roleFile);</span>
+<span class="nc" id="L159">    return getFileInfo(nodeRole.getRole(), roleFile);</span>
   }
 
   /**
@@ -157,17 +166,17 @@ public final class FileUtil {
    * @return Info string for role and file
    */
   public static String getFileInfo(String roleName, RoleFile roleFile) {
-<span class="nc" id="L160">    StringBuilder sb = new StringBuilder().append(roleName).append(&quot;/&quot;);</span>
-<span class="nc bnc" id="L161" title="All 2 branches missed.">    if (StringUtils.isNotEmpty(roleFile.getFile())) {</span>
-<span class="nc" id="L162">      sb.append(roleFile.getFile());</span>
+<span class="nc" id="L169">    StringBuilder sb = new StringBuilder().append(roleName).append(&quot;/&quot;);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">    if (StringUtils.isNotEmpty(roleFile.getFile())) {</span>
+<span class="nc" id="L171">      sb.append(roleFile.getFile());</span>
     }
-<span class="nc bnc" id="L164" title="All 2 branches missed.">    else if (StringUtils.isNotEmpty(roleFile.getUrl())) {</span>
-<span class="nc" id="L165">      sb.append(roleFile.getUrl());</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">    else if (StringUtils.isNotEmpty(roleFile.getUrl())) {</span>
+<span class="nc" id="L174">      sb.append(roleFile.getUrl());</span>
     }
     else {
-<span class="nc" id="L168">      sb.append(&quot;?&quot;);</span>
+<span class="nc" id="L177">      sb.append(&quot;?&quot;);</span>
     }
-<span class="nc" id="L170">    return sb.toString();</span>
+<span class="nc" id="L179">    return sb.toString();</span>
   }
 
 }
