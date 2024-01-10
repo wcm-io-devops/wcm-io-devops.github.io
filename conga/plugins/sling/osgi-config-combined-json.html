@@ -148,7 +148,7 @@
    <li><code>repoinit:runmode</code> - List of repoinit statements to be applied for the given run mode.</li> 
   </ul> 
   <p><code>runmode</code> can be a comma-separate strings, e.g. <code>prod,publish</code>. In this case all given run modes have to be active. On AEM as a Cloud Service, only the <a class="externalLink" href="https://experienceleague.adobe.com/docs/experience-manager-cloud-service/content/implementing/deploying/overview.html?lang=en#runmodes">officially supported run modes</a> are allowed.</p> 
-  <p>You can use comments in the JSON file, they are stripped out when generating the <code>.cfg.json</code> files.</p> 
+  <p>You can use comments in the JSON file, they are stripped out when generating the <code>.cfg.json</code> files. It's also valid to use trailing commas in JSON arrays and JSON objects, this eases generating JSON via templates.</p> 
   <p>Real world example with HBS template: <a class="externalLink" href="https://github.com/wcm-io/io.wcm.samples/blob/develop/config-definition/src/main/templates/wcm-io-samples-aem-cms/wcm-io-samples-aem-cms-config.osgiconfig.json.hbs">wcm-io-samples-aem-cms-config.osgiconfig.json.hbs</a></p> 
  </section> 
 </section>

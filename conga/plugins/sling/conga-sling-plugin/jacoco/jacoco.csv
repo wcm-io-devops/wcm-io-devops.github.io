@@ -5,7 +5,7 @@ CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.handlebars.escaping,Provisi
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.postprocessor,JsonOsgiConfigPostProcessor,7,28,0,0,2,8,0,4,0,4
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.postprocessor,ProvisioningOsgiConfigPostProcessor,7,25,0,0,2,8,0,4,0,4
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,RunModeComparator,2,36,2,10,1,7,2,8,0,4
-CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,JsonOsgiConfigUtil,33,298,5,31,4,76,5,22,0,9
+CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,JsonOsgiConfigUtil,33,306,4,32,4,78,4,23,0,9
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,ProvisioningUtil.new ConfigConsumer() {...},0,42,0,0,0,7,0,2,0,2
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,ProvisioningUtil,4,261,4,28,3,48,4,17,0,5
 CONGA Sling Plugin,io.wcm.devops.conga.plugins.sling.util,OsgiConfigUtil,0,12,0,0,0,3,0,1,0,1
