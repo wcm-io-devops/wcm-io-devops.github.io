@@ -104,11 +104,11 @@ public final class ContentPackageUtil {
 <span class="fc" id="L104">        .allowIndexDefinitions(getOptionalPropBoolean(options, PROPERTY_PACKAGE_ALLOW_INDEX_DEFINITIONS));</span>
 
     // description
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">    if (fileHeader != null) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">    if (fileHeader != null) {</span>
 <span class="fc" id="L108">      builder.description(mergeDescriptionFileHeader(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION), fileHeader));</span>
     }
     else {
-<span class="nc" id="L111">      builder.description(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION));</span>
+<span class="fc" id="L111">      builder.description(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION));</span>
     }
 
     // AC handling
