@@ -79,7 +79,7 @@ final class ResourceLoaderUtil {
 <span class="fc" id="L79">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
 <span class="pc bpc" id="L80" title="1 of 2 branches missed.">    for (String dependencyUrl : dependencyUrls) {</span>
       // resolver variables without config map - thus supporting only value providers with external values
-<span class="nc" id="L82">      String resolvedDependencyUrl = variableStringResolver.resolveString(dependencyUrl, ImmutableMap.of());</span>
+<span class="nc" id="L82">      String resolvedDependencyUrl = variableStringResolver.resolveString(dependencyUrl, Map.of());</span>
       try {
 <span class="nc" id="L84">        classpathUrls.addAll(urlFileManager.getFileUrlsWithDependencies(resolvedDependencyUrl));</span>
       }

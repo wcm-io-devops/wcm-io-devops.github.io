@@ -27,12 +27,12 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">package</strong> io.wcm.devops.conga.generator.plugins.handlebars.escaping;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.AggregateTranslator;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.CharSequenceTranslator;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.EntityArrays;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.LookupTranslator;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableMap;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.AggregateTranslator;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.CharSequenceTranslator;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.EntityArrays;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.text.translate.LookupTranslator;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.handlebars.EscapingStrategyPlugin;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.handlebars.context.EscapingStrategyContext;
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> CharSequenceTranslator ESCAPE_JSON =
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>        <strong class="jxr_keyword">new</strong> AggregateTranslator(
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>            <strong class="jxr_keyword">new</strong> LookupTranslator(
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                ImmutableMap.of(
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                Map.of(
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>                    <span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">"&#92;&#92;\&quot;"</span>,
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>                    <span class="jxr_string">"&#92;&#92;"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>                )),

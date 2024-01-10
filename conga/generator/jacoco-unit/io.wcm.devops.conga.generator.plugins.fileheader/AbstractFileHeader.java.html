@@ -50,7 +50,7 @@ import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
 
       List&lt;String&gt; sanitizedCommentLines;
 <span class="pc bpc" id="L52" title="1 of 2 branches missed.">      if (context.getCommentLines() == null) {</span>
-<span class="nc" id="L53">        sanitizedCommentLines = ImmutableList.of();</span>
+<span class="nc" id="L53">        sanitizedCommentLines = List.of();</span>
       }
       else {
 <span class="fc" id="L56">        sanitizedCommentLines = context.getCommentLines().stream()</span>

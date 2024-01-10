@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>         ContextPropertiesBuilder.buildEnvironmentContextVariables(environmentName, <strong class="jxr_keyword">this</strong>.environment, options.getVersion(),
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>             variableObjectTreeResolver, variableStringResolver));
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">this</strong>.dependencyVersions = options.getDependencyVersionBuilder() != <strong class="jxr_keyword">null</strong> ? options.getDependencyVersionBuilder().apply(environment) : ImmutableList.of();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">this</strong>.dependencyVersions = options.getDependencyVersionBuilder() != <strong class="jxr_keyword">null</strong> ? options.getDependencyVersionBuilder().apply(environment) : List.of();
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>     <em class="jxr_comment">// prepare YAML representer</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>     yamlRepresenter = <strong class="jxr_keyword">new</strong> <a name="YamlRepresenter" href="../../../../../io/wcm/devops/conga/generator/spi/yaml/context/YamlRepresenter.html#YamlRepresenter">YamlRepresenter</a>();

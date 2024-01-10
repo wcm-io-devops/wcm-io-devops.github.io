@@ -204,12 +204,12 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
   private &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
       Function&lt;ResourceInfo, Boolean&gt; resourceFilter) throws MojoFailureException {
 <span class="fc bfc" id="L206" title="All 2 branches covered.">    if (!sourceDir.exists()) {</span>
-<span class="fc" id="L207">      return ImmutableList.of();</span>
+<span class="fc" id="L207">      return List.of();</span>
     }
 <span class="fc" id="L209">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
 <span class="fc" id="L210">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
 <span class="pc bpc" id="L211" title="1 of 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
-<span class="nc" id="L212">      return ImmutableList.of();</span>
+<span class="nc" id="L212">      return List.of();</span>
     }
 
 <span class="fc" id="L215">    List&lt;T&gt; result = new ArrayList&lt;&gt;();</span>

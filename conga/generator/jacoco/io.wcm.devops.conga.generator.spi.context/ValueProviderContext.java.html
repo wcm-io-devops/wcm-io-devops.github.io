@@ -21,12 +21,10 @@ package io.wcm.devops.conga.generator.spi.context;
 
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * Context for a single {@link io.wcm.devops.conga.generator.spi.ValueProviderPlugin} instance.
  */
-<span class="fc" id="L29">public final class ValueProviderContext extends AbstractPluginContext&lt;ValueProviderContext&gt; {</span>
+<span class="fc" id="L27">public final class ValueProviderContext extends AbstractPluginContext&lt;ValueProviderContext&gt; {</span>
 
   private ValueProviderGlobalContext valueProviderGlobalContext;
   private String valueProviderName;
@@ -36,9 +34,9 @@ import com.google.common.collect.ImmutableMap;
    * @return this
    */
   public ValueProviderContext valueProviderGlobalContext(ValueProviderGlobalContext context) {
-<span class="fc" id="L39">    this.valueProviderGlobalContext = context;</span>
-<span class="fc" id="L40">    return this</span>
-<span class="fc" id="L41">        .pluginContextOptions(context.getPluginContextOptions());</span>
+<span class="fc" id="L37">    this.valueProviderGlobalContext = context;</span>
+<span class="fc" id="L38">    return this</span>
+<span class="fc" id="L39">        .pluginContextOptions(context.getPluginContextOptions());</span>
   }
 
   /**
@@ -46,15 +44,15 @@ import com.google.common.collect.ImmutableMap;
    * @return this
    */
   public ValueProviderContext valueProviderName(String value) {
-<span class="fc" id="L49">    this.valueProviderName = value;</span>
-<span class="fc" id="L50">    return this;</span>
+<span class="fc" id="L47">    this.valueProviderName = value;</span>
+<span class="fc" id="L48">    return this;</span>
   }
 
   /**
    * @return Value provider name
    */
   public String getValueProviderName() {
-<span class="fc" id="L57">    return this.valueProviderName;</span>
+<span class="fc" id="L55">    return this.valueProviderName;</span>
   }
 
   /**
@@ -62,11 +60,11 @@ import com.google.common.collect.ImmutableMap;
    * @return Configuration for the current value provider. Never null.
    */
   public Object getValueProviderConfig(String key) {
-<span class="fc" id="L65">    Map&lt;String, Object&gt; config = valueProviderGlobalContext.getValueProviderConfig(valueProviderName);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">    if (config == null) {</span>
-<span class="nc" id="L67">      config = ImmutableMap.of();</span>
+<span class="fc" id="L63">    Map&lt;String, Object&gt; config = valueProviderGlobalContext.getValueProviderConfig(valueProviderName);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">    if (config == null) {</span>
+<span class="nc" id="L65">      config = Map.of();</span>
     }
-<span class="fc" id="L69">    return config.get(key);</span>
+<span class="fc" id="L67">    return config.get(key);</span>
   }
 
   /**
@@ -74,7 +72,7 @@ import com.google.common.collect.ImmutableMap;
    * @return Cache object or null if none was set yet
    */
   public Object getValueProviderCache() {
-<span class="nc" id="L77">    return valueProviderGlobalContext.getGlobalValueProviderCache().get(valueProviderName);</span>
+<span class="nc" id="L75">    return valueProviderGlobalContext.getGlobalValueProviderCache().get(valueProviderName);</span>
   }
 
   /**
@@ -82,8 +80,8 @@ import com.google.common.collect.ImmutableMap;
    * @param object Cache object
    */
   public void setValueProviderCache(Object object) {
-<span class="nc" id="L85">    valueProviderGlobalContext.getGlobalValueProviderCache().put(valueProviderName, object);</span>
-<span class="nc" id="L86">  }</span>
+<span class="nc" id="L83">    valueProviderGlobalContext.getGlobalValueProviderCache().put(valueProviderName, object);</span>
+<span class="nc" id="L84">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

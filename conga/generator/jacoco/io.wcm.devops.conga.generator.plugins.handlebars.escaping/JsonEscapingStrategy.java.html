@@ -19,12 +19,12 @@
  */
 package io.wcm.devops.conga.generator.plugins.handlebars.escaping;
 
+import java.util.Map;
+
 import org.apache.commons.text.translate.AggregateTranslator;
 import org.apache.commons.text.translate.CharSequenceTranslator;
 import org.apache.commons.text.translate.EntityArrays;
 import org.apache.commons.text.translate.LookupTranslator;
-
-import com.google.common.collect.ImmutableMap;
 
 import io.wcm.devops.conga.generator.spi.handlebars.EscapingStrategyPlugin;
 import io.wcm.devops.conga.generator.spi.handlebars.context.EscapingStrategyContext;
@@ -50,7 +50,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 <span class="fc" id="L50">  private static final CharSequenceTranslator ESCAPE_JSON =</span>
       new AggregateTranslator(
           new LookupTranslator(
-<span class="fc" id="L53">              ImmutableMap.of(</span>
+<span class="fc" id="L53">              Map.of(</span>
                   &quot;\&quot;&quot;, &quot;\\\&quot;&quot;,
                   &quot;\\&quot;, &quot;\\\\&quot;
               )),
