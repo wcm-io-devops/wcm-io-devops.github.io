@@ -34,8 +34,6 @@ import org.apache.sling.contentparser.json.JSONParserFeature;
 import org.apache.sling.contentparser.json.JSONParserOptions;
 import org.apache.sling.contentparser.json.internal.JSONContentParser;
 
-import com.google.common.collect.ImmutableSet;
-
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.util.FileUtil;
 import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
@@ -43,9 +41,9 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
 /**
  * Imports JSON data and binary data into Sling resource hierarchy.
  */
-<span class="fc" id="L46">public final class JsonContentLoader {</span>
+<span class="fc" id="L44">public final class JsonContentLoader {</span>
 
-<span class="fc" id="L48">  private static final Set&lt;String&gt; IGNORED_NAMES = ImmutableSet.of(</span>
+<span class="fc" id="L46">  private static final Set&lt;String&gt; IGNORED_NAMES = Set.of(</span>
       JcrConstants.JCR_BASEVERSION,
       JcrConstants.JCR_PREDECESSORS,
       JcrConstants.JCR_SUCCESSORS,
@@ -55,12 +53,12 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
       &quot;jcr:isCheckedOut&quot;,
       &quot;:jcr:data&quot;);
 
-<span class="fc" id="L58">  private static final ContentParser JSON_PARSER = new JSONContentParser();</span>
-<span class="fc" id="L59">  private static final ParserOptions JSON_PARSER_OPTIONS = new JSONParserOptions()</span>
-<span class="fc" id="L60">      .withFeatures(EnumSet.of(JSONParserFeature.COMMENTS, JSONParserFeature.QUOTE_TICK))</span>
-<span class="fc" id="L61">      .detectCalendarValues(true)</span>
-<span class="fc" id="L62">      .ignorePropertyNames(IGNORED_NAMES)</span>
-<span class="fc" id="L63">      .ignoreResourceNames(IGNORED_NAMES);</span>
+<span class="fc" id="L56">  private static final ContentParser JSON_PARSER = new JSONContentParser();</span>
+<span class="fc" id="L57">  private static final ParserOptions JSON_PARSER_OPTIONS = new JSONParserOptions()</span>
+<span class="fc" id="L58">      .withFeatures(EnumSet.of(JSONParserFeature.COMMENTS, JSONParserFeature.QUOTE_TICK))</span>
+<span class="fc" id="L59">      .detectCalendarValues(true)</span>
+<span class="fc" id="L60">      .ignorePropertyNames(IGNORED_NAMES)</span>
+<span class="fc" id="L61">      .ignoreResourceNames(IGNORED_NAMES);</span>
 
   /**
    * Load a JSON file and transform the contained data structured in nested maps, as supported by the
@@ -69,13 +67,13 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
    * @return Nested map with content data
    */
   public ContentElement load(File jsonFile) {
-<span class="fc" id="L72">    try (InputStream is = new BufferedInputStream(new FileInputStream(jsonFile))) {</span>
-<span class="fc" id="L73">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
-<span class="fc" id="L74">      JSON_PARSER.parse(contentHandler, is, JSON_PARSER_OPTIONS);</span>
-<span class="fc" id="L75">      return contentHandler.getRoot();</span>
+<span class="fc" id="L70">    try (InputStream is = new BufferedInputStream(new FileInputStream(jsonFile))) {</span>
+<span class="fc" id="L71">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
+<span class="fc" id="L72">      JSON_PARSER.parse(contentHandler, is, JSON_PARSER_OPTIONS);</span>
+<span class="fc" id="L73">      return contentHandler.getRoot();</span>
     }
-<span class="nc" id="L77">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L78">      throw new GeneratorException(&quot;Unable to parse JSON file: &quot; + FileUtil.getCanonicalPath(jsonFile), ex);</span>
+<span class="nc" id="L75">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L76">      throw new GeneratorException(&quot;Unable to parse JSON file: &quot; + FileUtil.getCanonicalPath(jsonFile), ex);</span>
     }
   }
 
@@ -88,12 +86,12 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
    */
   public ContentElement load(InputStream inputStream) throws IOException {
     try {
-<span class="fc" id="L91">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
-<span class="fc" id="L92">      JSON_PARSER.parse(contentHandler, inputStream, JSON_PARSER_OPTIONS);</span>
-<span class="fc" id="L93">      return contentHandler.getRoot();</span>
+<span class="fc" id="L89">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
+<span class="fc" id="L90">      JSON_PARSER.parse(contentHandler, inputStream, JSON_PARSER_OPTIONS);</span>
+<span class="fc" id="L91">      return contentHandler.getRoot();</span>
     }
-<span class="nc" id="L95">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L96">      throw new GeneratorException(&quot;Unable to parse JSON stream.&quot;, ex);</span>
+<span class="nc" id="L93">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L94">      throw new GeneratorException(&quot;Unable to parse JSON stream.&quot;, ex);</span>
     }
   }
 

@@ -35,8 +35,6 @@ import org.apache.jackrabbit.filevault.maven.packaging.mojo.ValidatePackageMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-import com.google.common.collect.ImmutableMap;
-
 import io.wcm.devops.conga.generator.spi.ImplicitApplyOptions;
 import io.wcm.devops.conga.generator.spi.ValidationException;
 import io.wcm.devops.conga.generator.spi.ValidatorPlugin;
@@ -51,7 +49,7 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
 /**
  * Validates AEM content packages with Jackrabbit FileVault validator.
  */
-<span class="fc" id="L54">public class ContentPackageValidator implements ValidatorPlugin {</span>
+<span class="fc" id="L52">public class ContentPackageValidator implements ValidatorPlugin {</span>
 
   /**
    * Plugin name
@@ -63,26 +61,26 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
   private static final String OPTION_VALIDATORS_SETTINGS = &quot;contentPackage.validatorsSettings&quot;;
 
   // apply default validation for AEM and wcm.io node types
-<span class="fc" id="L66">  private static final Map&lt;String, Object&gt; DEFAULT_VALIDATORS_SETTINGS = ImmutableMap.of(&quot;jackrabbit-nodetypes&quot;,</span>
-<span class="fc" id="L67">      ImmutableMap.of(&quot;options&quot;, ImmutableMap.of(&quot;cnds&quot;, &quot;tccl:aem.cnd,tccl:wcmio.cnd&quot;)));</span>
+<span class="fc" id="L64">  private static final Map&lt;String, Object&gt; DEFAULT_VALIDATORS_SETTINGS = Map.of(&quot;jackrabbit-nodetypes&quot;,</span>
+<span class="fc" id="L65">      Map.of(&quot;options&quot;, Map.of(&quot;cnds&quot;, &quot;tccl:aem.cnd,tccl:wcmio.cnd&quot;)));</span>
 
   @Override
   public String getName() {
-<span class="fc" id="L71">    return NAME;</span>
+<span class="fc" id="L69">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(FileContext file, ValidatorContext context) {
-<span class="fc" id="L76">    return FileUtil.matchesExtension(file, FILE_EXTENSION);</span>
+<span class="fc" id="L74">    return FileUtil.matchesExtension(file, FILE_EXTENSION);</span>
   }
 
   @Override
   public ImplicitApplyOptions implicitApply(FileContext file, ValidatorContext context) {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">    if (FileUtil.matchesExtension(file, FILE_EXTENSION)) {</span>
-<span class="nc" id="L82">      return ImplicitApplyOptions.ALWAYS;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">    if (FileUtil.matchesExtension(file, FILE_EXTENSION)) {</span>
+<span class="nc" id="L80">      return ImplicitApplyOptions.ALWAYS;</span>
     }
     else {
-<span class="nc" id="L85">      return ImplicitApplyOptions.NEVER;</span>
+<span class="nc" id="L83">      return ImplicitApplyOptions.NEVER;</span>
     }
   }
 
@@ -91,16 +89,16 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
     try {
       // validate package if a package type is defined
       // supported only within Maven
-<span class="fc" id="L94">      String packageType = Objects.toString(ContentPackageProperties.get(file.getFile()).get(NAME_PACKAGE_TYPE), null);</span>
-<span class="pc bpc" id="L95" title="3 of 4 branches missed.">      if (packageType != null &amp;&amp; context.getContainerContext() instanceof MavenContext) {</span>
-<span class="nc" id="L96">        validateContentPackage(file.getFile(), context, (MavenContext)context.getContainerContext());</span>
+<span class="fc" id="L92">      String packageType = Objects.toString(ContentPackageProperties.get(file.getFile()).get(NAME_PACKAGE_TYPE), null);</span>
+<span class="pc bpc" id="L93" title="3 of 4 branches missed.">      if (packageType != null &amp;&amp; context.getContainerContext() instanceof MavenContext) {</span>
+<span class="nc" id="L94">        validateContentPackage(file.getFile(), context, (MavenContext)context.getContainerContext());</span>
       }
     }
-<span class="nc" id="L99">    catch (IOException | IllegalAccessException | MojoExecutionException | MojoFailureException</span>
+<span class="nc" id="L97">    catch (IOException | IllegalAccessException | MojoExecutionException | MojoFailureException</span>
         | IllegalArgumentException ex) {
-<span class="nc" id="L101">      throw new ValidationException(&quot;Unable to process content package: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L102">    }</span>
-<span class="fc" id="L103">    return null;</span>
+<span class="nc" id="L99">      throw new ValidationException(&quot;Unable to process content package: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L100">    }</span>
+<span class="fc" id="L101">    return null;</span>
   }
 
   private void validateContentPackage(File packageFile, ValidatorContext context, MavenContext mavenContext)
@@ -108,101 +106,101 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
 
     // instantiate Mojo to execute the validation (a bit hacky as we have to manually
     // pass through the maven context objects here via reflection)
-<span class="nc" id="L111">    ValidatePackageMojo mojo = new ValidatePackageMojo();</span>
-<span class="nc" id="L112">    mojo.setLog(new InfoPrefixLog(mavenContext.getLog(), &quot;    &quot;));</span>
+<span class="nc" id="L109">    ValidatePackageMojo mojo = new ValidatePackageMojo();</span>
+<span class="nc" id="L110">    mojo.setLog(new InfoPrefixLog(mavenContext.getLog(), &quot;    &quot;));</span>
 
-<span class="nc" id="L114">    setProperty(mojo, &quot;packageFile&quot;, packageFile);</span>
-<span class="nc" id="L115">    setProperty(mojo, &quot;enforceRecursiveSubpackageValidation&quot;, false);</span>
-<span class="nc" id="L116">    setProperty(mojo, &quot;failOnDependencyErrors&quot;, true);</span>
-<span class="nc" id="L117">    setProperty(mojo, &quot;project&quot;, mavenContext.getProject());</span>
-<span class="nc" id="L118">    setProperty(mojo, &quot;session&quot;, mavenContext.getSession());</span>
-<span class="nc" id="L119">    setProperty(mojo, &quot;failOnValidationWarnings&quot;, false);</span>
-<span class="nc" id="L120">    setProperty(mojo, &quot;mapPackageDependencyToMavenGa&quot;, Collections.emptyList());</span>
-<span class="nc" id="L121">    setProperty(mojo, &quot;repositorySystem&quot;, mavenContext.getRepositorySystem());</span>
-<span class="nc" id="L122">    setProperty(mojo, &quot;resolutionErrorHandler&quot;, mavenContext.getResolutionErrorHandler());</span>
-<span class="nc" id="L123">    setProperty(mojo, &quot;buildContext&quot;, mavenContext.getBuildContext());</span>
-<span class="nc" id="L124">    setProperty(mojo, &quot;attachedArtifacts&quot;, Collections.emptyList());</span>
+<span class="nc" id="L112">    setProperty(mojo, &quot;packageFile&quot;, packageFile);</span>
+<span class="nc" id="L113">    setProperty(mojo, &quot;enforceRecursiveSubpackageValidation&quot;, false);</span>
+<span class="nc" id="L114">    setProperty(mojo, &quot;failOnDependencyErrors&quot;, true);</span>
+<span class="nc" id="L115">    setProperty(mojo, &quot;project&quot;, mavenContext.getProject());</span>
+<span class="nc" id="L116">    setProperty(mojo, &quot;session&quot;, mavenContext.getSession());</span>
+<span class="nc" id="L117">    setProperty(mojo, &quot;failOnValidationWarnings&quot;, false);</span>
+<span class="nc" id="L118">    setProperty(mojo, &quot;mapPackageDependencyToMavenGa&quot;, Collections.emptyList());</span>
+<span class="nc" id="L119">    setProperty(mojo, &quot;repositorySystem&quot;, mavenContext.getRepositorySystem());</span>
+<span class="nc" id="L120">    setProperty(mojo, &quot;resolutionErrorHandler&quot;, mavenContext.getResolutionErrorHandler());</span>
+<span class="nc" id="L121">    setProperty(mojo, &quot;buildContext&quot;, mavenContext.getBuildContext());</span>
+<span class="nc" id="L122">    setProperty(mojo, &quot;attachedArtifacts&quot;, Collections.emptyList());</span>
 
-<span class="nc" id="L126">    Object validatorsSettings = MapExpander.getDeep(context.getOptions(), OPTION_VALIDATORS_SETTINGS);</span>
-<span class="nc" id="L127">    Map&lt;String,Object&gt; validatorSettingsMap = MapMerger.merge(toMap(validatorsSettings), DEFAULT_VALIDATORS_SETTINGS);</span>
-<span class="nc" id="L128">    setProperty(mojo, &quot;validatorsSettings&quot;, toValidatorsSettings(validatorSettingsMap));</span>
+<span class="nc" id="L124">    Object validatorsSettings = MapExpander.getDeep(context.getOptions(), OPTION_VALIDATORS_SETTINGS);</span>
+<span class="nc" id="L125">    Map&lt;String,Object&gt; validatorSettingsMap = MapMerger.merge(toMap(validatorsSettings), DEFAULT_VALIDATORS_SETTINGS);</span>
+<span class="nc" id="L126">    setProperty(mojo, &quot;validatorsSettings&quot;, toValidatorsSettings(validatorSettingsMap));</span>
 
-<span class="nc" id="L130">    mojo.execute();</span>
-<span class="nc" id="L131">  }</span>
+<span class="nc" id="L128">    mojo.execute();</span>
+<span class="nc" id="L129">  }</span>
 
   private void setProperty(Object object, String propertyName, Object value)
       throws IllegalArgumentException, IllegalAccessException {
-<span class="nc" id="L135">    setProperty(object, object.getClass(), propertyName, value);</span>
-<span class="nc" id="L136">  }</span>
+<span class="nc" id="L133">    setProperty(object, object.getClass(), propertyName, value);</span>
+<span class="nc" id="L134">  }</span>
 
   @SuppressWarnings(&quot;PMD.AvoidAccessibilityAlteration&quot;)
   private void setProperty(Object object, Class&lt;?&gt; clazz, String propertyName, Object value)
       throws IllegalArgumentException, IllegalAccessException {
     try {
-<span class="nc" id="L142">      Field field = clazz.getDeclaredField(propertyName);</span>
-<span class="nc" id="L143">      field.setAccessible(true);</span>
-<span class="nc" id="L144">      field.set(object, value);</span>
+<span class="nc" id="L140">      Field field = clazz.getDeclaredField(propertyName);</span>
+<span class="nc" id="L141">      field.setAccessible(true);</span>
+<span class="nc" id="L142">      field.set(object, value);</span>
     }
-<span class="nc" id="L146">    catch (NoSuchFieldException ex) {</span>
+<span class="nc" id="L144">    catch (NoSuchFieldException ex) {</span>
       // check super class
-<span class="nc" id="L148">      Class&lt;?&gt; superClass = clazz.getSuperclass();</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">      if (superClass != null) {</span>
-<span class="nc" id="L150">        setProperty(object, superClass, propertyName, value);</span>
+<span class="nc" id="L146">      Class&lt;?&gt; superClass = clazz.getSuperclass();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">      if (superClass != null) {</span>
+<span class="nc" id="L148">        setProperty(object, superClass, propertyName, value);</span>
       }
-<span class="nc" id="L152">    }</span>
-<span class="nc" id="L153">  }</span>
+<span class="nc" id="L150">    }</span>
+<span class="nc" id="L151">  }</span>
 
   private Map&lt;String, ValidatorSettings&gt; toValidatorsSettings(Map&lt;String, Object&gt; map)
       throws IllegalArgumentException, IllegalAccessException {
-<span class="nc" id="L157">    Map&lt;String, ValidatorSettings&gt; result = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L158" title="All 2 branches missed.">    for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
-<span class="nc" id="L159">      Map&lt;String, Object&gt; validatorSettingsMap = toMap(entry.getValue());</span>
+<span class="nc" id="L155">    Map&lt;String, ValidatorSettings&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">    for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L157">      Map&lt;String, Object&gt; validatorSettingsMap = toMap(entry.getValue());</span>
 
-<span class="nc" id="L161">      boolean isDisabled = toBoolean(validatorSettingsMap.get(&quot;isDisabled&quot;));</span>
-<span class="nc" id="L162">      ValidatorSettings validatorSettings = new ValidatorSettings();</span>
-<span class="nc" id="L163">      setProperty(validatorSettings, &quot;isDisabled&quot;, isDisabled);</span>
+<span class="nc" id="L159">      boolean isDisabled = toBoolean(validatorSettingsMap.get(&quot;isDisabled&quot;));</span>
+<span class="nc" id="L160">      ValidatorSettings validatorSettings = new ValidatorSettings();</span>
+<span class="nc" id="L161">      setProperty(validatorSettings, &quot;isDisabled&quot;, isDisabled);</span>
 
-<span class="nc" id="L165">      String defaultSeverity = toString(validatorSettingsMap.get(&quot;defaultSeverity&quot;));</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">      if (defaultSeverity != null) {</span>
-<span class="nc" id="L167">        validatorSettings.setDefaultSeverity(defaultSeverity);</span>
+<span class="nc" id="L163">      String defaultSeverity = toString(validatorSettingsMap.get(&quot;defaultSeverity&quot;));</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">      if (defaultSeverity != null) {</span>
+<span class="nc" id="L165">        validatorSettings.setDefaultSeverity(defaultSeverity);</span>
       }
 
-<span class="nc" id="L170">      Map&lt;String, Object&gt; options = toMap(validatorSettingsMap.get(&quot;options&quot;));</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">      for (Map.Entry&lt;String, Object&gt; option : options.entrySet()) {</span>
-<span class="nc" id="L172">        validatorSettings.getOptions().put(option.getKey(), toString(option.getValue()));</span>
-<span class="nc" id="L173">      }</span>
+<span class="nc" id="L168">      Map&lt;String, Object&gt; options = toMap(validatorSettingsMap.get(&quot;options&quot;));</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">      for (Map.Entry&lt;String, Object&gt; option : options.entrySet()) {</span>
+<span class="nc" id="L170">        validatorSettings.getOptions().put(option.getKey(), toString(option.getValue()));</span>
+<span class="nc" id="L171">      }</span>
 
-<span class="nc" id="L175">      result.put(entry.getKey(), validatorSettings);</span>
-<span class="nc" id="L176">    }</span>
-<span class="nc" id="L177">    return result;</span>
+<span class="nc" id="L173">      result.put(entry.getKey(), validatorSettings);</span>
+<span class="nc" id="L174">    }</span>
+<span class="nc" id="L175">    return result;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private Map&lt;String, Object&gt; toMap(Object value) {
-<span class="nc bnc" id="L182" title="All 2 branches missed.">    if (value instanceof Map) {</span>
-<span class="nc" id="L183">      return (Map)value;</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">    if (value instanceof Map) {</span>
+<span class="nc" id="L181">      return (Map)value;</span>
     }
-<span class="nc" id="L185">    return Collections.emptyMap();</span>
+<span class="nc" id="L183">    return Collections.emptyMap();</span>
   }
 
   private boolean toBoolean(Object value) {
-<span class="nc bnc" id="L189" title="All 2 branches missed.">    if (value instanceof Boolean) {</span>
-<span class="nc" id="L190">      return (Boolean)value;</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">    if (value instanceof Boolean) {</span>
+<span class="nc" id="L188">      return (Boolean)value;</span>
     }
-<span class="nc bnc" id="L192" title="All 2 branches missed.">    if (value instanceof String) {</span>
-<span class="nc" id="L193">      return BooleanUtils.toBoolean((String)value);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">    if (value instanceof String) {</span>
+<span class="nc" id="L191">      return BooleanUtils.toBoolean((String)value);</span>
     }
-<span class="nc" id="L195">    return false;</span>
+<span class="nc" id="L193">    return false;</span>
   }
 
   private String toString(Object value) {
-<span class="nc bnc" id="L199" title="All 2 branches missed.">    if (value instanceof String) {</span>
-<span class="nc" id="L200">      return (String)value;</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">    if (value instanceof String) {</span>
+<span class="nc" id="L198">      return (String)value;</span>
     }
-<span class="nc bnc" id="L202" title="All 2 branches missed.">    else if (value != null) {</span>
-<span class="nc" id="L203">      return value.toString();</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">    else if (value != null) {</span>
+<span class="nc" id="L201">      return value.toString();</span>
     }
-<span class="nc" id="L205">    return null;</span>
+<span class="nc" id="L203">    return null;</span>
   }
 
 }

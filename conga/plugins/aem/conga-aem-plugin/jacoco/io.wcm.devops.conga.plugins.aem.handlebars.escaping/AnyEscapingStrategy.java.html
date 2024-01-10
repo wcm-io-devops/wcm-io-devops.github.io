@@ -19,10 +19,10 @@
  */
 package io.wcm.devops.conga.plugins.aem.handlebars.escaping;
 
+import java.util.Map;
+
 import org.apache.commons.text.translate.CharSequenceTranslator;
 import org.apache.commons.text.translate.LookupTranslator;
-
-import com.google.common.collect.ImmutableMap;
 
 import io.wcm.devops.conga.generator.spi.handlebars.EscapingStrategyPlugin;
 import io.wcm.devops.conga.generator.spi.handlebars.context.EscapingStrategyContext;
@@ -44,7 +44,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
    * Defines translations for strings in ANY files.
    */
 <span class="fc" id="L46">  private static final CharSequenceTranslator ESCAPE_ANY =</span>
-<span class="fc" id="L47">      new LookupTranslator(ImmutableMap.of(</span>
+<span class="fc" id="L47">      new LookupTranslator(Map.of(</span>
           &quot;\&quot;&quot;, &quot;\\\&quot;&quot;,
           &quot;\\&quot;, &quot;\\\\&quot;));
 

@@ -51,8 +51,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.collect.ImmutableMap;
-
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.UrlFileManager;
 import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
@@ -82,7 +80,7 @@ public final class ContentPackageUtil {
    * @return Content package builder
    */
   public static ContentPackageBuilder getContentPackageBuilder(Map&lt;String, Object&gt; options, UrlFileManager urlFileManager) {
-<span class="nc" id="L85">    return getContentPackageBuilder(options, urlFileManager, null);</span>
+<span class="nc" id="L83">    return getContentPackageBuilder(options, urlFileManager, null);</span>
   }
 
   /**
@@ -94,55 +92,55 @@ public final class ContentPackageUtil {
    */
   public static ContentPackageBuilder getContentPackageBuilder(Map&lt;String, Object&gt; options, UrlFileManager urlFileManager,
       FileHeaderContext fileHeader) {
-<span class="fc" id="L97">    ContentPackageBuilder builder = new ContentPackageBuilder()</span>
-<span class="fc" id="L98">        .group(getMandatoryProp(options, PROPERTY_PACKAGE_GROUP))</span>
-<span class="fc" id="L99">        .name(getMandatoryProp(options, PROPERTY_PACKAGE_NAME))</span>
-<span class="fc" id="L100">        .version(getOptionalProp(options, PROPERTY_PACKAGE_VERSION))</span>
-<span class="fc" id="L101">        .packageType(getOptionalProp(options, PROPERTY_PACKAGE_PACKAGE_TYPE))</span>
-<span class="fc" id="L102">        .requiresRoot(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_ROOT))</span>
-<span class="fc" id="L103">        .requiresRestart(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_RESTART))</span>
-<span class="fc" id="L104">        .allowIndexDefinitions(getOptionalPropBoolean(options, PROPERTY_PACKAGE_ALLOW_INDEX_DEFINITIONS));</span>
+<span class="fc" id="L95">    ContentPackageBuilder builder = new ContentPackageBuilder()</span>
+<span class="fc" id="L96">        .group(getMandatoryProp(options, PROPERTY_PACKAGE_GROUP))</span>
+<span class="fc" id="L97">        .name(getMandatoryProp(options, PROPERTY_PACKAGE_NAME))</span>
+<span class="fc" id="L98">        .version(getOptionalProp(options, PROPERTY_PACKAGE_VERSION))</span>
+<span class="fc" id="L99">        .packageType(getOptionalProp(options, PROPERTY_PACKAGE_PACKAGE_TYPE))</span>
+<span class="fc" id="L100">        .requiresRoot(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_ROOT))</span>
+<span class="fc" id="L101">        .requiresRestart(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_RESTART))</span>
+<span class="fc" id="L102">        .allowIndexDefinitions(getOptionalPropBoolean(options, PROPERTY_PACKAGE_ALLOW_INDEX_DEFINITIONS));</span>
 
     // description
-<span class="fc bfc" id="L107" title="All 2 branches covered.">    if (fileHeader != null) {</span>
-<span class="fc" id="L108">      builder.description(mergeDescriptionFileHeader(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION), fileHeader));</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">    if (fileHeader != null) {</span>
+<span class="fc" id="L106">      builder.description(mergeDescriptionFileHeader(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION), fileHeader));</span>
     }
     else {
-<span class="fc" id="L111">      builder.description(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION));</span>
+<span class="fc" id="L109">      builder.description(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION));</span>
     }
 
     // AC handling
-<span class="fc" id="L115">    AcHandling acHandling = getAcHandling(options);</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered.">    if (acHandling != null) {</span>
-<span class="fc" id="L117">      builder.acHandling(acHandling);</span>
+<span class="fc" id="L113">    AcHandling acHandling = getAcHandling(options);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">    if (acHandling != null) {</span>
+<span class="fc" id="L115">      builder.acHandling(acHandling);</span>
     }
 
     // thumbnail image
-<span class="fc" id="L121">    String thumbnailImageUrl = getOptionalProp(options, PROPERTY_PACKAGE_THUMBNAIL_IMAGE);</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">    if (StringUtils.isNotBlank(thumbnailImageUrl)) {</span>
+<span class="fc" id="L119">    String thumbnailImageUrl = getOptionalProp(options, PROPERTY_PACKAGE_THUMBNAIL_IMAGE);</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">    if (StringUtils.isNotBlank(thumbnailImageUrl)) {</span>
       try {
-<span class="fc" id="L124">        builder.thumbnailImage(urlFileManager.getFile(thumbnailImageUrl));</span>
+<span class="fc" id="L122">        builder.thumbnailImage(urlFileManager.getFile(thumbnailImageUrl));</span>
       }
-<span class="nc" id="L126">      catch (IOException ex) {</span>
-<span class="nc" id="L127">        throw new GeneratorException(&quot;Unable to set package thumbnail to &quot; + thumbnailImageUrl, ex);</span>
-<span class="fc" id="L128">      }</span>
+<span class="nc" id="L124">      catch (IOException ex) {</span>
+<span class="nc" id="L125">        throw new GeneratorException(&quot;Unable to set package thumbnail to &quot; + thumbnailImageUrl, ex);</span>
+<span class="fc" id="L126">      }</span>
     }
     else {
-<span class="fc" id="L131">      try (InputStream is = ContentPackageUtil.class.getResourceAsStream(THUMBNAIL_IMAGE_DEFAULT)) {</span>
-<span class="fc" id="L132">        builder.thumbnailImage(is);</span>
+<span class="fc" id="L129">      try (InputStream is = ContentPackageUtil.class.getResourceAsStream(THUMBNAIL_IMAGE_DEFAULT)) {</span>
+<span class="fc" id="L130">        builder.thumbnailImage(is);</span>
       }
-<span class="nc" id="L134">      catch (IOException ex) {</span>
-<span class="nc" id="L135">        throw new GeneratorException(&quot;Unable to set package thumbnail to default &quot; + THUMBNAIL_IMAGE_DEFAULT, ex);</span>
-<span class="fc" id="L136">      }</span>
+<span class="nc" id="L132">      catch (IOException ex) {</span>
+<span class="nc" id="L133">        throw new GeneratorException(&quot;Unable to set package thumbnail to default &quot; + THUMBNAIL_IMAGE_DEFAULT, ex);</span>
+<span class="fc" id="L134">      }</span>
     }
 
     // filters
-<span class="fc" id="L140">    getFilters(options).forEach(builder::filter);</span>
+<span class="fc" id="L138">    getFilters(options).forEach(builder::filter);</span>
 
     // additional properties
-<span class="fc" id="L143">    putFlattenedProperties(builder, getAdditionalyProperties(options), &quot;&quot;);</span>
+<span class="fc" id="L141">    putFlattenedProperties(builder, getAdditionalyProperties(options), &quot;&quot;);</span>
 
-<span class="fc" id="L145">    return builder;</span>
+<span class="fc" id="L143">    return builder;</span>
   }
 
   /**
@@ -152,33 +150,33 @@ public final class ContentPackageUtil {
    * @return Merged description or null if all input is null
    */
   private static String mergeDescriptionFileHeader(String description, FileHeaderContext fileHeader) {
-<span class="fc" id="L155">    boolean hasDescription = StringUtils.isNotBlank(description);</span>
-<span class="pc bpc" id="L156" title="2 of 4 branches missed.">    boolean hasFileHeader = fileHeader != null &amp;&amp; !fileHeader.getCommentLines().isEmpty();</span>
+<span class="fc" id="L153">    boolean hasDescription = StringUtils.isNotBlank(description);</span>
+<span class="pc bpc" id="L154" title="2 of 4 branches missed.">    boolean hasFileHeader = fileHeader != null &amp;&amp; !fileHeader.getCommentLines().isEmpty();</span>
 
-<span class="pc bpc" id="L158" title="1 of 4 branches missed.">    if (!hasDescription &amp;&amp; !hasFileHeader) {</span>
-<span class="nc" id="L159">      return null;</span>
+<span class="pc bpc" id="L156" title="1 of 4 branches missed.">    if (!hasDescription &amp;&amp; !hasFileHeader) {</span>
+<span class="nc" id="L157">      return null;</span>
     }
 
-<span class="fc" id="L162">    StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L160">    StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L164" title="All 2 branches covered.">    if (hasDescription) {</span>
-<span class="fc" id="L165">      result.append(description);</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">    if (hasDescription) {</span>
+<span class="fc" id="L163">      result.append(description);</span>
     }
 
-<span class="pc bpc" id="L168" title="1 of 4 branches missed.">    if (hasDescription &amp;&amp; hasFileHeader) {</span>
-<span class="fc" id="L169">      result.append(&quot;\n---\n&quot;);</span>
+<span class="pc bpc" id="L166" title="1 of 4 branches missed.">    if (hasDescription &amp;&amp; hasFileHeader) {</span>
+<span class="fc" id="L167">      result.append(&quot;\n---\n&quot;);</span>
     }
 
-<span class="pc bpc" id="L172" title="1 of 2 branches missed.">    if (hasFileHeader) {</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">    if (hasFileHeader) {</span>
       @SuppressWarnings(&quot;null&quot;)
-<span class="fc" id="L174">      String fileHeaderString = StringUtils.trim(fileHeader.getCommentLines().stream()</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">          .filter(line -&gt; !StringUtils.contains(line, &quot;*****&quot;))</span>
-<span class="fc" id="L176">          .map(StringUtils::trim)</span>
-<span class="fc" id="L177">          .collect(Collectors.joining(&quot;\n&quot;)));</span>
-<span class="fc" id="L178">      result.append(fileHeaderString);</span>
+<span class="fc" id="L172">      String fileHeaderString = StringUtils.trim(fileHeader.getCommentLines().stream()</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">          .filter(line -&gt; !StringUtils.contains(line, &quot;*****&quot;))</span>
+<span class="fc" id="L174">          .map(StringUtils::trim)</span>
+<span class="fc" id="L175">          .collect(Collectors.joining(&quot;\n&quot;)));</span>
+<span class="fc" id="L176">      result.append(fileHeaderString);</span>
     }
 
-<span class="fc" id="L181">    return result.toString();</span>
+<span class="fc" id="L179">    return result.toString();</span>
   }
 
   /**
@@ -187,70 +185,70 @@ public final class ContentPackageUtil {
    * @return Filters list
    */
   private static List&lt;PackageFilter&gt; getFilters(Map&lt;String, Object&gt; options) {
-<span class="fc" id="L190">    List&lt;PackageFilter&gt; filters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L188">    List&lt;PackageFilter&gt; filters = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L192">    String rootPath = getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
-<span class="fc" id="L193">    List&lt;Map&lt;String, Object&gt;&gt; filterDefinitions = getOptionalPropMapList(options, PROPERTY_PACKAGE_FILTERS);</span>
+<span class="fc" id="L190">    String rootPath = getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
+<span class="fc" id="L191">    List&lt;Map&lt;String, Object&gt;&gt; filterDefinitions = getOptionalPropMapList(options, PROPERTY_PACKAGE_FILTERS);</span>
 
-<span class="fc bfc" id="L195" title="All 2 branches covered.">    if (filterDefinitions != null) {</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; filterDefinition : filterDefinitions) {</span>
-<span class="fc" id="L197">        String filterRoot = getMandatoryProp(filterDefinition, &quot;filter&quot;);</span>
-<span class="fc" id="L198">        PackageFilter filter = new PackageFilter(filterRoot);</span>
-<span class="fc" id="L199">        filters.add(filter);</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">    if (filterDefinitions != null) {</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; filterDefinition : filterDefinitions) {</span>
+<span class="fc" id="L195">        String filterRoot = getMandatoryProp(filterDefinition, &quot;filter&quot;);</span>
+<span class="fc" id="L196">        PackageFilter filter = new PackageFilter(filterRoot);</span>
+<span class="fc" id="L197">        filters.add(filter);</span>
 
-<span class="fc" id="L201">        List&lt;Map&lt;String, Object&gt;&gt; ruleDefinitions = getOptionalPropMapList(filterDefinition, &quot;rules&quot;);</span>
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (ruleDefinitions != null) {</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">          for (Map&lt;String, Object&gt; ruleDefinition : ruleDefinitions) {</span>
-<span class="fc" id="L204">            String rule = getMandatoryProp(ruleDefinition, &quot;rule&quot;);</span>
-<span class="fc" id="L205">            String pattern = getMandatoryProp(ruleDefinition, &quot;pattern&quot;);</span>
-<span class="fc bfc" id="L206" title="All 2 branches covered.">            if (StringUtils.equals(rule, &quot;include&quot;)) {</span>
-<span class="fc" id="L207">              filter.addIncludeRule(pattern);</span>
+<span class="fc" id="L199">        List&lt;Map&lt;String, Object&gt;&gt; ruleDefinitions = getOptionalPropMapList(filterDefinition, &quot;rules&quot;);</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (ruleDefinitions != null) {</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">          for (Map&lt;String, Object&gt; ruleDefinition : ruleDefinitions) {</span>
+<span class="fc" id="L202">            String rule = getMandatoryProp(ruleDefinition, &quot;rule&quot;);</span>
+<span class="fc" id="L203">            String pattern = getMandatoryProp(ruleDefinition, &quot;pattern&quot;);</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">            if (StringUtils.equals(rule, &quot;include&quot;)) {</span>
+<span class="fc" id="L205">              filter.addIncludeRule(pattern);</span>
             }
-<span class="pc bpc" id="L209" title="1 of 2 branches missed.">            else if (StringUtils.equals(rule, &quot;exclude&quot;)) {</span>
-<span class="fc" id="L210">              filter.addExcludeRule(pattern);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            else if (StringUtils.equals(rule, &quot;exclude&quot;)) {</span>
+<span class="fc" id="L208">              filter.addExcludeRule(pattern);</span>
             }
             else {
-<span class="nc" id="L213">              throw new GeneratorException(&quot;Invalude rule '&quot; + rule + &quot;' in post processor options.&quot;);</span>
+<span class="nc" id="L211">              throw new GeneratorException(&quot;Invalude rule '&quot; + rule + &quot;' in post processor options.&quot;);</span>
             }
-<span class="fc" id="L215">          }</span>
+<span class="fc" id="L213">          }</span>
         }
-<span class="fc" id="L217">      }</span>
+<span class="fc" id="L215">      }</span>
     }
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">    else if (rootPath != null) {</span>
-<span class="fc" id="L220">      filters.add(new PackageFilter(rootPath));</span>
-    }
-
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">    if (filters.isEmpty()) {</span>
-<span class="nc" id="L224">      throw new GeneratorException(&quot;No content package filters defines in post processor options.&quot;);</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">    else if (rootPath != null) {</span>
+<span class="fc" id="L218">      filters.add(new PackageFilter(rootPath));</span>
     }
 
-<span class="fc" id="L227">    return filters;</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">    if (filters.isEmpty()) {</span>
+<span class="nc" id="L222">      throw new GeneratorException(&quot;No content package filters defines in post processor options.&quot;);</span>
+    }
+
+<span class="fc" id="L225">    return filters;</span>
   }
 
   private static Map&lt;String,Object&gt; getAdditionalyProperties(Map&lt;String, Object&gt; options) {
-<span class="fc" id="L231">    Map&lt;String, Object&gt; props = getOptionalPropMap(options, PROPERTY_PACKAGE_PROPERTIES);</span>
-<span class="fc bfc" id="L232" title="All 2 branches covered.">    if (props == null) {</span>
-<span class="fc" id="L233">      props = ImmutableMap.of();</span>
+<span class="fc" id="L229">    Map&lt;String, Object&gt; props = getOptionalPropMap(options, PROPERTY_PACKAGE_PROPERTIES);</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">    if (props == null) {</span>
+<span class="fc" id="L231">      props = Map.of();</span>
     }
-<span class="fc" id="L235">    return props;</span>
+<span class="fc" id="L233">    return props;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private static void putFlattenedProperties(ContentPackageBuilder builder, Map&lt;String, Object&gt; props, String prefix) {
-<span class="fc bfc" id="L240" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : props.entrySet()) {</span>
-<span class="fc" id="L241">      String key = prefix + entry.getKey();</span>
-<span class="fc" id="L242">      Object value = entry.getValue();</span>
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
-<span class="nc" id="L244">        putFlattenedProperties(builder, (Map&lt;String, Object&gt;)value, key + &quot;.&quot;);</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : props.entrySet()) {</span>
+<span class="fc" id="L239">      String key = prefix + entry.getKey();</span>
+<span class="fc" id="L240">      Object value = entry.getValue();</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
+<span class="nc" id="L242">        putFlattenedProperties(builder, (Map&lt;String, Object&gt;)value, key + &quot;.&quot;);</span>
       }
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">      else if (value instanceof List) {</span>
-<span class="nc" id="L247">        throw new IllegalArgumentException(&quot;List value not allowed in package properties.&quot;);</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">      else if (value instanceof List) {</span>
+<span class="nc" id="L245">        throw new IllegalArgumentException(&quot;List value not allowed in package properties.&quot;);</span>
       }
       else {
-<span class="fc" id="L250">        builder.property(key, value);</span>
+<span class="fc" id="L248">        builder.property(key, value);</span>
       }
-<span class="fc" id="L252">    }</span>
-<span class="fc" id="L253">  }</span>
+<span class="fc" id="L250">    }</span>
+<span class="fc" id="L251">  }</span>
 
   /**
    * Get and validate AC handling value.
@@ -258,16 +256,16 @@ public final class ContentPackageUtil {
    * @return AC handling value or null if not set.
    */
   private static AcHandling getAcHandling(Map&lt;String, Object&gt; options) {
-<span class="fc" id="L261">    String acHandlingString = getOptionalProp(options, PROPERTY_PACKAGE_AC_HANDLING);</span>
-<span class="fc bfc" id="L262" title="All 2 branches covered.">    if (StringUtils.isBlank(acHandlingString)) {</span>
-<span class="fc" id="L263">      return null;</span>
+<span class="fc" id="L259">    String acHandlingString = getOptionalProp(options, PROPERTY_PACKAGE_AC_HANDLING);</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">    if (StringUtils.isBlank(acHandlingString)) {</span>
+<span class="fc" id="L261">      return null;</span>
     }
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">    for (AcHandling acHandling : AcHandling.values()) {</span>
-<span class="pc bpc" id="L266" title="1 of 2 branches missed.">      if (StringUtils.equals(acHandling.getMode(), acHandlingString)) {</span>
-<span class="fc" id="L267">        return acHandling;</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">    for (AcHandling acHandling : AcHandling.values()) {</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">      if (StringUtils.equals(acHandling.getMode(), acHandlingString)) {</span>
+<span class="fc" id="L265">        return acHandling;</span>
       }
     }
-<span class="nc" id="L270">    throw new GeneratorException(&quot;Invalid content package acHandling value: &quot; + acHandlingString);</span>
+<span class="nc" id="L268">    throw new GeneratorException(&quot;Invalid content package acHandling value: &quot; + acHandlingString);</span>
   }
 
 
@@ -278,14 +276,14 @@ public final class ContentPackageUtil {
    * @return Option value
    */
   public static String getMandatoryProp(Map&lt;String, Object&gt; options, String key) {
-<span class="fc" id="L281">    Object value = MapExpander.getDeep(options, key);</span>
-<span class="pc bpc" id="L282" title="1 of 2 branches missed.">    if (value instanceof String) {</span>
-<span class="fc" id="L283">      return (String)value;</span>
+<span class="fc" id="L279">    Object value = MapExpander.getDeep(options, key);</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">    if (value instanceof String) {</span>
+<span class="fc" id="L281">      return (String)value;</span>
     }
-<span class="nc bnc" id="L285" title="All 2 branches missed.">    else if (value != null) {</span>
-<span class="nc" id="L286">      return value.toString();</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">    else if (value != null) {</span>
+<span class="nc" id="L284">      return value.toString();</span>
     }
-<span class="nc" id="L288">    throw new GeneratorException(&quot;Missing post processor option '&quot; + key + &quot;'.&quot;);</span>
+<span class="nc" id="L286">    throw new GeneratorException(&quot;Missing post processor option '&quot; + key + &quot;'.&quot;);</span>
   }
 
   /**
@@ -295,14 +293,14 @@ public final class ContentPackageUtil {
    * @return Option value or null
    */
   public static String getOptionalProp(Map&lt;String, Object&gt; options, String key) {
-<span class="fc" id="L298">    Object value = MapExpander.getDeep(options, key);</span>
-<span class="fc bfc" id="L299" title="All 2 branches covered.">    if (value instanceof String) {</span>
-<span class="fc" id="L300">      return (String)value;</span>
+<span class="fc" id="L296">    Object value = MapExpander.getDeep(options, key);</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">    if (value instanceof String) {</span>
+<span class="fc" id="L298">      return (String)value;</span>
     }
-<span class="fc bfc" id="L302" title="All 2 branches covered.">    else if (value != null) {</span>
-<span class="fc" id="L303">      return value.toString();</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">    else if (value != null) {</span>
+<span class="fc" id="L301">      return value.toString();</span>
     }
-<span class="fc" id="L305">    return null;</span>
+<span class="fc" id="L303">    return null;</span>
   }
 
   /**
@@ -312,14 +310,14 @@ public final class ContentPackageUtil {
    * @return Option value or false
    */
   private static boolean getOptionalPropBoolean(Map&lt;String, Object&gt; options, String key) {
-<span class="fc" id="L315">    Object value = getOptionalProp(options, key);</span>
-<span class="pc bpc" id="L316" title="1 of 2 branches missed.">    if (value instanceof Boolean) {</span>
-<span class="nc" id="L317">      return (Boolean)value;</span>
+<span class="fc" id="L313">    Object value = getOptionalProp(options, key);</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">    if (value instanceof Boolean) {</span>
+<span class="nc" id="L315">      return (Boolean)value;</span>
     }
-<span class="pc bpc" id="L319" title="1 of 2 branches missed.">    else if (value != null) {</span>
-<span class="nc" id="L320">      return BooleanUtils.toBoolean(value.toString());</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">    else if (value != null) {</span>
+<span class="nc" id="L318">      return BooleanUtils.toBoolean(value.toString());</span>
     }
-<span class="fc" id="L322">    return false;</span>
+<span class="fc" id="L320">    return false;</span>
   }
 
   /**
@@ -330,11 +328,11 @@ public final class ContentPackageUtil {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   private static List&lt;Map&lt;String, Object&gt;&gt; getOptionalPropMapList(Map&lt;String, Object&gt; options, String key) {
-<span class="fc" id="L333">    Object value = MapExpander.getDeep(options, key);</span>
-<span class="pc bpc" id="L334" title="1 of 4 branches missed.">    if (value instanceof List || value == null) {</span>
-<span class="fc" id="L335">      return (List&lt;Map&lt;String, Object&gt;&gt;)value;</span>
+<span class="fc" id="L331">    Object value = MapExpander.getDeep(options, key);</span>
+<span class="pc bpc" id="L332" title="1 of 4 branches missed.">    if (value instanceof List || value == null) {</span>
+<span class="fc" id="L333">      return (List&lt;Map&lt;String, Object&gt;&gt;)value;</span>
     }
-<span class="nc" id="L337">    throw new GeneratorException(&quot;Invalid post processor option '&quot; + key + &quot;'.&quot;);</span>
+<span class="nc" id="L335">    throw new GeneratorException(&quot;Invalid post processor option '&quot; + key + &quot;'.&quot;);</span>
   }
 
   /**
@@ -345,11 +343,11 @@ public final class ContentPackageUtil {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   private static Map&lt;String, Object&gt; getOptionalPropMap(Map&lt;String, Object&gt; options, String key) {
-<span class="fc" id="L348">    Object value = MapExpander.getDeep(options, key);</span>
-<span class="pc bpc" id="L349" title="1 of 4 branches missed.">    if (value instanceof Map || value == null) {</span>
-<span class="fc" id="L350">      return (Map&lt;String, Object&gt;)value;</span>
+<span class="fc" id="L346">    Object value = MapExpander.getDeep(options, key);</span>
+<span class="pc bpc" id="L347" title="1 of 4 branches missed.">    if (value instanceof Map || value == null) {</span>
+<span class="fc" id="L348">      return (Map&lt;String, Object&gt;)value;</span>
     }
-<span class="nc" id="L352">    throw new GeneratorException(&quot;Invalid post processor option '&quot; + key + &quot;'.&quot;);</span>
+<span class="nc" id="L350">    throw new GeneratorException(&quot;Invalid post processor option '&quot; + key + &quot;'.&quot;);</span>
   }
 
   /**
@@ -360,65 +358,65 @@ public final class ContentPackageUtil {
    * @throws IOException I/O exception
    */
   public static List&lt;ContentPackageBinaryFile&gt; getFiles(Map&lt;String, Object&gt; options, File targetDir) throws IOException {
-<span class="fc" id="L363">    List&lt;ContentPackageBinaryFile&gt; files = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L361">    List&lt;ContentPackageBinaryFile&gt; files = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L365">    List&lt;Map&lt;String, Object&gt;&gt; fileDefinitions = getOptionalPropMapList(options, PROPERTY_PACKAGE_FILES);</span>
-<span class="pc bpc" id="L366" title="1 of 2 branches missed.">    if (fileDefinitions != null) {</span>
-<span class="fc bfc" id="L367" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; fileDefinition : fileDefinitions) {</span>
-<span class="fc" id="L368">        String file = getOptionalProp(fileDefinition, &quot;file&quot;);</span>
-<span class="fc" id="L369">        String fileMatch = getOptionalProp(fileDefinition, &quot;fileMatch&quot;);</span>
-<span class="fc" id="L370">        String dir = getOptionalProp(fileDefinition, &quot;dir&quot;);</span>
-<span class="fc" id="L371">        String url = getOptionalProp(fileDefinition, &quot;url&quot;);</span>
-<span class="fc" id="L372">        String path = getMandatoryProp(fileDefinition, &quot;path&quot;);</span>
-<span class="fc" id="L373">        boolean delete = BooleanUtils.toBoolean(getOptionalProp(fileDefinition, &quot;delete&quot;));</span>
+<span class="fc" id="L363">    List&lt;Map&lt;String, Object&gt;&gt; fileDefinitions = getOptionalPropMapList(options, PROPERTY_PACKAGE_FILES);</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">    if (fileDefinitions != null) {</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">      for (Map&lt;String, Object&gt; fileDefinition : fileDefinitions) {</span>
+<span class="fc" id="L366">        String file = getOptionalProp(fileDefinition, &quot;file&quot;);</span>
+<span class="fc" id="L367">        String fileMatch = getOptionalProp(fileDefinition, &quot;fileMatch&quot;);</span>
+<span class="fc" id="L368">        String dir = getOptionalProp(fileDefinition, &quot;dir&quot;);</span>
+<span class="fc" id="L369">        String url = getOptionalProp(fileDefinition, &quot;url&quot;);</span>
+<span class="fc" id="L370">        String path = getMandatoryProp(fileDefinition, &quot;path&quot;);</span>
+<span class="fc" id="L371">        boolean delete = BooleanUtils.toBoolean(getOptionalProp(fileDefinition, &quot;delete&quot;));</span>
 
-<span class="pc bpc" id="L375" title="2 of 6 branches missed.">        if (fileMatch != null &amp;&amp; file == null &amp;&amp; url == null) {</span>
+<span class="pc bpc" id="L373" title="2 of 6 branches missed.">        if (fileMatch != null &amp;&amp; file == null &amp;&amp; url == null) {</span>
           // add multiple (local) files matching with given regex
-<span class="fc" id="L377">          files.addAll(getMatchingFiles(targetDir, fileMatch, dir, path, delete));</span>
+<span class="fc" id="L375">          files.addAll(getMatchingFiles(targetDir, fileMatch, dir, path, delete));</span>
         }
         else {
           // add single file
-<span class="fc" id="L381">          files.add(new ContentPackageBinaryFile(file, dir, url, path, delete));</span>
+<span class="fc" id="L379">          files.add(new ContentPackageBinaryFile(file, dir, url, path, delete));</span>
         }
-<span class="fc" id="L383">      }</span>
+<span class="fc" id="L381">      }</span>
     }
 
-<span class="fc" id="L386">    return files;</span>
+<span class="fc" id="L384">    return files;</span>
   }
 
   private static List&lt;ContentPackageBinaryFile&gt; getMatchingFiles(File targetDir, String fileMatch,
       String dir, String path, boolean delete) throws IOException {
-<span class="fc" id="L391">    File fileTargetDir = targetDir;</span>
-<span class="pc bpc" id="L392" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(dir)) {</span>
-<span class="fc" id="L393">      fileTargetDir = new File(targetDir, dir);</span>
+<span class="fc" id="L389">    File fileTargetDir = targetDir;</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(dir)) {</span>
+<span class="fc" id="L391">      fileTargetDir = new File(targetDir, dir);</span>
     }
-<span class="fc" id="L395">    Path fileTargetPath = Paths.get(fileTargetDir.toURI());</span>
-<span class="fc" id="L396">    String targetPathPrefix = normalizedAbsolutePath(fileTargetPath) + &quot;/&quot;;</span>
-<span class="fc" id="L397">    Pattern pattern = Pattern.compile(fileMatch);</span>
+<span class="fc" id="L393">    Path fileTargetPath = Paths.get(fileTargetDir.toURI());</span>
+<span class="fc" id="L394">    String targetPathPrefix = normalizedAbsolutePath(fileTargetPath) + &quot;/&quot;;</span>
+<span class="fc" id="L395">    Pattern pattern = Pattern.compile(fileMatch);</span>
 
     // collect all files below the target dir
-<span class="fc" id="L400">    return Files.walk(Paths.get(fileTargetDir.toURI()))</span>
-<span class="fc" id="L401">        .filter(Files::isRegularFile)</span>
+<span class="fc" id="L398">    return Files.walk(Paths.get(fileTargetDir.toURI()))</span>
+<span class="fc" id="L399">        .filter(Files::isRegularFile)</span>
         // strip off the target dir paths, keep only the relative path/file name
-<span class="fc" id="L403">        .map(ContentPackageUtil::normalizedAbsolutePath)</span>
-<span class="fc" id="L404">        .map(file -&gt; StringUtils.removeStart(file, targetPathPrefix))</span>
+<span class="fc" id="L401">        .map(ContentPackageUtil::normalizedAbsolutePath)</span>
+<span class="fc" id="L402">        .map(file -&gt; StringUtils.removeStart(file, targetPathPrefix))</span>
         // check if file matches with the regex, apply matching input groups to path
-<span class="fc" id="L406">        .map(file -&gt; {</span>
-<span class="fc" id="L407">          Matcher matcher = pattern.matcher(file);</span>
-<span class="pc bpc" id="L408" title="1 of 2 branches missed.">          if (matcher.matches()) {</span>
-<span class="fc" id="L409">            String adaptedPath = matcher.replaceAll(path);</span>
-<span class="fc" id="L410">            return new ContentPackageBinaryFile(file, dir, null, adaptedPath, delete);</span>
+<span class="fc" id="L404">        .map(file -&gt; {</span>
+<span class="fc" id="L405">          Matcher matcher = pattern.matcher(file);</span>
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">          if (matcher.matches()) {</span>
+<span class="fc" id="L407">            String adaptedPath = matcher.replaceAll(path);</span>
+<span class="fc" id="L408">            return new ContentPackageBinaryFile(file, dir, null, adaptedPath, delete);</span>
           }
           else {
-<span class="nc" id="L413">            return null;</span>
+<span class="nc" id="L411">            return null;</span>
           }
         })
-<span class="fc" id="L416">        .filter(Objects::nonNull)</span>
-<span class="fc" id="L417">        .collect(Collectors.toList());</span>
+<span class="fc" id="L414">        .filter(Objects::nonNull)</span>
+<span class="fc" id="L415">        .collect(Collectors.toList());</span>
   }
 
   private static String normalizedAbsolutePath(Path path) {
-<span class="fc" id="L421">    return StringUtils.replace(path.toAbsolutePath().toString(), &quot;\\&quot;, &quot;/&quot;);</span>
+<span class="fc" id="L419">    return StringUtils.replace(path.toAbsolutePath().toString(), &quot;\\&quot;, &quot;/&quot;);</span>
   }
 
 }
