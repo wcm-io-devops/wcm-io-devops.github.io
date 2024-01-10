@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":1,"i1":2,"i2":2,"i3":2,"i4":2,"i5":2,"i6":2,"i7":2,"i8":2,"i9":2};
+var data = {"i0":1,"i1":2,"i2":2,"i3":2,"i4":2,"i5":2,"i6":2,"i7":2,"i8":2,"i9":2,"i10":2,"i11":2};
 var tabs = {65535:["t0","All Classes"],1:["t1","Interface Summary"],2:["t2","Class Summary"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -118,54 +118,66 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </th>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/postprocessor/JsonOsgiConfigPostProcessor.html" title="class in io.wcm.devops.conga.plugins.sling.postprocessor">JsonOsgiConfigPostProcessor</a></td>
+<th class="colLast" scope="row">
+<div class="block">Transforms a combined JSON file containing OSGi configurations into individual OSGi configuration files.</div>
+</th>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/util/JsonOsgiConfigUtil.html" title="class in io.wcm.devops.conga.plugins.sling.util">JsonOsgiConfigUtil</a></td>
+<th class="colLast" scope="row">
+<div class="block">Transforms a combined JSON file to provisioning model with OSGi configurations and repoinit statements.</div>
+</th>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/handlebars/escaping/OsgiConfigEscapingStrategy.html" title="class in io.wcm.devops.conga.plugins.sling.handlebars.escaping">OsgiConfigEscapingStrategy</a></td>
 <th class="colLast" scope="row">
 <div class="block">Escapes for JSON files.</div>
 </th>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/fileheader/OsgiConfigFileHeader.html" title="class in io.wcm.devops.conga.plugins.sling.fileheader">OsgiConfigFileHeader</a></td>
 <th class="colLast" scope="row">
 <div class="block">Adds file headers to OSGi .config files.</div>
 </th>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/util/OsgiConfigUtil.html" title="class in io.wcm.devops.conga.plugins.sling.util">OsgiConfigUtil</a></td>
 <th class="colLast" scope="row">
 <div class="block">Helper class for writing OSGi configurations in JSON format (.cfg.json files).</div>
 </th>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/handlebars/escaping/ProvisioningEscapingStrategy.html" title="class in io.wcm.devops.conga.plugins.sling.handlebars.escaping">ProvisioningEscapingStrategy</a></td>
 <th class="colLast" scope="row">
 <div class="block">Escapes for Sling Provisioning files.</div>
 </th>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/fileheader/ProvisioningFileHeader.html" title="class in io.wcm.devops.conga.plugins.sling.fileheader">ProvisioningFileHeader</a></td>
 <th class="colLast" scope="row">
 <div class="block">Adds file headers to Sling provisioning files.</div>
 </th>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/postprocessor/ProvisioningOsgiConfigPostProcessor.html" title="class in io.wcm.devops.conga.plugins.sling.postprocessor">ProvisioningOsgiConfigPostProcessor</a></td>
 <th class="colLast" scope="row">
-<div class="block">Transforms a Sling Provisioning file into OSGi configurations (ignoring all other provisioning contents).</div>
+<div class="block">Transforms a Sling Provisioning file into OSGi configuration files (.cfg.json).</div>
 </th>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/util/ProvisioningUtil.html" title="class in io.wcm.devops.conga.plugins.sling.util">ProvisioningUtil</a></td>
 <th class="colLast" scope="row">
 <div class="block">Helper for handling provisioning file format.</div>
 </th>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/validator/ProvisioningValidator.html" title="class in io.wcm.devops.conga.plugins.sling.validator">ProvisioningValidator</a></td>
 <th class="colLast" scope="row">
 <div class="block">Validates Sling Provisioning Model files.</div>
 </th>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><a href="io/wcm/devops/conga/plugins/sling/util/RunModeComparator.html" title="class in io.wcm.devops.conga.plugins.sling.util">RunModeComparator</a></td>
 <th class="colLast" scope="row">
 <div class="block">Comparator sorts run modes alphabetically.</div>

@@ -20,10 +20,8 @@
 package io.wcm.devops.conga.plugins.sling.postprocessor;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Dictionary;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.apache.sling.provisioning.model.Model;
@@ -33,14 +31,13 @@ import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.spi.PostProcessorPlugin;
 import io.wcm.devops.conga.generator.spi.context.FileContext;
 import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
-import io.wcm.devops.conga.plugins.sling.util.ConfigConsumer;
-import io.wcm.devops.conga.plugins.sling.util.OsgiConfigUtil;
 import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
 
 /**
- * Transforms a Sling Provisioning file into OSGi configurations (ignoring all other provisioning contents).
+ * Transforms a Sling Provisioning file into OSGi configuration files (.cfg.json).
+ * Repoinit statements are supported as well, all other provisioning contents are ignored
  */
-<span class="fc" id="L43">public class ProvisioningOsgiConfigPostProcessor implements PostProcessorPlugin {</span>
+<span class="fc" id="L40">public class ProvisioningOsgiConfigPostProcessor implements PostProcessorPlugin {</span>
 
   /**
    * Plugin name
@@ -49,56 +46,32 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
 
   @Override
   public String getName() {
-<span class="fc" id="L52">    return NAME;</span>
+<span class="fc" id="L49">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(FileContext file, PostProcessorContext context) {
-<span class="fc" id="L57">    return ProvisioningUtil.isProvisioningFile(file);</span>
+<span class="fc" id="L54">    return ProvisioningUtil.isProvisioningFile(file);</span>
   }
 
   @Override
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
-<span class="fc" id="L63">    File file = fileContext.getFile();</span>
+<span class="fc" id="L60">    File file = fileContext.getFile();</span>
     try {
       // generate OSGi configurations
-<span class="fc" id="L66">      Model model = ProvisioningUtil.getModel(fileContext);</span>
-<span class="fc" id="L67">      List&lt;FileContext&gt; files = generateOsgiConfigurations(model, file.getParentFile(), context);</span>
+<span class="fc" id="L63">      Model model = ProvisioningUtil.getModel(fileContext);</span>
+<span class="fc" id="L64">      List&lt;FileContext&gt; files = ProvisioningUtil.generateOsgiConfigurations(model, file.getParentFile(), context);</span>
 
       // delete provisioning file after transformation
-<span class="fc" id="L70">      file.delete();</span>
+<span class="fc" id="L67">      Files.delete(file.toPath());</span>
 
       // return list of generated osgi configuration files
-<span class="fc" id="L73">      return files;</span>
+<span class="fc" id="L70">      return files;</span>
     }
-<span class="nc" id="L75">    catch (IOException ex) {</span>
-<span class="nc" id="L76">      throw new GeneratorException(&quot;Unable to post-process sling provisioning OSGi configurations.&quot;, ex);</span>
+<span class="nc" id="L72">    catch (IOException ex) {</span>
+<span class="nc" id="L73">      throw new GeneratorException(&quot;Unable to post-process Sling Provisioning OSGi configurations.&quot;, ex);</span>
     }
-  }
-
-  /**
-   * Generate OSGi configuration for all feature and run modes.
-   * @param model Provisioning Model
-   * @param dir Target directory
-   * @param context Post processor context
-   */
-  private List&lt;FileContext&gt; generateOsgiConfigurations(Model model, File dir, PostProcessorContext context) throws IOException {
-<span class="fc" id="L87">    return ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;FileContext&gt;() {</span>
-      @Override
-      @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
-      public FileContext accept(String path, Dictionary&lt;String, Object&gt; properties) throws IOException {
-<span class="fc" id="L91">        context.getLogger().info(&quot;  Generate {}&quot;, path);</span>
-
-<span class="fc" id="L93">        File confFile = new File(dir, path);</span>
-<span class="fc" id="L94">        confFile.getParentFile().mkdirs();</span>
-<span class="fc" id="L95">        try (FileOutputStream os = new FileOutputStream(confFile)) {</span>
-<span class="fc" id="L96">          OsgiConfigUtil.write(os, properties);</span>
-        }
-
-<span class="fc" id="L99">        return new FileContext().file(confFile).charset(StandardCharsets.UTF_8);</span>
-      }
-    });
   }
 
 }
