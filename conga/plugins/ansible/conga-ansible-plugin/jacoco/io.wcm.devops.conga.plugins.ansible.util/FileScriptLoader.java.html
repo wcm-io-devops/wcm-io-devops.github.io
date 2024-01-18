@@ -73,7 +73,7 @@ public final class FileScriptLoader {
 <span class="fc" id="L73">    PumpStreamHandler streamHeandler = new PumpStreamHandler(osOutput, osError);</span>
 
     // execute script
-<span class="fc" id="L76">    DefaultExecutor executor = new DefaultExecutor();</span>
+<span class="fc" id="L76">    DefaultExecutor executor = DefaultExecutor.builder().get();</span>
 <span class="fc" id="L77">    executor.setStreamHandler(streamHeandler);</span>
     try {
 <span class="fc" id="L79">      int exitValue = executor.execute(cmd);</span>
