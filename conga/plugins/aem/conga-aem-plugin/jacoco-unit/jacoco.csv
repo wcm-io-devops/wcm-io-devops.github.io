@@ -29,12 +29,11 @@ CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.fileheader,AnyFileHeader,0,18,0
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.handlebars.escaping,AnyEscapingStrategy,2,25,1,1,0,6,1,5,0,5
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,ContentPackageValidator,282,31,23,1,64,9,20,5,8,5
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,InfoPrefixLog,95,0,0,0,32,0,17,0,17,0
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,AnyValidator.new ResourceExpander() {...},3,6,0,0,1,1,1,1,1,1
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,AnyValidator.new EntityResolver() {...},2,6,0,0,1,1,1,1,1,1
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,AnyValidator,0,96,0,2,0,21,0,7,0,6
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,AnyValidator,3,93,0,2,0,21,1,7,1,6
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto,CryptoSupport,0,29,0,0,0,7,0,3,0,3
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto,CryptoString,0,128,0,20,0,23,0,13,0,3
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentPackageUtil,87,549,24,64,19,132,24,39,1,18
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentPackageUtil,87,553,24,64,19,132,24,39,1,18
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentElementHandler,17,67,3,7,3,16,3,6,0,4
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,JsonContentLoader,16,66,0,0,4,15,0,4,0,4
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentPackageBinaryFile,12,85,5,9,4,24,5,7,0,5

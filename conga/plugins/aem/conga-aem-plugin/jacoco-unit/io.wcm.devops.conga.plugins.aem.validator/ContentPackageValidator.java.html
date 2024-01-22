@@ -133,7 +133,7 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
 <span class="nc" id="L133">    setProperty(object, object.getClass(), propertyName, value);</span>
 <span class="nc" id="L134">  }</span>
 
-  @SuppressWarnings(&quot;PMD.AvoidAccessibilityAlteration&quot;)
+  @SuppressWarnings({ &quot;PMD.AvoidAccessibilityAlteration&quot;, &quot;java:S3011&quot; })
   private void setProperty(Object object, Class&lt;?&gt; clazz, String propertyName, Object value)
       throws IllegalArgumentException, IllegalAccessException {
     try {

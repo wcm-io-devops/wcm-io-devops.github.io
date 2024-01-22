@@ -153,42 +153,43 @@ import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
 <span class="fc" id="L153">    List&lt;Void&gt; result = ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;Void&gt;() {</span>
       @Override
       @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
+      @SuppressWarnings(&quot;java:S3457&quot;) // log placeholders
       public Void accept(String path, Dictionary&lt;String, Object&gt; properties) throws IOException {
-<span class="fc bfc" id="L157" title="All 2 branches covered.">        String contentPath = rootPath + (StringUtils.contains(path, &quot;/&quot;) ? &quot;.&quot; : &quot;/&quot;) + path;</span>
-<span class="fc" id="L158">        context.getLogger().info(&quot;  Include &quot; + contentPath);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        String contentPath = rootPath + (StringUtils.contains(path, &quot;/&quot;) ? &quot;.&quot; : &quot;/&quot;) + path;</span>
+<span class="fc" id="L159">        context.getLogger().info(&quot;  Include &quot; + contentPath);</span>
 
         // write configuration to temporary file
-<span class="fc" id="L161">        File tempFile = File.createTempFile(NAME, &quot;.cfg.json&quot;);</span>
-<span class="fc" id="L162">        try (OutputStream os = new FileOutputStream(tempFile)) {</span>
-<span class="fc" id="L163">          OsgiConfigUtil.write(os, properties);</span>
+<span class="fc" id="L162">        File tempFile = File.createTempFile(NAME, &quot;.cfg.json&quot;);</span>
+<span class="fc" id="L163">        try (OutputStream os = new FileOutputStream(tempFile)) {</span>
+<span class="fc" id="L164">          OsgiConfigUtil.write(os, properties);</span>
         }
         try {
-<span class="fc" id="L166">          FileContext tempFileContext = new FileContext().file(tempFile).charset(StandardCharsets.UTF_8);</span>
+<span class="fc" id="L167">          FileContext tempFileContext = new FileContext().file(tempFile).charset(StandardCharsets.UTF_8);</span>
 
           // apply file header
-<span class="fc" id="L169">          applyFileHeader(tempFileContext, fileHeader, context);</span>
+<span class="fc" id="L170">          applyFileHeader(tempFileContext, fileHeader, context);</span>
 
           // write configuration to content package
-<span class="fc" id="L172">          try (InputStream is = new BufferedInputStream(new FileInputStream(tempFile))) {</span>
-<span class="fc" id="L173">            contentPackage.addFile(contentPath, is);</span>
+<span class="fc" id="L173">          try (InputStream is = new BufferedInputStream(new FileInputStream(tempFile))) {</span>
+<span class="fc" id="L174">            contentPackage.addFile(contentPath, is);</span>
           }
         }
         finally {
           // remove temporary file
-<span class="fc" id="L178">          Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L179">          Files.delete(tempFile.toPath());</span>
         }
-<span class="fc" id="L180">        return null;</span>
+<span class="fc" id="L181">        return null;</span>
       }
     });
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">    return !result.isEmpty();</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">    return !result.isEmpty();</span>
   }
 
   private String getBaseFileName(String fileName) {
-<span class="fc bfc" id="L187" title="All 2 branches covered.">    if (StringUtils.endsWith(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION)) {</span>
-<span class="fc" id="L188">      return StringUtils.substringBeforeLast(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">    if (StringUtils.endsWith(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION)) {</span>
+<span class="fc" id="L189">      return StringUtils.substringBeforeLast(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
     }
     else {
-<span class="fc" id="L191">      return FilenameUtils.getBaseName(fileName);</span>
+<span class="fc" id="L192">      return FilenameUtils.getBaseName(fileName);</span>
     }
   }
 

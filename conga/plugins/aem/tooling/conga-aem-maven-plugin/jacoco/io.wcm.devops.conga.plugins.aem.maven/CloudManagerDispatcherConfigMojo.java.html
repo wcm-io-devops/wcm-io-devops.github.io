@@ -115,40 +115,41 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
    * @param excludeFiles Exclude filenames
    * @throws IOException I/O exception
    */
+  @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   private void addZipDirectory(String basePath, File directory, Set&lt;String&gt; excludeFiles) throws IOException {
-<span class="fc" id="L119">    String directoryPath = toZipDirectoryPath(directory);</span>
-<span class="pc bpc" id="L120" title="1 of 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
-<span class="fc" id="L121">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
-<span class="fc" id="L122">      File[] files = directory.listFiles();</span>
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">      if (files != null) {</span>
-<span class="fc bfc" id="L124" title="All 2 branches covered.">        for (File file : files) {</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">          if (excludeFiles.contains(file.getName())) {</span>
-<span class="fc" id="L126">            continue;</span>
+<span class="fc" id="L120">    String directoryPath = toZipDirectoryPath(directory);</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
+<span class="fc" id="L122">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
+<span class="fc" id="L123">      File[] files = directory.listFiles();</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">      if (files != null) {</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for (File file : files) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">          if (excludeFiles.contains(file.getName())) {</span>
+<span class="fc" id="L127">            continue;</span>
           }
-<span class="fc bfc" id="L128" title="All 2 branches covered.">          if (file.isDirectory()) {</span>
-<span class="fc" id="L129">            addZipDirectory(basePath, file, Collections.emptySet());</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">          if (file.isDirectory()) {</span>
+<span class="fc" id="L130">            addZipDirectory(basePath, file, Collections.emptySet());</span>
           }
-<span class="fc bfc" id="L131" title="All 2 branches covered.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
-<span class="fc" id="L132">            Path linkPath = file.toPath();</span>
-<span class="fc" id="L133">            Path targetPath = linkPath.toRealPath();</span>
-<span class="fc" id="L134">            Path symlinkPath = file.getParentFile().toPath().relativize(targetPath);</span>
-<span class="fc" id="L135">            zipArchiver.addSymlink(relativeDirectoryPath + file.getName(), sanitizePathSeparators(symlinkPath.toString()));</span>
-<span class="fc" id="L136">          }</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
+<span class="fc" id="L133">            Path linkPath = file.toPath();</span>
+<span class="fc" id="L134">            Path targetPath = linkPath.toRealPath();</span>
+<span class="fc" id="L135">            Path symlinkPath = file.getParentFile().toPath().relativize(targetPath);</span>
+<span class="fc" id="L136">            zipArchiver.addSymlink(relativeDirectoryPath + file.getName(), sanitizePathSeparators(symlinkPath.toString()));</span>
+<span class="fc" id="L137">          }</span>
           else {
-<span class="fc" id="L138">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
+<span class="fc" id="L139">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
           }
         }
       }
     }
-<span class="fc" id="L143">  }</span>
+<span class="fc" id="L144">  }</span>
 
   private String toZipDirectoryPath(File directory) {
-<span class="fc" id="L146">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
-<span class="fc" id="L147">    return sanitizePathSeparators(canoncialPath) + &quot;/&quot;;</span>
+<span class="fc" id="L147">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
+<span class="fc" id="L148">    return sanitizePathSeparators(canoncialPath) + &quot;/&quot;;</span>
   }
 
   private String sanitizePathSeparators(String path) {
-<span class="fc" id="L151">    return StringUtils.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
+<span class="fc" id="L152">    return StringUtils.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
   }
 
 }

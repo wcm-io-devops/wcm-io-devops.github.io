@@ -44,11 +44,11 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElementImpl;
     }
     else {
 <span class="pc bpc" id="L46" title="1 of 2 branches missed.">      if (root == null) {</span>
-<span class="nc" id="L47">        throw new RuntimeException(&quot;Root resource not set.&quot;);</span>
+<span class="nc" id="L47">        throw new IllegalArgumentException(&quot;Root resource not set.&quot;);</span>
       }
 <span class="fc" id="L49">      Matcher matcher = PATH_PATTERN.matcher(path);</span>
 <span class="pc bpc" id="L50" title="1 of 2 branches missed.">      if (!matcher.matches()) {</span>
-<span class="nc" id="L51">        throw new RuntimeException(&quot;Unexpected path:&quot; + path);</span>
+<span class="nc" id="L51">        throw new IllegalArgumentException(&quot;Unexpected path:&quot; + path);</span>
       }
 <span class="fc" id="L53">      String relativeParentPath = StringUtils.stripStart(matcher.group(1), &quot;/&quot;);</span>
 <span class="fc" id="L54">      String name = matcher.group(4);</span>
@@ -60,7 +60,7 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElementImpl;
 <span class="fc" id="L60">        parent = root.getChild(relativeParentPath);</span>
       }
 <span class="pc bpc" id="L62" title="1 of 2 branches missed.">      if (parent == null) {</span>
-<span class="nc" id="L63">        throw new RuntimeException(&quot;Parent '&quot; + relativeParentPath + &quot;' does not exist.&quot;);</span>
+<span class="nc" id="L63">        throw new IllegalArgumentException(&quot;Parent '&quot; + relativeParentPath + &quot;' does not exist.&quot;);</span>
       }
 <span class="fc" id="L65">      parent.getChildren().put(name, new ContentElementImpl(name, properties));</span>
     }

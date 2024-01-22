@@ -135,44 +135,46 @@ public final class ModelParser {
 <span class="fc" id="L135">    return targets;</span>
   }
 
+  @SuppressWarnings(&quot;java:S112&quot;) // runtime exception
   private Map&lt;String, Object&gt; getModelData() {
-<span class="fc" id="L139">    File modelFile = new File(nodeDir, MODEL_FILE);</span>
-<span class="pc bpc" id="L140" title="2 of 4 branches missed.">    if (!modelFile.exists() || !modelFile.isFile()) {</span>
-<span class="nc" id="L141">      throw new RuntimeException(&quot;Model file not found: &quot; + getCanonicalPath(modelFile));</span>
+<span class="fc" id="L140">    File modelFile = new File(nodeDir, MODEL_FILE);</span>
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">    if (!modelFile.exists() || !modelFile.isFile()) {</span>
+<span class="nc" id="L142">      throw new RuntimeException(&quot;Model file not found: &quot; + getCanonicalPath(modelFile));</span>
     }
-<span class="fc" id="L143">    return parseYaml(modelFile);</span>
+<span class="fc" id="L144">    return parseYaml(modelFile);</span>
   }
 
+  @SuppressWarnings(&quot;java:S112&quot;) // runtime exception
   private Map&lt;String, Object&gt; parseYaml(File modelFile) {
     try {
-<span class="fc" id="L148">      try (InputStream is = new FileInputStream(modelFile);</span>
-<span class="fc" id="L149">          Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L150">        return yaml.loadAs(reader, Map.class);</span>
+<span class="fc" id="L150">      try (InputStream is = new FileInputStream(modelFile);</span>
+<span class="fc" id="L151">          Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L152">        return yaml.loadAs(reader, Map.class);</span>
       }
     }
-<span class="nc" id="L153">    catch (IOException ex) {</span>
-<span class="nc" id="L154">      throw new RuntimeException(&quot;Unable to parse &quot; + getCanonicalPath(modelFile), ex);</span>
+<span class="nc" id="L155">    catch (IOException ex) {</span>
+<span class="nc" id="L156">      throw new RuntimeException(&quot;Unable to parse &quot; + getCanonicalPath(modelFile), ex);</span>
     }
   }
 
   private boolean isContentPackage(Map&lt;String, Object&gt; fileData) {
-<span class="fc bfc" id="L159" title="All 2 branches covered.">    return fileData.get(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY) != null;</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">    return fileData.get(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY) != null;</span>
   }
 
   private boolean isOsgiBundle(File file) {
-<span class="fc bfc" id="L163" title="All 2 branches covered.">    if (!StringUtils.equals(FilenameUtils.getExtension((file.getName())), &quot;jar&quot;)) {</span>
-<span class="fc" id="L164">      return false;</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">    if (!StringUtils.equals(FilenameUtils.getExtension((file.getName())), &quot;jar&quot;)) {</span>
+<span class="fc" id="L166">      return false;</span>
     }
-<span class="fc" id="L166">    try (JarFile jarFile = new JarFile(file)) {</span>
-<span class="fc" id="L167">      Manifest manifest = jarFile.getManifest();</span>
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">      if (manifest != null) {</span>
-<span class="fc bfc" id="L169" title="All 2 branches covered.">        return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME) != null;</span>
+<span class="fc" id="L168">    try (JarFile jarFile = new JarFile(file)) {</span>
+<span class="fc" id="L169">      Manifest manifest = jarFile.getManifest();</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">      if (manifest != null) {</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME) != null;</span>
       }
-<span class="fc" id="L171">    }</span>
-<span class="nc" id="L172">    catch (IOException ex) {</span>
-<span class="nc" id="L173">      log.debug(&quot;Unable to check for OSGi bundle: {}&quot;, file, ex);</span>
-<span class="nc" id="L174">    }</span>
-<span class="nc" id="L175">    return false;</span>
+<span class="fc" id="L173">    }</span>
+<span class="nc" id="L174">    catch (IOException ex) {</span>
+<span class="nc" id="L175">      log.debug(&quot;Unable to check for OSGi bundle: {}&quot;, file, ex);</span>
+<span class="nc" id="L176">    }</span>
+<span class="nc" id="L177">    return false;</span>
   }
 
 }

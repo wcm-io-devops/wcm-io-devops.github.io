@@ -73,49 +73,50 @@ import com.github.jknack.handlebars.Options;
         allowFrom, allowFromHost);
   }
 
+  @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   private String generateRule(String ruleType, String ruleExpression, HttpdFilterType filterType,
       String allowFrom, String allowFromHost) {
-<span class="fc" id="L78">    StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L79">    StringBuilder sb = new StringBuilder();</span>
 
-<span class="fc" id="L80">    sb.append(&quot;&lt;&quot;).append(ruleType).append(&quot; \&quot;&quot;).append(ruleExpression).append(&quot;\&quot;&gt;\n&quot;);</span>
+<span class="fc" id="L81">    sb.append(&quot;&lt;&quot;).append(ruleType).append(&quot; \&quot;&quot;).append(ruleExpression).append(&quot;\&quot;&gt;\n&quot;);</span>
 
-<span class="fc bfc" id="L82" title="All 2 branches covered.">    if (filterType == HttpdFilterType.ALLOW) {</span>
-<span class="fc" id="L83">      sb.append(&quot;  &lt;IfVersion &lt; 2.4&gt;\n&quot;)</span>
-<span class="fc" id="L84">          .append(&quot;    Allow from all\n&quot;)</span>
-<span class="fc" id="L85">          .append(&quot;  &lt;/IfVersion&gt;\n&quot;)</span>
-<span class="fc" id="L86">          .append(&quot;  &lt;IfVersion &gt;= 2.4&gt;\n&quot;)</span>
-<span class="fc" id="L87">          .append(&quot;    Require all granted\n&quot;)</span>
-<span class="fc" id="L88">          .append(&quot;  &lt;/IfVersion&gt;\n&quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">    if (filterType == HttpdFilterType.ALLOW) {</span>
+<span class="fc" id="L84">      sb.append(&quot;  &lt;IfVersion &lt; 2.4&gt;\n&quot;)</span>
+<span class="fc" id="L85">          .append(&quot;    Allow from all\n&quot;)</span>
+<span class="fc" id="L86">          .append(&quot;  &lt;/IfVersion&gt;\n&quot;)</span>
+<span class="fc" id="L87">          .append(&quot;  &lt;IfVersion &gt;= 2.4&gt;\n&quot;)</span>
+<span class="fc" id="L88">          .append(&quot;    Require all granted\n&quot;)</span>
+<span class="fc" id="L89">          .append(&quot;  &lt;/IfVersion&gt;\n&quot;);</span>
     }
     else {
-<span class="fc" id="L91">      sb.append(&quot;  &lt;IfVersion &lt; 2.4&gt;\n&quot;)</span>
-<span class="fc" id="L92">          .append(&quot;    Order Deny,Allow\n&quot;)</span>
-<span class="fc" id="L93">          .append(&quot;    Deny from all\n&quot;);</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">      if (filterType == HttpdFilterType.DENY_ALLOW_ADMIN) {</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFrom)) {</span>
-<span class="fc" id="L96">          sb.append(&quot;    Allow from &quot;).append(allowFrom).append(&quot;\n&quot;);</span>
+<span class="fc" id="L92">      sb.append(&quot;  &lt;IfVersion &lt; 2.4&gt;\n&quot;)</span>
+<span class="fc" id="L93">          .append(&quot;    Order Deny,Allow\n&quot;)</span>
+<span class="fc" id="L94">          .append(&quot;    Deny from all\n&quot;);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">      if (filterType == HttpdFilterType.DENY_ALLOW_ADMIN) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFrom)) {</span>
+<span class="fc" id="L97">          sb.append(&quot;    Allow from &quot;).append(allowFrom).append(&quot;\n&quot;);</span>
         }
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFromHost)) {</span>
-<span class="fc" id="L99">          sb.append(&quot;    Allow from &quot;).append(allowFromHost).append(&quot;\n&quot;);</span>
-        }
-      }
-<span class="fc" id="L102">      sb.append(&quot;  &lt;/IfVersion&gt;\n&quot;)</span>
-<span class="fc" id="L103">          .append(&quot;  &lt;IfVersion &gt;= 2.4&gt;\n&quot;)</span>
-<span class="fc" id="L104">          .append(&quot;    Require all denied\n&quot;);</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">      if (filterType == HttpdFilterType.DENY_ALLOW_ADMIN) {</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFrom)) {</span>
-<span class="fc" id="L107">          sb.append(&quot;    Require ip &quot;).append(allowFrom).append(&quot;\n&quot;);</span>
-        }
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFromHost)) {</span>
-<span class="fc" id="L110">          sb.append(&quot;    Require host &quot;).append(allowFromHost).append(&quot;\n&quot;);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFromHost)) {</span>
+<span class="fc" id="L100">          sb.append(&quot;    Allow from &quot;).append(allowFromHost).append(&quot;\n&quot;);</span>
         }
       }
-<span class="fc" id="L113">      sb.append(&quot;  &lt;/IfVersion&gt;\n&quot;);</span>
+<span class="fc" id="L103">      sb.append(&quot;  &lt;/IfVersion&gt;\n&quot;)</span>
+<span class="fc" id="L104">          .append(&quot;  &lt;IfVersion &gt;= 2.4&gt;\n&quot;)</span>
+<span class="fc" id="L105">          .append(&quot;    Require all denied\n&quot;);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">      if (filterType == HttpdFilterType.DENY_ALLOW_ADMIN) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFrom)) {</span>
+<span class="fc" id="L108">          sb.append(&quot;    Require ip &quot;).append(allowFrom).append(&quot;\n&quot;);</span>
+        }
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (StringUtils.isNotBlank(allowFromHost)) {</span>
+<span class="fc" id="L111">          sb.append(&quot;    Require host &quot;).append(allowFromHost).append(&quot;\n&quot;);</span>
+        }
+      }
+<span class="fc" id="L114">      sb.append(&quot;  &lt;/IfVersion&gt;\n&quot;);</span>
     }
 
-<span class="fc" id="L116">    sb.append(&quot;&lt;/&quot;).append(ruleType).append(&quot;&gt;&quot;);</span>
+<span class="fc" id="L117">    sb.append(&quot;&lt;/&quot;).append(ruleType).append(&quot;&gt;&quot;);</span>
 
-<span class="fc" id="L118">    return sb.toString();</span>
+<span class="fc" id="L119">    return sb.toString();</span>
   }
 
 }

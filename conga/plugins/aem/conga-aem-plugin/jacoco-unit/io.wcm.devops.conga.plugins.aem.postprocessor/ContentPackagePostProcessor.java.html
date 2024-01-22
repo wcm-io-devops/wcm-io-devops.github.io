@@ -24,6 +24,7 @@ import static io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOption
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
  * Transforms a JSON file describing a JCR content structure to an AEM content package
  * to be deployed via CRX package manager.
  */
-<span class="fc" id="L52">public class ContentPackagePostProcessor extends AbstractPostProcessor {</span>
+<span class="fc" id="L53">public class ContentPackagePostProcessor extends AbstractPostProcessor {</span>
 
   /**
    * Plugin name
@@ -58,65 +59,65 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
 
   private static final String FILE_EXTENSION = &quot;json&quot;;
 
-<span class="fc" id="L61">  private final JsonContentLoader jsonContentLoader = new JsonContentLoader();</span>
+<span class="fc" id="L62">  private final JsonContentLoader jsonContentLoader = new JsonContentLoader();</span>
 
   @Override
   public String getName() {
-<span class="fc" id="L65">    return NAME;</span>
+<span class="fc" id="L66">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(FileContext file, PostProcessorContext context) {
-<span class="fc" id="L70">    return FileUtil.matchesExtension(file, FILE_EXTENSION);</span>
+<span class="fc" id="L71">    return FileUtil.matchesExtension(file, FILE_EXTENSION);</span>
   }
 
   @Override
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
-<span class="fc" id="L76">    File file = fileContext.getFile();</span>
-<span class="fc" id="L77">    Logger logger = context.getLogger();</span>
-<span class="fc" id="L78">    Map&lt;String, Object&gt; options = context.getOptions();</span>
+<span class="fc" id="L77">    File file = fileContext.getFile();</span>
+<span class="fc" id="L78">    Logger logger = context.getLogger();</span>
+<span class="fc" id="L79">    Map&lt;String, Object&gt; options = context.getOptions();</span>
 
     try {
       // extract file header
-<span class="fc" id="L82">      FileHeaderContext fileHeader = extractFileHeader(fileContext, context);</span>
+<span class="fc" id="L83">      FileHeaderContext fileHeader = extractFileHeader(fileContext, context);</span>
 
       // create AEM content package with configurations
-<span class="fc" id="L85">      File zipFile = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + &quot;.zip&quot;);</span>
-<span class="fc" id="L86">      logger.info(&quot;Generate {}&quot;, zipFile.getCanonicalPath());</span>
+<span class="fc" id="L86">      File zipFile = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + &quot;.zip&quot;);</span>
+<span class="fc" id="L87">      logger.info(&quot;Generate {}&quot;, zipFile.getCanonicalPath());</span>
 
-<span class="fc" id="L88">      String rootPath = ContentPackageUtil.getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
+<span class="fc" id="L89">      String rootPath = ContentPackageUtil.getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
 
-<span class="fc" id="L90">      ContentPackageBuilder builder = ContentPackageUtil.getContentPackageBuilder(options, context.getUrlFileManager(), fileHeader);</span>
-<span class="fc" id="L91">      try (ContentPackage contentPackage = builder.build(zipFile)) {</span>
+<span class="fc" id="L91">      ContentPackageBuilder builder = ContentPackageUtil.getContentPackageBuilder(options, context.getUrlFileManager(), fileHeader);</span>
+<span class="fc" id="L92">      try (ContentPackage contentPackage = builder.build(zipFile)) {</span>
 
         // add content from JSON file
-<span class="fc" id="L94">        ContentElement content = jsonContentLoader.load(fileContext.getFile());</span>
-<span class="fc" id="L95">        contentPackage.addContent(rootPath, content);</span>
+<span class="fc" id="L95">        ContentElement content = jsonContentLoader.load(fileContext.getFile());</span>
+<span class="fc" id="L96">        contentPackage.addContent(rootPath, content);</span>
 
         // add additional binary files
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (ContentPackageBinaryFile binaryFile : ContentPackageUtil.getFiles(options, fileContext.getTargetDir())) {</span>
-<span class="fc" id="L99">          String path = binaryFile.getPath();</span>
-<span class="fc" id="L100">          try (InputStream is = binaryFile.getInputStream(context.getUrlFileManager(), fileContext.getTargetDir())) {</span>
-<span class="fc" id="L101">            contentPackage.addFile(path, is);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for (ContentPackageBinaryFile binaryFile : ContentPackageUtil.getFiles(options, fileContext.getTargetDir())) {</span>
+<span class="fc" id="L100">          String path = binaryFile.getPath();</span>
+<span class="fc" id="L101">          try (InputStream is = binaryFile.getInputStream(context.getUrlFileManager(), fileContext.getTargetDir())) {</span>
+<span class="fc" id="L102">            contentPackage.addFile(path, is);</span>
           }
-<span class="fc" id="L103">          binaryFile.deleteIfRequired(context.getUrlFileManager(), fileContext.getTargetDir());</span>
-<span class="fc" id="L104">        }</span>
+<span class="fc" id="L104">          binaryFile.deleteIfRequired(context.getUrlFileManager(), fileContext.getTargetDir());</span>
+<span class="fc" id="L105">        }</span>
 
       }
 
       // delete provisioning file after transformation
-<span class="fc" id="L109">      file.delete();</span>
+<span class="fc" id="L110">      Files.delete(file.toPath());</span>
 
       // set force to true by default for CONGA-generated packages (but allow override from role definition)
-<span class="fc" id="L112">      Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L113">      modelOptions.put(&quot;force&quot;, true);</span>
-<span class="fc" id="L114">      modelOptions.putAll(fileContext.getModelOptions());</span>
+<span class="fc" id="L113">      Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L114">      modelOptions.put(&quot;force&quot;, true);</span>
+<span class="fc" id="L115">      modelOptions.putAll(fileContext.getModelOptions());</span>
 
-<span class="fc" id="L116">      return List.of(new FileContext().file(zipFile).modelOptions(modelOptions));</span>
+<span class="fc" id="L117">      return List.of(new FileContext().file(zipFile).modelOptions(modelOptions));</span>
     }
-<span class="nc" id="L118">    catch (IOException ex) {</span>
-<span class="nc" id="L119">      throw new GeneratorException(&quot;Unable to post-process JSON data file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+<span class="nc" id="L119">    catch (IOException ex) {</span>
+<span class="nc" id="L120">      throw new GeneratorException(&quot;Unable to post-process JSON data file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
     }
   }
 
