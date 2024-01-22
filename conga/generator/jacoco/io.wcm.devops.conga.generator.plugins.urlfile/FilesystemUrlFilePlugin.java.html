@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,7 +39,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 /**
  * Get file from local filesystem.
  */
-<span class="fc" id="L41">public class FilesystemUrlFilePlugin implements UrlFilePlugin {</span>
+<span class="fc" id="L42">public class FilesystemUrlFilePlugin implements UrlFilePlugin {</span>
 
   /**
    * Plugin name
@@ -50,67 +51,67 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 
   @Override
   public String getName() {
-<span class="fc" id="L53">    return NAME;</span>
+<span class="fc" id="L54">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(String url, UrlFilePluginContext context) {
-<span class="fc bfc" id="L58" title="All 2 branches covered.">    return StringUtils.startsWith(url, PREFIX)</span>
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        || StringUtils.startsWith(url, PREFIX_NODE);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    return StringUtils.startsWith(url, PREFIX)</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        || StringUtils.startsWith(url, PREFIX_NODE);</span>
   }
 
   @Override
   public String getFileName(String url, UrlFilePluginContext context) {
-<span class="nc" id="L64">    File file = getFileInternal(url, context);</span>
-<span class="nc" id="L65">    return file.getName();</span>
+<span class="nc" id="L65">    File file = getFileInternal(url, context);</span>
+<span class="nc" id="L66">    return file.getName();</span>
   }
 
   @Override
   public InputStream getFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L70">    File file = getFileInternal(url, context);</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">    if (!file.exists()) {</span>
-<span class="fc" id="L72">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+<span class="fc" id="L71">    File file = getFileInternal(url, context);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    if (!file.exists()) {</span>
+<span class="fc" id="L73">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
     }
-<span class="fc" id="L74">    return new BufferedInputStream(new FileInputStream(file));</span>
+<span class="fc" id="L75">    return new BufferedInputStream(new FileInputStream(file));</span>
   }
 
   @Override
   public URL getFileUrl(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L79">    File file = getFileInternal(url, context);</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">    if (!file.exists()) {</span>
-<span class="fc" id="L81">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+<span class="fc" id="L80">    File file = getFileInternal(url, context);</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">    if (!file.exists()) {</span>
+<span class="fc" id="L82">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
     }
-<span class="fc" id="L83">    return file.toURI().toURL();</span>
+<span class="fc" id="L84">    return file.toURI().toURL();</span>
   }
 
   @Override
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public void deleteFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L89">    File file = getFileInternal(url, context);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (!file.exists()) {</span>
-<span class="nc" id="L91">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+<span class="fc" id="L90">    File file = getFileInternal(url, context);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (!file.exists()) {</span>
+<span class="nc" id="L92">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
     }
-<span class="fc" id="L93">    file.delete();</span>
-<span class="fc" id="L94">  }</span>
+<span class="fc" id="L94">    Files.delete(file.toPath());</span>
+<span class="fc" id="L95">  }</span>
 
   private static File getFileInternal(String url, UrlFilePluginContext context) {
-<span class="fc bfc" id="L97" title="All 2 branches covered.">    if (StringUtils.startsWith(url, PREFIX)) {</span>
-<span class="fc" id="L98">      String absolutePath = StringUtils.substringAfter(url, PREFIX);</span>
-<span class="fc" id="L99">      return new File(absolutePath);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">    if (StringUtils.startsWith(url, PREFIX)) {</span>
+<span class="fc" id="L99">      String absolutePath = StringUtils.substringAfter(url, PREFIX);</span>
+<span class="fc" id="L100">      return new File(absolutePath);</span>
     }
-<span class="fc bfc" id="L101" title="All 2 branches covered.">    else if (StringUtils.startsWith(url, PREFIX_NODE)) {</span>
-<span class="fc" id="L102">      File nodeBaseDir = context.getNodeBaseDir();</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">      if (nodeBaseDir != null) {</span>
-<span class="fc" id="L104">        String relativePath = StringUtils.substringAfter(url, PREFIX_NODE);</span>
-<span class="fc" id="L105">        return new File(nodeBaseDir, relativePath);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    else if (StringUtils.startsWith(url, PREFIX_NODE)) {</span>
+<span class="fc" id="L103">      File nodeBaseDir = context.getNodeBaseDir();</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">      if (nodeBaseDir != null) {</span>
+<span class="fc" id="L105">        String relativePath = StringUtils.substringAfter(url, PREFIX_NODE);</span>
+<span class="fc" id="L106">        return new File(nodeBaseDir, relativePath);</span>
       }
       else {
-<span class="fc" id="L108">        throw new GeneratorException(&quot;Unable to get node basedir outside not generation context.&quot;);</span>
+<span class="fc" id="L109">        throw new GeneratorException(&quot;Unable to get node basedir outside not generation context.&quot;);</span>
       }
     }
     else {
-<span class="fc" id="L112">      String relativePath = url;</span>
-<span class="fc" id="L113">      return new File(context.getBaseDir(), relativePath);</span>
+<span class="fc" id="L113">      String relativePath = url;</span>
+<span class="fc" id="L114">      return new File(context.getBaseDir(), relativePath);</span>
     }
   }
 

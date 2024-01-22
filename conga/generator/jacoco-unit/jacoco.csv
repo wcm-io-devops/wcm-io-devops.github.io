@@ -9,8 +9,8 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.postprocessor,AbstractPost
 CONGA Generator,io.wcm.devops.conga.generator,GeneratorOptions,40,111,0,0,16,40,8,27,8,27
 CONGA Generator,io.wcm.devops.conga.generator,MessagePrefixLoggerFacade,480,9,0,0,112,4,62,1,62,1
 CONGA Generator,io.wcm.devops.conga.generator,ContextPropertiesBuilder,0,399,1,21,0,85,1,15,0,5
-CONGA Generator,io.wcm.devops.conga.generator,EnvironmentGenerator,99,815,11,51,20,162,12,35,1,15
-CONGA Generator,io.wcm.devops.conga.generator,FileGenerator,116,911,19,45,24,188,18,58,2,42
+CONGA Generator,io.wcm.devops.conga.generator,EnvironmentGenerator,109,815,11,51,23,162,12,35,1,15
+CONGA Generator,io.wcm.devops.conga.generator,FileGenerator,116,911,19,45,24,187,18,58,2,42
 CONGA Generator,io.wcm.devops.conga.generator,UrlFileManager,65,155,6,10,10,27,9,15,4,12
 CONGA Generator,io.wcm.devops.conga.generator,GeneratorException,0,9,0,0,0,4,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator,ResourceLoaderUtil,34,99,2,6,8,22,2,5,0,3
@@ -46,8 +46,7 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,ConfFileHeader,
 CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,ClasspathUrlFilePlugin,2,73,2,6,1,20,2,9,0,7
 CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,HttpUrlFilePlugin,4,33,0,4,1,7,1,7,1,5
 CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,FilesystemUrlFilePlugin,14,114,1,15,3,27,2,14,1,7
-CONGA Generator,io.wcm.devops.conga.generator.util,ConfigInheritanceResolver,0,127,0,12,0,29,0,11,0,5
-CONGA Generator,io.wcm.devops.conga.generator.util,ConfigInheritanceResolver.new ConfigurableProcessor() {...},0,13,0,0,0,4,0,2,0,2
+CONGA Generator,io.wcm.devops.conga.generator.util,ConfigInheritanceResolver,0,135,0,12,0,32,0,12,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,PluginManagerImpl,0,40,0,2,0,8,0,4,0,3
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableResolver,9,90,2,14,2,24,2,9,0,3
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableObjectTreeResolver.new ConfigurableProcessor() {...},0,26,0,0,0,6,0,2,0,2
@@ -60,16 +59,16 @@ CONGA Generator,io.wcm.devops.conga.generator.util,RoleUtil,3,378,1,45,1,88,1,30
 CONGA Generator,io.wcm.devops.conga.generator.util,PluginManagerImpl.new CacheLoader() {...},12,37,1,3,2,8,1,3,0,2
 CONGA Generator,io.wcm.devops.conga.generator.util,FileUtil,69,59,10,8,15,18,10,9,4,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableStringResolver,12,350,3,37,2,87,3,28,0,11
-CONGA Generator,io.wcm.devops.conga.generator.util,JexlResolver,3,143,1,17,1,37,1,14,0,6
+CONGA Generator,io.wcm.devops.conga.generator.util,JexlResolver,2,141,1,17,1,37,1,14,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,ValueUtil,0,164,0,28,0,41,0,17,0,3
 CONGA Generator,io.wcm.devops.conga.generator.util,ModelExportConfigProcessor,2,141,2,14,1,34,2,12,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableObjectTreeResolver,0,22,0,0,0,6,0,2,0,2
-CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EachIfEqualsHelper,0,21,0,2,0,7,0,4,0,3
+CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EachIfEqualsHelper,0,19,0,2,0,7,0,4,0,3
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,DisallowPropertyHelper,4,51,3,9,2,12,3,7,0,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,RegexQuoteHelper,0,15,0,2,0,5,0,4,0,3
-CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,AbstractEachIfHelper,0,122,1,9,0,25,1,10,0,6
+CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,AbstractEachIfHelper,0,120,1,9,0,25,1,10,0,6
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,IfEqualsHelper,0,25,0,6,0,6,0,6,0,3
-CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EachIfHelper,0,13,0,2,0,3,0,4,0,3
+CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EachIfHelper,0,12,0,2,0,3,0,4,0,3
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EnsurePropertiesHelper,1,82,1,11,1,19,1,9,0,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,IfNotEqualsHelper,0,25,0,6,0,6,0,6,0,3
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,ContainsHelper,2,43,1,9,1,10,1,8,0,4
@@ -82,11 +81,10 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,JsonEs
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,NoneEscapingStrategy,4,10,1,1,1,3,2,3,1,3
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,XmlEscapingStrategy,2,15,1,1,0,4,1,4,0,4
 CONGA Generator,io.wcm.devops.conga.generator.handlebars,HandlebarsKey,8,42,1,1,2,12,2,5,1,5
-CONGA Generator,io.wcm.devops.conga.generator.handlebars,HandlebarsManager.new CacheLoader() {...},0,72,0,0,0,10,0,3,0,3
+CONGA Generator,io.wcm.devops.conga.generator.handlebars,HandlebarsManager.new CacheLoader() {...},0,77,0,0,0,11,0,4,0,4
 CONGA Generator,io.wcm.devops.conga.generator.handlebars,HandlebarsManager,0,46,0,0,0,10,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator.handlebars,CharsetAwareTemplateSource,4,26,0,0,1,8,1,3,1,3
 CONGA Generator,io.wcm.devops.conga.generator.handlebars,CharsetAwareTemplateLoader,47,41,13,3,14,11,9,2,1,2
-CONGA Generator,io.wcm.devops.conga.generator.handlebars,HandlebarsManager.1.new EscapingStrategy() {...},0,18,0,0,0,2,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator.handlebars,HandlebarsManager.1.new Helper() {...},0,19,0,0,0,2,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator.spi.export.context,NodeModelExportContext,17,81,0,2,6,28,5,18,5,17
 CONGA Generator,io.wcm.devops.conga.generator.spi.export.context,GeneratedFileContext,4,26,0,0,1,8,1,5,1,5

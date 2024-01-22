@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.SortedSet;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.function.Predicate;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.FilenameUtils;
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>   }
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>   <strong class="jxr_keyword">private</strong> &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>       Function&lt;ResourceInfo, Boolean&gt; resourceFilter) <strong class="jxr_keyword">throws</strong> MojoFailureException {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>       Predicate&lt;ResourceInfo&gt; resourceFilter) <strong class="jxr_keyword">throws</strong> MojoFailureException {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">if</strong> (!sourceDir.exists()) {
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>       <strong class="jxr_keyword">return</strong> List.of();
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>     }
@@ -220,12 +220,12 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>     List&lt;T&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>     <strong class="jxr_keyword">for</strong> (Resource file : files) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.apply(file)) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.test(file)) {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>         result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>       }
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>     }
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>     <strong class="jxr_keyword">for</strong> (ResourceCollection dir : dirs) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.apply(dir)) {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.test(dir)) {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>         result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>       }
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>     }
@@ -277,7 +277,7 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> GeneratorException(<span class="jxr_string">"Unable to resolve: "</span> + resolvedDependencyUrl, ex);
 <a class="jxr_linenumber" name="L270" href="#L270">270</a>           }
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>         })
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>         .flatMap(list -&gt; list.stream())
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>         .flatMap(List::stream)
 <a class="jxr_linenumber" name="L273" href="#L273">273</a>         .collect(Collectors.toList());
 <a class="jxr_linenumber" name="L274" href="#L274">274</a>   }
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
@@ -303,7 +303,7 @@
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>       org.springframework.core.io.Resource[] resources = resolver.getResources(
 <a class="jxr_linenumber" name="L296" href="#L296">296</a>           <span class="jxr_string">"classpath*:"</span> + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a>       <strong class="jxr_keyword">return</strong> Arrays.stream(resources)
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>           .map(resource -&gt; toProperties(resource))
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>           .map(<strong class="jxr_keyword">this</strong>::toProperties)
 <a class="jxr_linenumber" name="L299" href="#L299">299</a>           .collect(Collectors.toList());
 <a class="jxr_linenumber" name="L300" href="#L300">300</a>     }
 <a class="jxr_linenumber" name="L301" href="#L301">301</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
@@ -318,7 +318,7 @@
 <a class="jxr_linenumber" name="L310" href="#L310">310</a>       <strong class="jxr_keyword">return</strong> props;
 <a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
 <a class="jxr_linenumber" name="L312" href="#L312">312</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Unable to read properties file: "</span> + resource.toString(), ex);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Unable to read properties file: "</span> + resource.toString(), ex);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>     }
 <a class="jxr_linenumber" name="L315" href="#L315">315</a>   }
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 

@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.Map.Entry;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Objects;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.function.BiFunction;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.function.BiPredicate;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.stream.StreamSupport;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
@@ -51,12 +51,12 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * Handlebars helper that extends the each helper by iterating only on list items that match a certain condition.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractEachIfHelper" href="../../../../../../../../io/wcm/devops/conga/generator/plugins/handlebars/helper/AbstractEachIfHelper.html#AbstractEachIfHelper">AbstractEachIfHelper</a> <strong class="jxr_keyword">implements</strong> <a name="HelperPlugin" href="../../../../../../../../io/wcm/devops/conga/generator/spi/handlebars/HelperPlugin.html#HelperPlugin">HelperPlugin</a> {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractEachIfHelper" href="../../../../../../../../io/wcm/devops/conga/generator/plugins/handlebars/helper/AbstractEachIfHelper.html#AbstractEachIfHelper">AbstractEachIfHelper</a> <strong class="jxr_keyword">implements</strong> HelperPlugin&lt;Object&gt; {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Helper&lt;Object&gt; delegate = <strong class="jxr_keyword">new</strong> EachHelper();
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiPredicate&lt;Object, Options&gt; propertyEvaluator;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <a name="AbstractEachIfHelper" href="../../../../../../../../io/wcm/devops/conga/generator/plugins/handlebars/helper/AbstractEachIfHelper.html#AbstractEachIfHelper">AbstractEachIfHelper</a>(BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <a name="AbstractEachIfHelper" href="../../../../../../../../io/wcm/devops/conga/generator/plugins/handlebars/helper/AbstractEachIfHelper.html#AbstractEachIfHelper">AbstractEachIfHelper</a>(BiPredicate&lt;Object, Options&gt; propertyEvaluator) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">this</strong>.propertyEvaluator = propertyEvaluator;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>    }
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> checkProperty(Object item, String propertyName, Options options) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      Map&lt;String, Object&gt; propertyMap = toMap(options.propertySet(item));
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      Object value = MapExpander.getDeep(propertyMap, propertyName);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">return</strong> propertyEvaluator.apply(value, options);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">return</strong> propertyEvaluator.test(value, options);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>    }
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>    <strong class="jxr_keyword">private</strong> Map&lt;String, Object&gt; toMap(Set&lt;Entry&lt;String, Object&gt;&gt; entries) {

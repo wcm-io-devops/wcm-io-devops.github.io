@@ -309,7 +309,7 @@ class FileGenerator {
     }
 <span class="nc" id="L310">    catch (IOException ex) {</span>
       // creates symbolic link failed - log warning and fallback to copying content
-<span class="nc" id="L312">      log.warn(&quot;Unable to create symbolic link: &quot; + ex.getMessage());</span>
+<span class="nc" id="L312">      log.warn(&quot;Unable to create symbolic link: {}&quot;, ex.getMessage());</span>
 <span class="nc" id="L313">      return false;</span>
     }
   }
@@ -332,7 +332,7 @@ class FileGenerator {
     }
 <span class="nc" id="L333">    catch (IOException ex) {</span>
       // creates symbolic link failed - create text file with link instead (similar to git)
-<span class="nc" id="L335">      log.warn(&quot;Created link textfile instead of symbolic link: &quot; + ex.getMessage());</span>
+<span class="nc" id="L335">      log.warn(&quot;Created link textfile instead of symbolic link: {}&quot;, ex.getMessage());</span>
 <span class="nc" id="L336">      FileUtils.write(linkPath.toFile(), relativizedPath.toString(), StandardCharsets.UTF_8);</span>
 <span class="fc" id="L337">    }</span>
 <span class="fc" id="L338">  }</span>
@@ -447,7 +447,7 @@ class FileGenerator {
 <span class="fc" id="L447">    });</span>
 
     // apply post processor configured as implicit ALWAYS
-<span class="fc" id="L450">    consolidatedFiles.values().forEach(fileItem -&gt; {</span>
+<span class="fc" id="L450">    consolidatedFiles.values().forEach(fileItem -&gt;</span>
 <span class="fc" id="L451">      pluginManager.getAll(PostProcessorPlugin.class).stream()</span>
 <span class="fc" id="L452">          .filter(implicitPlugin -&gt; implicitPlugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
 <span class="fc bfc" id="L453" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; implicitPlugin.implicitApply(fileItem.getFileContext(), postProcessorContext) == ImplicitApplyOptions.ALWAYS)</span>
@@ -464,8 +464,8 @@ class FileGenerator {
               }
 <span class="nc" id="L465">              generatedFileContext.postProcessor(implicitPlugin.getName());</span>
 <span class="nc" id="L466">            });</span>
-<span class="fc" id="L467">          });</span>
-<span class="fc" id="L468">    });</span>
+<span class="fc" id="L467">          })</span>
+    );
 
     // remove items that do no longer exist
 <span class="fc" id="L471">    List.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>

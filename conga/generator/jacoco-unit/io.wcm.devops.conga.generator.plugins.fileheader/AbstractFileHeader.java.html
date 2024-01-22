@@ -20,6 +20,7 @@
 package io.wcm.devops.conga.generator.plugins.fileheader;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,71 +39,71 @@ import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
 /**
  * Generic file header plugin implementation.
  */
-<span class="fc" id="L41">public abstract class AbstractFileHeader implements FileHeaderPlugin {</span>
+<span class="fc" id="L42">public abstract class AbstractFileHeader implements FileHeaderPlugin {</span>
 
   @Override
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public final Void apply(FileContext file, FileHeaderContext context) {
-<span class="fc" id="L46">    String lineBreak = StringUtils.defaultString(getLineBreak());</span>
+<span class="fc" id="L47">    String lineBreak = StringUtils.defaultString(getLineBreak());</span>
     try {
-<span class="fc" id="L48">      String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
+<span class="fc" id="L49">      String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
 
       List&lt;String&gt; sanitizedCommentLines;
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">      if (context.getCommentLines() == null) {</span>
-<span class="nc" id="L52">        sanitizedCommentLines = List.of();</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">      if (context.getCommentLines() == null) {</span>
+<span class="nc" id="L53">        sanitizedCommentLines = List.of();</span>
       }
       else {
-<span class="fc" id="L55">        sanitizedCommentLines = context.getCommentLines().stream()</span>
-<span class="fc" id="L56">            .map(this::sanitizeComment)</span>
-<span class="fc" id="L57">            .filter(Objects::nonNull)</span>
-<span class="fc" id="L58">            .map(line -&gt; StringUtils.defaultString(getCommentLinePrefix()) + line + lineBreak)</span>
-<span class="fc" id="L59">            .collect(Collectors.toList());</span>
+<span class="fc" id="L56">        sanitizedCommentLines = context.getCommentLines().stream()</span>
+<span class="fc" id="L57">            .map(this::sanitizeComment)</span>
+<span class="fc" id="L58">            .filter(Objects::nonNull)</span>
+<span class="fc" id="L59">            .map(line -&gt; StringUtils.defaultString(getCommentLinePrefix()) + line + lineBreak)</span>
+<span class="fc" id="L60">            .collect(Collectors.toList());</span>
       }
 
-<span class="fc" id="L62">      int insertPosition = getInsertPosition(content);</span>
+<span class="fc" id="L63">      int insertPosition = getInsertPosition(content);</span>
 
-<span class="fc" id="L64">      content = StringUtils.substring(content, 0, insertPosition)</span>
-<span class="fc" id="L65">          + StringUtils.defaultString(getCommentBlockStart())</span>
-<span class="fc" id="L66">          + StringUtils.join(sanitizedCommentLines, &quot;&quot;)</span>
-<span class="fc" id="L67">          + StringUtils.defaultString(getCommentBlockEnd())</span>
-<span class="fc" id="L68">          + StringUtils.defaultString(getBlockSuffix())</span>
-<span class="fc" id="L69">          + StringUtils.substring(content, insertPosition);</span>
+<span class="fc" id="L65">      content = StringUtils.substring(content, 0, insertPosition)</span>
+<span class="fc" id="L66">          + StringUtils.defaultString(getCommentBlockStart())</span>
+<span class="fc" id="L67">          + StringUtils.join(sanitizedCommentLines, &quot;&quot;)</span>
+<span class="fc" id="L68">          + StringUtils.defaultString(getCommentBlockEnd())</span>
+<span class="fc" id="L69">          + StringUtils.defaultString(getBlockSuffix())</span>
+<span class="fc" id="L70">          + StringUtils.substring(content, insertPosition);</span>
 
-<span class="fc" id="L71">      file.getFile().delete();</span>
-<span class="fc" id="L72">      FileUtils.write(file.getFile(), content, file.getCharset());</span>
+<span class="fc" id="L72">      Files.delete(file.getFile().toPath());</span>
+<span class="fc" id="L73">      FileUtils.write(file.getFile(), content, file.getCharset());</span>
     }
-<span class="nc" id="L74">    catch (IOException ex) {</span>
-<span class="nc" id="L75">      throw new GeneratorException(&quot;Unable to add file header to &quot; + file.getCanonicalPath(), ex);</span>
-<span class="fc" id="L76">    }</span>
-<span class="fc" id="L77">    return null;</span>
+<span class="nc" id="L75">    catch (IOException ex) {</span>
+<span class="nc" id="L76">      throw new GeneratorException(&quot;Unable to add file header to &quot; + file.getCanonicalPath(), ex);</span>
+<span class="fc" id="L77">    }</span>
+<span class="fc" id="L78">    return null;</span>
   }
 
   protected String sanitizeComment(String line) {
-<span class="fc" id="L81">    return line;</span>
+<span class="fc" id="L82">    return line;</span>
   }
 
   protected String getLineBreak() {
-<span class="fc" id="L85">    return &quot;\n&quot;;</span>
+<span class="fc" id="L86">    return &quot;\n&quot;;</span>
   }
 
   protected String getCommentBlockStart() {
-<span class="fc" id="L89">    return null;</span>
+<span class="fc" id="L90">    return null;</span>
   }
 
   protected String getCommentBlockEnd() {
-<span class="fc" id="L93">    return null;</span>
+<span class="fc" id="L94">    return null;</span>
   }
 
   protected String getCommentLinePrefix() {
-<span class="fc" id="L97">    return null;</span>
+<span class="fc" id="L98">    return null;</span>
   }
 
   protected String getBlockSuffix() {
-<span class="fc" id="L101">    return null;</span>
+<span class="fc" id="L102">    return null;</span>
   }
 
-  protected int getInsertPosition(@SuppressWarnings(&quot;unused&quot;) String content) {
-<span class="fc" id="L105">    return 0;</span>
+  protected int getInsertPosition(@SuppressWarnings({ &quot;unused&quot;, &quot;java:S1172&quot; }) String content) {
+<span class="fc" id="L106">    return 0;</span>
   }
 
   /**
@@ -112,22 +113,22 @@ import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
    */
   protected final FileHeaderContext extractFileHeaderBetweenBlockStartEnd(FileContext file) {
     try {
-<span class="pc bpc" id="L115" title="2 of 4 branches missed.">      if (StringUtils.isNotEmpty(getCommentBlockStart()) &amp;&amp; StringUtils.isNotEmpty(getCommentBlockEnd())) {</span>
-<span class="fc" id="L116">        String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
-<span class="fc" id="L117">        int insertPosition = getInsertPosition(content);</span>
-<span class="fc" id="L118">        int posBlockStart = content.indexOf(getCommentBlockStart());</span>
-<span class="fc" id="L119">        int posBlockEnd = content.indexOf(getCommentBlockEnd());</span>
-<span class="pc bpc" id="L120" title="1 of 4 branches missed.">        if (posBlockStart == insertPosition &amp;&amp; posBlockEnd &gt; 0) {</span>
-<span class="fc" id="L121">          String fileHeader = content.substring(posBlockStart + getCommentBlockStart().length(), posBlockEnd);</span>
-<span class="fc" id="L122">          List&lt;String&gt; lines = Arrays.asList(StringUtils.split(fileHeader, getLineBreak()));</span>
-<span class="fc" id="L123">          return new FileHeaderContext().commentLines(lines);</span>
+<span class="pc bpc" id="L116" title="2 of 4 branches missed.">      if (StringUtils.isNotEmpty(getCommentBlockStart()) &amp;&amp; StringUtils.isNotEmpty(getCommentBlockEnd())) {</span>
+<span class="fc" id="L117">        String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
+<span class="fc" id="L118">        int insertPosition = getInsertPosition(content);</span>
+<span class="fc" id="L119">        int posBlockStart = content.indexOf(getCommentBlockStart());</span>
+<span class="fc" id="L120">        int posBlockEnd = content.indexOf(getCommentBlockEnd());</span>
+<span class="pc bpc" id="L121" title="1 of 4 branches missed.">        if (posBlockStart == insertPosition &amp;&amp; posBlockEnd &gt; 0) {</span>
+<span class="fc" id="L122">          String fileHeader = content.substring(posBlockStart + getCommentBlockStart().length(), posBlockEnd);</span>
+<span class="fc" id="L123">          List&lt;String&gt; lines = Arrays.asList(StringUtils.split(fileHeader, getLineBreak()));</span>
+<span class="fc" id="L124">          return new FileHeaderContext().commentLines(lines);</span>
         }
       }
     }
-<span class="nc" id="L127">    catch (IOException ex) {</span>
-<span class="nc" id="L128">      throw new GeneratorException(&quot;Unable to parse file header from &quot; + file.getCanonicalPath(), ex);</span>
-<span class="fc" id="L129">    }</span>
-<span class="fc" id="L130">    return null;</span>
+<span class="nc" id="L128">    catch (IOException ex) {</span>
+<span class="nc" id="L129">      throw new GeneratorException(&quot;Unable to parse file header from &quot; + file.getCanonicalPath(), ex);</span>
+<span class="fc" id="L130">    }</span>
+<span class="fc" id="L131">    return null;</span>
   }
 
   /**
@@ -137,32 +138,32 @@ import io.wcm.devops.conga.generator.spi.context.FileHeaderContext;
    */
   protected final FileHeaderContext extractFileHeaderWithLinePrefixes(FileContext file) {
     try {
-<span class="pc bpc" id="L140" title="2 of 4 branches missed.">      if (StringUtils.isNotEmpty(getLineBreak()) &amp;&amp; StringUtils.isNotEmpty(getCommentLinePrefix())) {</span>
-<span class="fc" id="L141">        String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
-<span class="fc" id="L142">        int insertPosition = getInsertPosition(content);</span>
-<span class="fc" id="L143">        content = content.substring(insertPosition);</span>
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">      if (StringUtils.isNotEmpty(getLineBreak()) &amp;&amp; StringUtils.isNotEmpty(getCommentLinePrefix())) {</span>
+<span class="fc" id="L142">        String content = FileUtils.readFileToString(file.getFile(), file.getCharset());</span>
+<span class="fc" id="L143">        int insertPosition = getInsertPosition(content);</span>
+<span class="fc" id="L144">        content = content.substring(insertPosition);</span>
 
-<span class="fc" id="L145">        String[] contentLines = StringUtils.split(content, getLineBreak());</span>
-<span class="pc bpc" id="L146" title="2 of 4 branches missed.">        if (contentLines.length &gt; 0 &amp;&amp; StringUtils.startsWith(contentLines[0], getCommentLinePrefix())) {</span>
-<span class="fc" id="L147">          List&lt;String&gt; lines = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L148" title="1 of 2 branches missed.">          for (int i = 0; i &lt; contentLines.length; i++) {</span>
-<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (StringUtils.startsWith(contentLines[i], getCommentLinePrefix())) {</span>
-<span class="fc" id="L150">              lines.add(contentLines[i].substring(getCommentLinePrefix().length()));</span>
+<span class="fc" id="L146">        String[] contentLines = StringUtils.split(content, getLineBreak());</span>
+<span class="pc bpc" id="L147" title="2 of 4 branches missed.">        if (contentLines.length &gt; 0 &amp;&amp; StringUtils.startsWith(contentLines[0], getCommentLinePrefix())) {</span>
+<span class="fc" id="L148">          List&lt;String&gt; lines = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">          for (int i = 0; i &lt; contentLines.length; i++) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            if (StringUtils.startsWith(contentLines[i], getCommentLinePrefix())) {</span>
+<span class="fc" id="L151">              lines.add(contentLines[i].substring(getCommentLinePrefix().length()));</span>
             }
             else {
               break;
             }
           }
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">          if (!lines.isEmpty()) {</span>
-<span class="fc" id="L157">            return new FileHeaderContext().commentLines(lines);</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">          if (!lines.isEmpty()) {</span>
+<span class="fc" id="L158">            return new FileHeaderContext().commentLines(lines);</span>
           }
         }
       }
     }
-<span class="nc" id="L162">    catch (IOException ex) {</span>
-<span class="nc" id="L163">      throw new GeneratorException(&quot;Unable parse add file header from &quot; + file.getCanonicalPath(), ex);</span>
-<span class="nc" id="L164">    }</span>
-<span class="nc" id="L165">    return null;</span>
+<span class="nc" id="L163">    catch (IOException ex) {</span>
+<span class="nc" id="L164">      throw new GeneratorException(&quot;Unable parse add file header from &quot; + file.getCanonicalPath(), ex);</span>
+<span class="nc" id="L165">    }</span>
+<span class="nc" id="L166">    return null;</span>
   }
 
 }

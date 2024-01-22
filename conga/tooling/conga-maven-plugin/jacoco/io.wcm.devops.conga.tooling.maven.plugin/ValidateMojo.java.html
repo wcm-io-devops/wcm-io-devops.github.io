@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.SortedSet;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
@@ -200,7 +200,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
   }
 
   private &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
-      Function&lt;ResourceInfo, Boolean&gt; resourceFilter) throws MojoFailureException {
+      Predicate&lt;ResourceInfo&gt; resourceFilter) throws MojoFailureException {
 <span class="fc bfc" id="L204" title="All 2 branches covered.">    if (!sourceDir.exists()) {</span>
 <span class="fc" id="L205">      return List.of();</span>
     }
@@ -212,12 +212,12 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 
 <span class="fc" id="L213">    List&lt;T&gt; result = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L214" title="All 2 branches covered.">    for (Resource file : files) {</span>
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">      if (resourceFilter.apply(file)) {</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">      if (resourceFilter.test(file)) {</span>
 <span class="fc" id="L216">        result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));</span>
       }
 <span class="fc" id="L218">    }</span>
 <span class="fc bfc" id="L219" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
-<span class="pc bpc" id="L220" title="1 of 2 branches missed.">      if (resourceFilter.apply(dir)) {</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">      if (resourceFilter.test(dir)) {</span>
 <span class="fc" id="L221">        result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));</span>
       }
 <span class="fc" id="L223">    }</span>
@@ -269,7 +269,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 <span class="nc" id="L269">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
           }
         })
-<span class="pc" id="L272">        .flatMap(list -&gt; list.stream())</span>
+<span class="fc" id="L272">        .flatMap(List::stream)</span>
 <span class="fc" id="L273">        .collect(Collectors.toList());</span>
   }
 
@@ -295,7 +295,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 <span class="fc" id="L295">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
           &quot;classpath*:&quot; + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
 <span class="fc" id="L297">      return Arrays.stream(resources)</span>
-<span class="fc" id="L298">          .map(resource -&gt; toProperties(resource))</span>
+<span class="fc" id="L298">          .map(this::toProperties)</span>
 <span class="fc" id="L299">          .collect(Collectors.toList());</span>
     }
 <span class="nc" id="L301">    catch (IOException ex) {</span>
@@ -310,7 +310,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 <span class="fc" id="L310">      return props;</span>
     }
 <span class="nc" id="L312">    catch (IOException ex) {</span>
-<span class="nc" id="L313">      throw new RuntimeException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
+<span class="nc" id="L313">      throw new IllegalArgumentException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
     }
   }
 

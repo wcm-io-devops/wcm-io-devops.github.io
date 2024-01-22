@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      <em class="jxr_comment">// collect configuration environment directories</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      File configRootDir = getTargetDir();
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      List&lt;File&gt; environmentDirs = Arrays.stream(configRootDir.listFiles())
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          .filter(file -&gt; file.isDirectory())
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          .filter(File::isDirectory)
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          .filter(dir -&gt; selectedEnvironments == <strong class="jxr_keyword">null</strong> || selectedEnvironments.contains(dir.getName()))
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          .collect(Collectors.toList());
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  

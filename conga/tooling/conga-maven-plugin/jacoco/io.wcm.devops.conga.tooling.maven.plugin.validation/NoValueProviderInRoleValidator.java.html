@@ -37,7 +37,7 @@ import io.wcm.devops.conga.resource.Resource;
  */
 <span class="fc" id="L38">public final class NoValueProviderInRoleValidator implements DefinitionValidator&lt;Void&gt; {</span>
 
-<span class="fc" id="L40">  private final ModelReader&lt;Map&gt; mapReader = new MapReader();</span>
+<span class="fc" id="L40">  private final ModelReader&lt;Map&lt;String, Object&gt;&gt; mapReader = new MapReader();</span>
 
   @Override
   @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
@@ -71,7 +71,7 @@ import io.wcm.devops.conga.resource.Resource;
     }
 <span class="fc" id="L72">  }</span>
 
-  private static class MapReader extends AbstractModelReader&lt;Map&gt; {
+  private static class MapReader extends AbstractModelReader&lt;Map&lt;String, Object&gt;&gt; {
     MapReader() {
 <span class="fc" id="L76">      super(getYaml());</span>
 <span class="fc" id="L77">    }</span>

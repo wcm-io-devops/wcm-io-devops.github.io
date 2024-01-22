@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -43,7 +44,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
  * artifact.
  */
 @Mojo(name = &quot;generate-version-info&quot;, defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresProject = true, threadSafe = true)
-<span class="fc" id="L46">public class GenerateVersionInfoMojo extends AbstractMojo {</span>
+<span class="fc" id="L47">public class GenerateVersionInfoMojo extends AbstractMojo {</span>
 
   /**
    * Target path for the prepared definition files.
@@ -57,24 +58,29 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
   @Override
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public void execute() throws MojoExecutionException, MojoFailureException {
-<span class="fc" id="L60">    File outputDir = new File(definitionTarget, GeneratorOptions.CLASSPATH_PREFIX);</span>
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">    if (!outputDir.exists()) {</span>
-<span class="fc" id="L62">      outputDir.mkdirs();</span>
+<span class="fc" id="L61">    File outputDir = new File(definitionTarget, GeneratorOptions.CLASSPATH_PREFIX);</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">    if (!outputDir.exists()) {</span>
+<span class="fc" id="L63">      outputDir.mkdirs();</span>
     }
 
-<span class="fc" id="L65">    File propsFile = new File(outputDir, BuildConstants.FILE_VERSION_INFO);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">    if (propsFile.exists()) {</span>
-<span class="nc" id="L67">      propsFile.delete();</span>
+<span class="fc" id="L66">    File propsFile = new File(outputDir, BuildConstants.FILE_VERSION_INFO);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if (propsFile.exists()) {</span>
+      try {
+<span class="nc" id="L69">        Files.delete(propsFile.toPath());</span>
+      }
+<span class="nc" id="L71">      catch (IOException ex) {</span>
+<span class="nc" id="L72">        throw new MojoExecutionException(&quot;Unable to delete file: &quot; + FileUtil.getCanonicalPath(propsFile), ex);</span>
+<span class="nc" id="L73">      }</span>
     }
-<span class="fc" id="L69">    Properties versionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
-<span class="fc" id="L70">    try (OutputStream os = new FileOutputStream(propsFile)) {</span>
-<span class="fc" id="L71">      versionInfo.store(os, &quot;CONGA Version Info&quot;);</span>
+<span class="fc" id="L75">    Properties versionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
+<span class="fc" id="L76">    try (OutputStream os = new FileOutputStream(propsFile)) {</span>
+<span class="fc" id="L77">      versionInfo.store(os, &quot;CONGA Version Info&quot;);</span>
     }
-<span class="nc" id="L73">    catch (IOException ex) {</span>
-<span class="nc" id="L74">      throw new MojoExecutionException(&quot;Error generating version info to &quot;</span>
-<span class="nc" id="L75">          + FileUtil.getCanonicalPath(propsFile) + &quot;: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L76">    }</span>
-<span class="fc" id="L77">  }</span>
+<span class="nc" id="L79">    catch (IOException ex) {</span>
+<span class="nc" id="L80">      throw new MojoExecutionException(&quot;Error generating version info to &quot;</span>
+<span class="nc" id="L81">          + FileUtil.getCanonicalPath(propsFile) + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L82">    }</span>
+<span class="fc" id="L83">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

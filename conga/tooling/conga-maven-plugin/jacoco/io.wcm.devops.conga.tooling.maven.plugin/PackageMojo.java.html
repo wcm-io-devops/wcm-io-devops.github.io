@@ -90,7 +90,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
     // collect configuration environment directories
 <span class="fc" id="L91">    File configRootDir = getTargetDir();</span>
 <span class="fc" id="L92">    List&lt;File&gt; environmentDirs = Arrays.stream(configRootDir.listFiles())</span>
-<span class="fc" id="L93">        .filter(file -&gt; file.isDirectory())</span>
+<span class="fc" id="L93">        .filter(File::isDirectory)</span>
 <span class="pc bpc" id="L94" title="3 of 4 branches missed.">        .filter(dir -&gt; selectedEnvironments == null || selectedEnvironments.contains(dir.getName()))</span>
 <span class="fc" id="L95">        .collect(Collectors.toList());</span>
 

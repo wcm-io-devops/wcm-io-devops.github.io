@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -43,12 +43,12 @@ import io.wcm.devops.conga.model.util.MapExpander;
 /**
  * Handlebars helper that extends the each helper by iterating only on list items that match a certain condition.
  */
-abstract class AbstractEachIfHelper implements HelperPlugin {
+abstract class AbstractEachIfHelper implements HelperPlugin&lt;Object&gt; {
 
 <span class="fc" id="L48">  private final Helper&lt;Object&gt; delegate = new EachHelper();</span>
-  private final BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator;
+  private final BiPredicate&lt;Object, Options&gt; propertyEvaluator;
 
-<span class="fc" id="L51">  AbstractEachIfHelper(BiFunction&lt;Object, Options, Boolean&gt; propertyEvaluator) {</span>
+<span class="fc" id="L51">  AbstractEachIfHelper(BiPredicate&lt;Object, Options&gt; propertyEvaluator) {</span>
 <span class="fc" id="L52">    this.propertyEvaluator = propertyEvaluator;</span>
 <span class="fc" id="L53">  }</span>
 
@@ -90,7 +90,7 @@ abstract class AbstractEachIfHelper implements HelperPlugin {
   private boolean checkProperty(Object item, String propertyName, Options options) {
 <span class="fc" id="L91">    Map&lt;String, Object&gt; propertyMap = toMap(options.propertySet(item));</span>
 <span class="fc" id="L92">    Object value = MapExpander.getDeep(propertyMap, propertyName);</span>
-<span class="fc" id="L93">    return propertyEvaluator.apply(value, options);</span>
+<span class="fc" id="L93">    return propertyEvaluator.test(value, options);</span>
   }
 
   private Map&lt;String, Object&gt; toMap(Set&lt;Entry&lt;String, Object&gt;&gt; entries) {
