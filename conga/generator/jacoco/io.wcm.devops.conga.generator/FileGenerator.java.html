@@ -214,54 +214,60 @@ class FileGenerator {
 
     Collection&lt;GeneratedFileContext&gt; postProcessedFiles;
 <span class="fc bfc" id="L216" title="All 2 branches covered.">    if (template != null) {</span>
-<span class="fc" id="L217">      log.info(&quot;Generate file {}&quot;, getFilenameForLog(fileContext));</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">      if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L218">        log.info(&quot;Generate file {}&quot;, getFilenameForLog(fileContext));</span>
+      }
 
       // generate with template
-<span class="fc" id="L220">      generateWithTemplate();</span>
+<span class="fc" id="L222">      generateWithTemplate();</span>
 
       // add file header, validate and post-process generated file
-<span class="fc" id="L223">      applyFileHeader(fileContext, roleFile.getFileHeader());</span>
-<span class="fc" id="L224">      applyValidation(fileContext, roleFile.getValidators());</span>
-<span class="fc" id="L225">      postProcessedFiles = applyPostProcessor(fileContext);</span>
+<span class="fc" id="L225">      applyFileHeader(fileContext, roleFile.getFileHeader());</span>
+<span class="fc" id="L226">      applyValidation(fileContext, roleFile.getValidators());</span>
+<span class="fc" id="L227">      postProcessedFiles = applyPostProcessor(fileContext);</span>
 
     }
-<span class="fc bfc" id="L228" title="All 2 branches covered.">    else if (StringUtils.isNotBlank(url)) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">    else if (StringUtils.isNotBlank(url)) {</span>
 
       // if copying from a local file try to create a symlink instead of coyping it
-<span class="fc" id="L231">      boolean symlinkCreated = false;</span>
-<span class="pc bpc" id="L232" title="5 of 8 branches missed.">      if (allowSymlinks &amp;&amp; !symlinkCreationFailed &amp;&amp; urlFileManager.isLocalFile(url) &amp;&amp; !roleFile.isDeleteSource()) {</span>
-<span class="nc" id="L233">        log.info(&quot;Symlink file {} from {}&quot;, getFilenameForLog(fileContext), url);</span>
-<span class="nc bnc" id="L234" title="All 2 branches missed.">        if (createSymlinkToLocalFile()) {</span>
-<span class="nc" id="L235">          symlinkCreated = true;</span>
+<span class="fc" id="L233">      boolean symlinkCreated = false;</span>
+<span class="pc bpc" id="L234" title="5 of 8 branches missed.">      if (allowSymlinks &amp;&amp; !symlinkCreationFailed &amp;&amp; urlFileManager.isLocalFile(url) &amp;&amp; !roleFile.isDeleteSource()) {</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L236">          log.info(&quot;Symlink file {} from {}&quot;, getFilenameForLog(fileContext), url);</span>
+        }
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        if (createSymlinkToLocalFile()) {</span>
+<span class="nc" id="L239">          symlinkCreated = true;</span>
         }
         else {
-<span class="nc" id="L238">          symlinkCreationFailed = true;</span>
+<span class="nc" id="L242">          symlinkCreationFailed = true;</span>
         }
       }
 
       // generate by downloading/copying from URL
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">      if (!symlinkCreated) {</span>
-<span class="fc" id="L244">        log.info(&quot;Copy file {} from {}&quot;, getFilenameForLog(fileContext), url);</span>
-<span class="fc" id="L245">        copyFromUrlFile();</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">      if (!symlinkCreated) {</span>
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L249">          log.info(&quot;Copy file {} from {}&quot;, getFilenameForLog(fileContext), url);</span>
+        }
+<span class="fc" id="L251">        copyFromUrlFile();</span>
       }
 
       // post-process downloaded or symlinked file
-<span class="fc" id="L249">      postProcessedFiles = applyPostProcessor(fileContext);</span>
-<span class="fc" id="L250">    }</span>
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">    else if (StringUtils.isNotBlank(symlinkTarget)) {</span>
+<span class="fc" id="L255">      postProcessedFiles = applyPostProcessor(fileContext);</span>
+<span class="fc" id="L256">    }</span>
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">    else if (StringUtils.isNotBlank(symlinkTarget)) {</span>
 
       // create a symlink pointing to the given target
-<span class="fc" id="L254">      createSymlinkToSymlinkTarget();</span>
+<span class="fc" id="L260">      createSymlinkToSymlinkTarget();</span>
 
       // post-process symlinked file
-<span class="fc" id="L257">      postProcessedFiles = applyPostProcessor(fileContext);</span>
+<span class="fc" id="L263">      postProcessedFiles = applyPostProcessor(fileContext);</span>
 
     }
     else {
-<span class="nc" id="L261">      throw new IOException(&quot;No template, URL or symlink target defined for file: &quot; + FileUtil.getFileInfo(roleName, roleFile));</span>
+<span class="nc" id="L267">      throw new IOException(&quot;No template, URL or symlink target defined for file: &quot; + FileUtil.getFileInfo(roleName, roleFile));</span>
     }
 
-<span class="fc" id="L264">    return postProcessedFiles;</span>
+<span class="fc" id="L270">    return postProcessedFiles;</span>
   }
 
   /**
@@ -269,28 +275,28 @@ class FileGenerator {
    * Use unix file endings by default.
    */
   private void generateWithTemplate() throws IOException {
-<span class="fc" id="L272">    try (FileOutputStream fos = new FileOutputStream(file);</span>
-<span class="fc" id="L273">        Writer fileWriter = new OutputStreamWriter(fos, roleFile.getCharset())) {</span>
-<span class="fc" id="L274">      StringWriter stringWriter = new StringWriter();</span>
-<span class="fc" id="L275">      template.apply(config, stringWriter);</span>
-<span class="fc" id="L276">      fileWriter.write(normalizeLineEndings(stringWriter.toString()));</span>
-<span class="fc" id="L277">      fileWriter.flush();</span>
+<span class="fc" id="L278">    try (FileOutputStream fos = new FileOutputStream(file);</span>
+<span class="fc" id="L279">        Writer fileWriter = new OutputStreamWriter(fos, roleFile.getCharset())) {</span>
+<span class="fc" id="L280">      StringWriter stringWriter = new StringWriter();</span>
+<span class="fc" id="L281">      template.apply(config, stringWriter);</span>
+<span class="fc" id="L282">      fileWriter.write(normalizeLineEndings(stringWriter.toString()));</span>
+<span class="fc" id="L283">      fileWriter.flush();</span>
     }
-<span class="fc" id="L279">  }</span>
+<span class="fc" id="L285">  }</span>
 
   /**
    * Generate file by downloading/copying it's binary content from URL.
    */
   private void copyFromUrlFile() throws IOException {
-<span class="fc" id="L285">    try (FileOutputStream fos = new FileOutputStream(file);</span>
-<span class="fc" id="L286">        InputStream is = urlFileManager.getFile(url)) {</span>
-<span class="fc" id="L287">      IOUtils.copy(is, fos);</span>
-<span class="fc" id="L288">      fos.flush();</span>
+<span class="fc" id="L291">    try (FileOutputStream fos = new FileOutputStream(file);</span>
+<span class="fc" id="L292">        InputStream is = urlFileManager.getFile(url)) {</span>
+<span class="fc" id="L293">      IOUtils.copy(is, fos);</span>
+<span class="fc" id="L294">      fos.flush();</span>
     }
-<span class="fc bfc" id="L290" title="All 2 branches covered.">    if (roleFile.isDeleteSource()) {</span>
-<span class="fc" id="L291">      urlFileManager.deleteFile(url);</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">    if (roleFile.isDeleteSource()) {</span>
+<span class="fc" id="L297">      urlFileManager.deleteFile(url);</span>
     }
-<span class="fc" id="L293">  }</span>
+<span class="fc" id="L299">  }</span>
 
   /**
    * Create a symlink to a local file.
@@ -300,17 +306,17 @@ class FileGenerator {
   @SuppressWarnings(&quot;PMD.GuardLogStatement&quot;)
   private boolean createSymlinkToLocalFile() throws IOException {
     // if file is a local file try to create a symlink to it
-<span class="nc" id="L303">    File localFile = urlFileManager.getLocalFile(url);</span>
-<span class="nc" id="L304">    Path linkPath = file.toPath();</span>
-<span class="nc" id="L305">    Path targetPath = localFile.toPath();</span>
+<span class="nc" id="L309">    File localFile = urlFileManager.getLocalFile(url);</span>
+<span class="nc" id="L310">    Path linkPath = file.toPath();</span>
+<span class="nc" id="L311">    Path targetPath = localFile.toPath();</span>
     try {
-<span class="nc" id="L307">      Files.createSymbolicLink(linkPath, targetPath);</span>
-<span class="nc" id="L308">      return true;</span>
+<span class="nc" id="L313">      Files.createSymbolicLink(linkPath, targetPath);</span>
+<span class="nc" id="L314">      return true;</span>
     }
-<span class="nc" id="L310">    catch (IOException ex) {</span>
+<span class="nc" id="L316">    catch (IOException ex) {</span>
       // creates symbolic link failed - log warning and fallback to copying content
-<span class="nc" id="L312">      log.warn(&quot;Unable to create symbolic link: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L313">      return false;</span>
+<span class="nc" id="L318">      log.warn(&quot;Unable to create symbolic link: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L319">      return false;</span>
     }
   }
 
@@ -320,28 +326,28 @@ class FileGenerator {
    */
   @SuppressWarnings(&quot;PMD.GuardLogStatement&quot;)
   private void createSymlinkToSymlinkTarget() throws IOException {
-<span class="fc" id="L323">    File localFile = new File(nodeDir, this.symlinkTarget);</span>
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">    if (!localFile.exists()) {</span>
-<span class="nc" id="L325">      throw new IOException(&quot;Symlink target file not found: &quot; + FileUtil.getCanonicalPath(localFile));</span>
+<span class="fc" id="L329">    File localFile = new File(nodeDir, this.symlinkTarget);</span>
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">    if (!localFile.exists()) {</span>
+<span class="nc" id="L331">      throw new IOException(&quot;Symlink target file not found: &quot; + FileUtil.getCanonicalPath(localFile));</span>
     }
-<span class="fc" id="L327">    Path linkPath = file.toPath();</span>
-<span class="fc" id="L328">    Path targetPath = localFile.toPath();</span>
-<span class="fc" id="L329">    Path relativizedPath = file.getParentFile().toPath().relativize(targetPath);</span>
+<span class="fc" id="L333">    Path linkPath = file.toPath();</span>
+<span class="fc" id="L334">    Path targetPath = localFile.toPath();</span>
+<span class="fc" id="L335">    Path relativizedPath = file.getParentFile().toPath().relativize(targetPath);</span>
     try {
-<span class="fc" id="L331">      Files.createSymbolicLink(linkPath, relativizedPath);</span>
+<span class="fc" id="L337">      Files.createSymbolicLink(linkPath, relativizedPath);</span>
     }
-<span class="nc" id="L333">    catch (IOException ex) {</span>
+<span class="nc" id="L339">    catch (IOException ex) {</span>
       // creates symbolic link failed - create text file with link instead (similar to git)
-<span class="nc" id="L335">      log.warn(&quot;Created link textfile instead of symbolic link: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L336">      FileUtils.write(linkPath.toFile(), relativizedPath.toString(), StandardCharsets.UTF_8);</span>
-<span class="fc" id="L337">    }</span>
-<span class="fc" id="L338">  }</span>
+<span class="nc" id="L341">      log.warn(&quot;Created link textfile instead of symbolic link: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L342">      FileUtils.write(linkPath.toFile(), relativizedPath.toString(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L343">    }</span>
+<span class="fc" id="L344">  }</span>
 
   private String normalizeLineEndings(String value) {
     // convert/normalize all line endings to unix style
-<span class="fc" id="L342">    String normalizedLineEndings = LineEndingConverter.normalizeToUnix(value);</span>
+<span class="fc" id="L348">    String normalizedLineEndings = LineEndingConverter.normalizeToUnix(value);</span>
     // and then to the line-ending style as requested in the tempalte definition
-<span class="fc" id="L344">    return LineEndingConverter.convertTo(normalizedLineEndings, roleFile.getLineEndings());</span>
+<span class="fc" id="L350">    return LineEndingConverter.convertTo(normalizedLineEndings, roleFile.getLineEndings());</span>
   }
 
   /**
@@ -358,163 +364,169 @@ class FileGenerator {
   private &lt;T, R, P extends FilePlugin&lt;T, R&gt;&gt; Stream&lt;P&gt; collectFilePlugins(Class&lt;P&gt; pluginClass, FileContext fileItem, T contextObject,
       List&lt;String&gt; pluginNames) {
     Stream&lt;P&gt; plugins;
-<span class="fc bfc" id="L361" title="All 2 branches covered.">    if (pluginNames.isEmpty()) {</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">    if (pluginNames.isEmpty()) {</span>
       // auto-detect matching plugins if none are defined
-<span class="fc" id="L363">      plugins = pluginManager.getAll(pluginClass).stream()</span>
-<span class="fc" id="L364">          .filter(plugin -&gt; plugin.accepts(fileItem, contextObject))</span>
-<span class="fc bfc" id="L365" title="All 2 branches covered.">          .filter(plugin -&gt; plugin.implicitApply(fileItem, contextObject) == ImplicitApplyOptions.WHEN_UNCONFIGURED);</span>
+<span class="fc" id="L369">      plugins = pluginManager.getAll(pluginClass).stream()</span>
+<span class="fc" id="L370">          .filter(plugin -&gt; plugin.accepts(fileItem, contextObject))</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">          .filter(plugin -&gt; plugin.implicitApply(fileItem, contextObject) == ImplicitApplyOptions.WHEN_UNCONFIGURED);</span>
     }
     else {
       // otherwise apply selected plugins
-<span class="fc" id="L369">      plugins = pluginNames.stream()</span>
-<span class="fc" id="L370">          .map(name -&gt; pluginManager.get(name, pluginClass));</span>
+<span class="fc" id="L375">      plugins = pluginNames.stream()</span>
+<span class="fc" id="L376">          .map(name -&gt; pluginManager.get(name, pluginClass));</span>
     }
     // add plugins that should always apply
-<span class="fc" id="L373">    return Stream.concat(plugins, pluginManager.getAll(pluginClass).stream()</span>
-<span class="fc" id="L374">          .filter(plugin -&gt; plugin.accepts(fileItem, contextObject))</span>
-<span class="fc bfc" id="L375" title="All 2 branches covered.">          .filter(plugin -&gt; plugin.implicitApply(fileItem, contextObject) == ImplicitApplyOptions.ALWAYS));</span>
+<span class="fc" id="L379">    return Stream.concat(plugins, pluginManager.getAll(pluginClass).stream()</span>
+<span class="fc" id="L380">          .filter(plugin -&gt; plugin.accepts(fileItem, contextObject))</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">          .filter(plugin -&gt; plugin.implicitApply(fileItem, contextObject) == ImplicitApplyOptions.ALWAYS));</span>
   }
 
   private void applyFileHeader(FileContext fileItem, String pluginName) {
-<span class="fc" id="L379">    List&lt;String&gt; pluginNames = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L380" title="All 2 branches covered.">    if (!StringUtils.isEmpty(pluginName)) {</span>
-<span class="fc" id="L381">      pluginNames.add(pluginName);</span>
+<span class="fc" id="L385">    List&lt;String&gt; pluginNames = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L386" title="All 2 branches covered.">    if (!StringUtils.isEmpty(pluginName)) {</span>
+<span class="fc" id="L387">      pluginNames.add(pluginName);</span>
     }
-<span class="fc" id="L383">    collectFilePlugins(FileHeaderPlugin.class, fileItem, fileHeaderContext, pluginNames)</span>
-<span class="pc bpc" id="L384" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneFileHeader.NAME))</span>
-<span class="fc" id="L385">        .forEach(plugin -&gt; applyFileHeader(fileItem, plugin));</span>
-<span class="fc" id="L386">  }</span>
+<span class="fc" id="L389">    collectFilePlugins(FileHeaderPlugin.class, fileItem, fileHeaderContext, pluginNames)</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneFileHeader.NAME))</span>
+<span class="fc" id="L391">        .forEach(plugin -&gt; applyFileHeader(fileItem, plugin));</span>
+<span class="fc" id="L392">  }</span>
 
   private void applyFileHeader(FileContext fileItem, FileHeaderPlugin plugin) {
-<span class="fc" id="L389">    log.debug(&quot;  Add {} file header to file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
-<span class="fc" id="L390">    plugin.apply(fileItem, fileHeaderContext);</span>
-<span class="fc" id="L391">  }</span>
+<span class="pc bpc" id="L395" title="1 of 2 branches missed.">    if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L396">      log.debug(&quot;  Add {} file header to file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
+    }
+<span class="fc" id="L398">    plugin.apply(fileItem, fileHeaderContext);</span>
+<span class="fc" id="L399">  }</span>
 
   private void applyValidation(FileContext fileItem, List&lt;String&gt; pluginNames) {
-<span class="fc" id="L394">    collectFilePlugins(ValidatorPlugin.class, fileItem, validatorContext, pluginNames)</span>
-<span class="pc bpc" id="L395" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneValidator.NAME))</span>
-<span class="fc" id="L396">        .forEach(plugin -&gt; applyValidation(fileItem, plugin));</span>
-<span class="fc" id="L397">  }</span>
+<span class="fc" id="L402">    collectFilePlugins(ValidatorPlugin.class, fileItem, validatorContext, pluginNames)</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneValidator.NAME))</span>
+<span class="fc" id="L404">        .forEach(plugin -&gt; applyValidation(fileItem, plugin));</span>
+<span class="fc" id="L405">  }</span>
 
   private void applyValidation(FileContext fileItem, ValidatorPlugin plugin) {
-<span class="fc" id="L400">    log.info(&quot;  Validate {} for file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
-<span class="fc" id="L401">    plugin.apply(fileItem, validatorContext);</span>
-<span class="fc" id="L402">  }</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">    if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L409">      log.info(&quot;  Validate {} for file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
+    }
+<span class="fc" id="L411">    plugin.apply(fileItem, validatorContext);</span>
+<span class="fc" id="L412">  }</span>
 
   private Collection&lt;GeneratedFileContext&gt; applyPostProcessor(FileContext fileItem) {
     // collect distinct list of files returned by each post processor
     // if a file is returned by multiple post processors combine to single entry with multiple plugin names
-<span class="fc" id="L407">    Map&lt;String, GeneratedFileContext&gt; consolidatedFiles = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L417">    Map&lt;String, GeneratedFileContext&gt; consolidatedFiles = new LinkedHashMap&lt;&gt;();</span>
 
     // start with original file
-<span class="fc" id="L410">    consolidatedFiles.put(fileContext.getCanonicalPath(), new GeneratedFileContext().fileContext(fileContext));</span>
+<span class="fc" id="L420">    consolidatedFiles.put(fileContext.getCanonicalPath(), new GeneratedFileContext().fileContext(fileContext));</span>
 
     // collect postprocessor plugins
-<span class="fc" id="L413">    Stream&lt;PostProcessorPlugin&gt; postProcessors = collectFilePlugins(PostProcessorPlugin.class, fileItem, postProcessorContext,</span>
-<span class="fc" id="L414">        roleFile.getPostProcessors());</span>
+<span class="fc" id="L423">    Stream&lt;PostProcessorPlugin&gt; postProcessors = collectFilePlugins(PostProcessorPlugin.class, fileItem, postProcessorContext,</span>
+<span class="fc" id="L424">        roleFile.getPostProcessors());</span>
 
     // process all processors. if multiple processors each processor processed the files of the previous one.
-<span class="fc" id="L417">    postProcessors.forEach(plugin -&gt; applyPostProcessor(consolidatedFiles, plugin));</span>
+<span class="fc" id="L427">    postProcessors.forEach(plugin -&gt; applyPostProcessor(consolidatedFiles, plugin));</span>
 
-<span class="fc" id="L419">    return consolidatedFiles.values();</span>
+<span class="fc" id="L429">    return consolidatedFiles.values();</span>
   }
 
   private void applyPostProcessor(Map&lt;String, GeneratedFileContext&gt; consolidatedFiles, PostProcessorPlugin plugin) {
 
     // process all files from given map
-<span class="fc" id="L425">    List.copyOf(consolidatedFiles.values()).stream()</span>
+<span class="fc" id="L435">    List.copyOf(consolidatedFiles.values()).stream()</span>
         // do not apply post processor twice
-<span class="fc bfc" id="L427" title="All 2 branches covered.">        .filter(fileItem -&gt; !fileItem.getPostProcessors().contains(plugin.getName()))</span>
-<span class="fc" id="L428">        .filter(fileItem -&gt; plugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
-<span class="fc" id="L429">        .forEach(fileItem -&gt; {</span>
-<span class="fc" id="L430">          List&lt;FileContext&gt; processedFiles = applyPostProcessor(fileItem.getFileContext(), plugin);</span>
-<span class="fc" id="L431">          fileItem.postProcessor(plugin.getName());</span>
-<span class="fc" id="L432">          processedFiles.forEach(item -&gt; {</span>
-<span class="fc" id="L433">            GeneratedFileContext generatedFileContext = consolidatedFiles.get(item.getCanonicalPath());</span>
-<span class="pc bpc" id="L434" title="1 of 2 branches missed.">            if (generatedFileContext == null) {</span>
-<span class="fc" id="L435">              generatedFileContext = new GeneratedFileContext().fileContext(item);</span>
-<span class="fc" id="L436">              consolidatedFiles.put(item.getCanonicalPath(), generatedFileContext);</span>
+<span class="fc bfc" id="L437" title="All 2 branches covered.">        .filter(fileItem -&gt; !fileItem.getPostProcessors().contains(plugin.getName()))</span>
+<span class="fc" id="L438">        .filter(fileItem -&gt; plugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
+<span class="fc" id="L439">        .forEach(fileItem -&gt; {</span>
+<span class="fc" id="L440">          List&lt;FileContext&gt; processedFiles = applyPostProcessor(fileItem.getFileContext(), plugin);</span>
+<span class="fc" id="L441">          fileItem.postProcessor(plugin.getName());</span>
+<span class="fc" id="L442">          processedFiles.forEach(item -&gt; {</span>
+<span class="fc" id="L443">            GeneratedFileContext generatedFileContext = consolidatedFiles.get(item.getCanonicalPath());</span>
+<span class="pc bpc" id="L444" title="1 of 2 branches missed.">            if (generatedFileContext == null) {</span>
+<span class="fc" id="L445">              generatedFileContext = new GeneratedFileContext().fileContext(item);</span>
+<span class="fc" id="L446">              consolidatedFiles.put(item.getCanonicalPath(), generatedFileContext);</span>
             }
-<span class="fc" id="L438">            generatedFileContext.postProcessor(plugin.getName());</span>
-<span class="fc" id="L439">          });</span>
-<span class="fc" id="L440">      });</span>
+<span class="fc" id="L448">            generatedFileContext.postProcessor(plugin.getName());</span>
+<span class="fc" id="L449">          });</span>
+<span class="fc" id="L450">      });</span>
 
     // remove items that do no longer exist
-<span class="fc" id="L443">    List.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>
-<span class="fc bfc" id="L444" title="All 2 branches covered.">      if (!fileItem.getFileContext().getFile().exists()) {</span>
-<span class="fc" id="L445">        consolidatedFiles.remove(fileItem.getFileContext().getCanonicalPath());</span>
+<span class="fc" id="L453">    List.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>
+<span class="fc bfc" id="L454" title="All 2 branches covered.">      if (!fileItem.getFileContext().getFile().exists()) {</span>
+<span class="fc" id="L455">        consolidatedFiles.remove(fileItem.getFileContext().getCanonicalPath());</span>
       }
-<span class="fc" id="L447">    });</span>
+<span class="fc" id="L457">    });</span>
 
     // apply post processor configured as implicit ALWAYS
-<span class="fc" id="L450">    consolidatedFiles.values().forEach(fileItem -&gt;</span>
-<span class="fc" id="L451">      pluginManager.getAll(PostProcessorPlugin.class).stream()</span>
-<span class="fc" id="L452">          .filter(implicitPlugin -&gt; implicitPlugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
-<span class="fc bfc" id="L453" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; implicitPlugin.implicitApply(fileItem.getFileContext(), postProcessorContext) == ImplicitApplyOptions.ALWAYS)</span>
+<span class="fc" id="L460">    consolidatedFiles.values().forEach(fileItem -&gt;</span>
+<span class="fc" id="L461">      pluginManager.getAll(PostProcessorPlugin.class).stream()</span>
+<span class="fc" id="L462">          .filter(implicitPlugin -&gt; implicitPlugin.accepts(fileItem.getFileContext(), postProcessorContext))</span>
+<span class="fc bfc" id="L463" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; implicitPlugin.implicitApply(fileItem.getFileContext(), postProcessorContext) == ImplicitApplyOptions.ALWAYS)</span>
           // do not apply post processor twice
-<span class="fc bfc" id="L455" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; !fileItem.getPostProcessors().contains(implicitPlugin.getName()))</span>
-<span class="fc" id="L456">          .forEach(implicitPlugin -&gt; {</span>
-<span class="fc" id="L457">            List&lt;FileContext&gt; processedFiles = applyPostProcessor(fileItem.getFileContext(), implicitPlugin);</span>
-<span class="fc" id="L458">            fileItem.postProcessor(implicitPlugin.getName());</span>
-<span class="fc" id="L459">            processedFiles.forEach(item -&gt; {</span>
-<span class="nc" id="L460">              GeneratedFileContext generatedFileContext = consolidatedFiles.get(item.getCanonicalPath());</span>
-<span class="nc bnc" id="L461" title="All 2 branches missed.">              if (generatedFileContext == null) {</span>
-<span class="nc" id="L462">                generatedFileContext = new GeneratedFileContext().fileContext(item);</span>
-<span class="nc" id="L463">                consolidatedFiles.put(item.getCanonicalPath(), generatedFileContext);</span>
+<span class="fc bfc" id="L465" title="All 2 branches covered.">          .filter(implicitPlugin -&gt; !fileItem.getPostProcessors().contains(implicitPlugin.getName()))</span>
+<span class="fc" id="L466">          .forEach(implicitPlugin -&gt; {</span>
+<span class="fc" id="L467">            List&lt;FileContext&gt; processedFiles = applyPostProcessor(fileItem.getFileContext(), implicitPlugin);</span>
+<span class="fc" id="L468">            fileItem.postProcessor(implicitPlugin.getName());</span>
+<span class="fc" id="L469">            processedFiles.forEach(item -&gt; {</span>
+<span class="nc" id="L470">              GeneratedFileContext generatedFileContext = consolidatedFiles.get(item.getCanonicalPath());</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">              if (generatedFileContext == null) {</span>
+<span class="nc" id="L472">                generatedFileContext = new GeneratedFileContext().fileContext(item);</span>
+<span class="nc" id="L473">                consolidatedFiles.put(item.getCanonicalPath(), generatedFileContext);</span>
               }
-<span class="nc" id="L465">              generatedFileContext.postProcessor(implicitPlugin.getName());</span>
-<span class="nc" id="L466">            });</span>
-<span class="fc" id="L467">          })</span>
+<span class="nc" id="L475">              generatedFileContext.postProcessor(implicitPlugin.getName());</span>
+<span class="nc" id="L476">            });</span>
+<span class="fc" id="L477">          })</span>
     );
 
     // remove items that do no longer exist
-<span class="fc" id="L471">    List.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>
-<span class="pc bpc" id="L472" title="1 of 2 branches missed.">      if (!fileItem.getFileContext().getFile().exists()) {</span>
-<span class="nc" id="L473">        consolidatedFiles.remove(fileItem.getFileContext().getCanonicalPath());</span>
+<span class="fc" id="L481">    List.copyOf(consolidatedFiles.values()).forEach(fileItem -&gt; {</span>
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">      if (!fileItem.getFileContext().getFile().exists()) {</span>
+<span class="nc" id="L483">        consolidatedFiles.remove(fileItem.getFileContext().getCanonicalPath());</span>
       }
-<span class="fc" id="L475">    });</span>
+<span class="fc" id="L485">    });</span>
 
-<span class="fc" id="L477">  }</span>
+<span class="fc" id="L487">  }</span>
 
   private List&lt;FileContext&gt; applyPostProcessor(FileContext fileItem, PostProcessorPlugin plugin) {
-<span class="fc" id="L480">    log.info(&quot;  Post-process {} for file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
-
-<span class="fc" id="L482">    List&lt;FileContext&gt; processedFiles = plugin.apply(fileItem, postProcessorContext);</span>
-
-<span class="pc bpc" id="L484" title="1 of 2 branches missed.">    if (processedFiles != null) {</span>
-      // add file header, validate files
-<span class="fc" id="L486">      processedFiles.forEach(processedFile -&gt; {</span>
-<span class="fc" id="L487">        applyFileHeader(processedFile, getPostProcessorFileHeader());</span>
-<span class="fc" id="L488">        applyValidation(processedFile, getPostProcessorValidators());</span>
-<span class="fc" id="L489">      });</span>
+<span class="pc bpc" id="L490" title="1 of 2 branches missed.">    if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L491">      log.info(&quot;  Post-process {} for file {}&quot;, plugin.getName(), getFilenameForLog(fileItem));</span>
     }
 
-<span class="fc" id="L492">    return processedFiles;</span>
+<span class="fc" id="L494">    List&lt;FileContext&gt; processedFiles = plugin.apply(fileItem, postProcessorContext);</span>
+
+<span class="pc bpc" id="L496" title="1 of 2 branches missed.">    if (processedFiles != null) {</span>
+      // add file header, validate files
+<span class="fc" id="L498">      processedFiles.forEach(processedFile -&gt; {</span>
+<span class="fc" id="L499">        applyFileHeader(processedFile, getPostProcessorFileHeader());</span>
+<span class="fc" id="L500">        applyValidation(processedFile, getPostProcessorValidators());</span>
+<span class="fc" id="L501">      });</span>
+    }
+
+<span class="fc" id="L504">    return processedFiles;</span>
   }
 
   private String getPostProcessorFileHeader() {
-<span class="fc" id="L496">    Object fileHeader = MapExpander.getDeep(postProcessorContext.getOptions(), POSTPROCESSOR_KEY_FILE_HEADER);</span>
-<span class="fc bfc" id="L497" title="All 2 branches covered.">    if (fileHeader instanceof String) {</span>
-<span class="fc" id="L498">      return (String)fileHeader;</span>
+<span class="fc" id="L508">    Object fileHeader = MapExpander.getDeep(postProcessorContext.getOptions(), POSTPROCESSOR_KEY_FILE_HEADER);</span>
+<span class="fc bfc" id="L509" title="All 2 branches covered.">    if (fileHeader instanceof String) {</span>
+<span class="fc" id="L510">      return (String)fileHeader;</span>
     }
     else {
-<span class="fc" id="L501">      return null;</span>
+<span class="fc" id="L513">      return null;</span>
     }
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private List&lt;String&gt; getPostProcessorValidators() {
-<span class="fc" id="L507">    Object validators = MapExpander.getDeep(postProcessorContext.getOptions(), POSTPROCESSOR_KEY_VALIDATORS);</span>
-<span class="fc bfc" id="L508" title="All 2 branches covered.">    if (validators instanceof List) {</span>
-<span class="fc" id="L509">      return (List&lt;String&gt;)validators;</span>
+<span class="fc" id="L519">    Object validators = MapExpander.getDeep(postProcessorContext.getOptions(), POSTPROCESSOR_KEY_VALIDATORS);</span>
+<span class="fc bfc" id="L520" title="All 2 branches covered.">    if (validators instanceof List) {</span>
+<span class="fc" id="L521">      return (List&lt;String&gt;)validators;</span>
     }
     else {
-<span class="fc" id="L512">      return List.of();</span>
+<span class="fc" id="L524">      return List.of();</span>
     }
   }
 
   private String getFilenameForLog(FileContext fileItem) {
-<span class="fc" id="L517">    return StringUtils.substring(fileItem.getCanonicalPath(), FileUtil.getCanonicalPath(nodeDir).length() + 1);</span>
+<span class="fc" id="L529">    return StringUtils.substring(fileItem.getCanonicalPath(), FileUtil.getCanonicalPath(nodeDir).length() + 1);</span>
   }
 
 }

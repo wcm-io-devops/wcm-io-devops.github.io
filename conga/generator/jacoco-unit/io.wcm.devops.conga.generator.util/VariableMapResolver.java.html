@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import io.wcm.devops.conga.generator.spi.context.ValueProviderGlobalContext;
@@ -59,9 +60,9 @@ public final class VariableMapResolver {
   /**
    * @param valueProviderGlobalContext Value provider global context
    */
-<span class="fc" id="L62">  public VariableMapResolver(ValueProviderGlobalContext valueProviderGlobalContext) {</span>
-<span class="fc" id="L63">    this.variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, this);</span>
-<span class="fc" id="L64">  }</span>
+<span class="fc" id="L63">  public VariableMapResolver(ValueProviderGlobalContext valueProviderGlobalContext) {</span>
+<span class="fc" id="L64">    this.variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, this);</span>
+<span class="fc" id="L65">  }</span>
 
   /**
    * Replace variable placeholders in values of a map with syntax ${key} with values from the map itself.
@@ -72,7 +73,7 @@ public final class VariableMapResolver {
    * @throws IllegalArgumentException when a variable name could not be resolve.d
    */
   public Map&lt;String, Object&gt; resolve(Map&lt;String, Object&gt; config) {
-<span class="fc" id="L75">    return resolve(config, true);</span>
+<span class="fc" id="L76">    return resolve(config, true);</span>
   }
 
   /**
@@ -84,7 +85,7 @@ public final class VariableMapResolver {
    * @throws IllegalArgumentException when a variable name could not be resolved.
    */
   public Map&lt;String, Object&gt; resolve(Map&lt;String, Object&gt; config, boolean deescapeVariables) {
-<span class="fc" id="L87">    return resolve(config, deescapeVariables, 0);</span>
+<span class="fc" id="L88">    return resolve(config, deescapeVariables, 0);</span>
   }
 
   /**
@@ -93,172 +94,172 @@ public final class VariableMapResolver {
    * @return Map with de-escaped variable references.
    */
   public Map&lt;String, Object&gt; deescape(Map&lt;String, Object&gt; config) {
-<span class="fc" id="L96">    return deescapeMap(config);</span>
+<span class="fc" id="L97">    return deescapeMap(config);</span>
   }
 
   @SuppressWarnings(&quot;PMD.CompareObjectsWithEquals&quot;)
   private Map&lt;String, Object&gt; resolve(Map&lt;String, Object&gt; config, boolean deescapeVariables, int iterationCount) {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    if (iterationCount &gt;= REPLACEMENT_MAX_ITERATIONS) {</span>
-<span class="nc" id="L102">      throw new IllegalArgumentException(&quot;Cyclic dependencies in config map detected: &quot; + config);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">    if (iterationCount &gt;= REPLACEMENT_MAX_ITERATIONS) {</span>
+<span class="nc" id="L103">      throw new IllegalArgumentException(&quot;Cyclic dependencies in config map detected: &quot; + config);</span>
     }
 
-<span class="fc" id="L105">    Map&lt;String, Object&gt; mapCopy = replaceMap(config, config);</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">    boolean replacedAny = mapCopy != config;</span>
+<span class="fc" id="L106">    Map&lt;String, Object&gt; mapCopy = replaceMap(config, config);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">    boolean replacedAny = mapCopy != config;</span>
 
-<span class="fc bfc" id="L108" title="All 2 branches covered.">    if (replacedAny) {</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">    if (replacedAny) {</span>
       // try again until all nested references are resolved
-<span class="fc" id="L110">      return resolve(mapCopy, deescapeVariables, iterationCount + 1);</span>
+<span class="fc" id="L111">      return resolve(mapCopy, deescapeVariables, iterationCount + 1);</span>
     }
     else {
-<span class="fc bfc" id="L113" title="All 2 branches covered.">      if (deescapeVariables) {</span>
-<span class="fc" id="L114">        return deescapeMap(config);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">      if (deescapeVariables) {</span>
+<span class="fc" id="L115">        return deescapeMap(config);</span>
       }
       else {
-<span class="fc" id="L117">        return config;</span>
+<span class="fc" id="L118">        return config;</span>
       }
     }
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private Object replaceAny(Object value, Map&lt;String, Object&gt; variables) {
-<span class="fc bfc" id="L124" title="All 2 branches covered.">    if (value instanceof String) {</span>
-<span class="fc" id="L125">      return replaceObject((String)value, variables);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">    if (value instanceof String) {</span>
+<span class="fc" id="L126">      return replaceObject((String)value, variables);</span>
     }
-<span class="fc bfc" id="L127" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L128">      return replaceList((List&lt;Object&gt;)value, variables);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L129">      return replaceList((List&lt;Object&gt;)value, variables);</span>
     }
-<span class="fc bfc" id="L130" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L131">      Map&lt;String, Object&gt; map = (Map&lt;String, Object&gt;)value;</span>
-<span class="fc bfc" id="L132" title="All 2 branches covered.">      if (map.containsKey(LIST_VARIABLE_ITERATE)) {</span>
-<span class="fc" id="L133">        return replaceIterate(map, variables);</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L132">      Map&lt;String, Object&gt; map = (Map&lt;String, Object&gt;)value;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">      if (map.containsKey(LIST_VARIABLE_ITERATE)) {</span>
+<span class="fc" id="L134">        return replaceIterate(map, variables);</span>
       }
       else {
-<span class="fc" id="L136">        return replaceMap(map, variables);</span>
+<span class="fc" id="L137">        return replaceMap(map, variables);</span>
       }
     }
     else {
-<span class="fc" id="L140">      return value;</span>
+<span class="fc" id="L141">      return value;</span>
     }
   }
 
   private Object replaceObject(String value, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L145">    Object replacedValue = variableStringResolver.resolve(value, variables, false);</span>
-<span class="pc bpc" id="L146" title="1 of 4 branches missed.">    if (replacedValue != null &amp;&amp; replacedValue.equals(value)) {</span>
-<span class="fc" id="L147">      return value;</span>
+<span class="fc" id="L146">    Object replacedValue = variableStringResolver.resolve(value, variables, false);</span>
+<span class="pc bpc" id="L147" title="1 of 4 branches missed.">    if (replacedValue != null &amp;&amp; replacedValue.equals(value)) {</span>
+<span class="fc" id="L148">      return value;</span>
     }
     else {
-<span class="fc" id="L150">      return replacedValue;</span>
+<span class="fc" id="L151">      return replacedValue;</span>
     }
   }
 
   @SuppressWarnings(&quot;PMD.CompareObjectsWithEquals&quot;)
   private List&lt;Object&gt; replaceList(List&lt;Object&gt; list, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L156">    boolean replacedAny = false;</span>
-<span class="fc" id="L157">    List&lt;Object&gt; listCopy = new ArrayList&lt;&gt;(list);</span>
-<span class="fc bfc" id="L158" title="All 2 branches covered.">    for (int i = 0; i &lt; listCopy.size(); i++) {</span>
-<span class="fc" id="L159">      Object item = listCopy.get(i);</span>
-<span class="fc" id="L160">      Object replacedValue = replaceAny(item, variables);</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">      if (item != replacedValue) {</span>
-<span class="fc" id="L162">        listCopy.set(i, replacedValue);</span>
-<span class="fc" id="L163">        replacedAny = true;</span>
+<span class="fc" id="L157">    boolean replacedAny = false;</span>
+<span class="fc" id="L158">    List&lt;Object&gt; listCopy = new ArrayList&lt;&gt;(list);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">    for (int i = 0; i &lt; listCopy.size(); i++) {</span>
+<span class="fc" id="L160">      Object item = listCopy.get(i);</span>
+<span class="fc" id="L161">      Object replacedValue = replaceAny(item, variables);</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">      if (item != replacedValue) {</span>
+<span class="fc" id="L163">        listCopy.set(i, replacedValue);</span>
+<span class="fc" id="L164">        replacedAny = true;</span>
       }
     }
-<span class="fc bfc" id="L166" title="All 2 branches covered.">    if (replacedAny) {</span>
-<span class="fc" id="L167">      return listCopy;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">    if (replacedAny) {</span>
+<span class="fc" id="L168">      return listCopy;</span>
     }
     else {
-<span class="fc" id="L170">      return list;</span>
+<span class="fc" id="L171">      return list;</span>
     }
   }
 
   private Map&lt;String, Object&gt; replaceMap(Map&lt;String, Object&gt; map, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L175">    Map&lt;String, Object&gt; mapCopy = new HashMap&lt;&gt;(map);</span>
-<span class="fc bfc" id="L176" title="All 2 branches covered.">    boolean replacedAny = mapCopy.remove(LIST_VARIABLE_ITERATE) != null;</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : mapCopy.entrySet()) {</span>
-<span class="fc" id="L178">      Object replacedValue = replaceAny(entry.getValue(), variables);</span>
-<span class="fc bfc" id="L179" title="All 2 branches covered.">      if (entry.getValue() != replacedValue) {</span>
-<span class="fc" id="L180">        entry.setValue(replacedValue);</span>
-<span class="fc" id="L181">        replacedAny = true;</span>
+<span class="fc" id="L176">    Map&lt;String, Object&gt; mapCopy = new HashMap&lt;&gt;(map);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">    boolean replacedAny = mapCopy.remove(LIST_VARIABLE_ITERATE) != null;</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : mapCopy.entrySet()) {</span>
+<span class="fc" id="L179">      Object replacedValue = replaceAny(entry.getValue(), variables);</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">      if (!Objects.equals(entry.getValue(), replacedValue)) {</span>
+<span class="fc" id="L181">        entry.setValue(replacedValue);</span>
+<span class="fc" id="L182">        replacedAny = true;</span>
       }
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L184">    }</span>
 
-<span class="fc bfc" id="L185" title="All 2 branches covered.">    if (replacedAny) {</span>
-<span class="fc" id="L186">      return mapCopy;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">    if (replacedAny) {</span>
+<span class="fc" id="L187">      return mapCopy;</span>
     }
     else {
-<span class="fc" id="L189">      return map;</span>
+<span class="fc" id="L190">      return map;</span>
     }
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private List&lt;Object&gt; replaceIterate(Map&lt;String, Object&gt; map, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L195">    Object listObject = map.get(LIST_VARIABLE_ITERATE);</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">    if (listObject instanceof String) {</span>
-<span class="fc" id="L197">      Matcher matcher = SINGLE_EXPRESSION_PATTERN.matcher((String)listObject);</span>
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">      if (matcher.matches()) {</span>
-<span class="fc" id="L199">        listObject = variableStringResolver.resolve((String)listObject, variables);</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (listObject == null) {</span>
-<span class="nc" id="L201">          throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + matcher.group(0));</span>
+<span class="fc" id="L196">    Object listObject = map.get(LIST_VARIABLE_ITERATE);</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">    if (listObject instanceof String) {</span>
+<span class="fc" id="L198">      Matcher matcher = SINGLE_EXPRESSION_PATTERN.matcher((String)listObject);</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">      if (matcher.matches()) {</span>
+<span class="fc" id="L200">        listObject = variableStringResolver.resolve((String)listObject, variables);</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (listObject == null) {</span>
+<span class="nc" id="L202">          throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + matcher.group(0));</span>
         }
       }
     }
-<span class="fc bfc" id="L205" title="All 2 branches covered.">    if (!(listObject instanceof List)) {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">    if (!(listObject instanceof List)) {</span>
       // allow to iterate over single values as well
-<span class="fc" id="L207">      listObject = List.of(listObject);</span>
+<span class="fc" id="L208">      listObject = List.of(listObject);</span>
     }
-<span class="fc" id="L209">    Map&lt;String, Object&gt; variablesClone = new LinkedHashMap&lt;&gt;(ObjectCloner.deepClone(variables));</span>
-<span class="fc" id="L210">    List&lt;Object&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L211">    int count = 0;</span>
-<span class="fc bfc" id="L212" title="All 2 branches covered.">    for (Object item : (List&lt;Object&gt;)listObject) {</span>
-<span class="fc" id="L213">      variablesClone.put(ITEM_VARIABLE, item);</span>
-<span class="fc" id="L214">      variablesClone.put(ITEM_INDEX_VARIABLE, count++);</span>
-<span class="fc" id="L215">      result.add(replaceMap(map, variablesClone));</span>
-<span class="fc" id="L216">    }</span>
-<span class="fc" id="L217">    return result;</span>
+<span class="fc" id="L210">    Map&lt;String, Object&gt; variablesClone = new LinkedHashMap&lt;&gt;(ObjectCloner.deepClone(variables));</span>
+<span class="fc" id="L211">    List&lt;Object&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L212">    int count = 0;</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">    for (Object item : (List&lt;Object&gt;)listObject) {</span>
+<span class="fc" id="L214">      variablesClone.put(ITEM_VARIABLE, item);</span>
+<span class="fc" id="L215">      variablesClone.put(ITEM_INDEX_VARIABLE, count++);</span>
+<span class="fc" id="L216">      result.add(replaceMap(map, variablesClone));</span>
+<span class="fc" id="L217">    }</span>
+<span class="fc" id="L218">    return result;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private Object deescapeAny(Object value) {
-<span class="fc bfc" id="L222" title="All 2 branches covered.">    if (value instanceof String) {</span>
-<span class="fc" id="L223">      return deescapeString((String)value);</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">    if (value instanceof String) {</span>
+<span class="fc" id="L224">      return deescapeString((String)value);</span>
     }
-<span class="fc bfc" id="L225" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L226">      return deescapeList((List&lt;Object&gt;)value);</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L227">      return deescapeList((List&lt;Object&gt;)value);</span>
     }
-<span class="fc bfc" id="L228" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L229">      return deescapeMap((Map&lt;String, Object&gt;)value);</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L230">      return deescapeMap((Map&lt;String, Object&gt;)value);</span>
     }
     else {
-<span class="fc" id="L232">      return value;</span>
+<span class="fc" id="L233">      return value;</span>
     }
   }
 
   private String deescapeString(String value) {
-<span class="fc" id="L237">    return variableStringResolver.deescape(value);</span>
+<span class="fc" id="L238">    return variableStringResolver.deescape(value);</span>
   }
 
   @SuppressWarnings(&quot;PMD.CompareObjectsWithEquals&quot;)
   private List&lt;Object&gt; deescapeList(List&lt;Object&gt; list) {
-<span class="fc" id="L242">    List&lt;Object&gt; listCopy = new ArrayList&lt;&gt;(list);</span>
-<span class="fc bfc" id="L243" title="All 2 branches covered.">    for (int i = 0; i &lt; listCopy.size(); i++) {</span>
-<span class="fc" id="L244">      Object item = listCopy.get(i);</span>
-<span class="fc" id="L245">      Object deescapedValue = deescapeAny(item);</span>
-<span class="fc bfc" id="L246" title="All 2 branches covered.">      if (item != deescapedValue) {</span>
-<span class="fc" id="L247">        listCopy.set(i, deescapedValue);</span>
+<span class="fc" id="L243">    List&lt;Object&gt; listCopy = new ArrayList&lt;&gt;(list);</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">    for (int i = 0; i &lt; listCopy.size(); i++) {</span>
+<span class="fc" id="L245">      Object item = listCopy.get(i);</span>
+<span class="fc" id="L246">      Object deescapedValue = deescapeAny(item);</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">      if (item != deescapedValue) {</span>
+<span class="fc" id="L248">        listCopy.set(i, deescapedValue);</span>
       }
     }
-<span class="fc" id="L250">    return listCopy;</span>
+<span class="fc" id="L251">    return listCopy;</span>
   }
 
   private Map&lt;String, Object&gt; deescapeMap(Map&lt;String, Object&gt; map) {
-<span class="fc" id="L254">    Map&lt;String, Object&gt; mapCopy = new HashMap&lt;&gt;(map);</span>
-<span class="fc bfc" id="L255" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : mapCopy.entrySet()) {</span>
-<span class="fc" id="L256">      Object deescapedValue = deescapeAny(entry.getValue());</span>
-<span class="fc bfc" id="L257" title="All 2 branches covered.">      if (entry.getValue() != deescapedValue) {</span>
-<span class="fc" id="L258">        entry.setValue(deescapedValue);</span>
+<span class="fc" id="L255">    Map&lt;String, Object&gt; mapCopy = new HashMap&lt;&gt;(map);</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : mapCopy.entrySet()) {</span>
+<span class="fc" id="L257">      Object deescapedValue = deescapeAny(entry.getValue());</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">      if (!Objects.equals(entry.getValue(), deescapedValue)) {</span>
+<span class="fc" id="L259">        entry.setValue(deescapedValue);</span>
       }
-<span class="fc" id="L260">    }</span>
-<span class="fc" id="L261">    return mapCopy;</span>
+<span class="fc" id="L261">    }</span>
+<span class="fc" id="L262">    return mapCopy;</span>
   }
 
 }

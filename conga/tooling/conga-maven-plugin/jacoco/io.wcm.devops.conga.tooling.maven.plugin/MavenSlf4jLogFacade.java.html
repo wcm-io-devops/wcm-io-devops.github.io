@@ -29,339 +29,340 @@ import org.slf4j.Marker;
 /**
  * Facade to rout SLF4J logging calls to maven plugin logger.
  */
+@SuppressWarnings(&quot;java:S2629&quot;)
 class MavenSlf4jLogFacade implements Logger {
 
-<span class="fc" id="L34">  private static final Pattern ARGUMENT_PATTERN = Pattern.compile(&quot;\\{\\}&quot;);</span>
+<span class="fc" id="L35">  private static final Pattern ARGUMENT_PATTERN = Pattern.compile(&quot;\\{\\}&quot;);</span>
 
   private final Log log;
 
-<span class="fc" id="L38">  MavenSlf4jLogFacade(Log log) {</span>
-<span class="fc" id="L39">    this.log = log;</span>
-<span class="fc" id="L40">  }</span>
+<span class="fc" id="L39">  MavenSlf4jLogFacade(Log log) {</span>
+<span class="fc" id="L40">    this.log = log;</span>
+<span class="fc" id="L41">  }</span>
 
   @Override
   public boolean isDebugEnabled() {
-<span class="nc" id="L44">    return log.isDebugEnabled();</span>
+<span class="fc" id="L45">    return log.isDebugEnabled();</span>
   }
 
   @Override
   public void debug(String content) {
-<span class="fc" id="L49">    log.debug(content);</span>
-<span class="fc" id="L50">  }</span>
+<span class="nc" id="L50">    log.debug(content);</span>
+<span class="nc" id="L51">  }</span>
 
   @Override
   public void debug(String content, Throwable error) {
-<span class="nc" id="L54">    log.debug(content, error);</span>
-<span class="nc" id="L55">  }</span>
+<span class="nc" id="L55">    log.debug(content, error);</span>
+<span class="nc" id="L56">  }</span>
 
   @Override
   public boolean isInfoEnabled() {
-<span class="nc" id="L59">    return log.isInfoEnabled();</span>
+<span class="fc" id="L60">    return log.isInfoEnabled();</span>
   }
 
   @Override
   public void info(String content) {
-<span class="fc" id="L64">    log.info(content);</span>
-<span class="fc" id="L65">  }</span>
+<span class="fc" id="L65">    log.info(content);</span>
+<span class="fc" id="L66">  }</span>
 
   @Override
   public void info(String content, Throwable error) {
-<span class="nc" id="L69">    log.info(content, error);</span>
-<span class="nc" id="L70">  }</span>
+<span class="nc" id="L70">    log.info(content, error);</span>
+<span class="nc" id="L71">  }</span>
 
   @Override
   public boolean isWarnEnabled() {
-<span class="nc" id="L74">    return log.isWarnEnabled();</span>
+<span class="nc" id="L75">    return log.isWarnEnabled();</span>
   }
 
   @Override
   public void warn(String content) {
-<span class="nc" id="L79">    log.warn(content);</span>
-<span class="nc" id="L80">  }</span>
+<span class="nc" id="L80">    log.warn(content);</span>
+<span class="nc" id="L81">  }</span>
 
   @Override
   public void warn(String content, Throwable error) {
-<span class="nc" id="L84">    log.warn(content, error);</span>
-<span class="nc" id="L85">  }</span>
+<span class="nc" id="L85">    log.warn(content, error);</span>
+<span class="nc" id="L86">  }</span>
 
   @Override
   public boolean isErrorEnabled() {
-<span class="nc" id="L89">    return log.isErrorEnabled();</span>
+<span class="nc" id="L90">    return log.isErrorEnabled();</span>
   }
 
   @Override
   public void error(String content) {
-<span class="nc" id="L94">    log.error(content);</span>
-<span class="nc" id="L95">  }</span>
+<span class="nc" id="L95">    log.error(content);</span>
+<span class="nc" id="L96">  }</span>
 
   @Override
   public void error(String content, Throwable error) {
-<span class="nc" id="L99">    log.error(content, error);</span>
-<span class="nc" id="L100">  }</span>
+<span class="nc" id="L100">    log.error(content, error);</span>
+<span class="nc" id="L101">  }</span>
 
   @Override
   public String getName() {
-<span class="nc" id="L104">    return null;</span>
+<span class="nc" id="L105">    return null;</span>
   }
 
   @Override
   public boolean isTraceEnabled() {
-<span class="nc" id="L109">    return false;</span>
+<span class="nc" id="L110">    return false;</span>
   }
 
   @Override
   public void trace(String msg) {
     // ignore
 
-<span class="nc" id="L116">  }</span>
+<span class="nc" id="L117">  }</span>
 
   @Override
   public void trace(String format, Object arg) {
     // ignore
-<span class="nc" id="L121">  }</span>
+<span class="nc" id="L122">  }</span>
 
   @Override
   public void trace(String format, Object arg1, Object arg2) {
     // ignore
-<span class="nc" id="L126">  }</span>
+<span class="nc" id="L127">  }</span>
 
   @Override
   public void trace(String format, Object... arguments) {
     // ignore
-<span class="nc" id="L131">  }</span>
+<span class="nc" id="L132">  }</span>
 
   @Override
   public void trace(String msg, Throwable t) {
     // ignore
-<span class="nc" id="L136">  }</span>
+<span class="nc" id="L137">  }</span>
 
   @Override
   public boolean isTraceEnabled(Marker marker) {
-<span class="nc" id="L140">    return false;</span>
+<span class="nc" id="L141">    return false;</span>
   }
 
   @Override
   public void trace(Marker marker, String msg) {
     // ignore
-<span class="nc" id="L146">  }</span>
+<span class="nc" id="L147">  }</span>
 
   @Override
   public void trace(Marker marker, String format, Object arg) {
     // ignore
-<span class="nc" id="L151">  }</span>
+<span class="nc" id="L152">  }</span>
 
   @Override
   public void trace(Marker marker, String format, Object arg1, Object arg2) {
     // ignore
-<span class="nc" id="L156">  }</span>
+<span class="nc" id="L157">  }</span>
 
   @Override
   public void trace(Marker marker, String format, Object... argArray) {
     // ignore
-<span class="nc" id="L161">  }</span>
+<span class="nc" id="L162">  }</span>
 
   @Override
   public void trace(Marker marker, String msg, Throwable t) {
     // ignore
-<span class="nc" id="L166">  }</span>
+<span class="nc" id="L167">  }</span>
 
   @Override
   public void debug(String format, Object arg) {
-<span class="nc" id="L170">    debug(formatMessage(format, arg));</span>
-<span class="nc" id="L171">  }</span>
+<span class="nc" id="L171">    debug(formatMessage(format, arg));</span>
+<span class="nc" id="L172">  }</span>
 
   @Override
   public void debug(String format, Object arg1, Object arg2) {
-<span class="fc" id="L175">    debug(formatMessage(format, arg1, arg2));</span>
-<span class="fc" id="L176">  }</span>
+<span class="nc" id="L176">    debug(formatMessage(format, arg1, arg2));</span>
+<span class="nc" id="L177">  }</span>
 
   @Override
   public void debug(String format, Object... arguments) {
-<span class="nc" id="L180">    debug(formatMessage(format, arguments));</span>
-<span class="nc" id="L181">  }</span>
+<span class="nc" id="L181">    debug(formatMessage(format, arguments));</span>
+<span class="nc" id="L182">  }</span>
 
   @Override
   public boolean isDebugEnabled(Marker marker) {
-<span class="nc" id="L185">    return isDebugEnabled();</span>
+<span class="nc" id="L186">    return isDebugEnabled();</span>
   }
 
   @Override
   public void debug(Marker marker, String msg) {
-<span class="nc" id="L190">    debug(msg);</span>
-<span class="nc" id="L191">  }</span>
+<span class="nc" id="L191">    debug(msg);</span>
+<span class="nc" id="L192">  }</span>
 
   @Override
   public void debug(Marker marker, String format, Object arg) {
-<span class="nc" id="L195">    debug(format, arg);</span>
-<span class="nc" id="L196">  }</span>
+<span class="nc" id="L196">    debug(format, arg);</span>
+<span class="nc" id="L197">  }</span>
 
   @Override
   public void debug(Marker marker, String format, Object arg1, Object arg2) {
-<span class="nc" id="L200">    debug(format, arg1, arg2);</span>
-<span class="nc" id="L201">  }</span>
+<span class="nc" id="L201">    debug(format, arg1, arg2);</span>
+<span class="nc" id="L202">  }</span>
 
   @Override
   public void debug(Marker marker, String format, Object... arguments) {
-<span class="nc" id="L205">    debug(format, arguments);</span>
-<span class="nc" id="L206">  }</span>
+<span class="nc" id="L206">    debug(format, arguments);</span>
+<span class="nc" id="L207">  }</span>
 
   @Override
   public void debug(Marker marker, String msg, Throwable t) {
-<span class="nc" id="L210">    debug(msg, t);</span>
-<span class="nc" id="L211">  }</span>
+<span class="nc" id="L211">    debug(msg, t);</span>
+<span class="nc" id="L212">  }</span>
 
   @Override
   public void info(String format, Object arg) {
-<span class="fc" id="L215">    info(formatMessage(format, arg));</span>
-<span class="fc" id="L216">  }</span>
+<span class="fc" id="L216">    info(formatMessage(format, arg));</span>
+<span class="fc" id="L217">  }</span>
 
   @Override
   public void info(String format, Object arg1, Object arg2) {
-<span class="fc" id="L220">    info(formatMessage(format, arg1, arg2));</span>
-<span class="fc" id="L221">  }</span>
+<span class="fc" id="L221">    info(formatMessage(format, arg1, arg2));</span>
+<span class="fc" id="L222">  }</span>
 
   @Override
   public void info(String format, Object... arguments) {
-<span class="nc" id="L225">    info(formatMessage(format, arguments));</span>
-<span class="nc" id="L226">  }</span>
+<span class="nc" id="L226">    info(formatMessage(format, arguments));</span>
+<span class="nc" id="L227">  }</span>
 
   @Override
   public boolean isInfoEnabled(Marker marker) {
-<span class="nc" id="L230">    return isInfoEnabled();</span>
+<span class="nc" id="L231">    return isInfoEnabled();</span>
   }
 
   @Override
   public void info(Marker marker, String msg) {
-<span class="nc" id="L235">    info(msg);</span>
-<span class="nc" id="L236">  }</span>
+<span class="nc" id="L236">    info(msg);</span>
+<span class="nc" id="L237">  }</span>
 
   @Override
   public void info(Marker marker, String format, Object arg) {
-<span class="nc" id="L240">    info(format, arg);</span>
-<span class="nc" id="L241">  }</span>
+<span class="nc" id="L241">    info(format, arg);</span>
+<span class="nc" id="L242">  }</span>
 
   @Override
   public void info(Marker marker, String format, Object arg1, Object arg2) {
-<span class="nc" id="L245">    info(format, arg1, arg2);</span>
-<span class="nc" id="L246">  }</span>
+<span class="nc" id="L246">    info(format, arg1, arg2);</span>
+<span class="nc" id="L247">  }</span>
 
   @Override
   public void info(Marker marker, String format, Object... arguments) {
-<span class="nc" id="L250">    info(format, arguments);</span>
-<span class="nc" id="L251">  }</span>
+<span class="nc" id="L251">    info(format, arguments);</span>
+<span class="nc" id="L252">  }</span>
 
   @Override
   public void info(Marker marker, String msg, Throwable t) {
-<span class="nc" id="L255">    info(msg, t);</span>
-<span class="nc" id="L256">  }</span>
+<span class="nc" id="L256">    info(msg, t);</span>
+<span class="nc" id="L257">  }</span>
 
   @Override
   public void warn(String format, Object arg) {
-<span class="nc" id="L260">    warn(formatMessage(format, arg));</span>
-<span class="nc" id="L261">  }</span>
+<span class="nc" id="L261">    warn(formatMessage(format, arg));</span>
+<span class="nc" id="L262">  }</span>
 
   @Override
   public void warn(String format, Object... arguments) {
-<span class="nc" id="L265">    warn(formatMessage(format, arguments));</span>
-<span class="nc" id="L266">  }</span>
+<span class="nc" id="L266">    warn(formatMessage(format, arguments));</span>
+<span class="nc" id="L267">  }</span>
 
   @Override
   public void warn(String format, Object arg1, Object arg2) {
-<span class="nc" id="L270">    warn(formatMessage(format, arg1, arg2));</span>
-<span class="nc" id="L271">  }</span>
+<span class="nc" id="L271">    warn(formatMessage(format, arg1, arg2));</span>
+<span class="nc" id="L272">  }</span>
 
   @Override
   public boolean isWarnEnabled(Marker marker) {
-<span class="nc" id="L275">    return isWarnEnabled();</span>
+<span class="nc" id="L276">    return isWarnEnabled();</span>
   }
 
   @Override
   public void warn(Marker marker, String msg) {
-<span class="nc" id="L280">    warn(msg);</span>
-<span class="nc" id="L281">  }</span>
+<span class="nc" id="L281">    warn(msg);</span>
+<span class="nc" id="L282">  }</span>
 
   @Override
   public void warn(Marker marker, String format, Object arg) {
-<span class="nc" id="L285">    warn(format, format, arg);</span>
-<span class="nc" id="L286">  }</span>
+<span class="nc" id="L286">    warn(format, format, arg);</span>
+<span class="nc" id="L287">  }</span>
 
   @Override
   public void warn(Marker marker, String format, Object arg1, Object arg2) {
-<span class="nc" id="L290">    warn(format, format, arg1, arg2);</span>
-<span class="nc" id="L291">  }</span>
+<span class="nc" id="L291">    warn(format, format, arg1, arg2);</span>
+<span class="nc" id="L292">  }</span>
 
   @Override
   public void warn(Marker marker, String format, Object... arguments) {
-<span class="nc" id="L295">    warn(format, format, arguments);</span>
-<span class="nc" id="L296">  }</span>
+<span class="nc" id="L296">    warn(format, format, arguments);</span>
+<span class="nc" id="L297">  }</span>
 
   @Override
   public void warn(Marker marker, String msg, Throwable t) {
-<span class="nc" id="L300">    warn(msg, t);</span>
-<span class="nc" id="L301">  }</span>
+<span class="nc" id="L301">    warn(msg, t);</span>
+<span class="nc" id="L302">  }</span>
 
   @Override
   public void error(String format, Object arg) {
-<span class="nc" id="L305">    error(formatMessage(format, arg));</span>
-<span class="nc" id="L306">  }</span>
+<span class="nc" id="L306">    error(formatMessage(format, arg));</span>
+<span class="nc" id="L307">  }</span>
 
   @Override
   public void error(String format, Object arg1, Object arg2) {
-<span class="nc" id="L310">    error(formatMessage(format, arg1, arg2));</span>
-<span class="nc" id="L311">  }</span>
+<span class="nc" id="L311">    error(formatMessage(format, arg1, arg2));</span>
+<span class="nc" id="L312">  }</span>
 
   @Override
   public void error(String format, Object... arguments) {
-<span class="nc" id="L315">    error(formatMessage(format, arguments));</span>
-<span class="nc" id="L316">  }</span>
+<span class="nc" id="L316">    error(formatMessage(format, arguments));</span>
+<span class="nc" id="L317">  }</span>
 
   @Override
   public boolean isErrorEnabled(Marker marker) {
-<span class="nc" id="L320">    return isErrorEnabled();</span>
+<span class="nc" id="L321">    return isErrorEnabled();</span>
   }
 
   @Override
   public void error(Marker marker, String msg) {
-<span class="nc" id="L325">    error(msg);</span>
-<span class="nc" id="L326">  }</span>
+<span class="nc" id="L326">    error(msg);</span>
+<span class="nc" id="L327">  }</span>
 
   @Override
   public void error(Marker marker, String format, Object arg) {
-<span class="nc" id="L330">    error(format, arg);</span>
-<span class="nc" id="L331">  }</span>
+<span class="nc" id="L331">    error(format, arg);</span>
+<span class="nc" id="L332">  }</span>
 
   @Override
   public void error(Marker marker, String format, Object arg1, Object arg2) {
-<span class="nc" id="L335">    error(format, arg1, arg2);</span>
-<span class="nc" id="L336">  }</span>
+<span class="nc" id="L336">    error(format, arg1, arg2);</span>
+<span class="nc" id="L337">  }</span>
 
   @Override
   public void error(Marker marker, String format, Object... arguments) {
-<span class="nc" id="L340">    error(format, arguments);</span>
-<span class="nc" id="L341">  }</span>
+<span class="nc" id="L341">    error(format, arguments);</span>
+<span class="nc" id="L342">  }</span>
 
   @Override
   public void error(Marker marker, String msg, Throwable t) {
-<span class="nc" id="L345">    error(msg, t);</span>
-<span class="nc" id="L346">  }</span>
+<span class="nc" id="L346">    error(msg, t);</span>
+<span class="nc" id="L347">  }</span>
 
   static String formatMessage(String format, Object... arguments) {
-<span class="fc" id="L349">    StringBuffer sb = new StringBuffer();</span>
-<span class="fc" id="L350">    int index = 0;</span>
-<span class="fc" id="L351">    Matcher matcher = ARGUMENT_PATTERN.matcher(format);</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L350">    StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L351">    int index = 0;</span>
+<span class="fc" id="L352">    Matcher matcher = ARGUMENT_PATTERN.matcher(format);</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">    while (matcher.find()) {</span>
       String value;
-<span class="pc bpc" id="L354" title="1 of 4 branches missed.">      if (arguments.length &gt; index &amp;&amp; arguments[index] != null) {</span>
-<span class="fc" id="L355">        value = arguments[index].toString();</span>
+<span class="pc bpc" id="L355" title="1 of 4 branches missed.">      if (arguments.length &gt; index &amp;&amp; arguments[index] != null) {</span>
+<span class="fc" id="L356">        value = arguments[index].toString();</span>
       }
       else {
-<span class="fc" id="L358">        value = &quot;{}&quot;;</span>
+<span class="fc" id="L359">        value = &quot;{}&quot;;</span>
       }
-<span class="fc" id="L360">      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));</span>
-<span class="fc" id="L361">      index++;</span>
-<span class="fc" id="L362">    }</span>
-<span class="fc" id="L363">    matcher.appendTail(sb);</span>
-<span class="fc" id="L364">    return sb.toString();</span>
+<span class="fc" id="L361">      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));</span>
+<span class="fc" id="L362">      index++;</span>
+<span class="fc" id="L363">    }</span>
+<span class="fc" id="L364">    matcher.appendTail(sb);</span>
+<span class="fc" id="L365">    return sb.toString();</span>
   }
 
 }

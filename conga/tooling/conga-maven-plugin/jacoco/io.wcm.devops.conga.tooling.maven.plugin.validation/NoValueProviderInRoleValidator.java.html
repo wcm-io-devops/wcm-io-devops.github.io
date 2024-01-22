@@ -67,7 +67,7 @@ import io.wcm.devops.conga.resource.Resource;
 
   private void validate(String value) {
 <span class="pc bpc" id="L69" title="1 of 2 branches missed.">    if (VariableStringResolver.hasValueProviderReference(value)) {</span>
-<span class="nc" id="L70">      throw new RuntimeException(&quot;Role definitions must not reference value providers: &quot; + value);</span>
+<span class="nc" id="L70">      throw new IllegalStateException(&quot;Role definitions must not reference value providers: &quot; + value);</span>
     }
 <span class="fc" id="L72">  }</span>
 

@@ -52,20 +52,23 @@ public final class TemplateValidator implements DefinitionValidator&lt;Void&gt; 
 <span class="fc" id="L52">  }</span>
 
   @Override
-  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  @SuppressWarnings({
+      &quot;PMD.PreserveStackTrace&quot;,
+      &quot;java:S1075&quot; // uses / by intention
+  })
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    if (StringUtils.equalsIgnoreCase(resource.getFileExtension(), FILE_EXTENSION)) {</span>
-<span class="fc" id="L58">      String templatePath = StringUtils.substringAfter(PathUtil.unifySlashes(resource.getCanonicalPath()),</span>
-<span class="fc" id="L59">          PathUtil.unifySlashes(templateDir.getCanonicalPath()) + &quot;/&quot;);</span>
-<span class="fc" id="L60">      Handlebars handlebars = handlebarsManager.get(NoneEscapingStrategy.NAME, StandardCharsets.UTF_8.name());</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">    if (StringUtils.equalsIgnoreCase(resource.getFileExtension(), FILE_EXTENSION)) {</span>
+<span class="fc" id="L61">      String templatePath = StringUtils.substringAfter(PathUtil.unifySlashes(resource.getCanonicalPath()),</span>
+<span class="fc" id="L62">          PathUtil.unifySlashes(templateDir.getCanonicalPath()) + &quot;/&quot;);</span>
+<span class="fc" id="L63">      Handlebars handlebars = handlebarsManager.get(NoneEscapingStrategy.NAME, StandardCharsets.UTF_8.name());</span>
       try {
-<span class="fc" id="L62">        handlebars.compile(templatePath);</span>
+<span class="fc" id="L65">        handlebars.compile(templatePath);</span>
       }
-<span class="nc" id="L64">      /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L65">        throw new MojoFailureException(&quot;Template &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
-<span class="fc" id="L66">      }</span>
+<span class="nc" id="L67">      /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L68">        throw new MojoFailureException(&quot;Template &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="fc" id="L69">      }</span>
     }
-<span class="fc" id="L68">    return null;</span>
+<span class="fc" id="L71">    return null;</span>
   }
 
 }

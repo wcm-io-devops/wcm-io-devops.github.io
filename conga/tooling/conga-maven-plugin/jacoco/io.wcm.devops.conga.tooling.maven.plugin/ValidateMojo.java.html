@@ -224,10 +224,11 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 <span class="fc" id="L224">    return result;</span>
   }
 
+  @SuppressWarnings(&quot;java:S1075&quot;) // no filesystem path
   private static String getPathForLog(ResourceCollection rootSourceDir, Resource file) {
-<span class="fc" id="L228">    String path = PathUtil.unifySlashes(file.getCanonicalPath());</span>
-<span class="fc" id="L229">    String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + &quot;/&quot;;</span>
-<span class="fc" id="L230">    return StringUtils.substringAfter(path, rootPath);</span>
+<span class="fc" id="L229">    String path = PathUtil.unifySlashes(file.getCanonicalPath());</span>
+<span class="fc" id="L230">    String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + &quot;/&quot;;</span>
+<span class="fc" id="L231">    return StringUtils.substringAfter(path, rootPath);</span>
   }
 
   // ===== PLUGIN VERSION INFO VALIDATION =====
@@ -243,74 +244,74 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
       throws MojoExecutionException {
 
     // build combined classpath for dependencies defined in environment and maven project
-<span class="fc" id="L246">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L247">    classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));</span>
-<span class="fc" id="L248">    classpathUrls.addAll(mavenProjectClasspathUrls);</span>
-<span class="fc" id="L249">    ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);</span>
+<span class="fc" id="L247">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L248">    classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));</span>
+<span class="fc" id="L249">    classpathUrls.addAll(mavenProjectClasspathUrls);</span>
+<span class="fc" id="L250">    ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);</span>
 
     // get version info from this project
-<span class="fc" id="L252">    Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
+<span class="fc" id="L253">    Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
 
     // validate current version info against dependency version infos
-<span class="fc bfc" id="L255" title="All 2 branches covered.">    for (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {</span>
-<span class="fc" id="L256">      validateVersionInfo(currentVersionInfo, dependencyVersionInfo);</span>
-<span class="fc" id="L257">    }</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">    for (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {</span>
+<span class="fc" id="L257">      validateVersionInfo(currentVersionInfo, dependencyVersionInfo);</span>
+<span class="fc" id="L258">    }</span>
 
-<span class="fc" id="L259">  }</span>
+<span class="fc" id="L260">  }</span>
 
   private List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls, PluginContextOptions pluginContextOptions) {
-<span class="fc" id="L262">    return dependencyUrls.stream()</span>
-<span class="fc" id="L263">        .map(dependencyUrl -&gt; {</span>
-<span class="nc" id="L264">          String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
+<span class="fc" id="L263">    return dependencyUrls.stream()</span>
+<span class="fc" id="L264">        .map(dependencyUrl -&gt; {</span>
+<span class="nc" id="L265">          String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
           try {
-<span class="nc" id="L266">            return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
+<span class="nc" id="L267">            return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
           }
-<span class="nc" id="L268">          catch (IOException ex) {</span>
-<span class="nc" id="L269">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
+<span class="nc" id="L269">          catch (IOException ex) {</span>
+<span class="nc" id="L270">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
           }
         })
-<span class="fc" id="L272">        .flatMap(List::stream)</span>
-<span class="fc" id="L273">        .collect(Collectors.toList());</span>
+<span class="fc" id="L273">        .flatMap(List::stream)</span>
+<span class="fc" id="L274">        .collect(Collectors.toList());</span>
   }
 
   private void validateVersionInfo(Properties currentVersionInfo, Properties dependencyVersionInfo) throws MojoExecutionException {
-<span class="fc bfc" id="L277" title="All 2 branches covered.">    for (Object keyObject : currentVersionInfo.keySet()) {</span>
-<span class="fc" id="L278">      String key = keyObject.toString();</span>
-<span class="fc" id="L279">      String currentVersionString = currentVersionInfo.getProperty(key);</span>
-<span class="fc" id="L280">      String dependencyVersionString = dependencyVersionInfo.getProperty(key);</span>
-<span class="pc bpc" id="L281" title="2 of 4 branches missed.">      if (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {</span>
-<span class="nc" id="L282">        continue;</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">    for (Object keyObject : currentVersionInfo.keySet()) {</span>
+<span class="fc" id="L279">      String key = keyObject.toString();</span>
+<span class="fc" id="L280">      String currentVersionString = currentVersionInfo.getProperty(key);</span>
+<span class="fc" id="L281">      String dependencyVersionString = dependencyVersionInfo.getProperty(key);</span>
+<span class="pc bpc" id="L282" title="2 of 4 branches missed.">      if (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {</span>
+<span class="nc" id="L283">        continue;</span>
       }
-<span class="fc" id="L284">      DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(currentVersionString);</span>
-<span class="fc" id="L285">      DefaultArtifactVersion dependencyVersion = new DefaultArtifactVersion(dependencyVersionString);</span>
-<span class="pc bpc" id="L286" title="1 of 2 branches missed.">      if (currentVersion.compareTo(dependencyVersion) &lt; 0) {</span>
-<span class="nc" id="L287">        throw new MojoExecutionException(&quot;Newer CONGA maven plugin or plugin version required: &quot; + key + &quot;:&quot; + dependencyVersion.toString());</span>
+<span class="fc" id="L285">      DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(currentVersionString);</span>
+<span class="fc" id="L286">      DefaultArtifactVersion dependencyVersion = new DefaultArtifactVersion(dependencyVersionString);</span>
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">      if (currentVersion.compareTo(dependencyVersion) &lt; 0) {</span>
+<span class="nc" id="L288">        throw new MojoExecutionException(&quot;Newer CONGA maven plugin or plugin version required: &quot; + key + &quot;:&quot; + dependencyVersion.toString());</span>
       }
-<span class="fc" id="L289">    }</span>
-<span class="fc" id="L290">  }</span>
+<span class="fc" id="L290">    }</span>
+<span class="fc" id="L291">  }</span>
 
   private List&lt;Properties&gt; getDependencyVersionInfos(ClassLoader classLoader) throws MojoExecutionException {
-<span class="fc" id="L293">    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);</span>
+<span class="fc" id="L294">    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);</span>
     try {
-<span class="fc" id="L295">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
+<span class="fc" id="L296">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
           &quot;classpath*:&quot; + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
-<span class="fc" id="L297">      return Arrays.stream(resources)</span>
-<span class="fc" id="L298">          .map(this::toProperties)</span>
-<span class="fc" id="L299">          .collect(Collectors.toList());</span>
+<span class="fc" id="L298">      return Arrays.stream(resources)</span>
+<span class="fc" id="L299">          .map(this::toProperties)</span>
+<span class="fc" id="L300">          .collect(Collectors.toList());</span>
     }
-<span class="nc" id="L301">    catch (IOException ex) {</span>
-<span class="nc" id="L302">      throw new MojoExecutionException(&quot;Unable to get classpath resources: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L302">    catch (IOException ex) {</span>
+<span class="nc" id="L303">      throw new MojoExecutionException(&quot;Unable to get classpath resources: &quot; + ex.getMessage(), ex);</span>
     }
   }
 
   private Properties toProperties(org.springframework.core.io.Resource resource) {
-<span class="fc" id="L307">    try (InputStream is = resource.getInputStream()) {</span>
-<span class="fc" id="L308">      Properties props = new Properties();</span>
-<span class="fc" id="L309">      props.load(is);</span>
-<span class="fc" id="L310">      return props;</span>
+<span class="fc" id="L308">    try (InputStream is = resource.getInputStream()) {</span>
+<span class="fc" id="L309">      Properties props = new Properties();</span>
+<span class="fc" id="L310">      props.load(is);</span>
+<span class="fc" id="L311">      return props;</span>
     }
-<span class="nc" id="L312">    catch (IOException ex) {</span>
-<span class="nc" id="L313">      throw new IllegalArgumentException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
+<span class="nc" id="L313">    catch (IOException ex) {</span>
+<span class="nc" id="L314">      throw new IllegalArgumentException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
     }
   }
 

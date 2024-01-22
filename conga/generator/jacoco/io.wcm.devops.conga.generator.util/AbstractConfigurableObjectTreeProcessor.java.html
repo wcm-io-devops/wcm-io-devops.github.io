@@ -92,7 +92,7 @@ abstract class AbstractConfigurableObjectTreeProcessor&lt;T&gt; {
 <span class="fc" id="L92">      }</span>
     }
 <span class="nc" id="L94">    catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {</span>
-<span class="nc" id="L95">      throw new RuntimeException(&quot;Unable to get bean properties from '&quot; + object.getClass().getName() + &quot;'.&quot;, ex);</span>
+<span class="nc" id="L95">      throw new IllegalArgumentException(&quot;Unable to get bean properties from '&quot; + object.getClass().getName() + &quot;'.&quot;, ex);</span>
 <span class="fc" id="L96">    }</span>
 <span class="fc" id="L97">  }</span>
 

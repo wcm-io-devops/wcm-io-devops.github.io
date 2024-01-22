@@ -5,7 +5,7 @@ CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,DefinitionPackageMoj
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,GenerateVersionInfoMojo,24,40,2,2,7,11,2,2,0,2
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,BuildConstants,0,5,0,0,0,1,0,1,0,1
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,GenerateMojo,5,189,1,5,1,49,1,5,0,3
-CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,MavenSlf4jLogFacade,279,105,1,5,91,26,57,10,56,8
+CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,MavenSlf4jLogFacade,291,93,1,5,93,24,57,10,56,8
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,ValidateMojo,73,455,12,22,15,105,11,19,1,12
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,AbstractCongaMojo,43,369,9,23,9,82,9,26,0,19
 CONGA Maven Plugin,io.wcm.devops.conga.tooling.maven.plugin,DependencyVersionBuilder,22,154,1,9,4,41,1,10,0,6
