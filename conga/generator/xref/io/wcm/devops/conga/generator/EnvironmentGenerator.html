@@ -247,86 +247,86 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a>           mergedConfig.putAll(ContextPropertiesBuilder.buildCurrentContextVariables(node, nodeRole));
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>           <em class="jxr_comment">// collect role and tenant information for export model</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>           <a name="ExportNodeRoleData" href="../../../../../io/wcm/devops/conga/generator/spi/export/context/ExportNodeRoleData.html#ExportNodeRoleData">ExportNodeRoleData</a> exportNodeRoleData = exportModelGenerator.addRole(roleName, variants, mergedConfig,
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>               role.getSensitiveConfigParameters());
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>           <em class="jxr_comment">// generate files</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>           List&lt;GeneratedFileContext&gt; allFiles = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>           <strong class="jxr_keyword">for</strong> (RoleFile roleFile : role.getFiles()) {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <em class="jxr_comment">// generate file if no variant is required, or at least one of the given variants is defined for the node/role</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>             <strong class="jxr_keyword">if</strong> (RoleUtil.matchesRoleFile(roleFile, variants)) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>               Template template = getHandlebarsTemplate(role, roleFile, nodeRole);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>               multiplyFiles(role, roleFile, mergedConfig, nodeDir, template,
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>                   roleName, variants, roleFile.getTemplate(), allFiles);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>             }
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>           }
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>           <em class="jxr_comment">// filter out result files probably deleted by other file definitions</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>           allFiles = allFiles.stream()
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>               .filter(generatedFile -&gt; generatedFile.getFileContext().getFile().exists())
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>               .collect(Collectors.toList());
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>           exportNodeRoleData.files(allFiles);
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>         }
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>       }
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>       <em class="jxr_comment">// save export model</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>       exportModelGenerator.generate();
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>     }
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>       <strong class="jxr_keyword">this</strong>.urlFilePluginContext.baseNodeDir(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     }
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>   }
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>   <strong class="jxr_keyword">private</strong> RoleVariant getRoleVariant(Role role, String variant, String roleName, Node node) {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">for</strong> (RoleVariant roleVariant : role.getVariants()) {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>       <strong class="jxr_keyword">if</strong> (StringUtils.equals(variant, roleVariant.getVariant())) {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>         <strong class="jxr_keyword">return</strong> roleVariant;
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>       }
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>     }
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Variant '"</span> + variant + <span class="jxr_string">"' for role '"</span> + roleName + <span class="jxr_string">"' "</span>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>         + <span class="jxr_string">"from "</span> + environmentName + <span class="jxr_string">"/"</span> + node.getNode() + <span class="jxr_string">" does not exist."</span>);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>   }
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>   <strong class="jxr_keyword">private</strong> Template getHandlebarsTemplate(Role role, RoleFile roleFile, NodeRole nodeRole) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>     String templateFile = FileUtil.getTemplatePath(role, roleFile);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(templateFile)) {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>       <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(roleFile.getUrl()) &amp;&amp; StringUtils.isEmpty(roleFile.getSymlinkTarget())) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"No template defined for file: "</span> + FileUtil.getFileInfo(nodeRole, roleFile));
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>       }
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>       <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>       }
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>     }
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>       Handlebars handlebars = handlebarsManager.get(getEscapingStrategy(roleFile), roleFile.getCharset());
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>       <strong class="jxr_keyword">return</strong> handlebars.compile(templateFile);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>     }
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to compile handlebars template: "</span> + FileUtil.getFileInfo(nodeRole, roleFile), ex);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>     }
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>   }
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">   * Get escaping strategy for file. If one is explicitly defined in role definition use this.</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">   * Otherwise get the best-matching by file extension.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   * @param roleFile Role file</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">   * @return Escaping Strategy (never null)</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>   <strong class="jxr_keyword">private</strong> String getEscapingStrategy(RoleFile roleFile) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isNotEmpty(roleFile.getEscapingStrategy())) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>       <strong class="jxr_keyword">return</strong> roleFile.getEscapingStrategy();
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     String fileExtension = FilenameUtils.getExtension(roleFile.getFile());
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <a name="EscapingStrategyContext" href="../../../../../io/wcm/devops/conga/generator/spi/handlebars/context/EscapingStrategyContext.html#EscapingStrategyContext">EscapingStrategyContext</a> context = <strong class="jxr_keyword">new</strong> <a name="EscapingStrategyContext" href="../../../../../io/wcm/devops/conga/generator/spi/handlebars/context/EscapingStrategyContext.html#EscapingStrategyContext">EscapingStrategyContext</a>()
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>         .pluginContextOptions(<strong class="jxr_keyword">this</strong>.pluginContextOptions);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">return</strong> options.getPluginManager().getAll(EscapingStrategyPlugin.<strong class="jxr_keyword">class</strong>).stream()
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>         .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneEscapingStrategy.NAME))
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         .filter(plugin -&gt; plugin.accepts(fileExtension, context))
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>         .findFirst().orElse(options.getPluginManager().get(NoneEscapingStrategy.NAME, EscapingStrategyPlugin.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>         .getName();
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>   }
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>           <a name="ExportNodeRoleData" href="../../../../../io/wcm/devops/conga/generator/spi/export/context/ExportNodeRoleData.html#ExportNodeRoleData">ExportNodeRoleData</a> exportNodeRoleData = exportModelGenerator.addRole(roleName, variants, mergedConfig);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>           <em class="jxr_comment">// generate files</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>           List&lt;GeneratedFileContext&gt; allFiles = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>           <strong class="jxr_keyword">for</strong> (RoleFile roleFile : role.getFiles()) {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <em class="jxr_comment">// generate file if no variant is required, or at least one of the given variants is defined for the node/role</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <strong class="jxr_keyword">if</strong> (RoleUtil.matchesRoleFile(roleFile, variants)) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>               Template template = getHandlebarsTemplate(role, roleFile, nodeRole);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>               multiplyFiles(role, roleFile, mergedConfig, nodeDir, template,
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>                   roleName, variants, roleFile.getTemplate(), allFiles);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>             }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>           }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>           <em class="jxr_comment">// filter out result files probably deleted by other file definitions</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>           allFiles = allFiles.stream()
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>               .filter(generatedFile -&gt; generatedFile.getFileContext().getFile().exists())
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>               .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>           exportNodeRoleData.files(allFiles);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>       }
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>       <em class="jxr_comment">// save export model</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>       exportModelGenerator.generate();
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     }
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>       <strong class="jxr_keyword">this</strong>.urlFilePluginContext.baseNodeDir(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>     }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>   }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>   <strong class="jxr_keyword">private</strong> RoleVariant getRoleVariant(Role role, String variant, String roleName, Node node) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <strong class="jxr_keyword">for</strong> (RoleVariant roleVariant : role.getVariants()) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>       <strong class="jxr_keyword">if</strong> (StringUtils.equals(variant, roleVariant.getVariant())) {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>         <strong class="jxr_keyword">return</strong> roleVariant;
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>       }
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>     }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Variant '"</span> + variant + <span class="jxr_string">"' for role '"</span> + roleName + <span class="jxr_string">"' "</span>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>         + <span class="jxr_string">"from "</span> + environmentName + <span class="jxr_string">"/"</span> + node.getNode() + <span class="jxr_string">" does not exist."</span>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>   }
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>   <strong class="jxr_keyword">private</strong> Template getHandlebarsTemplate(Role role, RoleFile roleFile, NodeRole nodeRole) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>     String templateFile = FileUtil.getTemplatePath(role, roleFile);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(templateFile)) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>       <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(roleFile.getUrl()) &amp;&amp; StringUtils.isEmpty(roleFile.getSymlinkTarget())) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"No template defined for file: "</span> + FileUtil.getFileInfo(nodeRole, roleFile));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>       }
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>       <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       }
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>       Handlebars handlebars = handlebarsManager.get(getEscapingStrategy(roleFile), roleFile.getCharset());
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>       <strong class="jxr_keyword">return</strong> handlebars.compile(templateFile);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     }
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to compile handlebars template: "</span> + FileUtil.getFileInfo(nodeRole, roleFile), ex);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>   }
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">   * Get escaping strategy for file. If one is explicitly defined in role definition use this.</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">   * Otherwise get the best-matching by file extension.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">   * @param roleFile Role file</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">   * @return Escaping Strategy (never null)</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>   <strong class="jxr_keyword">private</strong> String getEscapingStrategy(RoleFile roleFile) {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isNotEmpty(roleFile.getEscapingStrategy())) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>       <strong class="jxr_keyword">return</strong> roleFile.getEscapingStrategy();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>     }
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     String fileExtension = FilenameUtils.getExtension(roleFile.getFile());
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     <a name="EscapingStrategyContext" href="../../../../../io/wcm/devops/conga/generator/spi/handlebars/context/EscapingStrategyContext.html#EscapingStrategyContext">EscapingStrategyContext</a> context = <strong class="jxr_keyword">new</strong> <a name="EscapingStrategyContext" href="../../../../../io/wcm/devops/conga/generator/spi/handlebars/context/EscapingStrategyContext.html#EscapingStrategyContext">EscapingStrategyContext</a>()
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>         .pluginContextOptions(<strong class="jxr_keyword">this</strong>.pluginContextOptions);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <strong class="jxr_keyword">return</strong> options.getPluginManager().getAll(EscapingStrategyPlugin.<strong class="jxr_keyword">class</strong>).stream()
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneEscapingStrategy.NAME))
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         .filter(plugin -&gt; plugin.accepts(fileExtension, context))
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         .findFirst().orElse(options.getPluginManager().get(NoneEscapingStrategy.NAME, EscapingStrategyPlugin.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         .getName();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>   }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>   @SuppressWarnings(<span class="jxr_string">"java:S107"</span>) <em class="jxr_comment">// allow many parameters</em>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> multiplyFiles(Role role, RoleFile roleFile, Map&lt;String, Object&gt; config, File nodeDir, Template template,
 <a class="jxr_linenumber" name="L323" href="#L323">323</a>       String roleName, List&lt;String&gt; roleVariantNames, String templateName, List&lt;GeneratedFileContext&gt; generatedFiles) {
 <a class="jxr_linenumber" name="L324" href="#L324">324</a>     <a name="MultiplyPlugin" href="../../../../../io/wcm/devops/conga/generator/spi/MultiplyPlugin.html#MultiplyPlugin">MultiplyPlugin</a> multiplyPlugin = defaultMultiplyPlugin;
@@ -373,68 +373,71 @@
 <a class="jxr_linenumber" name="L365" href="#L365">365</a>     }
 <a class="jxr_linenumber" name="L366" href="#L366">366</a>   }
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>   @SuppressWarnings(<span class="jxr_string">"PMD.PreserveStackTrace"</span>)
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>   @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>   <strong class="jxr_keyword">private</strong> Collection&lt;GeneratedFileContext&gt; generateFile(RoleFile roleFile, String dir,
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>       String fileName, String url, String symlinkTarget,
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>       Map&lt;String, Object&gt; config, File nodeDir, Template template,
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>       String roleName, List&lt;String&gt; roleVariantNames, String templateName) {
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     String generatedFileName = fileName;
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isBlank(generatedFileName) &amp;&amp; StringUtils.isNotBlank(url)) {
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>       <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>         generatedFileName = urlFileManager.getFileName(url);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>       }
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>       <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to get file name from URL: "</span> + url, ex);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>   @SuppressWarnings({
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>       <span class="jxr_string">"PMD.PreserveStackTrace"</span>,
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>       <span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// allow many parameters</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>   })
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>   @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>   <strong class="jxr_keyword">private</strong> Collection&lt;GeneratedFileContext&gt; generateFile(RoleFile roleFile, String dir,
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>       String fileName, String url, String symlinkTarget,
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>       Map&lt;String, Object&gt; config, File nodeDir, Template template,
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>       String roleName, List&lt;String&gt; roleVariantNames, String templateName) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>     String generatedFileName = fileName;
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isBlank(generatedFileName) &amp;&amp; StringUtils.isNotBlank(url)) {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>       <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>         generatedFileName = urlFileManager.getFileName(url);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a>       }
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>     }
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>     File file = <strong class="jxr_keyword">new</strong> File(nodeDir, dir != <strong class="jxr_keyword">null</strong> ? FilenameUtils.concat(dir, generatedFileName) : generatedFileName);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>     <strong class="jxr_keyword">if</strong> (file.exists()) {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>       <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>         Files.delete(file.toPath());
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>       }
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>       <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to delete: "</span> + FileUtil.getCanonicalPath(file), ex);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>       <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to get file name from URL: "</span> + url, ex);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>       }
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     }
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>     File file = <strong class="jxr_keyword">new</strong> File(nodeDir, dir != <strong class="jxr_keyword">null</strong> ? FilenameUtils.concat(dir, generatedFileName) : generatedFileName);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>     <strong class="jxr_keyword">if</strong> (file.exists()) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>       <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>         Files.delete(file.toPath());
 <a class="jxr_linenumber" name="L392" href="#L392">392</a>       }
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>     }
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>     <a name="FileGenerator" href="../../../../../io/wcm/devops/conga/generator/FileGenerator.html#FileGenerator">FileGenerator</a> fileGenerator = <strong class="jxr_keyword">new</strong> <a name="FileGenerator" href="../../../../../io/wcm/devops/conga/generator/FileGenerator.html#FileGenerator">FileGenerator</a>(options, environmentName,
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>         roleName, roleVariantNames, templateName,
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>         nodeDir, file, url, symlinkTarget,
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>         roleFile, config, template,
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>         variableMapResolver, urlFileManager, pluginContextOptions, dependencyVersions);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>       Collection&lt;GeneratedFileContext&gt; generatedFiles = fileGenerator.generate();
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>       <em class="jxr_comment">// check for path duplicates</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>       generatedFiles.forEach(generatedFileContext -&gt; {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>         String path = generatedFileContext.getFileContext().getCanonicalPath();
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>         <strong class="jxr_keyword">if</strong> (generatedFilePaths.contains(path)) {
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>           log.warn(<span class="jxr_string">"File was generated already, check for file name clashes: {}"</span>, path);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>         }
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>           generatedFilePaths.add(path);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>       <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to delete: "</span> + FileUtil.getCanonicalPath(file), ex);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>       }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>     }
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>     <a name="FileGenerator" href="../../../../../io/wcm/devops/conga/generator/FileGenerator.html#FileGenerator">FileGenerator</a> fileGenerator = <strong class="jxr_keyword">new</strong> <a name="FileGenerator" href="../../../../../io/wcm/devops/conga/generator/FileGenerator.html#FileGenerator">FileGenerator</a>(options, environmentName,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>         roleName, roleVariantNames, templateName,
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>         nodeDir, file, url, symlinkTarget,
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>         roleFile, config, template,
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         variableMapResolver, urlFileManager, pluginContextOptions, dependencyVersions);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>       Collection&lt;GeneratedFileContext&gt; generatedFiles = fileGenerator.generate();
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>       <em class="jxr_comment">// check for path duplicates</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>       generatedFiles.forEach(generatedFileContext -&gt; {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>         String path = generatedFileContext.getFileContext().getCanonicalPath();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">if</strong> (generatedFilePaths.contains(path)) {
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>           log.warn(<span class="jxr_string">"File was generated already, check for file name clashes: {}"</span>, path);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a>         }
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>       });
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>       <strong class="jxr_keyword">return</strong> generatedFiles;
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>     }
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     <strong class="jxr_keyword">catch</strong> (<a name="ValidationException" href="../../../../../io/wcm/devops/conga/generator/spi/ValidationException.html#ValidationException">ValidationException</a> ex) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"File validation failed "</span> + FileUtil.getCanonicalPath(file) + <span class="jxr_string">" - "</span> + ex.getMessage());
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>           generatedFilePaths.add(path);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>         }
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>       });
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>       <strong class="jxr_keyword">return</strong> generatedFiles;
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>     }
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>     <em class="jxr_comment">/*CHECKSTYLE:OFF*/</em> <strong class="jxr_keyword">catch</strong> (Exception ex) { <em class="jxr_comment">/*CHECKSTYLE:ON*/</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to generate file: "</span> + FileUtil.getCanonicalPath(file) + <span class="jxr_string">"\n"</span> + ex.getMessage(), ex);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     <strong class="jxr_keyword">catch</strong> (<a name="ValidationException" href="../../../../../io/wcm/devops/conga/generator/spi/ValidationException.html#ValidationException">ValidationException</a> ex) {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"File validation failed "</span> + FileUtil.getCanonicalPath(file) + <span class="jxr_string">" - "</span> + ex.getMessage());
 <a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>   }
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>   @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>   <strong class="jxr_keyword">private</strong> Map&lt;String, Map&lt;String, Object&gt;&gt; mergePluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; map1, Map&lt;String, Map&lt;String, Object&gt;&gt; map2) {
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>     <strong class="jxr_keyword">return</strong> MapMerger.merge((Map)map1, (Map)map2);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>   }
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>     <em class="jxr_comment">/*CHECKSTYLE:OFF*/</em> <strong class="jxr_keyword">catch</strong> (Exception ex) { <em class="jxr_comment">/*CHECKSTYLE:ON*/</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to generate file: "</span> + FileUtil.getCanonicalPath(file) + <span class="jxr_string">"\n"</span> + ex.getMessage(), ex);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>     }
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>   }
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>   @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>   <strong class="jxr_keyword">private</strong> Map&lt;String, Map&lt;String, Object&gt;&gt; mergePluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; map1, Map&lt;String, Map&lt;String, Object&gt;&gt; map2) {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     <strong class="jxr_keyword">return</strong> MapMerger.merge((Map)map1, (Map)map2);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>   }
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2015&#x2013;2024 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All rights reserved.</div>

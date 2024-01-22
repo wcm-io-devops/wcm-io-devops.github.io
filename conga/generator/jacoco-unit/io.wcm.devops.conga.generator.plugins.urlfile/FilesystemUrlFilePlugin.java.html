@@ -70,7 +70,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   public InputStream getFile(String url, UrlFilePluginContext context) throws IOException {
 <span class="fc" id="L71">    File file = getFileInternal(url, context);</span>
 <span class="fc bfc" id="L72" title="All 2 branches covered.">    if (!file.exists()) {</span>
-<span class="fc" id="L73">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+<span class="nc" id="L73">      throwFileNotFoundException(file);</span>
     }
 <span class="fc" id="L75">    return new BufferedInputStream(new FileInputStream(file));</span>
   }
@@ -79,7 +79,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   public URL getFileUrl(String url, UrlFilePluginContext context) throws IOException {
 <span class="fc" id="L80">    File file = getFileInternal(url, context);</span>
 <span class="fc bfc" id="L81" title="All 2 branches covered.">    if (!file.exists()) {</span>
-<span class="fc" id="L82">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+<span class="nc" id="L82">      throwFileNotFoundException(file);</span>
     }
 <span class="fc" id="L84">    return file.toURI().toURL();</span>
   }
@@ -89,7 +89,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   public void deleteFile(String url, UrlFilePluginContext context) throws IOException {
 <span class="fc" id="L90">    File file = getFileInternal(url, context);</span>
 <span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (!file.exists()) {</span>
-<span class="nc" id="L92">      throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
+<span class="nc" id="L92">      throwFileNotFoundException(file);</span>
     }
 <span class="fc" id="L94">    Files.delete(file.toPath());</span>
 <span class="fc" id="L95">  }</span>
@@ -113,6 +113,10 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 <span class="fc" id="L113">      String relativePath = url;</span>
 <span class="fc" id="L114">      return new File(context.getBaseDir(), relativePath);</span>
     }
+  }
+
+  private static void throwFileNotFoundException(File file) throws FileNotFoundException {
+<span class="fc" id="L119">    throw new FileNotFoundException(&quot;File does not exist: &quot; + FileUtil.getCanonicalPath(file));</span>
   }
 
 }

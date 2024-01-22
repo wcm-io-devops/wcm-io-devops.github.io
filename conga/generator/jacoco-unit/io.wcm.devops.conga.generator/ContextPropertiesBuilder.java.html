@@ -82,76 +82,77 @@ public final class ContextPropertiesBuilder {
    * @param variableStringResolver Variable string resolver
    * @return Context variables map
    */
+  @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   public static Map&lt;String, Object&gt; buildEnvironmentContextVariables(String environmentName,
       Environment environment, String version,
       VariableObjectTreeResolver variableObjectTreeResolver, VariableStringResolver variableStringResolver) {
-<span class="fc" id="L88">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;(EMPTY_CONTEXT_VARIABLES);</span>
+<span class="fc" id="L89">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;(EMPTY_CONTEXT_VARIABLES);</span>
 
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (version != null) {</span>
-<span class="fc" id="L91">      map.put(VERSION, version);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (version != null) {</span>
+<span class="fc" id="L92">      map.put(VERSION, version);</span>
     }
-<span class="fc" id="L93">    map.put(ENVIRONMENT, environmentName);</span>
+<span class="fc" id="L94">    map.put(ENVIRONMENT, environmentName);</span>
 
     // clone environment before resolving variables to make sure they are resolved only for this context, not for file generation
-<span class="fc" id="L96">    Environment clonedEnvironemnt = ObjectCloner.deepClone(environment);</span>
+<span class="fc" id="L97">    Environment clonedEnvironemnt = ObjectCloner.deepClone(environment);</span>
 
     // resolve all variables at any level in environment
-<span class="fc" id="L99">    variableObjectTreeResolver.resolve(clonedEnvironemnt);</span>
+<span class="fc" id="L100">    variableObjectTreeResolver.resolve(clonedEnvironemnt);</span>
 
     // list of nodes
-<span class="fc" id="L102">    map.put(NODES, clonedEnvironemnt.getNodes());</span>
-<span class="fc" id="L103">    Map&lt;String, List&lt;Node&gt;&gt; nodesByRole = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L104">    Map&lt;String, Map&lt;String, List&lt;Node&gt;&gt;&gt; nodesByRoleVariant = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">    for (Node node : clonedEnvironemnt.getNodes()) {</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">      for (NodeRole nodeRole : node.getRoles()) {</span>
-<span class="fc" id="L107">        List&lt;Node&gt; nodes = nodesByRole.get(nodeRole.getRole());</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (nodes == null) {</span>
-<span class="fc" id="L109">          nodes = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L110">          nodesByRole.put(nodeRole.getRole(), nodes);</span>
+<span class="fc" id="L103">    map.put(NODES, clonedEnvironemnt.getNodes());</span>
+<span class="fc" id="L104">    Map&lt;String, List&lt;Node&gt;&gt; nodesByRole = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L105">    Map&lt;String, Map&lt;String, List&lt;Node&gt;&gt;&gt; nodesByRoleVariant = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    for (Node node : clonedEnvironemnt.getNodes()) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">      for (NodeRole nodeRole : node.getRoles()) {</span>
+<span class="fc" id="L108">        List&lt;Node&gt; nodes = nodesByRole.get(nodeRole.getRole());</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (nodes == null) {</span>
+<span class="fc" id="L110">          nodes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L111">          nodesByRole.put(nodeRole.getRole(), nodes);</span>
         }
-<span class="fc" id="L112">        nodes.add(node);</span>
+<span class="fc" id="L113">        nodes.add(node);</span>
 
-<span class="fc" id="L114">        List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (String variant : variants) {</span>
-<span class="fc" id="L116">          Map&lt;String, List&lt;Node&gt;&gt; nodesByVariant = nodesByRoleVariant.get(nodeRole.getRole());</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">          if (nodesByVariant == null) {</span>
-<span class="fc" id="L118">            nodesByVariant = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L119">            nodesByRoleVariant.put(nodeRole.getRole(), nodesByVariant);</span>
+<span class="fc" id="L115">        List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (String variant : variants) {</span>
+<span class="fc" id="L117">          Map&lt;String, List&lt;Node&gt;&gt; nodesByVariant = nodesByRoleVariant.get(nodeRole.getRole());</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">          if (nodesByVariant == null) {</span>
+<span class="fc" id="L119">            nodesByVariant = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L120">            nodesByRoleVariant.put(nodeRole.getRole(), nodesByVariant);</span>
           }
-<span class="fc" id="L121">          List&lt;Node&gt; variantNodes = nodesByVariant.get(variant);</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">          if (variantNodes == null) {</span>
-<span class="fc" id="L123">            variantNodes = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L124">            nodesByVariant.put(variant, variantNodes);</span>
+<span class="fc" id="L122">          List&lt;Node&gt; variantNodes = nodesByVariant.get(variant);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">          if (variantNodes == null) {</span>
+<span class="fc" id="L124">            variantNodes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L125">            nodesByVariant.put(variant, variantNodes);</span>
           }
-<span class="fc" id="L126">          variantNodes.add(node);</span>
-<span class="fc" id="L127">        }</span>
-<span class="fc" id="L128">      }</span>
-<span class="fc" id="L129">    }</span>
-<span class="fc" id="L130">    map.put(NODES_BY_ROLE, nodesByRole);</span>
-<span class="fc" id="L131">    map.put(NODES_BY_ROLE_VARIANT, nodesByRoleVariant);</span>
+<span class="fc" id="L127">          variantNodes.add(node);</span>
+<span class="fc" id="L128">        }</span>
+<span class="fc" id="L129">      }</span>
+<span class="fc" id="L130">    }</span>
+<span class="fc" id="L131">    map.put(NODES_BY_ROLE, nodesByRole);</span>
+<span class="fc" id="L132">    map.put(NODES_BY_ROLE_VARIANT, nodesByRoleVariant);</span>
 
     // list of tenants
-<span class="fc" id="L134">    map.put(TENANTS, clonedEnvironemnt.getTenants());</span>
-<span class="fc" id="L135">    Map&lt;String, List&lt;Tenant&gt;&gt; tenantsByRole = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">    for (Tenant tenant : clonedEnvironemnt.getTenants()) {</span>
+<span class="fc" id="L135">    map.put(TENANTS, clonedEnvironemnt.getTenants());</span>
+<span class="fc" id="L136">    Map&lt;String, List&lt;Tenant&gt;&gt; tenantsByRole = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">    for (Tenant tenant : clonedEnvironemnt.getTenants()) {</span>
 
       // resolve placeholders in tentant name
-<span class="fc" id="L139">      Map&lt;String, Object&gt; tenantConfig = MapMerger.merge(clonedEnvironemnt.getConfig(), tenant.getConfig());</span>
-<span class="fc" id="L140">      String tenantName = variableStringResolver.resolveString(tenant.getTenant(), tenantConfig);</span>
-<span class="fc" id="L141">      tenant.setTenant(tenantName);</span>
+<span class="fc" id="L140">      Map&lt;String, Object&gt; tenantConfig = MapMerger.merge(clonedEnvironemnt.getConfig(), tenant.getConfig());</span>
+<span class="fc" id="L141">      String tenantName = variableStringResolver.resolveString(tenant.getTenant(), tenantConfig);</span>
+<span class="fc" id="L142">      tenant.setTenant(tenantName);</span>
 
-<span class="fc bfc" id="L143" title="All 2 branches covered.">      for (String tenantRoleName : tenant.getRoles()) {</span>
-<span class="fc" id="L144">        List&lt;Tenant&gt; tenants = tenantsByRole.get(tenantRoleName);</span>
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (tenants == null) {</span>
-<span class="fc" id="L146">          tenants = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L147">          tenantsByRole.put(tenantRoleName, tenants);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">      for (String tenantRoleName : tenant.getRoles()) {</span>
+<span class="fc" id="L145">        List&lt;Tenant&gt; tenants = tenantsByRole.get(tenantRoleName);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (tenants == null) {</span>
+<span class="fc" id="L147">          tenants = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L148">          tenantsByRole.put(tenantRoleName, tenants);</span>
         }
-<span class="fc" id="L149">        tenants.add(tenant);</span>
-<span class="fc" id="L150">      }</span>
-<span class="fc" id="L151">    }</span>
-<span class="fc" id="L152">    map.put(TENANTS_BY_ROLE, tenantsByRole);</span>
+<span class="fc" id="L150">        tenants.add(tenant);</span>
+<span class="fc" id="L151">      }</span>
+<span class="fc" id="L152">    }</span>
+<span class="fc" id="L153">    map.put(TENANTS_BY_ROLE, tenantsByRole);</span>
 
-<span class="fc" id="L154">    return map;</span>
+<span class="fc" id="L155">    return map;</span>
   }
 
   /**
@@ -161,20 +162,20 @@ public final class ContextPropertiesBuilder {
    * @return Context variables map
    */
   public static Map&lt;String, Object&gt; buildCurrentContextVariables(Node node, NodeRole nodeRole) {
-<span class="fc" id="L164">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L165">    map.put(ROLE, nodeRole.getRole());</span>
+<span class="fc" id="L165">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L166">    map.put(ROLE, nodeRole.getRole());</span>
 
-<span class="fc" id="L167">    List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">    if (variants.size() == 1) {</span>
-<span class="fc" id="L169">      map.put(ROLE_VARIANT, variants.get(0));</span>
+<span class="fc" id="L168">    List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">    if (variants.size() == 1) {</span>
+<span class="fc" id="L170">      map.put(ROLE_VARIANT, variants.get(0));</span>
     }
     else {
-<span class="fc" id="L172">      map.put(ROLE_VARIANT, null);</span>
+<span class="fc" id="L173">      map.put(ROLE_VARIANT, null);</span>
     }
-<span class="fc" id="L174">    map.put(ROLE_VARIANTS, variants);</span>
+<span class="fc" id="L175">    map.put(ROLE_VARIANTS, variants);</span>
 
-<span class="fc" id="L176">    map.put(NODE, node.getNode());</span>
-<span class="fc" id="L177">    return map;</span>
+<span class="fc" id="L177">    map.put(NODE, node.getNode());</span>
+<span class="fc" id="L178">    return map;</span>
   }
 
   /**
@@ -183,20 +184,20 @@ public final class ContextPropertiesBuilder {
    * @return Configuration
    */
   public static Map&lt;String, Object&gt; removeContextVariables(Map&lt;String, Object&gt; config) {
-<span class="fc" id="L186">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;(config);</span>
-<span class="fc" id="L187">    map.remove(VERSION);</span>
-<span class="fc" id="L188">    map.remove(ENVIRONMENT);</span>
-<span class="fc" id="L189">    map.remove(NODES);</span>
-<span class="fc" id="L190">    map.remove(NODES_BY_ROLE);</span>
-<span class="fc" id="L191">    map.remove(NODES_BY_ROLE_VARIANT);</span>
-<span class="fc" id="L192">    map.remove(TENANTS);</span>
-<span class="fc" id="L193">    map.remove(TENANTS_BY_ROLE);</span>
-<span class="fc" id="L194">    map.remove(ROLE);</span>
-<span class="fc" id="L195">    map.remove(ROLE_VARIANT);</span>
-<span class="fc" id="L196">    map.remove(NODE);</span>
-<span class="fc" id="L197">    map.remove(TENANT);</span>
-<span class="fc" id="L198">    map.remove(TENANT_ROLES);</span>
-<span class="fc" id="L199">    return map;</span>
+<span class="fc" id="L187">    Map&lt;String, Object&gt; map = new HashMap&lt;&gt;(config);</span>
+<span class="fc" id="L188">    map.remove(VERSION);</span>
+<span class="fc" id="L189">    map.remove(ENVIRONMENT);</span>
+<span class="fc" id="L190">    map.remove(NODES);</span>
+<span class="fc" id="L191">    map.remove(NODES_BY_ROLE);</span>
+<span class="fc" id="L192">    map.remove(NODES_BY_ROLE_VARIANT);</span>
+<span class="fc" id="L193">    map.remove(TENANTS);</span>
+<span class="fc" id="L194">    map.remove(TENANTS_BY_ROLE);</span>
+<span class="fc" id="L195">    map.remove(ROLE);</span>
+<span class="fc" id="L196">    map.remove(ROLE_VARIANT);</span>
+<span class="fc" id="L197">    map.remove(NODE);</span>
+<span class="fc" id="L198">    map.remove(TENANT);</span>
+<span class="fc" id="L199">    map.remove(TENANT_ROLES);</span>
+<span class="fc" id="L200">    return map;</span>
   }
 
   /**
@@ -204,7 +205,7 @@ public final class ContextPropertiesBuilder {
    * @return Map with context variables
    */
   public static Map&lt;String, Object&gt; getEmptyContextVariables() {
-<span class="fc" id="L207">    return EMPTY_CONTEXT_VARIABLES;</span>
+<span class="fc" id="L208">    return EMPTY_CONTEXT_VARIABLES;</span>
   }
 
 }

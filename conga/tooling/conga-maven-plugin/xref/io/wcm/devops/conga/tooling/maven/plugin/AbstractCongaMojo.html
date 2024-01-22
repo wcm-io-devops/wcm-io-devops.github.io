@@ -287,98 +287,99 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">return</strong> jarFile;
 <a class="jxr_linenumber" name="L280" href="#L280">280</a>   }
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>   <strong class="jxr_keyword">private</strong> String[] toArray(List&lt;String&gt; values) {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     <strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty()) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>     }
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>     <strong class="jxr_keyword">return</strong> values.toArray(<strong class="jxr_keyword">new</strong> String[0]);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>   }
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>   <strong class="jxr_keyword">private</strong> String buildJarFileName() {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>     StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>     sb.append(project.getBuild().getFinalName());
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>     <strong class="jxr_keyword">if</strong> (!StringUtils.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>       sb.append(<span class="jxr_string">"-"</span>).append(CLASSIFIER_DEFINITION);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>     }
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     sb.append(<span class="jxr_string">"."</span>).append(FILE_EXTENSION_DEFINITION);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>   }
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">   * Copy definitions and template files to classes folder to include them in JAR artifact.</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>   @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>   <strong class="jxr_keyword">private</strong> File copyDefinitions() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>     File outputDir = <strong class="jxr_keyword">new</strong> File(definitionTarget);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>     <strong class="jxr_keyword">if</strong> (!outputDir.exists()) {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>       outputDir.mkdirs();
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>     }
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     ResourceLoader resourceLoader = <strong class="jxr_keyword">new</strong> ResourceLoader();
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>     ResourceCollection roleDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     ResourceCollection templateDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     ResourceCollection environmentDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <em class="jxr_comment">// copy definitions</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>       copyDefinitions(roleDirCol, outputDir, outputDir, CLASSPATH_ROLES_DIR);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>       copyDefinitions(templateDirCol, outputDir, outputDir, CLASSPATH_TEMPLATES_DIR);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>       copyDefinitions(environmentDirCol, outputDir, outputDir, CLASSPATH_ENVIRONMENTS_DIR);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>     }
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Unable to copy definitions:"</span> + ex.getMessage(), ex);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>     }
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>     <strong class="jxr_keyword">return</strong> outputDir;
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>   }
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>   @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copyDefinitions(ResourceCollection sourceDir, File rootOutputDir, File parentTargetDir, String dirName) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>     <strong class="jxr_keyword">if</strong> (!sourceDir.exists()) {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>       <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>     }
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>     SortedSet&lt;Resource&gt; files = sourceDir.getResources();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>     SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>     <strong class="jxr_keyword">if</strong> (files.isEmpty() &amp;&amp; dirs.isEmpty()) {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>       <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     }
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>     File targetDir = <strong class="jxr_keyword">new</strong> File(parentTargetDir, dirName);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>     <strong class="jxr_keyword">if</strong> (!targetDir.exists()) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>       targetDir.mkdirs();
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>     }
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>     <strong class="jxr_keyword">for</strong> (Resource file : files) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>       File targetFile = <strong class="jxr_keyword">new</strong> File(targetDir, file.getName());
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>       getLog().info(<span class="jxr_string">"Include "</span> + getPathForLog(rootOutputDir, targetFile));
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>       <strong class="jxr_keyword">if</strong> (targetFile.exists()) {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         Files.delete(targetFile.toPath());
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>       }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>       <strong class="jxr_keyword">try</strong> (InputStream is = file.getInputStream()) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>         byte[] data = IOUtils.toByteArray(is);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>         FileUtils.writeByteArrayToFile(targetFile, data);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>       }
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>     }
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>     <strong class="jxr_keyword">for</strong> (ResourceCollection dir : dirs) {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>       copyDefinitions(dir, rootOutputDir, targetDir, dir.getName());
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>     }
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>   }
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>   @SuppressWarnings(<span class="jxr_string">"java:S1075"</span>) <em class="jxr_comment">// not a filesystem path</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>   <strong class="jxr_keyword">private</strong> String getPathForLog(File rootOutputDir, File file) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>     String path = unifySlashes(file.getCanonicalPath());
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>     String rootPath = unifySlashes(rootOutputDir.getCanonicalPath()) + <span class="jxr_string">"/"</span>;
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>     <strong class="jxr_keyword">return</strong> StringUtils.substringAfter(path, rootPath);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>   }
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>   <strong class="jxr_keyword">private</strong> String unifySlashes(String path) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>     <strong class="jxr_keyword">return</strong> StringUtils.replace(path, <span class="jxr_string">"&#92;&#92;"</span>, <span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>   }
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>   @SuppressWarnings(<span class="jxr_string">"java:S1168"</span>) <em class="jxr_comment">// null array is allowed</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>   <strong class="jxr_keyword">private</strong> String[] toArray(List&lt;String&gt; values) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     <strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty()) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>     }
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>     <strong class="jxr_keyword">return</strong> values.toArray(<strong class="jxr_keyword">new</strong> String[0]);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>   }
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>   <strong class="jxr_keyword">private</strong> String buildJarFileName() {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     sb.append(project.getBuild().getFinalName());
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     <strong class="jxr_keyword">if</strong> (!StringUtils.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>       sb.append(<span class="jxr_string">"-"</span>).append(CLASSIFIER_DEFINITION);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     }
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     sb.append(<span class="jxr_string">"."</span>).append(FILE_EXTENSION_DEFINITION);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     <strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>   }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">   * Copy definitions and template files to classes folder to include them in JAR artifact.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>   @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>   <strong class="jxr_keyword">private</strong> File copyDefinitions() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     File outputDir = <strong class="jxr_keyword">new</strong> File(definitionTarget);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>     <strong class="jxr_keyword">if</strong> (!outputDir.exists()) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>       outputDir.mkdirs();
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     }
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>     ResourceLoader resourceLoader = <strong class="jxr_keyword">new</strong> ResourceLoader();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     ResourceCollection roleDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     ResourceCollection templateDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     ResourceCollection environmentDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <em class="jxr_comment">// copy definitions</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>       copyDefinitions(roleDirCol, outputDir, outputDir, CLASSPATH_ROLES_DIR);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>       copyDefinitions(templateDirCol, outputDir, outputDir, CLASSPATH_TEMPLATES_DIR);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>       copyDefinitions(environmentDirCol, outputDir, outputDir, CLASSPATH_ENVIRONMENTS_DIR);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Unable to copy definitions:"</span> + ex.getMessage(), ex);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>     }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <strong class="jxr_keyword">return</strong> outputDir;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>   }
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>   @SuppressFBWarnings(<span class="jxr_string">"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"</span>)
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copyDefinitions(ResourceCollection sourceDir, File rootOutputDir, File parentTargetDir, String dirName) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     <strong class="jxr_keyword">if</strong> (!sourceDir.exists()) {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     }
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>     SortedSet&lt;Resource&gt; files = sourceDir.getResources();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>     <strong class="jxr_keyword">if</strong> (files.isEmpty() &amp;&amp; dirs.isEmpty()) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     }
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     File targetDir = <strong class="jxr_keyword">new</strong> File(parentTargetDir, dirName);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     <strong class="jxr_keyword">if</strong> (!targetDir.exists()) {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>       targetDir.mkdirs();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>     }
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>     <strong class="jxr_keyword">for</strong> (Resource file : files) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>       File targetFile = <strong class="jxr_keyword">new</strong> File(targetDir, file.getName());
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>       getLog().info(<span class="jxr_string">"Include "</span> + getPathForLog(rootOutputDir, targetFile));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>       <strong class="jxr_keyword">if</strong> (targetFile.exists()) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         Files.delete(targetFile.toPath());
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>       }
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>       <strong class="jxr_keyword">try</strong> (InputStream is = file.getInputStream()) {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         byte[] data = IOUtils.toByteArray(is);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>         FileUtils.writeByteArrayToFile(targetFile, data);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>       }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>     }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>     <strong class="jxr_keyword">for</strong> (ResourceCollection dir : dirs) {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>       copyDefinitions(dir, rootOutputDir, targetDir, dir.getName());
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>     }
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>   }
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>   @SuppressWarnings(<span class="jxr_string">"java:S1075"</span>) <em class="jxr_comment">// not a filesystem path</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>   <strong class="jxr_keyword">private</strong> String getPathForLog(File rootOutputDir, File file) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>     String path = unifySlashes(file.getCanonicalPath());
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     String rootPath = unifySlashes(rootOutputDir.getCanonicalPath()) + <span class="jxr_string">"/"</span>;
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     <strong class="jxr_keyword">return</strong> StringUtils.substringAfter(path, rootPath);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>   }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>   <strong class="jxr_keyword">private</strong> String unifySlashes(String path) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>     <strong class="jxr_keyword">return</strong> StringUtils.replace(path, <span class="jxr_string">"&#92;&#92;"</span>, <span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>   }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2015&#x2013;2024 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All rights reserved.</div>

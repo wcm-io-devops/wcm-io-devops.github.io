@@ -9,7 +9,7 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.postprocessor,AbstractPost
 CONGA Generator,io.wcm.devops.conga.generator,GeneratorOptions,40,111,0,0,16,40,8,27,8,27
 CONGA Generator,io.wcm.devops.conga.generator,MessagePrefixLoggerFacade,480,9,0,0,112,4,62,1,62,1
 CONGA Generator,io.wcm.devops.conga.generator,ContextPropertiesBuilder,0,399,1,21,0,85,1,15,0,5
-CONGA Generator,io.wcm.devops.conga.generator,EnvironmentGenerator,109,815,11,51,23,162,12,35,1,15
+CONGA Generator,io.wcm.devops.conga.generator,EnvironmentGenerator,109,813,11,51,23,161,12,35,1,15
 CONGA Generator,io.wcm.devops.conga.generator,FileGenerator,129,922,26,50,26,191,24,58,2,42
 CONGA Generator,io.wcm.devops.conga.generator,UrlFileManager,65,155,6,10,10,27,9,15,4,12
 CONGA Generator,io.wcm.devops.conga.generator,GeneratorException,0,9,0,0,0,4,0,2,0,2
@@ -45,7 +45,7 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,AbstractFileHea
 CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,ConfFileHeader,0,18,0,0,0,6,0,6,0,6
 CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,ClasspathUrlFilePlugin,2,73,2,6,1,20,2,9,0,7
 CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,HttpUrlFilePlugin,4,33,0,4,1,7,1,7,1,5
-CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,FilesystemUrlFilePlugin,14,114,1,15,3,27,2,14,1,7
+CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,FilesystemUrlFilePlugin,13,107,1,15,5,26,2,15,1,8
 CONGA Generator,io.wcm.devops.conga.generator.util,ConfigInheritanceResolver,0,135,0,12,0,32,0,12,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,PluginManagerImpl,0,40,0,2,0,8,0,4,0,3
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableResolver,9,90,2,14,2,24,2,9,0,3
