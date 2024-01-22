@@ -117,78 +117,79 @@ public final class ProvisioningUtil {
    * @return List of non-null results
    * @throws IOException I/O exception
    */
+  @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   public static &lt;R&gt; List&lt;R&gt; visitOsgiConfigurations(Model model, ConfigConsumer&lt;R&gt; consumer) throws IOException {
-<span class="fc" id="L121">    List&lt;R&gt; results = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">    for (Feature feature : model.getFeatures()) {</span>
+<span class="fc" id="L122">    List&lt;R&gt; results = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">    for (Feature feature : model.getFeatures()) {</span>
 
       // OSGi configurations
-<span class="fc bfc" id="L125" title="All 2 branches covered.">      for (RunMode runMode : feature.getRunModes()) {</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        for (Configuration configuration : runMode.getConfigurations()) {</span>
-<span class="fc" id="L127">          String path = getPathForConfiguration(configuration, runMode);</span>
-<span class="fc" id="L128">          R result = consumer.accept(path, configuration.getProperties());</span>
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">          if (result != null) {</span>
-<span class="fc" id="L130">            results.add(result);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">      for (RunMode runMode : feature.getRunModes()) {</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (Configuration configuration : runMode.getConfigurations()) {</span>
+<span class="fc" id="L128">          String path = getPathForConfiguration(configuration, runMode);</span>
+<span class="fc" id="L129">          R result = consumer.accept(path, configuration.getProperties());</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">          if (result != null) {</span>
+<span class="fc" id="L131">            results.add(result);</span>
           }
-<span class="fc" id="L132">        }</span>
-<span class="fc" id="L133">      }</span>
+<span class="fc" id="L133">        }</span>
+<span class="fc" id="L134">      }</span>
 
       // repoinit statements
-<span class="fc bfc" id="L136" title="All 2 branches covered.">      for (Section section : feature.getAdditionalSections(REPOINIT_SECTION)) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">      for (Section section : feature.getAdditionalSections(REPOINIT_SECTION)) {</span>
 
         // repoinit script
-<span class="fc" id="L139">        String script = section.getContents();</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (StringUtils.isBlank(script)) {</span>
-<span class="nc" id="L141">          continue;</span>
+<span class="fc" id="L140">        String script = section.getContents();</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (StringUtils.isBlank(script)) {</span>
+<span class="nc" id="L142">          continue;</span>
         }
 
         // associated run modes
-<span class="fc" id="L145">        String runModesString = section.getAttributes().get(REPOINIT_PROPERTY_RUNMODES);</span>
+<span class="fc" id="L146">        String runModesString = section.getAttributes().get(REPOINIT_PROPERTY_RUNMODES);</span>
         RunMode runMode;
-<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (runModesString != null) {</span>
-<span class="fc" id="L148">          runMode = new RunMode(StringUtils.split(runModesString, &quot;,&quot;));</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (runModesString != null) {</span>
+<span class="fc" id="L149">          runMode = new RunMode(StringUtils.split(runModesString, &quot;,&quot;));</span>
         }
         else {
-<span class="fc" id="L151">          runMode = new RunMode(null);</span>
+<span class="fc" id="L152">          runMode = new RunMode(null);</span>
         }
 
         // prepare repoinit OSGi configuration
-<span class="fc" id="L155">        String pid = Objects.toString(feature.getName(), &quot;conga&quot;)</span>
-<span class="fc bfc" id="L156" title="All 2 branches covered.">            + (runModesString != null ? &quot;-&quot; + StringUtils.replace(runModesString, &quot;,&quot;, &quot;-&quot;) : &quot;&quot;);</span>
-<span class="fc" id="L157">        Configuration configuration = new Configuration(pid, REPOINIT_PID);</span>
-<span class="fc" id="L158">        configuration.getProperties().put(&quot;scripts&quot;, new String[] { script });</span>
-<span class="fc" id="L159">        String path = getPathForConfiguration(configuration, runMode);</span>
-<span class="fc" id="L160">        R result = consumer.accept(path, configuration.getProperties());</span>
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (result != null) {</span>
-<span class="fc" id="L162">          results.add(result);</span>
+<span class="fc" id="L156">        String pid = Objects.toString(feature.getName(), &quot;conga&quot;)</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            + (runModesString != null ? &quot;-&quot; + StringUtils.replace(runModesString, &quot;,&quot;, &quot;-&quot;) : &quot;&quot;);</span>
+<span class="fc" id="L158">        Configuration configuration = new Configuration(pid, REPOINIT_PID);</span>
+<span class="fc" id="L159">        configuration.getProperties().put(&quot;scripts&quot;, new String[] { script });</span>
+<span class="fc" id="L160">        String path = getPathForConfiguration(configuration, runMode);</span>
+<span class="fc" id="L161">        R result = consumer.accept(path, configuration.getProperties());</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (result != null) {</span>
+<span class="fc" id="L163">          results.add(result);</span>
         }
-<span class="fc" id="L164">      }</span>
+<span class="fc" id="L165">      }</span>
 
-<span class="fc" id="L166">    }</span>
-<span class="fc" id="L167">    return results;</span>
+<span class="fc" id="L167">    }</span>
+<span class="fc" id="L168">    return results;</span>
   }
 
   /**
    * Get the relative path for a configuration
    */
   private static String getPathForConfiguration(Configuration configuration, RunMode runMode) {
-<span class="fc" id="L174">    SortedSet&lt;String&gt; runModesList = new TreeSet&lt;&gt;(new RunModeComparator());</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">    if (runMode.getNames() != null) {</span>
-<span class="fc" id="L176">      runModesList.addAll(Arrays.asList(runMode.getNames()));</span>
+<span class="fc" id="L175">    SortedSet&lt;String&gt; runModesList = new TreeSet&lt;&gt;(new RunModeComparator());</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">    if (runMode.getNames() != null) {</span>
+<span class="fc" id="L177">      runModesList.addAll(Arrays.asList(runMode.getNames()));</span>
     }
 
     // run modes directory
-<span class="fc" id="L180">    StringBuilder path = new StringBuilder();</span>
-<span class="pc bpc" id="L181" title="1 of 4 branches missed.">    if (!runModesList.isEmpty() &amp;&amp; !runMode.isSpecial()) {</span>
-<span class="fc" id="L182">      path.append(StringUtils.join(runModesList, &quot;.&quot;)).append(&quot;/&quot;);</span>
+<span class="fc" id="L181">    StringBuilder path = new StringBuilder();</span>
+<span class="pc bpc" id="L182" title="1 of 4 branches missed.">    if (!runModesList.isEmpty() &amp;&amp; !runMode.isSpecial()) {</span>
+<span class="fc" id="L183">      path.append(StringUtils.join(runModesList, &quot;.&quot;)).append(&quot;/&quot;);</span>
     }
 
     // main name
-<span class="fc bfc" id="L186" title="All 2 branches covered.">    if (configuration.getFactoryPid() != null) {</span>
-<span class="fc" id="L187">      path.append(configuration.getFactoryPid()).append(&quot;-&quot;);</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">    if (configuration.getFactoryPid() != null) {</span>
+<span class="fc" id="L188">      path.append(configuration.getFactoryPid()).append(&quot;-&quot;);</span>
     }
-<span class="fc" id="L189">    path.append(configuration.getPid()).append(&quot;.cfg.json&quot;);</span>
+<span class="fc" id="L190">    path.append(configuration.getPid()).append(&quot;.cfg.json&quot;);</span>
 
-<span class="fc" id="L191">    return path.toString();</span>
+<span class="fc" id="L192">    return path.toString();</span>
   }
 
   /**
@@ -200,20 +201,20 @@ public final class ProvisioningUtil {
    * @throws IOException I/O exception
    */
   public static List&lt;FileContext&gt; generateOsgiConfigurations(Model model, File dir, PostProcessorContext context) throws IOException {
-<span class="fc" id="L203">    return ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;FileContext&gt;() {</span>
+<span class="fc" id="L204">    return ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;FileContext&gt;() {</span>
 
       @Override
       @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
       public FileContext accept(String path, Dictionary&lt;String, Object&gt; properties) throws IOException {
-<span class="fc" id="L208">        context.getLogger().info(&quot;  Generate {}&quot;, path);</span>
+<span class="fc" id="L209">        context.getLogger().info(&quot;  Generate {}&quot;, path);</span>
 
-<span class="fc" id="L210">        File confFile = new File(dir, path);</span>
-<span class="fc" id="L211">        confFile.getParentFile().mkdirs();</span>
-<span class="fc" id="L212">        try (FileOutputStream os = new FileOutputStream(confFile)) {</span>
-<span class="fc" id="L213">          OsgiConfigUtil.write(os, properties);</span>
+<span class="fc" id="L211">        File confFile = new File(dir, path);</span>
+<span class="fc" id="L212">        confFile.getParentFile().mkdirs();</span>
+<span class="fc" id="L213">        try (FileOutputStream os = new FileOutputStream(confFile)) {</span>
+<span class="fc" id="L214">          OsgiConfigUtil.write(os, properties);</span>
         }
 
-<span class="fc" id="L216">        return new FileContext().file(confFile).charset(StandardCharsets.UTF_8);</span>
+<span class="fc" id="L217">        return new FileContext().file(confFile).charset(StandardCharsets.UTF_8);</span>
       }
     });
   }
