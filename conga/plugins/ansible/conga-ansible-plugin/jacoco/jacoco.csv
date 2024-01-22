@@ -4,7 +4,7 @@ CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryWr
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryReader,9,240,8,38,3,62,8,16,0,1
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders,CypherFactory,6,12,2,2,2,3,2,1,0,1
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin.InventoryContent,0,20,0,0,0,8,0,4,0,4
-CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin,17,246,7,27,5,59,7,19,0,9
+CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin,12,244,6,26,4,58,6,19,0,9
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleVaultValueProviderPlugin,9,71,1,7,2,18,1,7,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleValueEncryptionPlugin,8,27,0,0,2,7,0,4,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVaultValueRepresent,0,19,0,0,0,3,0,2,0,2
@@ -20,10 +20,10 @@ CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleGroup,146,6
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleInventory,72,43,8,0,20,11,10,6,6,6
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleVariable,320,36,49,1,68,12,32,5,7,5
 CONGA Ansible Plugin,org.yaml.snakeyaml.inspector,TrustedTagInspector,0,5,0,0,0,2,0,2,0,2
-CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,EncryptionKeychain,9,150,0,0,2,37,0,13,0,13
+CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,EncryptionKeychain,9,148,0,0,2,36,0,13,0,13
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,CypherAES,26,0,0,0,6,0,6,0,6,0
-CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,CypherAES256,192,323,13,17,32,81,15,15,2,13
+CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,CypherAES256,192,321,13,17,32,80,15,15,2,13
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.data,VaultInfo,4,57,4,4,1,13,5,6,1,6
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.data,Util,9,142,0,8,2,24,1,13,1,9
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.data,VaultContent,63,313,9,21,5,70,9,16,0,10
-CONGA Ansible Plugin,net.wedjaa.ansible.vault,Manager,6,72,0,0,2,14,0,5,0,5
+CONGA Ansible Plugin,net.wedjaa.ansible.vault,Manager,0,72,0,0,0,14,0,5,0,5

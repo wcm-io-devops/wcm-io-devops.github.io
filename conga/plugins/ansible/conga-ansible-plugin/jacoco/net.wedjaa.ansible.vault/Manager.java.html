@@ -38,26 +38,23 @@ import net.wedjaa.ansible.vault.crypto.VaultHandler;
 <span class="fc" id="L38">    return reader.load(yaml);</span>
   }
 
-  public String writeToYaml(Object object) {
+  public String writeToYaml(Object object) throws IOException {
 <span class="fc" id="L42">    try (StringWriter resultWriter = new StringWriter()) {</span>
 <span class="fc" id="L43">      Yaml writer = new Yaml();</span>
 <span class="fc" id="L44">      writer.dump(object, resultWriter);</span>
 <span class="fc" id="L45">      return resultWriter.getBuffer().toString();</span>
     }
-<span class="nc" id="L47">    catch (IOException ex) {</span>
-<span class="nc" id="L48">      throw new RuntimeException(ex);</span>
-    }
   }
 
   public Object getFromVault(Class&lt;?&gt; objectClass, String yaml, String password) throws IOException {
-<span class="fc" id="L53">    byte[] clearYaml = VaultHandler.decrypt(yaml.getBytes(CHAR_ENCODING), password);</span>
-<span class="fc" id="L54">    return getFromYaml(objectClass, new String(clearYaml, CHAR_ENCODING));</span>
+<span class="fc" id="L50">    byte[] clearYaml = VaultHandler.decrypt(yaml.getBytes(CHAR_ENCODING), password);</span>
+<span class="fc" id="L51">    return getFromYaml(objectClass, new String(clearYaml, CHAR_ENCODING));</span>
   }
 
   public String writeToVault(Object object, String password) throws IOException {
-<span class="fc" id="L58">    String clearYaml = writeToYaml(object);</span>
-<span class="fc" id="L59">    byte[] yamlVault = VaultHandler.encrypt(clearYaml.getBytes(CHAR_ENCODING), password);</span>
-<span class="fc" id="L60">    return new String(yamlVault, CHAR_ENCODING);</span>
+<span class="fc" id="L55">    String clearYaml = writeToYaml(object);</span>
+<span class="fc" id="L56">    byte[] yamlVault = VaultHandler.encrypt(clearYaml.getBytes(CHAR_ENCODING), password);</span>
+<span class="fc" id="L57">    return new String(yamlVault, CHAR_ENCODING);</span>
   }
 
 }

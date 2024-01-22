@@ -33,101 +33,102 @@ public final class AnsibleInventoryReader {
   private AnsibleInventoryReader() {
   }
 
+  @SuppressWarnings({ &quot;java:S3776&quot;, &quot;java:S135&quot;, &quot;java:S6541&quot; }) // ignore complexity
   public static AnsibleInventory read(String text) {
-<span class="fc" id="L37">    final AnsibleInventory inventory = new AnsibleInventory();</span>
+<span class="fc" id="L38">    final AnsibleInventory inventory = new AnsibleInventory();</span>
 
-<span class="fc" id="L39">    final StringTokenizer tokenizer = new StringTokenizer(text, &quot; \t\n\r\f&quot;, true);</span>
+<span class="fc" id="L40">    final StringTokenizer tokenizer = new StringTokenizer(text, &quot; \t\n\r\f&quot;, true);</span>
 
-<span class="fc" id="L41">    AnsibleGroup group = null;</span>
-<span class="fc" id="L42">    AnsibleHost host = null;</span>
-<span class="fc" id="L43">    boolean skipComment = false;</span>
-<span class="fc" id="L44">    boolean isVarsBlock = false;</span>
-<span class="fc" id="L45">    boolean isChildrenBlock = false;</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">    while (tokenizer.hasMoreTokens()) {</span>
-<span class="fc" id="L47">      final String token = tokenizer.nextToken();</span>
+<span class="fc" id="L42">    AnsibleGroup group = null;</span>
+<span class="fc" id="L43">    AnsibleHost host = null;</span>
+<span class="fc" id="L44">    boolean skipComment = false;</span>
+<span class="fc" id="L45">    boolean isVarsBlock = false;</span>
+<span class="fc" id="L46">    boolean isChildrenBlock = false;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    while (tokenizer.hasMoreTokens()) {</span>
+<span class="fc" id="L48">      final String token = tokenizer.nextToken();</span>
 
       // New line, reset the comment flag
-<span class="fc bfc" id="L50" title="All 2 branches covered.">      if (&quot;\n&quot;.equals(token)) {</span>
-<span class="fc" id="L51">        skipComment = false;</span>
-<span class="fc" id="L52">        continue;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">      if (&quot;\n&quot;.equals(token)) {</span>
+<span class="fc" id="L52">        skipComment = false;</span>
+<span class="fc" id="L53">        continue;</span>
       }
 
       // We are still reading a comment line
-<span class="fc bfc" id="L56" title="All 2 branches covered.">      if (skipComment) {</span>
-<span class="fc" id="L57">        continue;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">      if (skipComment) {</span>
+<span class="fc" id="L58">        continue;</span>
       }
 
       // Ignore separators
-<span class="pc bpc" id="L61" title="3 of 8 branches missed.">      if (&quot; &quot;.equals(token) || &quot;\t&quot;.equals(token) || &quot;\r&quot;.equals(token) || &quot;\f&quot;.equals(token)) {</span>
-<span class="nc" id="L62">        continue;</span>
+<span class="pc bpc" id="L62" title="3 of 8 branches missed.">      if (&quot; &quot;.equals(token) || &quot;\t&quot;.equals(token) || &quot;\r&quot;.equals(token) || &quot;\f&quot;.equals(token)) {</span>
+<span class="nc" id="L63">        continue;</span>
       }
 
       // We are reading a comment
-<span class="pc bpc" id="L66" title="1 of 4 branches missed.">      if (token.startsWith(&quot;;&quot;) || token.startsWith(&quot;#&quot;)) {</span>
-<span class="fc" id="L67">        skipComment = true;</span>
-<span class="fc" id="L68">        continue;</span>
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">      if (token.startsWith(&quot;;&quot;) || token.startsWith(&quot;#&quot;)) {</span>
+<span class="fc" id="L68">        skipComment = true;</span>
+<span class="fc" id="L69">        continue;</span>
       }
 
-<span class="fc bfc" id="L71" title="All 2 branches covered.">      if (token.startsWith(&quot;[&quot;)) {</span>
-<span class="fc" id="L72">        host = null;</span>
-<span class="fc" id="L73">        isChildrenBlock = false;</span>
-<span class="fc" id="L74">        isVarsBlock = false;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">      if (token.startsWith(&quot;[&quot;)) {</span>
+<span class="fc" id="L73">        host = null;</span>
+<span class="fc" id="L74">        isChildrenBlock = false;</span>
+<span class="fc" id="L75">        isVarsBlock = false;</span>
 
-<span class="fc" id="L76">        String groupName = token.replaceAll(&quot;^\\[&quot;, &quot;&quot;).replaceAll(&quot;]$&quot;, &quot;&quot;);</span>
+<span class="fc" id="L77">        String groupName = token.replaceAll(&quot;^\\[&quot;, &quot;&quot;).replaceAll(&quot;]$&quot;, &quot;&quot;);</span>
 
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (groupName.contains(&quot;:&quot;)) {</span>
-<span class="fc" id="L79">          final String[] g = groupName.split(&quot;:&quot;);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (groupName.contains(&quot;:&quot;)) {</span>
+<span class="fc" id="L80">          final String[] g = groupName.split(&quot;:&quot;);</span>
 
-<span class="fc" id="L81">          groupName = g[0];</span>
+<span class="fc" id="L82">          groupName = g[0];</span>
 
-<span class="fc bfc" id="L83" title="All 2 branches covered.">          if (&quot;vars&quot;.equals(g[1])) {</span>
-<span class="fc" id="L84">            isVarsBlock = true;</span>
-<span class="fc" id="L85">            group = inventory.getGroup(groupName);</span>
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">          } else if (&quot;children&quot;.equals(g[1])) {</span>
-<span class="fc" id="L87">            isChildrenBlock = true;</span>
-<span class="fc" id="L88">            group = new AnsibleGroup(groupName);</span>
-<span class="fc" id="L89">            inventory.addGroup(group);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">          if (&quot;vars&quot;.equals(g[1])) {</span>
+<span class="fc" id="L85">            isVarsBlock = true;</span>
+<span class="fc" id="L86">            group = inventory.getGroup(groupName);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">          } else if (&quot;children&quot;.equals(g[1])) {</span>
+<span class="fc" id="L88">            isChildrenBlock = true;</span>
+<span class="fc" id="L89">            group = new AnsibleGroup(groupName);</span>
+<span class="fc" id="L90">            inventory.addGroup(group);</span>
           }
-<span class="fc" id="L91">        } else {</span>
-<span class="fc" id="L92">          group = new AnsibleGroup(groupName);</span>
-<span class="fc" id="L93">          inventory.addGroup(group);</span>
+<span class="fc" id="L92">        } else {</span>
+<span class="fc" id="L93">          group = new AnsibleGroup(groupName);</span>
+<span class="fc" id="L94">          inventory.addGroup(group);</span>
         }
-<span class="fc bfc" id="L95" title="All 2 branches covered.">      } else if (token.contains(&quot;=&quot;)) {</span>
-<span class="fc" id="L96">        final String[] v = token.split(&quot;=&quot;);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">      } else if (token.contains(&quot;=&quot;)) {</span>
+<span class="fc" id="L97">        final String[] v = token.split(&quot;=&quot;);</span>
         // Replace YAML backslashes escapes
-<span class="fc" id="L98">        final AnsibleVariable variable = new AnsibleVariable(v[0], v[1].replace(&quot;\\\\&quot;, &quot;\\&quot;));</span>
+<span class="fc" id="L99">        final AnsibleVariable variable = new AnsibleVariable(v[0], v[1].replace(&quot;\\\\&quot;, &quot;\\&quot;));</span>
 
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (host != null) {</span>
-<span class="fc" id="L101">          host.addVariable(variable);</span>
-<span class="pc bpc" id="L102" title="2 of 4 branches missed.">        } else if (isVarsBlock &amp;&amp; group != null) {</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">          for (AnsibleGroup s : group.getSubgroups()) {</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">            for (AnsibleHost h : s.getHosts()) {</span>
-<span class="fc" id="L105">              h.addVariable(variable);</span>
-<span class="fc" id="L106">            }</span>
-<span class="fc" id="L107">          }</span>
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">          for (AnsibleHost h : group.getHosts()) {</span>
-<span class="nc" id="L109">            h.addVariable(variable);</span>
-<span class="nc" id="L110">          }</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (host != null) {</span>
+<span class="fc" id="L102">          host.addVariable(variable);</span>
+<span class="pc bpc" id="L103" title="2 of 4 branches missed.">        } else if (isVarsBlock &amp;&amp; group != null) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">          for (AnsibleGroup s : group.getSubgroups()) {</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            for (AnsibleHost h : s.getHosts()) {</span>
+<span class="fc" id="L106">              h.addVariable(variable);</span>
+<span class="fc" id="L107">            }</span>
+<span class="fc" id="L108">          }</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">          for (AnsibleHost h : group.getHosts()) {</span>
+<span class="nc" id="L110">            h.addVariable(variable);</span>
+<span class="nc" id="L111">          }</span>
         }
-<span class="fc" id="L112">      } else {</span>
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (group == null) {</span>
-<span class="fc" id="L114">          host = new AnsibleHost(token);</span>
-<span class="fc" id="L115">          inventory.addHost(host);</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        } else if (isChildrenBlock) {</span>
-<span class="fc" id="L117">          final AnsibleGroup g = inventory.getGroup(token);</span>
-<span class="fc bfc" id="L118" title="All 2 branches covered.">          if (g != null) {</span>
-<span class="fc" id="L119">            group.addSubgroup(g);</span>
+<span class="fc" id="L113">      } else {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (group == null) {</span>
+<span class="fc" id="L115">          host = new AnsibleHost(token);</span>
+<span class="fc" id="L116">          inventory.addHost(host);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        } else if (isChildrenBlock) {</span>
+<span class="fc" id="L118">          final AnsibleGroup g = inventory.getGroup(token);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">          if (g != null) {</span>
+<span class="fc" id="L120">            group.addSubgroup(g);</span>
           } else {
-<span class="fc" id="L121">            group.addSubgroup(new AnsibleGroup(token));</span>
+<span class="fc" id="L122">            group.addSubgroup(new AnsibleGroup(token));</span>
           }
-<span class="fc" id="L123">        } else {</span>
-<span class="fc" id="L124">          host = new AnsibleHost(token);</span>
-<span class="fc" id="L125">          group.addHost(host);</span>
+<span class="fc" id="L124">        } else {</span>
+<span class="fc" id="L125">          host = new AnsibleHost(token);</span>
+<span class="fc" id="L126">          group.addHost(host);</span>
         }
       }
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L129">    }</span>
 
-<span class="fc" id="L130">    return inventory;</span>
+<span class="fc" id="L131">    return inventory;</span>
   }
 
 }

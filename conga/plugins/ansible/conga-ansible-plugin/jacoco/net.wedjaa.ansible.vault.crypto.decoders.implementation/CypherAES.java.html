@@ -22,33 +22,34 @@ import java.io.OutputStream;
 import net.wedjaa.ansible.vault.crypto.data.VaultInfo;
 import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
 
-<span class="nc" id="L25">public class CypherAES implements CypherInterface {</span>
+@SuppressWarnings(&quot;java:S1192&quot;) // duplicate string literal
+<span class="nc" id="L26">public class CypherAES implements CypherInterface {</span>
 
   public static final String CYPHER_ID = &quot;AES&quot;;
 
   @Override
   public void decrypt(OutputStream decodedStream, byte[] data, String password) throws IOException {
-<span class="nc" id="L31">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
+<span class="nc" id="L32">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
   }
 
   @Override
   public byte[] decrypt(byte[] data, String password) throws IOException {
-<span class="nc" id="L36">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
+<span class="nc" id="L37">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
   }
 
   @Override
   public void encrypt(OutputStream encodedStream, byte[] data, String password) throws IOException {
-<span class="nc" id="L41">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
+<span class="nc" id="L42">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
   }
 
   @Override
   public byte[] encrypt(byte[] data, String password) throws IOException {
-<span class="nc" id="L46">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
+<span class="nc" id="L47">    throw new IOException(CYPHER_ID + &quot; is not implemented.&quot;);</span>
   }
 
   @Override
   public String infoLine() {
-<span class="nc" id="L51">    return VaultInfo.vaultInfoForCypher(CYPHER_ID);</span>
+<span class="nc" id="L52">    return VaultInfo.vaultInfoForCypher(CYPHER_ID);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
