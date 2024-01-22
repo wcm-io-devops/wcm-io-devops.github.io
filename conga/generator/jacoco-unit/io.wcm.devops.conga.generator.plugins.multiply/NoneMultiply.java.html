@@ -22,15 +22,13 @@ package io.wcm.devops.conga.generator.plugins.multiply;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableList;
-
 import io.wcm.devops.conga.generator.spi.MultiplyPlugin;
 import io.wcm.devops.conga.generator.spi.context.MultiplyContext;
 
 /**
  * Multiplier that does not multiply but generate the file once.
  */
-<span class="fc" id="L33">public final class NoneMultiply implements MultiplyPlugin {</span>
+<span class="fc" id="L31">public final class NoneMultiply implements MultiplyPlugin {</span>
 
   /**
    * Plugin name
@@ -39,12 +37,12 @@ import io.wcm.devops.conga.generator.spi.context.MultiplyContext;
 
   @Override
   public String getName() {
-<span class="fc" id="L42">    return NAME;</span>
+<span class="fc" id="L40">    return NAME;</span>
   }
 
   @Override
   public List&lt;Map&lt;String, Object&gt;&gt; multiply(MultiplyContext context) {
-<span class="fc" id="L47">    return ImmutableList.of(context.getConfig());</span>
+<span class="fc" id="L45">    return List.of(context.getConfig());</span>
   }
 
 }

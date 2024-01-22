@@ -40,9 +40,6 @@ import org.slf4j.Logger;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.export.NodeModelExport;
@@ -97,207 +94,207 @@ final class EnvironmentGenerator {
   private final VariableStringResolver variableStringResolver;
   private final VariableMapResolver variableMapResolver;
   private final Collection&lt;String&gt; dependencyVersions;
-<span class="fc" id="L100">  private final Set&lt;String&gt; sensitiveConfigParameters = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L97">  private final Set&lt;String&gt; sensitiveConfigParameters = new HashSet&lt;&gt;();</span>
 
   private final Map&lt;String, Role&gt; roles;
   private final Map&lt;String, Object&gt; environmentContextProperties;
-<span class="fc" id="L104">  private final Set&lt;String&gt; generatedFilePaths = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L101">  private final Set&lt;String&gt; generatedFilePaths = new HashSet&lt;&gt;();</span>
   private final YamlRepresenter yamlRepresenter;
 
   EnvironmentGenerator(String environmentName, Environment environment, File destDir,
-<span class="fc" id="L108">      GeneratorOptions options) {</span>
-<span class="fc" id="L109">    this.options = options;</span>
-<span class="fc" id="L110">    this.environmentName = environmentName;</span>
-<span class="fc" id="L111">    this.environment = EnvironmentExpander.expandNodes(environment, environmentName);</span>
-<span class="fc" id="L112">    this.destDir = destDir;</span>
-<span class="fc" id="L113">    this.log = options.getLogger();</span>
+<span class="fc" id="L105">      GeneratorOptions options) {</span>
+<span class="fc" id="L106">    this.options = options;</span>
+<span class="fc" id="L107">    this.environmentName = environmentName;</span>
+<span class="fc" id="L108">    this.environment = EnvironmentExpander.expandNodes(environment, environmentName);</span>
+<span class="fc" id="L109">    this.destDir = destDir;</span>
+<span class="fc" id="L110">    this.log = options.getLogger();</span>
 
-<span class="fc" id="L115">    this.pluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L116">        .pluginManager(options.getPluginManager())</span>
-<span class="fc" id="L117">        .valueProviderConfig(options.getValueProviderConfig())</span>
-<span class="fc" id="L118">        .genericPluginConfig(mergePluginConfig(environment.getPluginConfig(), options.getGenericPluginConfig()))</span>
-<span class="fc" id="L119">        .containerContext(options.getContainerContext())</span>
-<span class="fc" id="L120">        .logger(this.log);</span>
+<span class="fc" id="L112">    this.pluginContextOptions = new PluginContextOptions()</span>
+<span class="fc" id="L113">        .pluginManager(options.getPluginManager())</span>
+<span class="fc" id="L114">        .valueProviderConfig(options.getValueProviderConfig())</span>
+<span class="fc" id="L115">        .genericPluginConfig(mergePluginConfig(environment.getPluginConfig(), options.getGenericPluginConfig()))</span>
+<span class="fc" id="L116">        .containerContext(options.getContainerContext())</span>
+<span class="fc" id="L117">        .logger(this.log);</span>
 
     // prepare variable resolvers
-<span class="fc" id="L123">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
-<span class="fc" id="L124">        .pluginContextOptions(this.pluginContextOptions);</span>
-<span class="fc" id="L125">    this.variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
-<span class="fc" id="L126">    this.variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
-<span class="fc" id="L127">    VariableObjectTreeResolver variableObjectTreeResolver = new VariableObjectTreeResolver(valueProviderGlobalContext);</span>
+<span class="fc" id="L120">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
+<span class="fc" id="L121">        .pluginContextOptions(this.pluginContextOptions);</span>
+<span class="fc" id="L122">    this.variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
+<span class="fc" id="L123">    this.variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
+<span class="fc" id="L124">    VariableObjectTreeResolver variableObjectTreeResolver = new VariableObjectTreeResolver(valueProviderGlobalContext);</span>
 
     // build resource loaded based on combined dependency lists of environment and container
-<span class="fc" id="L130">    List&lt;URL&gt; combindedClasspathUrls = ResourceLoaderUtil.getEnvironmentClasspathUrls(environment.getDependencies(), this.variableStringResolver, options);</span>
-<span class="fc" id="L131">    ClassLoader resourceClassLoader = ResourceLoaderUtil.buildClassLoader(combindedClasspathUrls);</span>
-<span class="fc" id="L132">    ResourceLoader resourceLoader = new ResourceLoader(resourceClassLoader);</span>
+<span class="fc" id="L127">    List&lt;URL&gt; combindedClasspathUrls = ResourceLoaderUtil.getEnvironmentClasspathUrls(environment.getDependencies(), this.variableStringResolver, options);</span>
+<span class="fc" id="L128">    ClassLoader resourceClassLoader = ResourceLoaderUtil.buildClassLoader(combindedClasspathUrls);</span>
+<span class="fc" id="L129">    ResourceLoader resourceLoader = new ResourceLoader(resourceClassLoader);</span>
 
     // prepare template and role directories
-<span class="fc" id="L135">    List&lt;ResourceCollection&gt; templateDirs = ImmutableList.of(</span>
-<span class="fc" id="L136">        resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + options.getTemplateDir()),</span>
-<span class="fc" id="L137">        resourceLoader.getResourceCollection(ResourceLoader.CLASSPATH_PREFIX + GeneratorOptions.CLASSPATH_TEMPLATES_DIR));</span>
-<span class="fc" id="L138">    List&lt;ResourceCollection&gt; roleDirs = ImmutableList.of(</span>
-<span class="fc" id="L139">        resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + options.getRoleDir()),</span>
-<span class="fc" id="L140">        resourceLoader.getResourceCollection(ResourceLoader.CLASSPATH_PREFIX + GeneratorOptions.CLASSPATH_ROLES_DIR));</span>
+<span class="fc" id="L132">    List&lt;ResourceCollection&gt; templateDirs = List.of(</span>
+<span class="fc" id="L133">        resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + options.getTemplateDir()),</span>
+<span class="fc" id="L134">        resourceLoader.getResourceCollection(ResourceLoader.CLASSPATH_PREFIX + GeneratorOptions.CLASSPATH_TEMPLATES_DIR));</span>
+<span class="fc" id="L135">    List&lt;ResourceCollection&gt; roleDirs = List.of(</span>
+<span class="fc" id="L136">        resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + options.getRoleDir()),</span>
+<span class="fc" id="L137">        resourceLoader.getResourceCollection(ResourceLoader.CLASSPATH_PREFIX + GeneratorOptions.CLASSPATH_ROLES_DIR));</span>
 
-<span class="fc" id="L142">    this.roles = ResourceLoaderUtil.readModels(roleDirs, new RoleReader());</span>
+<span class="fc" id="L139">    this.roles = ResourceLoaderUtil.readModels(roleDirs, new RoleReader());</span>
 
     // collect sensitive configuration parameter names from all roles
-<span class="fc" id="L145">    this.roles.values().forEach(role -&gt; sensitiveConfigParameters.addAll(role.getSensitiveConfigParameters()));</span>
+<span class="fc" id="L142">    this.roles.values().forEach(role -&gt; sensitiveConfigParameters.addAll(role.getSensitiveConfigParameters()));</span>
 
-<span class="fc" id="L147">    this.urlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L148">        .pluginContextOptions(pluginContextOptions)</span>
-<span class="fc" id="L149">        .baseDir(options.getBaseDir())</span>
-<span class="fc" id="L150">        .resourceClassLoader(resourceClassLoader)</span>
-<span class="fc" id="L151">        .environment(environment);</span>
-<span class="fc" id="L152">    this.urlFileManager = new UrlFileManager(options.getPluginManager(), this.urlFilePluginContext);</span>
+<span class="fc" id="L144">    this.urlFilePluginContext = new UrlFilePluginContext()</span>
+<span class="fc" id="L145">        .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L146">        .baseDir(options.getBaseDir())</span>
+<span class="fc" id="L147">        .resourceClassLoader(resourceClassLoader)</span>
+<span class="fc" id="L148">        .environment(environment);</span>
+<span class="fc" id="L149">    this.urlFileManager = new UrlFileManager(options.getPluginManager(), this.urlFilePluginContext);</span>
 
-<span class="fc" id="L154">    this.handlebarsManager = new HandlebarsManager(templateDirs, this.pluginContextOptions);</span>
+<span class="fc" id="L151">    this.handlebarsManager = new HandlebarsManager(templateDirs, this.pluginContextOptions);</span>
 
-<span class="fc" id="L156">    this.defaultMultiplyPlugin = options.getPluginManager().get(NoneMultiply.NAME, MultiplyPlugin.class);</span>
-<span class="fc" id="L157">    this.environmentContextProperties = ImmutableMap.copyOf(</span>
-<span class="fc" id="L158">        ContextPropertiesBuilder.buildEnvironmentContextVariables(environmentName, this.environment, options.getVersion(),</span>
+<span class="fc" id="L153">    this.defaultMultiplyPlugin = options.getPluginManager().get(NoneMultiply.NAME, MultiplyPlugin.class);</span>
+<span class="fc" id="L154">    this.environmentContextProperties = Collections.unmodifiableMap(</span>
+<span class="fc" id="L155">        ContextPropertiesBuilder.buildEnvironmentContextVariables(environmentName, this.environment, options.getVersion(),</span>
             variableObjectTreeResolver, variableStringResolver));
 
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">    this.dependencyVersions = options.getDependencyVersionBuilder() != null ? options.getDependencyVersionBuilder().apply(environment) : List.of();</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">    this.dependencyVersions = options.getDependencyVersionBuilder() != null ? options.getDependencyVersionBuilder().apply(environment) : List.of();</span>
 
     // prepare YAML representer
-<span class="fc" id="L164">    yamlRepresenter = new YamlRepresenter();</span>
-<span class="fc" id="L165">    options.getPluginManager().getAll(YamlRepresentPlugin.class).forEach(plugin -&gt; {</span>
-<span class="nc" id="L166">      YamlRepresentContext context = new YamlRepresentContext()</span>
-<span class="nc" id="L167">          .pluginContextOptions(pluginContextOptions)</span>
-<span class="nc" id="L168">          .yamlRepresenter(yamlRepresenter);</span>
-<span class="nc" id="L169">      plugin.register(context);</span>
-<span class="nc" id="L170">    });</span>
-<span class="fc" id="L171">  }</span>
+<span class="fc" id="L161">    yamlRepresenter = new YamlRepresenter();</span>
+<span class="fc" id="L162">    options.getPluginManager().getAll(YamlRepresentPlugin.class).forEach(plugin -&gt; {</span>
+<span class="nc" id="L163">      YamlRepresentContext context = new YamlRepresentContext()</span>
+<span class="nc" id="L164">          .pluginContextOptions(pluginContextOptions)</span>
+<span class="nc" id="L165">          .yamlRepresenter(yamlRepresenter);</span>
+<span class="nc" id="L166">      plugin.register(context);</span>
+<span class="nc" id="L167">    });</span>
+<span class="fc" id="L168">  }</span>
 
   /**
    * Generate files for environment.
    * @param nodeNames Node names to generate. If none specified all nodes are generated.
    */
   public void generate(String[] nodeNames) {
-<span class="fc" id="L178">    log.info(&quot;&quot;);</span>
-<span class="fc" id="L179">    log.info(&quot;===== Environment '{}' =====&quot;, environmentName);</span>
+<span class="fc" id="L175">    log.info(&quot;&quot;);</span>
+<span class="fc" id="L176">    log.info(&quot;===== Environment '{}' =====&quot;, environmentName);</span>
 
-<span class="fc bfc" id="L181" title="All 2 branches covered.">    Set&lt;String&gt; nodeNamesIndex = ArrayUtils.isEmpty(nodeNames) ? Collections.emptySet() : ImmutableSet.copyOf(nodeNames);</span>
-<span class="fc bfc" id="L182" title="All 2 branches covered.">    for (Node node : environment.getNodes()) {</span>
-<span class="fc bfc" id="L183" title="All 2 branches covered.">      if (isSelectedNode(node, nodeNamesIndex)) {</span>
-<span class="fc" id="L184">        generateNode(node);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">    Set&lt;String&gt; nodeNamesIndex = ArrayUtils.isEmpty(nodeNames) ? Collections.emptySet() : Set.of(nodeNames);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">    for (Node node : environment.getNodes()) {</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">      if (isSelectedNode(node, nodeNamesIndex)) {</span>
+<span class="fc" id="L181">        generateNode(node);</span>
       }
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L183">    }</span>
 
-<span class="fc" id="L188">    log.info(&quot;&quot;);</span>
-<span class="fc" id="L189">  }</span>
+<span class="fc" id="L185">    log.info(&quot;&quot;);</span>
+<span class="fc" id="L186">  }</span>
 
   private boolean isSelectedNode(Node node, Set&lt;String&gt; nodeNames) {
-<span class="fc bfc" id="L192" title="All 2 branches covered.">    if (nodeNames.isEmpty()) {</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">    if (nodeNames.isEmpty()) {</span>
+<span class="fc" id="L190">      return true;</span>
+    }
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">    if (StringUtils.isNotBlank(node.getNode()) &amp;&amp; nodeNames.contains(node.getNode())) {</span>
 <span class="fc" id="L193">      return true;</span>
     }
-<span class="pc bpc" id="L195" title="1 of 4 branches missed.">    if (StringUtils.isNotBlank(node.getNode()) &amp;&amp; nodeNames.contains(node.getNode())) {</span>
-<span class="fc" id="L196">      return true;</span>
-    }
-<span class="fc" id="L198">    return CollectionUtils.containsAny(node.getNodes(), nodeNames);</span>
+<span class="fc" id="L195">    return CollectionUtils.containsAny(node.getNodes(), nodeNames);</span>
   }
 
   private void generateNode(Node node) {
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">    if (StringUtils.isEmpty(node.getNode())) {</span>
-<span class="nc" id="L203">      throw new GeneratorException(&quot;Missing node name in &quot; + environmentName + &quot;.&quot;);</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">    if (StringUtils.isEmpty(node.getNode())) {</span>
+<span class="nc" id="L200">      throw new GeneratorException(&quot;Missing node name in &quot; + environmentName + &quot;.&quot;);</span>
     }
 
-<span class="fc" id="L206">    log.info(&quot;&quot;);</span>
-<span class="fc" id="L207">    log.info(&quot;----- Node '{}' -----&quot;, node.getNode());</span>
+<span class="fc" id="L203">    log.info(&quot;&quot;);</span>
+<span class="fc" id="L204">    log.info(&quot;----- Node '{}' -----&quot;, node.getNode());</span>
 
-<span class="fc" id="L209">    File nodeDir = FileUtil.ensureDirExistsAutocreate(new File(destDir, node.getNode()));</span>
+<span class="fc" id="L206">    File nodeDir = FileUtil.ensureDirExistsAutocreate(new File(destDir, node.getNode()));</span>
     try {
-<span class="fc" id="L211">      this.urlFilePluginContext.baseNodeDir(nodeDir);</span>
+<span class="fc" id="L208">      this.urlFilePluginContext.baseNodeDir(nodeDir);</span>
 
-<span class="fc" id="L213">      NodeModelExport exportModelGenerator = new NodeModelExport(nodeDir, node, environment, options.getModelExport(),</span>
-<span class="fc" id="L214">          variableStringResolver, variableMapResolver, options.getContainerVersionInfo(), pluginContextOptions,</span>
+<span class="fc" id="L210">      NodeModelExport exportModelGenerator = new NodeModelExport(nodeDir, node, environment, options.getModelExport(),</span>
+<span class="fc" id="L211">          variableStringResolver, variableMapResolver, options.getContainerVersionInfo(), pluginContextOptions,</span>
           sensitiveConfigParameters, yamlRepresenter);
 
-<span class="fc bfc" id="L217" title="All 2 branches covered.">      for (NodeRole nodeRole : node.getRoles()) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">      for (NodeRole nodeRole : node.getRoles()) {</span>
         // get role and resolve all inheritance relations
-<span class="fc" id="L219">        Map&lt;String, Role&gt; resolvedRoles = RoleUtil.resolveRole(nodeRole.getRole(), environmentName + &quot;/&quot; + node.getNode(), roles);</span>
-<span class="fc bfc" id="L220" title="All 2 branches covered.">        for (Map.Entry&lt;String, Role&gt; resolvedRole : resolvedRoles.entrySet()) {</span>
-<span class="fc" id="L221">          String roleName = resolvedRole.getKey();</span>
-<span class="fc" id="L222">          Role role = resolvedRole.getValue();</span>
-<span class="fc" id="L223">          List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
+<span class="fc" id="L216">        Map&lt;String, Role&gt; resolvedRoles = RoleUtil.resolveRole(nodeRole.getRole(), environmentName + &quot;/&quot; + node.getNode(), roles);</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for (Map.Entry&lt;String, Role&gt; resolvedRole : resolvedRoles.entrySet()) {</span>
+<span class="fc" id="L218">          String roleName = resolvedRole.getKey();</span>
+<span class="fc" id="L219">          Role role = resolvedRole.getValue();</span>
+<span class="fc" id="L220">          List&lt;String&gt; variants = nodeRole.getAggregatedVariants();</span>
 
           // collect default config from role and it's variant.
           // default config in variants has higher precedence than config in the role itself
           // variants listed first have higher precedence than variants listed last
-<span class="fc" id="L228">          Map&lt;String, Object&gt; roleDefaultConfig = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L229" title="All 2 branches covered.">          for (String variant : variants) {</span>
-<span class="fc" id="L230">            RoleVariant roleVariant = getRoleVariant(role, variant, roleName, node);</span>
-<span class="fc" id="L231">            roleDefaultConfig = MapMerger.merge(roleDefaultConfig, roleVariant.getConfig());</span>
-<span class="fc" id="L232">          }</span>
-<span class="fc" id="L233">          roleDefaultConfig = MapMerger.merge(roleDefaultConfig, role.getConfig());</span>
+<span class="fc" id="L225">          Map&lt;String, Object&gt; roleDefaultConfig = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">          for (String variant : variants) {</span>
+<span class="fc" id="L227">            RoleVariant roleVariant = getRoleVariant(role, variant, roleName, node);</span>
+<span class="fc" id="L228">            roleDefaultConfig = MapMerger.merge(roleDefaultConfig, roleVariant.getConfig());</span>
+<span class="fc" id="L229">          }</span>
+<span class="fc" id="L230">          roleDefaultConfig = MapMerger.merge(roleDefaultConfig, role.getConfig());</span>
 
           // merge default values to config
-<span class="fc" id="L236">          Map&lt;String, Object&gt; mergedConfig = nodeRole.getConfig();</span>
-<span class="fc" id="L237">          mergedConfig = MapMerger.merge(mergedConfig, roleDefaultConfig);</span>
+<span class="fc" id="L233">          Map&lt;String, Object&gt; mergedConfig = nodeRole.getConfig();</span>
+<span class="fc" id="L234">          mergedConfig = MapMerger.merge(mergedConfig, roleDefaultConfig);</span>
 
           // additionally set context variables
-<span class="fc" id="L240">          mergedConfig.putAll(environmentContextProperties);</span>
-<span class="fc" id="L241">          mergedConfig.putAll(ContextPropertiesBuilder.buildCurrentContextVariables(node, nodeRole));</span>
+<span class="fc" id="L237">          mergedConfig.putAll(environmentContextProperties);</span>
+<span class="fc" id="L238">          mergedConfig.putAll(ContextPropertiesBuilder.buildCurrentContextVariables(node, nodeRole));</span>
 
           // collect role and tenant information for export model
-<span class="fc" id="L244">          ExportNodeRoleData exportNodeRoleData = exportModelGenerator.addRole(roleName, variants, mergedConfig,</span>
-<span class="fc" id="L245">              role.getSensitiveConfigParameters());</span>
+<span class="fc" id="L241">          ExportNodeRoleData exportNodeRoleData = exportModelGenerator.addRole(roleName, variants, mergedConfig,</span>
+<span class="fc" id="L242">              role.getSensitiveConfigParameters());</span>
 
           // generate files
-<span class="fc" id="L248">          List&lt;GeneratedFileContext&gt; allFiles = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L249" title="All 2 branches covered.">          for (RoleFile roleFile : role.getFiles()) {</span>
+<span class="fc" id="L245">          List&lt;GeneratedFileContext&gt; allFiles = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">          for (RoleFile roleFile : role.getFiles()) {</span>
             // generate file if no variant is required, or at least one of the given variants is defined for the node/role
-<span class="fc bfc" id="L251" title="All 2 branches covered.">            if (RoleUtil.matchesRoleFile(roleFile, variants)) {</span>
-<span class="fc" id="L252">              Template template = getHandlebarsTemplate(role, roleFile, nodeRole);</span>
-<span class="fc" id="L253">              multiplyFiles(role, roleFile, mergedConfig, nodeDir, template,</span>
-<span class="fc" id="L254">                  roleName, variants, roleFile.getTemplate(), allFiles);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">            if (RoleUtil.matchesRoleFile(roleFile, variants)) {</span>
+<span class="fc" id="L249">              Template template = getHandlebarsTemplate(role, roleFile, nodeRole);</span>
+<span class="fc" id="L250">              multiplyFiles(role, roleFile, mergedConfig, nodeDir, template,</span>
+<span class="fc" id="L251">                  roleName, variants, roleFile.getTemplate(), allFiles);</span>
             }
-<span class="fc" id="L256">          }</span>
+<span class="fc" id="L253">          }</span>
 
           // filter out result files probably deleted by other file definitions
-<span class="fc" id="L259">          allFiles = allFiles.stream()</span>
-<span class="fc" id="L260">              .filter(generatedFile -&gt; generatedFile.getFileContext().getFile().exists())</span>
-<span class="fc" id="L261">              .collect(Collectors.toList());</span>
+<span class="fc" id="L256">          allFiles = allFiles.stream()</span>
+<span class="fc" id="L257">              .filter(generatedFile -&gt; generatedFile.getFileContext().getFile().exists())</span>
+<span class="fc" id="L258">              .collect(Collectors.toList());</span>
 
-<span class="fc" id="L263">          exportNodeRoleData.files(allFiles);</span>
-<span class="fc" id="L264">        }</span>
-<span class="fc" id="L265">      }</span>
+<span class="fc" id="L260">          exportNodeRoleData.files(allFiles);</span>
+<span class="fc" id="L261">        }</span>
+<span class="fc" id="L262">      }</span>
 
       // save export model
-<span class="fc" id="L268">      exportModelGenerator.generate();</span>
+<span class="fc" id="L265">      exportModelGenerator.generate();</span>
     }
     finally {
-<span class="fc" id="L271">      this.urlFilePluginContext.baseNodeDir(null);</span>
+<span class="fc" id="L268">      this.urlFilePluginContext.baseNodeDir(null);</span>
     }
-<span class="fc" id="L273">  }</span>
+<span class="fc" id="L270">  }</span>
 
   private RoleVariant getRoleVariant(Role role, String variant, String roleName, Node node) {
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">    for (RoleVariant roleVariant : role.getVariants()) {</span>
-<span class="fc bfc" id="L277" title="All 2 branches covered.">      if (StringUtils.equals(variant, roleVariant.getVariant())) {</span>
-<span class="fc" id="L278">        return roleVariant;</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">    for (RoleVariant roleVariant : role.getVariants()) {</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">      if (StringUtils.equals(variant, roleVariant.getVariant())) {</span>
+<span class="fc" id="L275">        return roleVariant;</span>
       }
-<span class="fc" id="L280">    }</span>
-<span class="nc" id="L281">    throw new GeneratorException(&quot;Variant '&quot; + variant + &quot;' for role '&quot; + roleName + &quot;' &quot;</span>
-<span class="nc" id="L282">        + &quot;from &quot; + environmentName + &quot;/&quot; + node.getNode() + &quot; does not exist.&quot;);</span>
+<span class="fc" id="L277">    }</span>
+<span class="nc" id="L278">    throw new GeneratorException(&quot;Variant '&quot; + variant + &quot;' for role '&quot; + roleName + &quot;' &quot;</span>
+<span class="nc" id="L279">        + &quot;from &quot; + environmentName + &quot;/&quot; + node.getNode() + &quot; does not exist.&quot;);</span>
   }
 
   private Template getHandlebarsTemplate(Role role, RoleFile roleFile, NodeRole nodeRole) {
-<span class="fc" id="L286">    String templateFile = FileUtil.getTemplatePath(role, roleFile);</span>
-<span class="fc bfc" id="L287" title="All 2 branches covered.">    if (StringUtils.isEmpty(templateFile)) {</span>
-<span class="pc bpc" id="L288" title="1 of 4 branches missed.">      if (StringUtils.isEmpty(roleFile.getUrl()) &amp;&amp; StringUtils.isEmpty(roleFile.getSymlinkTarget())) {</span>
-<span class="nc" id="L289">        throw new GeneratorException(&quot;No template defined for file: &quot; + FileUtil.getFileInfo(nodeRole, roleFile));</span>
+<span class="fc" id="L283">    String templateFile = FileUtil.getTemplatePath(role, roleFile);</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">    if (StringUtils.isEmpty(templateFile)) {</span>
+<span class="pc bpc" id="L285" title="1 of 4 branches missed.">      if (StringUtils.isEmpty(roleFile.getUrl()) &amp;&amp; StringUtils.isEmpty(roleFile.getSymlinkTarget())) {</span>
+<span class="nc" id="L286">        throw new GeneratorException(&quot;No template defined for file: &quot; + FileUtil.getFileInfo(nodeRole, roleFile));</span>
       }
       else {
-<span class="fc" id="L292">        return null;</span>
+<span class="fc" id="L289">        return null;</span>
       }
     }
     try {
-<span class="fc" id="L296">      Handlebars handlebars = handlebarsManager.get(getEscapingStrategy(roleFile), roleFile.getCharset());</span>
-<span class="fc" id="L297">      return handlebars.compile(templateFile);</span>
+<span class="fc" id="L293">      Handlebars handlebars = handlebarsManager.get(getEscapingStrategy(roleFile), roleFile.getCharset());</span>
+<span class="fc" id="L294">      return handlebars.compile(templateFile);</span>
     }
-<span class="nc" id="L299">    catch (IOException ex) {</span>
-<span class="nc" id="L300">      throw new GeneratorException(&quot;Unable to compile handlebars template: &quot; + FileUtil.getFileInfo(nodeRole, roleFile), ex);</span>
+<span class="nc" id="L296">    catch (IOException ex) {</span>
+<span class="nc" id="L297">      throw new GeneratorException(&quot;Unable to compile handlebars template: &quot; + FileUtil.getFileInfo(nodeRole, roleFile), ex);</span>
     }
   }
 
@@ -308,64 +305,64 @@ final class EnvironmentGenerator {
    * @return Escaping Strategy (never null)
    */
   private String getEscapingStrategy(RoleFile roleFile) {
-<span class="pc bpc" id="L311" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(roleFile.getEscapingStrategy())) {</span>
-<span class="nc" id="L312">      return roleFile.getEscapingStrategy();</span>
+<span class="pc bpc" id="L308" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(roleFile.getEscapingStrategy())) {</span>
+<span class="nc" id="L309">      return roleFile.getEscapingStrategy();</span>
     }
-<span class="fc" id="L314">    String fileExtension = FilenameUtils.getExtension(roleFile.getFile());</span>
-<span class="fc" id="L315">    EscapingStrategyContext context = new EscapingStrategyContext()</span>
-<span class="fc" id="L316">        .pluginContextOptions(this.pluginContextOptions);</span>
-<span class="fc" id="L317">    return options.getPluginManager().getAll(EscapingStrategyPlugin.class).stream()</span>
-<span class="fc bfc" id="L318" title="All 2 branches covered.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneEscapingStrategy.NAME))</span>
-<span class="fc" id="L319">        .filter(plugin -&gt; plugin.accepts(fileExtension, context))</span>
-<span class="fc" id="L320">        .findFirst().orElse(options.getPluginManager().get(NoneEscapingStrategy.NAME, EscapingStrategyPlugin.class))</span>
-<span class="fc" id="L321">        .getName();</span>
+<span class="fc" id="L311">    String fileExtension = FilenameUtils.getExtension(roleFile.getFile());</span>
+<span class="fc" id="L312">    EscapingStrategyContext context = new EscapingStrategyContext()</span>
+<span class="fc" id="L313">        .pluginContextOptions(this.pluginContextOptions);</span>
+<span class="fc" id="L314">    return options.getPluginManager().getAll(EscapingStrategyPlugin.class).stream()</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneEscapingStrategy.NAME))</span>
+<span class="fc" id="L316">        .filter(plugin -&gt; plugin.accepts(fileExtension, context))</span>
+<span class="fc" id="L317">        .findFirst().orElse(options.getPluginManager().get(NoneEscapingStrategy.NAME, EscapingStrategyPlugin.class))</span>
+<span class="fc" id="L318">        .getName();</span>
   }
 
   private void multiplyFiles(Role role, RoleFile roleFile, Map&lt;String, Object&gt; config, File nodeDir, Template template,
       String roleName, List&lt;String&gt; roleVariantNames, String templateName, List&lt;GeneratedFileContext&gt; generatedFiles) {
-<span class="fc" id="L326">    MultiplyPlugin multiplyPlugin = defaultMultiplyPlugin;</span>
-<span class="fc bfc" id="L327" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(roleFile.getMultiply())) {</span>
-<span class="fc" id="L328">      multiplyPlugin = options.getPluginManager().get(roleFile.getMultiply(), MultiplyPlugin.class);</span>
+<span class="fc" id="L323">    MultiplyPlugin multiplyPlugin = defaultMultiplyPlugin;</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(roleFile.getMultiply())) {</span>
+<span class="fc" id="L325">      multiplyPlugin = options.getPluginManager().get(roleFile.getMultiply(), MultiplyPlugin.class);</span>
     }
 
-<span class="fc" id="L331">    MultiplyContext multiplyContext = new MultiplyContext()</span>
-<span class="fc" id="L332">        .pluginContextOptions(this.pluginContextOptions)</span>
-<span class="fc" id="L333">        .role(role)</span>
-<span class="fc" id="L334">        .roleFile(roleFile)</span>
-<span class="fc" id="L335">        .environment(environment)</span>
-<span class="fc" id="L336">        .config(config)</span>
-<span class="fc" id="L337">        .variableStringResolver(variableStringResolver)</span>
-<span class="fc" id="L338">        .variableMapResolver(variableMapResolver);</span>
+<span class="fc" id="L328">    MultiplyContext multiplyContext = new MultiplyContext()</span>
+<span class="fc" id="L329">        .pluginContextOptions(this.pluginContextOptions)</span>
+<span class="fc" id="L330">        .role(role)</span>
+<span class="fc" id="L331">        .roleFile(roleFile)</span>
+<span class="fc" id="L332">        .environment(environment)</span>
+<span class="fc" id="L333">        .config(config)</span>
+<span class="fc" id="L334">        .variableStringResolver(variableStringResolver)</span>
+<span class="fc" id="L335">        .variableMapResolver(variableMapResolver);</span>
 
-<span class="fc" id="L340">    List&lt;Map&lt;String, Object&gt;&gt; muliplyConfigs = multiplyPlugin.multiply(multiplyContext);</span>
-<span class="fc" id="L341">    int index = 0;</span>
-<span class="fc bfc" id="L342" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; muliplyConfig : muliplyConfigs) {</span>
+<span class="fc" id="L337">    List&lt;Map&lt;String, Object&gt;&gt; muliplyConfigs = multiplyPlugin.multiply(multiplyContext);</span>
+<span class="fc" id="L338">    int index = 0;</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">    for (Map&lt;String, Object&gt; muliplyConfig : muliplyConfigs) {</span>
 
       // resolve variables
-<span class="fc" id="L345">      Map&lt;String, Object&gt; resolvedConfig = variableMapResolver.resolve(muliplyConfig, false);</span>
-<span class="fc" id="L346">      resolvedConfig.put(ContextProperties.MULTIPLY_INDEX, index);</span>
+<span class="fc" id="L342">      Map&lt;String, Object&gt; resolvedConfig = variableMapResolver.resolve(muliplyConfig, false);</span>
+<span class="fc" id="L343">      resolvedConfig.put(ContextProperties.MULTIPLY_INDEX, index);</span>
 
       // skip file if condition does not evaluate to a non-empty string or is &quot;false&quot;
-<span class="fc" id="L349">      boolean skip = false;</span>
-<span class="fc bfc" id="L350" title="All 2 branches covered.">      if (StringUtils.isNotEmpty(roleFile.getCondition())) {</span>
-<span class="fc" id="L351">        String condition = variableStringResolver.resolveString(roleFile.getCondition(), resolvedConfig);</span>
-<span class="pc bpc" id="L352" title="1 of 4 branches missed.">        skip = StringUtils.isBlank(condition) || StringUtils.equalsIgnoreCase(condition, &quot;false&quot;);</span>
+<span class="fc" id="L346">      boolean skip = false;</span>
+<span class="fc bfc" id="L347" title="All 2 branches covered.">      if (StringUtils.isNotEmpty(roleFile.getCondition())) {</span>
+<span class="fc" id="L348">        String condition = variableStringResolver.resolveString(roleFile.getCondition(), resolvedConfig);</span>
+<span class="pc bpc" id="L349" title="1 of 4 branches missed.">        skip = StringUtils.isBlank(condition) || StringUtils.equalsIgnoreCase(condition, &quot;false&quot;);</span>
       }
 
-<span class="fc bfc" id="L355" title="All 2 branches covered.">      if (!skip) {</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">      if (!skip) {</span>
         // replace placeholders with context variables
-<span class="fc" id="L357">        String dir = variableStringResolver.resolveString(roleFile.getDir(), resolvedConfig);</span>
-<span class="fc" id="L358">        String file = variableStringResolver.resolveString(roleFile.getFile(), resolvedConfig);</span>
-<span class="fc" id="L359">        String url = variableStringResolver.resolveString(roleFile.getUrl(), resolvedConfig);</span>
-<span class="fc" id="L360">        String symlinkTarget = variableStringResolver.resolveString(roleFile.getSymlinkTarget(), resolvedConfig);</span>
+<span class="fc" id="L354">        String dir = variableStringResolver.resolveString(roleFile.getDir(), resolvedConfig);</span>
+<span class="fc" id="L355">        String file = variableStringResolver.resolveString(roleFile.getFile(), resolvedConfig);</span>
+<span class="fc" id="L356">        String url = variableStringResolver.resolveString(roleFile.getUrl(), resolvedConfig);</span>
+<span class="fc" id="L357">        String symlinkTarget = variableStringResolver.resolveString(roleFile.getSymlinkTarget(), resolvedConfig);</span>
 
-<span class="fc" id="L362">        generatedFiles.addAll(generateFile(roleFile, dir, file, url, symlinkTarget,</span>
+<span class="fc" id="L359">        generatedFiles.addAll(generateFile(roleFile, dir, file, url, symlinkTarget,</span>
             resolvedConfig, nodeDir, template, roleName, roleVariantNames, templateName));
 
-<span class="fc" id="L365">        index++;</span>
+<span class="fc" id="L362">        index++;</span>
       }
-<span class="fc" id="L367">    }</span>
-<span class="fc" id="L368">  }</span>
+<span class="fc" id="L364">    }</span>
+<span class="fc" id="L365">  }</span>
 
   @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
@@ -374,53 +371,53 @@ final class EnvironmentGenerator {
       Map&lt;String, Object&gt; config, File nodeDir, Template template,
       String roleName, List&lt;String&gt; roleVariantNames, String templateName) {
 
-<span class="fc" id="L377">    String generatedFileName = fileName;</span>
-<span class="pc bpc" id="L378" title="1 of 4 branches missed.">    if (StringUtils.isBlank(generatedFileName) &amp;&amp; StringUtils.isNotBlank(url)) {</span>
+<span class="fc" id="L374">    String generatedFileName = fileName;</span>
+<span class="pc bpc" id="L375" title="1 of 4 branches missed.">    if (StringUtils.isBlank(generatedFileName) &amp;&amp; StringUtils.isNotBlank(url)) {</span>
       try {
-<span class="fc" id="L380">        generatedFileName = urlFileManager.getFileName(url);</span>
+<span class="fc" id="L377">        generatedFileName = urlFileManager.getFileName(url);</span>
       }
-<span class="nc" id="L382">      catch (IOException ex) {</span>
-<span class="nc" id="L383">        throw new GeneratorException(&quot;Unable to get file name from URL: &quot; + url, ex);</span>
-<span class="fc" id="L384">      }</span>
+<span class="nc" id="L379">      catch (IOException ex) {</span>
+<span class="nc" id="L380">        throw new GeneratorException(&quot;Unable to get file name from URL: &quot; + url, ex);</span>
+<span class="fc" id="L381">      }</span>
     }
 
-<span class="pc bpc" id="L387" title="1 of 2 branches missed.">    File file = new File(nodeDir, dir != null ? FilenameUtils.concat(dir, generatedFileName) : generatedFileName);</span>
-<span class="pc bpc" id="L388" title="1 of 2 branches missed.">    if (file.exists()) {</span>
-<span class="nc" id="L389">      file.delete();</span>
+<span class="pc bpc" id="L384" title="1 of 2 branches missed.">    File file = new File(nodeDir, dir != null ? FilenameUtils.concat(dir, generatedFileName) : generatedFileName);</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">    if (file.exists()) {</span>
+<span class="nc" id="L386">      file.delete();</span>
     }
 
-<span class="fc" id="L392">    FileGenerator fileGenerator = new FileGenerator(options, environmentName,</span>
+<span class="fc" id="L389">    FileGenerator fileGenerator = new FileGenerator(options, environmentName,</span>
         roleName, roleVariantNames, templateName,
         nodeDir, file, url, symlinkTarget,
         roleFile, config, template,
         variableMapResolver, urlFileManager, pluginContextOptions, dependencyVersions);
     try {
-<span class="fc" id="L398">      Collection&lt;GeneratedFileContext&gt; generatedFiles = fileGenerator.generate();</span>
+<span class="fc" id="L395">      Collection&lt;GeneratedFileContext&gt; generatedFiles = fileGenerator.generate();</span>
 
       // check for path duplicates
-<span class="fc" id="L401">      generatedFiles.forEach(generatedFileContext -&gt; {</span>
-<span class="fc" id="L402">        String path = generatedFileContext.getFileContext().getCanonicalPath();</span>
-<span class="pc bpc" id="L403" title="1 of 2 branches missed.">        if (generatedFilePaths.contains(path)) {</span>
-<span class="nc" id="L404">          log.warn(&quot;File was generated already, check for file name clashes: {}&quot;, path);</span>
+<span class="fc" id="L398">      generatedFiles.forEach(generatedFileContext -&gt; {</span>
+<span class="fc" id="L399">        String path = generatedFileContext.getFileContext().getCanonicalPath();</span>
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">        if (generatedFilePaths.contains(path)) {</span>
+<span class="nc" id="L401">          log.warn(&quot;File was generated already, check for file name clashes: {}&quot;, path);</span>
         }
         else {
-<span class="fc" id="L407">          generatedFilePaths.add(path);</span>
+<span class="fc" id="L404">          generatedFilePaths.add(path);</span>
         }
-<span class="fc" id="L409">      });</span>
+<span class="fc" id="L406">      });</span>
 
-<span class="fc" id="L411">      return generatedFiles;</span>
+<span class="fc" id="L408">      return generatedFiles;</span>
     }
-<span class="nc" id="L413">    catch (ValidationException ex) {</span>
-<span class="nc" id="L414">      throw new GeneratorException(&quot;File validation failed &quot; + FileUtil.getCanonicalPath(file) + &quot; - &quot; + ex.getMessage());</span>
+<span class="nc" id="L410">    catch (ValidationException ex) {</span>
+<span class="nc" id="L411">      throw new GeneratorException(&quot;File validation failed &quot; + FileUtil.getCanonicalPath(file) + &quot; - &quot; + ex.getMessage());</span>
     }
-<span class="nc" id="L416">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L417">      throw new GeneratorException(&quot;Unable to generate file: &quot; + FileUtil.getCanonicalPath(file) + &quot;\n&quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L413">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L414">      throw new GeneratorException(&quot;Unable to generate file: &quot; + FileUtil.getCanonicalPath(file) + &quot;\n&quot; + ex.getMessage(), ex);</span>
     }
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private Map&lt;String, Map&lt;String, Object&gt;&gt; mergePluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; map1, Map&lt;String, Map&lt;String, Object&gt;&gt; map2) {
-<span class="fc" id="L423">    return MapMerger.merge((Map)map1, (Map)map2);</span>
+<span class="fc" id="L420">    return MapMerger.merge((Map)map1, (Map)map2);</span>
   }
 
 }

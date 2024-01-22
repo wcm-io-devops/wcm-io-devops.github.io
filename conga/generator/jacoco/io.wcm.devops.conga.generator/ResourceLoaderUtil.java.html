@@ -23,13 +23,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
-
-import com.google.common.collect.ImmutableMap;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
@@ -56,7 +55,7 @@ final class ResourceLoaderUtil {
    */
   @SuppressFBWarnings(&quot;DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED&quot;)
   public static ClassLoader buildClassLoader(List&lt;URL&gt; classpathUrls) {
-<span class="fc" id="L59">    return new URLClassLoader(classpathUrls.toArray(new URL[0]));</span>
+<span class="fc" id="L58">    return new URLClassLoader(classpathUrls.toArray(new URL[0]));</span>
   }
 
   /**
@@ -69,26 +68,26 @@ final class ResourceLoaderUtil {
   public static List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls,
       VariableStringResolver variableStringResolver, GeneratorOptions options) {
 
-<span class="fc" id="L72">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L73">        .baseDir(options.getBaseDir())</span>
-<span class="fc" id="L74">        .resourceClassLoader(ResourceLoaderUtil.class.getClassLoader())</span>
-<span class="fc" id="L75">        .pluginContextOptions(new PluginContextOptions()</span>
-<span class="fc" id="L76">            .containerContext(options.getContainerContext()));</span>
-<span class="fc" id="L77">    UrlFileManager urlFileManager = new UrlFileManager(options.getPluginManager(), urlFilePluginContext);</span>
+<span class="fc" id="L71">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
+<span class="fc" id="L72">        .baseDir(options.getBaseDir())</span>
+<span class="fc" id="L73">        .resourceClassLoader(ResourceLoaderUtil.class.getClassLoader())</span>
+<span class="fc" id="L74">        .pluginContextOptions(new PluginContextOptions()</span>
+<span class="fc" id="L75">            .containerContext(options.getContainerContext()));</span>
+<span class="fc" id="L76">    UrlFileManager urlFileManager = new UrlFileManager(options.getPluginManager(), urlFilePluginContext);</span>
 
-<span class="fc" id="L79">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">    for (String dependencyUrl : dependencyUrls) {</span>
+<span class="fc" id="L78">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">    for (String dependencyUrl : dependencyUrls) {</span>
       // resolver variables without config map - thus supporting only value providers with external values
-<span class="nc" id="L82">      String resolvedDependencyUrl = variableStringResolver.resolveString(dependencyUrl, Map.of());</span>
+<span class="nc" id="L81">      String resolvedDependencyUrl = variableStringResolver.resolveString(dependencyUrl, Map.of());</span>
       try {
-<span class="nc" id="L84">        classpathUrls.addAll(urlFileManager.getFileUrlsWithDependencies(resolvedDependencyUrl));</span>
+<span class="nc" id="L83">        classpathUrls.addAll(urlFileManager.getFileUrlsWithDependencies(resolvedDependencyUrl));</span>
       }
-<span class="nc" id="L86">      catch (IOException ex) {</span>
-<span class="nc" id="L87">        throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
-<span class="nc" id="L88">      }</span>
-<span class="nc" id="L89">    }</span>
-<span class="fc" id="L90">    classpathUrls.addAll(options.getContainerClasspathUrls());</span>
-<span class="fc" id="L91">    return classpathUrls;</span>
+<span class="nc" id="L85">      catch (IOException ex) {</span>
+<span class="nc" id="L86">        throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
+<span class="nc" id="L87">      }</span>
+<span class="nc" id="L88">    }</span>
+<span class="fc" id="L89">    classpathUrls.addAll(options.getContainerClasspathUrls());</span>
+<span class="fc" id="L90">    return classpathUrls;</span>
   }
 
   /**
@@ -99,22 +98,22 @@ final class ResourceLoaderUtil {
    * @param &lt;T&gt; Model type
    */
   public static &lt;T&gt; Map&lt;String, T&gt; readModels(List&lt;ResourceCollection&gt; dirs, ModelReader&lt;T&gt; reader) {
-<span class="fc" id="L102">    Map&lt;String, T&gt; models = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">      for (Resource file : dir.getResources()) {</span>
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (reader.accepts(file)) {</span>
+<span class="fc" id="L101">    Map&lt;String, T&gt; models = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">      for (Resource file : dir.getResources()) {</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (reader.accepts(file)) {</span>
           try {
-<span class="fc" id="L107">            T model = reader.read(file);</span>
-<span class="fc" id="L108">            ConfigInheritanceResolver.resolve(model);</span>
-<span class="fc" id="L109">            models.put(FilenameUtils.getBaseName(file.getName()), model);</span>
+<span class="fc" id="L106">            T model = reader.read(file);</span>
+<span class="fc" id="L107">            ConfigInheritanceResolver.resolve(model);</span>
+<span class="fc" id="L108">            models.put(FilenameUtils.getBaseName(file.getName()), model);</span>
           }
-<span class="nc" id="L111">          /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L112">            throw new GeneratorException(&quot;Unable to read definition: &quot; + file.getCanonicalPath(), ex);</span>
-<span class="fc" id="L113">          }</span>
+<span class="nc" id="L110">          /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L111">            throw new GeneratorException(&quot;Unable to read definition: &quot; + file.getCanonicalPath(), ex);</span>
+<span class="fc" id="L112">          }</span>
         }
-<span class="fc" id="L115">      }</span>
-<span class="fc" id="L116">    }</span>
-<span class="fc" id="L117">    return ImmutableMap.copyOf(models);</span>
+<span class="fc" id="L114">      }</span>
+<span class="fc" id="L115">    }</span>
+<span class="fc" id="L116">    return Collections.unmodifiableMap(models);</span>
   }
 
 }

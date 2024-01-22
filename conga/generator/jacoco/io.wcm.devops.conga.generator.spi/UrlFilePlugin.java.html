@@ -25,8 +25,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
 import io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
 
 /**
@@ -68,7 +66,7 @@ public interface UrlFilePlugin extends Plugin {
    * @throws IOException If the access to the file failed
    */
   default URL getFileUrl(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L71">    throw new IOException(&quot;File URLs not supported for &quot; + getClass().getName());</span>
+<span class="nc" id="L69">    throw new IOException(&quot;File URLs not supported for &quot; + getClass().getName());</span>
   }
 
   /**
@@ -80,7 +78,7 @@ public interface UrlFilePlugin extends Plugin {
    * @throws IOException If the access to the file failed
    */
   default List&lt;URL&gt; getFileUrlsWithDependencies(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L83">    return ImmutableList.of(getFileUrl(url, context));</span>
+<span class="nc" id="L81">    return List.of(getFileUrl(url, context));</span>
   }
 
   /**
@@ -91,7 +89,7 @@ public interface UrlFilePlugin extends Plugin {
    * @throws IOException If deleting the file is supported but failes for some reason
    */
   default void deleteFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L94">    throw new UnsupportedOperationException(&quot;Unable to delete file: &quot; + url);</span>
+<span class="nc" id="L92">    throw new UnsupportedOperationException(&quot;Unable to delete file: &quot; + url);</span>
   }
 
   /**
@@ -102,7 +100,7 @@ public interface UrlFilePlugin extends Plugin {
    * @throws IOException If the access to the file failed
    */
   default boolean isLocalFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L105">    return false;</span>
+<span class="fc" id="L103">    return false;</span>
   }
 
   /**
@@ -113,7 +111,7 @@ public interface UrlFilePlugin extends Plugin {
    * @throws IOException If the access to the file failed
    */
   default File getLocalFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L116">    throw new IOException(&quot;Local file not supported for &quot; + getClass().getName());</span>
+<span class="nc" id="L114">    throw new IOException(&quot;Local file not supported for &quot; + getClass().getName());</span>
   }
 
 }

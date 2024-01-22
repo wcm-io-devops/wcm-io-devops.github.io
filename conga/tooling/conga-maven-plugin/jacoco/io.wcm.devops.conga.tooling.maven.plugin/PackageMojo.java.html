@@ -43,15 +43,13 @@ import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.zip.ZipArchiver;
 
-import com.google.common.collect.ImmutableSet;
-
 import io.wcm.devops.conga.generator.util.FileUtil;
 
 /**
  * Packages the generated configurations in a ZIP file.
  */
 @Mojo(name = &quot;package&quot;, defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true, threadSafe = true)
-<span class="fc" id="L54">public class PackageMojo extends AbstractCongaMojo {</span>
+<span class="fc" id="L52">public class PackageMojo extends AbstractCongaMojo {</span>
 
   /**
    * Selected environments to generate.
@@ -74,72 +72,72 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   public void execute() throws MojoExecutionException, MojoFailureException {
 
     // build attachments with all generated configurations
-<span class="fc" id="L77">    buildGeneratedConfigurationAttachments();</span>
+<span class="fc" id="L75">    buildGeneratedConfigurationAttachments();</span>
 
-<span class="fc" id="L79">  }</span>
+<span class="fc" id="L77">  }</span>
 
 
   @SuppressWarnings(&quot;PMD.UseStringBufferForStringAppends&quot;)
   private void buildGeneratedConfigurationAttachments() throws MojoExecutionException, MojoFailureException {
     Set&lt;String&gt; selectedEnvironments;
-<span class="pc bpc" id="L85" title="2 of 4 branches missed.">    if (environments != null &amp;&amp; environments.length &gt; 0) {</span>
-<span class="nc" id="L86">      selectedEnvironments = ImmutableSet.copyOf(environments);</span>
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">    if (environments != null &amp;&amp; environments.length &gt; 0) {</span>
+<span class="nc" id="L84">      selectedEnvironments = Set.copyOf(Arrays.asList(environments));</span>
     }
     else {
-<span class="fc" id="L89">      selectedEnvironments = null;</span>
+<span class="fc" id="L87">      selectedEnvironments = null;</span>
     }
 
     // collect configuration environment directories
-<span class="fc" id="L93">    File configRootDir = getTargetDir();</span>
-<span class="fc" id="L94">    List&lt;File&gt; environmentDirs = Arrays.stream(configRootDir.listFiles())</span>
-<span class="fc" id="L95">        .filter(file -&gt; file.isDirectory())</span>
-<span class="pc bpc" id="L96" title="3 of 4 branches missed.">        .filter(dir -&gt; selectedEnvironments == null || selectedEnvironments.contains(dir.getName()))</span>
-<span class="fc" id="L97">        .collect(Collectors.toList());</span>
+<span class="fc" id="L91">    File configRootDir = getTargetDir();</span>
+<span class="fc" id="L92">    List&lt;File&gt; environmentDirs = Arrays.stream(configRootDir.listFiles())</span>
+<span class="fc" id="L93">        .filter(file -&gt; file.isDirectory())</span>
+<span class="pc bpc" id="L94" title="3 of 4 branches missed.">        .filter(dir -&gt; selectedEnvironments == null || selectedEnvironments.contains(dir.getName()))</span>
+<span class="fc" id="L95">        .collect(Collectors.toList());</span>
 
-<span class="fc" id="L99">    MavenProject project = getProject();</span>
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    if (artifactPerEnvironment) {</span>
+<span class="fc" id="L97">    MavenProject project = getProject();</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">    if (artifactPerEnvironment) {</span>
       // generate an ZIP artifact with generated configurations for each environment
-<span class="fc bfc" id="L102" title="All 2 branches covered.">      for (File environmentDir : environmentDirs) {</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">      for (File environmentDir : environmentDirs) {</span>
 
         // classifier is environment name
         // if current project is not a config project, prefix the classifier
-<span class="fc" id="L106">        String classifier = environmentDir.getName();</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (!StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
-<span class="nc" id="L108">          classifier = CLASSIFIER_CONFIGURATION + &quot;-&quot; + classifier;</span>
+<span class="fc" id="L104">        String classifier = environmentDir.getName();</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (!StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L106">          classifier = CLASSIFIER_CONFIGURATION + &quot;-&quot; + classifier;</span>
         }
-<span class="fc" id="L110">        validateClassifier(classifier);</span>
+<span class="fc" id="L108">        validateClassifier(classifier);</span>
 
         // build ZIP artifact
-<span class="fc" id="L113">        File outputFile = buildZipFile(environmentDir, classifier);</span>
+<span class="fc" id="L111">        File outputFile = buildZipFile(environmentDir, classifier);</span>
 
         // attach ZIP artifact
-<span class="fc" id="L116">        projectHelper.attachArtifact(project, outputFile, classifier);</span>
+<span class="fc" id="L114">        projectHelper.attachArtifact(project, outputFile, classifier);</span>
 
-<span class="fc" id="L118">      }</span>
+<span class="fc" id="L116">      }</span>
 
       // additionally build a JAR file with all CONGA definitions and resources as main artifact
-<span class="fc" id="L121">      buildDefinitionsJarFile();</span>
+<span class="fc" id="L119">      buildDefinitionsJarFile();</span>
 
     }
     else {
       // generate an ZIP artifact containing all environments
-<span class="nc" id="L126">      String classifier = null;</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">      if (!StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
-<span class="nc" id="L128">        classifier = CLASSIFIER_CONFIGURATION;</span>
+<span class="nc" id="L124">      String classifier = null;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">      if (!StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L126">        classifier = CLASSIFIER_CONFIGURATION;</span>
       }
-<span class="nc" id="L130">      validateClassifier(classifier);</span>
+<span class="nc" id="L128">      validateClassifier(classifier);</span>
 
-<span class="nc" id="L132">      File outputFile = buildZipFile(configRootDir, classifier);</span>
+<span class="nc" id="L130">      File outputFile = buildZipFile(configRootDir, classifier);</span>
       // set or attach ZIP artifact
-<span class="nc bnc" id="L134" title="All 2 branches missed.">      if (StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
-<span class="nc" id="L135">        project.getArtifact().setFile(outputFile);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">      if (StringUtils.equals(project.getPackaging(), PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L133">        project.getArtifact().setFile(outputFile);</span>
       }
       else {
-<span class="nc" id="L138">        projectHelper.attachArtifact(project, outputFile, CLASSIFIER_CONFIGURATION);</span>
+<span class="nc" id="L136">        projectHelper.attachArtifact(project, outputFile, CLASSIFIER_CONFIGURATION);</span>
       }
     }
 
-<span class="fc" id="L142">  }</span>
+<span class="fc" id="L140">  }</span>
 
   /**
    * Build JAR file with definitions.
@@ -147,19 +145,19 @@ import io.wcm.devops.conga.generator.util.FileUtil;
    * @return JAR file
    */
   private File buildZipFile(File contentDirectory, String classifier) throws MojoExecutionException {
-<span class="fc" id="L150">    File zipFile = new File(getProject().getBuild().getDirectory(), buildZipFileName(classifier));</span>
+<span class="fc" id="L148">    File zipFile = new File(getProject().getBuild().getDirectory(), buildZipFileName(classifier));</span>
 
-<span class="fc" id="L152">    String basePath = toZipDirectoryPath(contentDirectory);</span>
-<span class="fc" id="L153">    addZipDirectory(basePath, contentDirectory);</span>
-<span class="fc" id="L154">    zipArchiver.setDestFile(zipFile);</span>
+<span class="fc" id="L150">    String basePath = toZipDirectoryPath(contentDirectory);</span>
+<span class="fc" id="L151">    addZipDirectory(basePath, contentDirectory);</span>
+<span class="fc" id="L152">    zipArchiver.setDestFile(zipFile);</span>
     try {
-<span class="fc" id="L156">      zipArchiver.createArchive();</span>
+<span class="fc" id="L154">      zipArchiver.createArchive();</span>
     }
-<span class="nc" id="L158">    catch (ArchiverException | IOException ex) {</span>
-<span class="nc" id="L159">      throw new MojoExecutionException(&quot;Unable to build file &quot; + zipFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L160">    }</span>
+<span class="nc" id="L156">    catch (ArchiverException | IOException ex) {</span>
+<span class="nc" id="L157">      throw new MojoExecutionException(&quot;Unable to build file &quot; + zipFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L158">    }</span>
 
-<span class="fc" id="L162">    return zipFile;</span>
+<span class="fc" id="L160">    return zipFile;</span>
   }
 
   /**
@@ -170,53 +168,53 @@ import io.wcm.devops.conga.generator.util.FileUtil;
    * @param directory Directory to include
    */
   private void addZipDirectory(String basePath, File directory) throws MojoExecutionException {
-<span class="fc" id="L173">    String directoryPath = toZipDirectoryPath(directory);</span>
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
-<span class="fc" id="L175">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
-<span class="fc" id="L176">      File[] files = directory.listFiles();</span>
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">      if (files != null) {</span>
-<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (File file : files) {</span>
-<span class="fc bfc" id="L179" title="All 2 branches covered.">          if (file.isDirectory()) {</span>
-<span class="fc" id="L180">            addZipDirectory(basePath, file);</span>
+<span class="fc" id="L171">    String directoryPath = toZipDirectoryPath(directory);</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
+<span class="fc" id="L173">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
+<span class="fc" id="L174">      File[] files = directory.listFiles();</span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">      if (files != null) {</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        for (File file : files) {</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">          if (file.isDirectory()) {</span>
+<span class="fc" id="L178">            addZipDirectory(basePath, file);</span>
           }
-<span class="fc bfc" id="L182" title="All 2 branches covered.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
             // include file symlink is pointing at
             try {
-<span class="fc" id="L185">              zipArchiver.addFile(file.toPath().toRealPath().toFile(), relativeDirectoryPath + file.getName());</span>
+<span class="fc" id="L183">              zipArchiver.addFile(file.toPath().toRealPath().toFile(), relativeDirectoryPath + file.getName());</span>
             }
-<span class="nc" id="L187">            catch (IOException ex) {</span>
-<span class="nc" id="L188">              throw new MojoExecutionException(&quot;Unable to include symlinked file &quot; + FileUtil.getCanonicalPath(file), ex);</span>
-<span class="fc" id="L189">            }</span>
+<span class="nc" id="L185">            catch (IOException ex) {</span>
+<span class="nc" id="L186">              throw new MojoExecutionException(&quot;Unable to include symlinked file &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+<span class="fc" id="L187">            }</span>
           }
           else {
-<span class="fc" id="L192">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
+<span class="fc" id="L190">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
           }
         }
       }
     }
-<span class="fc" id="L197">  }</span>
+<span class="fc" id="L195">  }</span>
 
   private String toZipDirectoryPath(File directory) {
-<span class="fc" id="L200">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
-<span class="fc" id="L201">    return StringUtils.replace(canoncialPath, &quot;\\&quot;, &quot;/&quot;) + &quot;/&quot;;</span>
+<span class="fc" id="L198">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
+<span class="fc" id="L199">    return StringUtils.replace(canoncialPath, &quot;\\&quot;, &quot;/&quot;) + &quot;/&quot;;</span>
   }
 
   private String buildZipFileName(String classifier) {
-<span class="fc" id="L205">    StringBuilder sb = new StringBuilder();</span>
-<span class="fc" id="L206">    sb.append(getProject().getBuild().getFinalName());</span>
-<span class="pc bpc" id="L207" title="1 of 2 branches missed.">    if (StringUtils.isNotBlank(classifier)) {</span>
-<span class="fc" id="L208">      sb.append(&quot;-&quot;).append(classifier);</span>
+<span class="fc" id="L203">    StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L204">    sb.append(getProject().getBuild().getFinalName());</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">    if (StringUtils.isNotBlank(classifier)) {</span>
+<span class="fc" id="L206">      sb.append(&quot;-&quot;).append(classifier);</span>
     }
-<span class="fc" id="L210">    sb.append(&quot;.&quot;).append(FILE_EXTENSION_CONFIGURATION);</span>
-<span class="fc" id="L211">    return sb.toString();</span>
+<span class="fc" id="L208">    sb.append(&quot;.&quot;).append(FILE_EXTENSION_CONFIGURATION);</span>
+<span class="fc" id="L209">    return sb.toString();</span>
   }
 
   private void validateClassifier(String classifier) throws MojoExecutionException {
     // classifier should not contain dots to make sure separation from extension/packaging types is not affected
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">    if (StringUtils.contains(classifier, &quot;.&quot;)) {</span>
-<span class="nc" id="L217">      throw new MojoExecutionException(&quot;Classifier must not contain dots: &quot; + classifier);</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">    if (StringUtils.contains(classifier, &quot;.&quot;)) {</span>
+<span class="nc" id="L215">      throw new MojoExecutionException(&quot;Classifier must not contain dots: &quot; + classifier);</span>
     }
-<span class="fc" id="L219">  }</span>
+<span class="fc" id="L217">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

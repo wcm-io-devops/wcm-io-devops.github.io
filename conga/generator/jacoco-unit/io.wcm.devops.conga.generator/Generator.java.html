@@ -27,8 +27,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.google.common.collect.ImmutableList;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.util.FileUtil;
 import io.wcm.devops.conga.model.environment.Environment;
@@ -48,25 +46,25 @@ public final class Generator {
   /**
    * @param options Generator options
    */
-<span class="fc" id="L51">  public Generator(GeneratorOptions options) {</span>
-<span class="fc" id="L52">    this.options = options;</span>
-<span class="fc" id="L53">    this.destDir = FileUtil.ensureDirExistsAutocreate(options.getDestDir());</span>
+<span class="fc" id="L49">  public Generator(GeneratorOptions options) {</span>
+<span class="fc" id="L50">    this.options = options;</span>
+<span class="fc" id="L51">    this.destDir = FileUtil.ensureDirExistsAutocreate(options.getDestDir());</span>
 
-<span class="fc" id="L55">    ClassLoader resourceClassLoader = ResourceLoaderUtil.buildClassLoader(options.getContainerClasspathUrls());</span>
-<span class="fc" id="L56">    ResourceLoader resourceLoader = new ResourceLoader(resourceClassLoader);</span>
-<span class="fc" id="L57">    List&lt;ResourceCollection&gt; environmentDirs = ImmutableList.of(</span>
-<span class="fc" id="L58">        resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + options.getEnvironmentDir()),</span>
-<span class="fc" id="L59">        resourceLoader.getResourceCollection(ResourceLoader.CLASSPATH_PREFIX + GeneratorOptions.CLASSPATH_ENVIRONMENTS_DIR));</span>
-<span class="fc" id="L60">    this.environments = ResourceLoaderUtil.readModels(environmentDirs, new EnvironmentReader());</span>
-<span class="fc" id="L61">  }</span>
+<span class="fc" id="L53">    ClassLoader resourceClassLoader = ResourceLoaderUtil.buildClassLoader(options.getContainerClasspathUrls());</span>
+<span class="fc" id="L54">    ResourceLoader resourceLoader = new ResourceLoader(resourceClassLoader);</span>
+<span class="fc" id="L55">    List&lt;ResourceCollection&gt; environmentDirs = List.of(</span>
+<span class="fc" id="L56">        resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + options.getEnvironmentDir()),</span>
+<span class="fc" id="L57">        resourceLoader.getResourceCollection(ResourceLoader.CLASSPATH_PREFIX + GeneratorOptions.CLASSPATH_ENVIRONMENTS_DIR));</span>
+<span class="fc" id="L58">    this.environments = ResourceLoaderUtil.readModels(environmentDirs, new EnvironmentReader());</span>
+<span class="fc" id="L59">  }</span>
 
   /**
    * Generate files for environment(s).
    * @param environmentNames Environments to generate. If none specified all environments are generated.
    */
   public void generate(String[] environmentNames) {
-<span class="fc" id="L68">    generate(environmentNames, new String[] {});</span>
-<span class="fc" id="L69">  }</span>
+<span class="fc" id="L66">    generate(environmentNames, new String[] {});</span>
+<span class="fc" id="L67">  }</span>
 
   /**
    * Generate files for environment(s).
@@ -75,38 +73,38 @@ public final class Generator {
    */
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public void generate(String[] environmentNames, String[] nodeNames) {
-<span class="fc" id="L78">    Map&lt;String, Environment&gt; selectedEnvironments = new HashMap&lt;&gt;();</span>
-<span class="pc bpc" id="L79" title="1 of 4 branches missed.">    if (environmentNames == null || environmentNames.length == 0) {</span>
-<span class="fc" id="L80">      selectedEnvironments.putAll(environments);</span>
+<span class="fc" id="L76">    Map&lt;String, Environment&gt; selectedEnvironments = new HashMap&lt;&gt;();</span>
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">    if (environmentNames == null || environmentNames.length == 0) {</span>
+<span class="fc" id="L78">      selectedEnvironments.putAll(environments);</span>
     }
     else {
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">      for (String environmentName : environmentNames) {</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (!environments.containsKey(environmentName)) {</span>
-<span class="fc" id="L85">          throw new GeneratorException(&quot;Environment '&quot; + environmentName + &quot;' does not exist.&quot;);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">      for (String environmentName : environmentNames) {</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (!environments.containsKey(environmentName)) {</span>
+<span class="fc" id="L83">          throw new GeneratorException(&quot;Environment '&quot; + environmentName + &quot;' does not exist.&quot;);</span>
         }
-<span class="nc" id="L87">        selectedEnvironments.put(environmentName, environments.get(environmentName));</span>
+<span class="nc" id="L85">        selectedEnvironments.put(environmentName, environments.get(environmentName));</span>
       }
     }
 
-<span class="fc bfc" id="L91" title="All 2 branches covered.">    for (Map.Entry&lt;String, Environment&gt; entry : selectedEnvironments.entrySet()) {</span>
-<span class="fc" id="L92">      File environmentDestDir = new File(destDir, entry.getKey());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">    for (Map.Entry&lt;String, Environment&gt; entry : selectedEnvironments.entrySet()) {</span>
+<span class="fc" id="L90">      File environmentDestDir = new File(destDir, entry.getKey());</span>
       // remove existing directory and it's content if it exists alreday
-<span class="pc bpc" id="L94" title="3 of 4 branches missed.">      if (options.isDeleteBeforeGenerate() &amp;&amp; environmentDestDir.exists()) {</span>
+<span class="pc bpc" id="L92" title="3 of 4 branches missed.">      if (options.isDeleteBeforeGenerate() &amp;&amp; environmentDestDir.exists()) {</span>
         try {
-<span class="nc" id="L96">          FileUtils.deleteDirectory(environmentDestDir);</span>
+<span class="nc" id="L94">          FileUtils.deleteDirectory(environmentDestDir);</span>
         }
-<span class="nc" id="L98">        catch (IOException ex) {</span>
-<span class="nc" id="L99">          throw new GeneratorException(&quot;Unable to delete existing target directory: &quot; + FileUtil.getCanonicalPath(environmentDestDir), ex);</span>
-<span class="nc" id="L100">        }</span>
+<span class="nc" id="L96">        catch (IOException ex) {</span>
+<span class="nc" id="L97">          throw new GeneratorException(&quot;Unable to delete existing target directory: &quot; + FileUtil.getCanonicalPath(environmentDestDir), ex);</span>
+<span class="nc" id="L98">        }</span>
       }
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">      if (!environmentDestDir.exists()) {</span>
-<span class="fc" id="L103">        environmentDestDir.mkdir();</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">      if (!environmentDestDir.exists()) {</span>
+<span class="fc" id="L101">        environmentDestDir.mkdir();</span>
       }
 
-<span class="fc" id="L106">      EnvironmentGenerator environmentGenerator = new EnvironmentGenerator(entry.getKey(), entry.getValue(), environmentDestDir, options);</span>
-<span class="fc" id="L107">      environmentGenerator.generate(nodeNames);</span>
-<span class="fc" id="L108">    }</span>
-<span class="fc" id="L109">  }</span>
+<span class="fc" id="L104">      EnvironmentGenerator environmentGenerator = new EnvironmentGenerator(entry.getKey(), entry.getValue(), environmentDestDir, options);</span>
+<span class="fc" id="L105">      environmentGenerator.generate(nodeNames);</span>
+<span class="fc" id="L106">    }</span>
+<span class="fc" id="L107">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

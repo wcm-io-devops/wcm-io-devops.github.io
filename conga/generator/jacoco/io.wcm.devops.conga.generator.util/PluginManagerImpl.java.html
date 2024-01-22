@@ -23,12 +23,10 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableList;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.spi.Plugin;
@@ -36,22 +34,22 @@ import io.wcm.devops.conga.generator.spi.Plugin;
 /**
  * Manages registered plugin. Plugins are registered using the {@link ServiceLoader} concept.
  */
-<span class="fc" id="L39">public final class PluginManagerImpl implements PluginManager {</span>
+<span class="fc" id="L37">public final class PluginManagerImpl implements PluginManager {</span>
 
-<span class="fc" id="L41">  private final LoadingCache&lt;Class&lt;Plugin&gt;, SortedMap&lt;String, Plugin&gt;&gt; pluginCache =</span>
-<span class="fc" id="L42">      CacheBuilder.newBuilder().build(new CacheLoader&lt;Class&lt;Plugin&gt;, SortedMap&lt;String, Plugin&gt;&gt;() {</span>
+<span class="fc" id="L39">  private final LoadingCache&lt;Class&lt;Plugin&gt;, SortedMap&lt;String, Plugin&gt;&gt; pluginCache =</span>
+<span class="fc" id="L40">      Caffeine.newBuilder().build(new CacheLoader&lt;Class&lt;Plugin&gt;, SortedMap&lt;String, Plugin&gt;&gt;() {</span>
         @Override
         public SortedMap&lt;String, Plugin&gt; load(Class&lt;Plugin&gt; pluginClass) throws Exception {
-<span class="fc" id="L45">          ServiceLoader&lt;Plugin&gt; loadedPlugins = ServiceLoader.load(pluginClass);</span>
-<span class="fc" id="L46">          SortedMap&lt;String, Plugin&gt; pluginMap = new TreeMap&lt;&gt;();</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">          for (Plugin plugin : loadedPlugins) {</span>
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">            if (pluginMap.containsKey(plugin.getName())) {</span>
-<span class="nc" id="L49">              throw new GeneratorException(&quot;Plugin name '&quot; + plugin.getName() + &quot;' is not unique. &quot;</span>
-<span class="nc" id="L50">                  + pluginMap.get(plugin.getName()) + &quot; clashes with &quot; + plugin + &quot;.&quot;);</span>
+<span class="fc" id="L43">          ServiceLoader&lt;Plugin&gt; loadedPlugins = ServiceLoader.load(pluginClass);</span>
+<span class="fc" id="L44">          SortedMap&lt;String, Plugin&gt; pluginMap = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">          for (Plugin plugin : loadedPlugins) {</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">            if (pluginMap.containsKey(plugin.getName())) {</span>
+<span class="nc" id="L47">              throw new GeneratorException(&quot;Plugin name '&quot; + plugin.getName() + &quot;' is not unique. &quot;</span>
+<span class="nc" id="L48">                  + pluginMap.get(plugin.getName()) + &quot; clashes with &quot; + plugin + &quot;.&quot;);</span>
             }
-<span class="fc" id="L52">            pluginMap.put(plugin.getName(), plugin);</span>
-<span class="fc" id="L53">          }</span>
-<span class="fc" id="L54">          return pluginMap;</span>
+<span class="fc" id="L50">            pluginMap.put(plugin.getName(), plugin);</span>
+<span class="fc" id="L51">          }</span>
+<span class="fc" id="L52">          return pluginMap;</span>
         }
       });
 
@@ -66,16 +64,11 @@ import io.wcm.devops.conga.generator.spi.Plugin;
   @Override
   @SuppressWarnings(&quot;unchecked&quot;)
   public &lt;T extends Plugin&gt; T get(String name, Class&lt;T&gt; pluginClass) throws GeneratorException {
-    try {
-<span class="fc" id="L70">      Plugin plugin = pluginCache.get((Class&lt;Plugin&gt;)pluginClass).get(name);</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">      if (plugin == null) {</span>
-<span class="fc" id="L72">        throw new GeneratorException(pluginClass.getSimpleName() + &quot; not found: '&quot; + name + &quot;'&quot;);</span>
-      }
-<span class="fc" id="L74">      return (T)plugin;</span>
+<span class="fc" id="L67">    Plugin plugin = pluginCache.get((Class&lt;Plugin&gt;)pluginClass).get(name);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (plugin == null) {</span>
+<span class="fc" id="L69">      throw new GeneratorException(pluginClass.getSimpleName() + &quot; not found: '&quot; + name + &quot;'&quot;);</span>
     }
-<span class="nc" id="L76">    catch (ExecutionException ex) {</span>
-<span class="nc" id="L77">      throw new GeneratorException(&quot;Untable to build plugin cache for &quot; + pluginClass.getName(), ex);</span>
-    }
+<span class="fc" id="L71">    return (T)plugin;</span>
   }
 
   /**
@@ -88,12 +81,7 @@ import io.wcm.devops.conga.generator.spi.Plugin;
   @Override
   @SuppressWarnings(&quot;unchecked&quot;)
   public &lt;T extends Plugin&gt; List&lt;T&gt; getAll(Class&lt;T&gt; pluginClass) throws GeneratorException {
-    try {
-<span class="fc" id="L92">      return (List&lt;T&gt;)ImmutableList.copyOf(pluginCache.get((Class&lt;Plugin&gt;)pluginClass).values());</span>
-    }
-<span class="nc" id="L94">    catch (ExecutionException ex) {</span>
-<span class="nc" id="L95">      throw new GeneratorException(&quot;Untable to build plugin cache for &quot; + pluginClass.getName(), ex);</span>
-    }
+<span class="fc" id="L84">    return (List&lt;T&gt;)List.copyOf(pluginCache.get((Class&lt;Plugin&gt;)pluginClass).values());</span>
   }
 
 }
