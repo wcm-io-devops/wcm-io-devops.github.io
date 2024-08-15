@@ -579,7 +579,7 @@ public final class AllPackageBuilder {
 <span class="fc" id="L579">    File tempFile = File.createTempFile(FilenameUtils.getBaseName(pkg.getFile().getName()), &quot;.zip&quot;);</span>
 
     // open original content package
-<span class="fc" id="L582">    try (ZipFile zipFileIn = new ZipFile(pkg.getFile())) {</span>
+<span class="fc" id="L582">    try (ZipFile zipFileIn = new ZipFile.Builder().setFile(pkg.getFile()).get()) {</span>
 
       // iterate through entries and write them to the temp. zip file
 <span class="fc" id="L585">      try (FileOutputStream fos = new FileOutputStream(tempFile);</span>

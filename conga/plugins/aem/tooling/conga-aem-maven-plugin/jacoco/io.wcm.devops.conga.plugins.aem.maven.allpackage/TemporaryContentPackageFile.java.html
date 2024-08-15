@@ -83,11 +83,9 @@ final class TemporaryContentPackageFile extends AbstractInstallableFile implemen
 <span class="nc" id="L83">    StringBuilder sb = new StringBuilder();</span>
 <span class="nc" id="L84">    sb.append(getPackageInfo());</span>
 <span class="nc bnc" id="L85" title="All 2 branches missed.">    if (this.dependencies != null) {</span>
-<span class="nc" id="L86">      sb.append(&quot; (dependencies: &quot;);</span>
-<span class="nc" id="L87">      sb.append(this.dependencies);</span>
-<span class="nc" id="L88">      sb.append(&quot;)&quot;);</span>
+<span class="nc" id="L86">      sb.append(&quot; (dependencies: &quot;).append(this.dependencies).append(&quot;)&quot;);</span>
     }
-<span class="nc" id="L90">    return sb.toString();</span>
+<span class="nc" id="L88">    return sb.toString();</span>
   }
 
 }
