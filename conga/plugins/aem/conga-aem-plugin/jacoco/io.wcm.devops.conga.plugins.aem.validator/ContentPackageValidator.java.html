@@ -106,7 +106,7 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
 
     // instantiate Mojo to execute the validation (a bit hacky as we have to manually
     // pass through the maven context objects here via reflection)
-<span class="nc" id="L109">    ValidatePackageMojo mojo = new ValidatePackageMojo();</span>
+<span class="nc" id="L109">    ValidatePackageMojo mojo = new ValidatePackageMojo(mavenContext.getRepoSystem(), mavenContext.getBuildContext());</span>
 <span class="nc" id="L110">    mojo.setLog(new InfoPrefixLog(mavenContext.getLog(), &quot;    &quot;));</span>
 
 <span class="nc" id="L112">    setProperty(mojo, &quot;packageFile&quot;, packageFile);</span>
@@ -116,91 +116,89 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
 <span class="nc" id="L116">    setProperty(mojo, &quot;session&quot;, mavenContext.getSession());</span>
 <span class="nc" id="L117">    setProperty(mojo, &quot;failOnValidationWarnings&quot;, false);</span>
 <span class="nc" id="L118">    setProperty(mojo, &quot;mapPackageDependencyToMavenGa&quot;, Collections.emptyList());</span>
-<span class="nc" id="L119">    setProperty(mojo, &quot;repositorySystem&quot;, mavenContext.getRepositorySystem());</span>
-<span class="nc" id="L120">    setProperty(mojo, &quot;resolutionErrorHandler&quot;, mavenContext.getResolutionErrorHandler());</span>
-<span class="nc" id="L121">    setProperty(mojo, &quot;buildContext&quot;, mavenContext.getBuildContext());</span>
-<span class="nc" id="L122">    setProperty(mojo, &quot;attachedArtifacts&quot;, Collections.emptyList());</span>
+<span class="nc" id="L119">    setProperty(mojo, &quot;resolutionErrorHandler&quot;, mavenContext.getResolutionErrorHandler());</span>
+<span class="nc" id="L120">    setProperty(mojo, &quot;attachedArtifacts&quot;, Collections.emptyList());</span>
 
-<span class="nc" id="L124">    Object validatorsSettings = MapExpander.getDeep(context.getOptions(), OPTION_VALIDATORS_SETTINGS);</span>
-<span class="nc" id="L125">    Map&lt;String,Object&gt; validatorSettingsMap = MapMerger.merge(toMap(validatorsSettings), DEFAULT_VALIDATORS_SETTINGS);</span>
-<span class="nc" id="L126">    setProperty(mojo, &quot;validatorsSettings&quot;, toValidatorsSettings(validatorSettingsMap));</span>
+<span class="nc" id="L122">    Object validatorsSettings = MapExpander.getDeep(context.getOptions(), OPTION_VALIDATORS_SETTINGS);</span>
+<span class="nc" id="L123">    Map&lt;String,Object&gt; validatorSettingsMap = MapMerger.merge(toMap(validatorsSettings), DEFAULT_VALIDATORS_SETTINGS);</span>
+<span class="nc" id="L124">    setProperty(mojo, &quot;validatorsSettings&quot;, toValidatorsSettings(validatorSettingsMap));</span>
 
-<span class="nc" id="L128">    mojo.execute();</span>
-<span class="nc" id="L129">  }</span>
+<span class="nc" id="L126">    mojo.execute();</span>
+<span class="nc" id="L127">  }</span>
 
   private void setProperty(Object object, String propertyName, Object value)
       throws IllegalArgumentException, IllegalAccessException {
-<span class="nc" id="L133">    setProperty(object, object.getClass(), propertyName, value);</span>
-<span class="nc" id="L134">  }</span>
+<span class="nc" id="L131">    setProperty(object, object.getClass(), propertyName, value);</span>
+<span class="nc" id="L132">  }</span>
 
   @SuppressWarnings({ &quot;PMD.AvoidAccessibilityAlteration&quot;, &quot;java:S3011&quot; })
   private void setProperty(Object object, Class&lt;?&gt; clazz, String propertyName, Object value)
       throws IllegalArgumentException, IllegalAccessException {
     try {
-<span class="nc" id="L140">      Field field = clazz.getDeclaredField(propertyName);</span>
-<span class="nc" id="L141">      field.setAccessible(true);</span>
-<span class="nc" id="L142">      field.set(object, value);</span>
+<span class="nc" id="L138">      Field field = clazz.getDeclaredField(propertyName);</span>
+<span class="nc" id="L139">      field.setAccessible(true);</span>
+<span class="nc" id="L140">      field.set(object, value);</span>
     }
-<span class="nc" id="L144">    catch (NoSuchFieldException ex) {</span>
+<span class="nc" id="L142">    catch (NoSuchFieldException ex) {</span>
       // check super class
-<span class="nc" id="L146">      Class&lt;?&gt; superClass = clazz.getSuperclass();</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">      if (superClass != null) {</span>
-<span class="nc" id="L148">        setProperty(object, superClass, propertyName, value);</span>
+<span class="nc" id="L144">      Class&lt;?&gt; superClass = clazz.getSuperclass();</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">      if (superClass != null) {</span>
+<span class="nc" id="L146">        setProperty(object, superClass, propertyName, value);</span>
       }
-<span class="nc" id="L150">    }</span>
-<span class="nc" id="L151">  }</span>
+<span class="nc" id="L148">    }</span>
+<span class="nc" id="L149">  }</span>
 
   private Map&lt;String, ValidatorSettings&gt; toValidatorsSettings(Map&lt;String, Object&gt; map)
       throws IllegalArgumentException, IllegalAccessException {
-<span class="nc" id="L155">    Map&lt;String, ValidatorSettings&gt; result = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">    for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
-<span class="nc" id="L157">      Map&lt;String, Object&gt; validatorSettingsMap = toMap(entry.getValue());</span>
+<span class="nc" id="L153">    Map&lt;String, ValidatorSettings&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">    for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L155">      Map&lt;String, Object&gt; validatorSettingsMap = toMap(entry.getValue());</span>
 
-<span class="nc" id="L159">      boolean isDisabled = toBoolean(validatorSettingsMap.get(&quot;isDisabled&quot;));</span>
-<span class="nc" id="L160">      ValidatorSettings validatorSettings = new ValidatorSettings();</span>
-<span class="nc" id="L161">      setProperty(validatorSettings, &quot;isDisabled&quot;, isDisabled);</span>
+<span class="nc" id="L157">      boolean isDisabled = toBoolean(validatorSettingsMap.get(&quot;isDisabled&quot;));</span>
+<span class="nc" id="L158">      ValidatorSettings validatorSettings = new ValidatorSettings();</span>
+<span class="nc" id="L159">      setProperty(validatorSettings, &quot;isDisabled&quot;, isDisabled);</span>
 
-<span class="nc" id="L163">      String defaultSeverity = toString(validatorSettingsMap.get(&quot;defaultSeverity&quot;));</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">      if (defaultSeverity != null) {</span>
-<span class="nc" id="L165">        validatorSettings.setDefaultSeverity(defaultSeverity);</span>
+<span class="nc" id="L161">      String defaultSeverity = toString(validatorSettingsMap.get(&quot;defaultSeverity&quot;));</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">      if (defaultSeverity != null) {</span>
+<span class="nc" id="L163">        validatorSettings.setDefaultSeverity(defaultSeverity);</span>
       }
 
-<span class="nc" id="L168">      Map&lt;String, Object&gt; options = toMap(validatorSettingsMap.get(&quot;options&quot;));</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">      for (Map.Entry&lt;String, Object&gt; option : options.entrySet()) {</span>
-<span class="nc" id="L170">        validatorSettings.getOptions().put(option.getKey(), toString(option.getValue()));</span>
-<span class="nc" id="L171">      }</span>
+<span class="nc" id="L166">      Map&lt;String, Object&gt; options = toMap(validatorSettingsMap.get(&quot;options&quot;));</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">      for (Map.Entry&lt;String, Object&gt; option : options.entrySet()) {</span>
+<span class="nc" id="L168">        validatorSettings.getOptions().put(option.getKey(), toString(option.getValue()));</span>
+<span class="nc" id="L169">      }</span>
 
-<span class="nc" id="L173">      result.put(entry.getKey(), validatorSettings);</span>
-<span class="nc" id="L174">    }</span>
-<span class="nc" id="L175">    return result;</span>
+<span class="nc" id="L171">      result.put(entry.getKey(), validatorSettings);</span>
+<span class="nc" id="L172">    }</span>
+<span class="nc" id="L173">    return result;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private Map&lt;String, Object&gt; toMap(Object value) {
-<span class="nc bnc" id="L180" title="All 2 branches missed.">    if (value instanceof Map) {</span>
-<span class="nc" id="L181">      return (Map)value;</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">    if (value instanceof Map) {</span>
+<span class="nc" id="L179">      return (Map)value;</span>
     }
-<span class="nc" id="L183">    return Collections.emptyMap();</span>
+<span class="nc" id="L181">    return Collections.emptyMap();</span>
   }
 
   private boolean toBoolean(Object value) {
-<span class="nc bnc" id="L187" title="All 2 branches missed.">    if (value instanceof Boolean) {</span>
-<span class="nc" id="L188">      return (Boolean)value;</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">    if (value instanceof Boolean) {</span>
+<span class="nc" id="L186">      return (Boolean)value;</span>
     }
-<span class="nc bnc" id="L190" title="All 2 branches missed.">    if (value instanceof String) {</span>
-<span class="nc" id="L191">      return BooleanUtils.toBoolean((String)value);</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">    if (value instanceof String) {</span>
+<span class="nc" id="L189">      return BooleanUtils.toBoolean((String)value);</span>
     }
-<span class="nc" id="L193">    return false;</span>
+<span class="nc" id="L191">    return false;</span>
   }
 
   private String toString(Object value) {
-<span class="nc bnc" id="L197" title="All 2 branches missed.">    if (value instanceof String) {</span>
-<span class="nc" id="L198">      return (String)value;</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">    if (value instanceof String) {</span>
+<span class="nc" id="L196">      return (String)value;</span>
     }
-<span class="nc bnc" id="L200" title="All 2 branches missed.">    else if (value != null) {</span>
-<span class="nc" id="L201">      return value.toString();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">    else if (value != null) {</span>
+<span class="nc" id="L199">      return value.toString();</span>
     }
-<span class="nc" id="L203">    return null;</span>
+<span class="nc" id="L201">    return null;</span>
   }
 
 }
