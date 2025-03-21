@@ -104,7 +104,7 @@
   <h1 id="spotbugs_bug_detector_report">SpotBugs Bug Detector Report</h1>
  </div>
  <p>The following document contains the results of <a class="externalLink" href="https://spotbugs.github.io/">SpotBugs</a></p>
- <p>SpotBugs Version is <i>4.8.6</i></p>
+ <p>SpotBugs Version is <i>4.9.3</i></p>
  <p>Threshold is <i>medium</i></p>
  <p>Effort is <i>default</i></p>
 </section>
@@ -122,7 +122,7 @@
   <tbody>
    <tr class="b">
     <td>126</td>
-    <td>12</td>
+    <td>16</td>
     <td>0</td>
     <td>7</td>
    </tr>
@@ -141,7 +141,7 @@
   <tbody>
    <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.EnvironmentGenerator">io.wcm.devops.conga.generator.EnvironmentGenerator</a></td>
-    <td>2</td>
+    <td>3</td>
    </tr>
    <tr class="a">
     <td><a href="#io.wcm.devops.conga.generator.FileGenerator">io.wcm.devops.conga.generator.FileGenerator</a></td>
@@ -152,22 +152,26 @@
     <td>1</td>
    </tr>
    <tr class="a">
-    <td><a href="#io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader</a></td>
-    <td>2</td>
+    <td><a href="#io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader</a></td>
+    <td>1</td>
    </tr>
    <tr class="b">
-    <td><a href="#io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin</a></td>
+    <td><a href="#io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader</a></td>
     <td>3</td>
    </tr>
    <tr class="a">
+    <td><a href="#io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin</a></td>
+    <td>4</td>
+   </tr>
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.plugins.urlfile.HttpUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.HttpUrlFilePlugin</a></td>
     <td>1</td>
    </tr>
-   <tr class="b">
+   <tr class="a">
     <td><a href="#io.wcm.devops.conga.generator.plugins.validator.XmlValidator">io.wcm.devops.conga.generator.plugins.validator.XmlValidator</a></td>
     <td>1</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.util.VariableStringResolver">io.wcm.devops.conga.generator.util.VariableStringResolver</a></td>
     <td>1</td>
    </tr>
@@ -199,6 +203,13 @@
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
     <td><a href="./xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L207">207</a></td>
+    <td>Medium</td>
+   </tr>
+   <tr class="b">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.generator.EnvironmentGenerator.generateFile(RoleFile, String, String, String, String, Map, File, Template, String, List, String) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L378">378-423</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -249,6 +260,29 @@
    </tr>
   </tbody>
  </table>
+</section><a name="io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader"></a>
+<section>
+ <h2 id="io.wcm.devops.conga.generator.plugins.fileheader.a">io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader</h2>
+ <table class="bodyTable table table-striped table-hover">
+  <thead>
+   <tr class="a">
+    <th>Bug</th>
+    <th>Category</th>
+    <th>Details</th>
+    <th>Line</th>
+    <th>Priority</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="b">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader.apply(FileContext, FileHeaderContext) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/generator/plugins/fileheader/AbstractFileHeader.html#L47">47-78</a></td>
+    <td>Medium</td>
+   </tr>
+  </tbody>
+ </table>
 </section><a name="io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader"></a>
 <section>
  <h2 id="io.wcm.devops.conga.generator.plugins.fileheader.x">io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader</h2>
@@ -264,13 +298,20 @@
   </thead>
   <tbody>
    <tr class="b">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader.apply(FileContext, FileHeaderContext) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/generator/plugins/fileheader/XmlFileHeader.html#L97">97-112</a></td>
+    <td>Medium</td>
+   </tr>
+   <tr class="a">
     <td>The use of DocumentBuilder.parse(...) (DocumentBuilder) is vulnerable to XML External Entity attacks</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#XXE_DOCUMENT">XXE_DOCUMENT</a></td>
     <td><a href="./xref/io/wcm/devops/conga/generator/plugins/fileheader/XmlFileHeader.html#L97">97</a></td>
     <td>Medium</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td>The use of DocumentBuilder.parse(...) (DocumentBuilder) is vulnerable to XML External Entity attacks</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#XXE_DOCUMENT">XXE_DOCUMENT</a></td>
@@ -312,6 +353,13 @@
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
     <td><a href="./xref/io/wcm/devops/conga/generator/plugins/urlfile/FilesystemUrlFilePlugin.html#L114">114</a></td>
+    <td>Medium</td>
+   </tr>
+   <tr class="a">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin.deleteFile(String, UrlFilePluginContext) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/generator/plugins/urlfile/FilesystemUrlFilePlugin.html#L90">90-95</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -400,6 +448,7 @@
     <li><a href="#io.wcm.devops.conga.generator.environmentgenerator" title="io.wcm.devops.conga.generator.EnvironmentGenerator">io.wcm.devops.conga.generator.EnvironmentGenerator</a>
     <li><a href="#io.wcm.devops.conga.generator.filegenerator" title="io.wcm.devops.conga.generator.FileGenerator">io.wcm.devops.conga.generator.FileGenerator</a>
     <li><a href="#io.wcm.devops.conga.generator.generator" title="io.wcm.devops.conga.generator.Generator">io.wcm.devops.conga.generator.Generator</a>
+    <li><a href="#io.wcm.devops.conga.generator.plugins.fileheader.a" title="io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader</a>
     <li><a href="#io.wcm.devops.conga.generator.plugins.fileheader.x" title="io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader</a>
     <li><a href="#io.wcm.devops.conga.generator.plugins.urlfile.file" title="io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin</a>
     <li><a href="#io.wcm.devops.conga.generator.plugins.urlfile.http" title="io.wcm.devops.conga.generator.plugins.urlfile.HttpUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.HttpUrlFilePlugin</a>
