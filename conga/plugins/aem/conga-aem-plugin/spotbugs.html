@@ -102,7 +102,7 @@
   <h1 id="spotbugs_bug_detector_report">SpotBugs Bug Detector Report</h1>
  </div>
  <p>The following document contains the results of <a class="externalLink" href="https://spotbugs.github.io/">SpotBugs</a></p>
- <p>SpotBugs Version is <i>4.8.6</i></p>
+ <p>SpotBugs Version is <i>4.9.3</i></p>
  <p>Threshold is <i>medium</i></p>
  <p>Effort is <i>default</i></p>
 </section>
@@ -120,7 +120,7 @@
   <tbody>
    <tr class="b">
     <td>49</td>
-    <td>11</td>
+    <td>16</td>
     <td>0</td>
     <td>5</td>
    </tr>
@@ -139,25 +139,29 @@
   <tbody>
    <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</a></td>
-    <td>3</td>
+    <td>4</td>
    </tr>
    <tr class="a">
     <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a></td>
-    <td>1</td>
+    <td>2</td>
    </tr>
    <tr class="b">
-    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a></td>
+    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1</a></td>
     <td>1</td>
    </tr>
    <tr class="a">
+    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a></td>
+    <td>2</td>
+   </tr>
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a></td>
     <td>1</td>
    </tr>
-   <tr class="b">
-    <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a></td>
-    <td>2</td>
-   </tr>
    <tr class="a">
+    <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a></td>
+    <td>3</td>
+   </tr>
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a></td>
     <td>3</td>
    </tr>
@@ -198,6 +202,13 @@
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L93">93</a></td>
     <td>Medium</td>
    </tr>
+   <tr class="a">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport.generateIV() is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L101">101-103</a></td>
+    <td>Medium</td>
+   </tr>
   </tbody>
  </table>
 </section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor"></a>
@@ -221,11 +232,41 @@
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L105">105</a></td>
     <td>Medium</td>
    </tr>
+   <tr class="a">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor.apply(FileContext, PostProcessorContext) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L83">83-138</a></td>
+    <td>Medium</td>
+   </tr>
+  </tbody>
+ </table>
+</section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1"></a>
+<section>
+ <h2 id="io.wcm.devops.conga.plugins.aem.postprocessor.cont1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1</h2>
+ <table class="bodyTable table table-striped table-hover">
+  <thead>
+   <tr class="a">
+    <th>Bug</th>
+    <th>Category</th>
+    <th>Details</th>
+    <th>Line</th>
+    <th>Priority</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="b">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1.accept(String, Dictionary) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L158">158-181</a></td>
+    <td>Medium</td>
+   </tr>
   </tbody>
  </table>
 </section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor"></a>
 <section>
- <h2 id="io.wcm.devops.conga.plugins.aem.postprocessor.cont1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</h2>
+ <h2 id="io.wcm.devops.conga.plugins.aem.postprocessor.cont2">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</h2>
  <table class="bodyTable table table-striped table-hover">
   <thead>
    <tr class="a">
@@ -242,6 +283,13 @@
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackagePostProcessor.html#L86">86</a></td>
+    <td>Medium</td>
+   </tr>
+   <tr class="a">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor.apply(FileContext, PostProcessorContext) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackagePostProcessor.html#L77">77-120</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -297,6 +345,13 @@
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L78">78</a></td>
     <td>Medium</td>
    </tr>
+   <tr class="b">
+    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile.deleteIfRequired(UrlFileManager, File) is unnecessary</td>
+    <td>STYLE</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L98">98-108</a></td>
+    <td>Medium</td>
+   </tr>
   </tbody>
  </table>
 </section><a name="io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil"></a>
@@ -350,7 +405,8 @@
       <ul class="nav nav-list">
     <li><a href="#io.wcm.devops.conga.plugins.aem.crypto.impl.aescry" title="io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a>
-    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont1" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a>
+    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont1" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1</a>
+    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont2" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentelemen" title="io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentpackag" title="io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentpackag1" title="io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a>
