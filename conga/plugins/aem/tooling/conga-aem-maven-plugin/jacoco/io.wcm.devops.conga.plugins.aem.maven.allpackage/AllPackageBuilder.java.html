@@ -413,7 +413,7 @@ public final class AllPackageBuilder {
         // make sure author-only or publish-only packages are only taken into account if the current package has same restriction
 <span class="fc bfc" id="L414" title="All 2 branches covered.">        .filter(item -&gt; isAuthorAndPublish(item)</span>
 <span class="fc bfc" id="L415" title="All 4 branches covered.">            || (isOnlyAuthor(item) &amp;&amp; isOnlyAuthor(currentPackage))</span>
-<span class="pc bpc" id="L416" title="1 of 4 branches missed.">            || (isOnlyPublish(item) &amp;&amp; isOnlyPublish(currentPackage)))</span>
+<span class="fc bfc" id="L416" title="All 4 branches covered.">            || (isOnlyPublish(item) &amp;&amp; isOnlyPublish(currentPackage)))</span>
         // get last in list
 <span class="fc" id="L418">        .reduce((first, second) -&gt; second).orElse(null);</span>
   }
