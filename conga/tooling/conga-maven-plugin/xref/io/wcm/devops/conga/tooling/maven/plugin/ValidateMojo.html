@@ -38,292 +38,293 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.function.Predicate;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.FilenameUtils;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.resolver.ResolutionErrorHandler;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.execution.MavenSession;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoExecutionException;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoFailureException;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Component;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.LifecyclePhase;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Mojo;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Parameter;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.ResolutionScope;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.project.MavenProject;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.eclipse.aether.RepositorySystem;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.eclipse.aether.RepositorySystemSession;
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.eclipse.aether.repository.RemoteRepository;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.sonatype.plexus.build.incremental.BuildContext;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.GeneratorException;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.GeneratorOptions;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.UrlFileManager;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.handlebars.HandlebarsManager;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.util.PluginManager;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.util.PluginManagerImpl;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.environment.Environment;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.reader.EnvironmentReader;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.reader.RoleReader;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.role.Role;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.Resource;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.ResourceCollection;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.ResourceInfo;
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.ResourceLoader;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil;
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.MavenContext;
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.PathUtil;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.DefinitionValidator;
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.ModelValidator;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.NoValueProviderInRoleValidator;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.RoleTemplateFileValidator;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * Validates definitions by trying to parse them with model reader or compile them via handlebars.</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * Validates that the CONGA maven plugin version and CONGA plugin versions match or are newer than those versions</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * used when generating the dependency artifacts.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  @Mojo(name = <span class="jxr_string">"validate"</span>, defaultPhase = LifecyclePhase.VALIDATE, requiresProject = <strong class="jxr_keyword">true</strong>, threadSafe = <strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      requiresDependencyResolution = ResolutionScope.COMPILE)
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ValidateMojo" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.html#ValidateMojo">ValidateMojo</a> <strong class="jxr_keyword">extends</strong> <a name="AbstractCongaMojo" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/AbstractCongaMojo.html#AbstractCongaMojo">AbstractCongaMojo</a> {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">   * Selected environments to validate.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>    @Parameter(property = <span class="jxr_string">"conga.environments"</span>)
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>    <strong class="jxr_keyword">private</strong> String[] environments;
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>    @Parameter(property = <span class="jxr_string">"project"</span>, required = <strong class="jxr_keyword">true</strong>, readonly = <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>    <strong class="jxr_keyword">private</strong> MavenProject project;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>    @Component
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>    <strong class="jxr_keyword">private</strong> org.apache.maven.repository.RepositorySystem repositorySystem;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>    @Component
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>    <strong class="jxr_keyword">private</strong> ResolutionErrorHandler resolutionErrorHandler;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>   @Component
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>   <strong class="jxr_keyword">private</strong> RepositorySystem repoSystem;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>   @Component
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>   <strong class="jxr_keyword">private</strong> BuildContext buildContext;
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>   @Parameter(defaultValue = <span class="jxr_string">"${repositorySystemSession}"</span>, readonly = <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>   <strong class="jxr_keyword">private</strong> RepositorySystemSession repoSession;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>   @Parameter(defaultValue = <span class="jxr_string">"${project.remoteProjectRepositories}"</span>, readonly = <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>   <strong class="jxr_keyword">private</strong> List&lt;RemoteRepository&gt; remoteRepos;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   @Parameter(defaultValue = <span class="jxr_string">"${session}"</span>, readonly = <strong class="jxr_keyword">true</strong>, required = false)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>   <strong class="jxr_keyword">private</strong> MavenSession session;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>   @Override
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     List&lt;URL&gt; mavenProjectClasspathUrls = ClassLoaderUtil.getMavenProjectClasspathUrls(project);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     ClassLoader mavenProjectClassLoader = ClassLoaderUtil.buildClassLoader(mavenProjectClasspathUrls);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     ResourceLoader mavenProjectResourceLoader = <strong class="jxr_keyword">new</strong> ResourceLoader(mavenProjectClassLoader);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>     ResourceCollection roleDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>     ResourceCollection templateDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>     ResourceCollection environmentDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     <em class="jxr_comment">// validate role definition syntax</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     validateFiles(roleDir, roleDir, <strong class="jxr_keyword">new</strong> ModelValidator&lt;Role&gt;(<span class="jxr_string">"Role"</span>, <strong class="jxr_keyword">new</strong> RoleReader()));
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     PluginManager pluginManager = <strong class="jxr_keyword">new</strong> PluginManagerImpl();
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <a name="MavenContext" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/util/MavenContext.html#MavenContext">MavenContext</a> mavenContext = <strong class="jxr_keyword">new</strong> <a name="MavenContext" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/util/MavenContext.html#MavenContext">MavenContext</a>()
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         .project(project)
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>         .session(session)
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>         .setRepositorySystem(repositorySystem)
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>         .resolutionErrorHandler(resolutionErrorHandler)
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>         .buildContext(buildContext)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>         .log(getLog())
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>         .repoSystem(repoSystem)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         .repoSession(repoSession)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         .remoteRepos(remoteRepos)
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         .artifactTypeMappings(getArtifactTypeMappings());
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>     UrlFilePluginContext urlFilePluginContext = <strong class="jxr_keyword">new</strong> UrlFilePluginContext()
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         .baseDir(project.getBasedir())
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>         .resourceClassLoader(mavenProjectClassLoader)
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>         .pluginContextOptions(<strong class="jxr_keyword">new</strong> PluginContextOptions()
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>           .containerContext(mavenContext));
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>     UrlFileManager urlFileManager = <strong class="jxr_keyword">new</strong> UrlFileManager(pluginManager, urlFilePluginContext);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>     PluginContextOptions pluginContextOptions = <strong class="jxr_keyword">new</strong> PluginContextOptions()
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         .pluginManager(pluginManager)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         .urlFileManager(urlFileManager)
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>         .valueProviderConfig(getValueProviderConfig())
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         .genericPluginConfig(getPluginConfig())
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>         .containerContext(mavenContext)
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>         .logger(<strong class="jxr_keyword">new</strong> <a name="MavenSlf4jLogFacade" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/MavenSlf4jLogFacade.html#MavenSlf4jLogFacade">MavenSlf4jLogFacade</a>(getLog()));
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <em class="jxr_comment">// validate that all templates can be compiled</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>     HandlebarsManager handlebarsManager = <strong class="jxr_keyword">new</strong> HandlebarsManager(List.of(templateDir), pluginContextOptions);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>     validateFiles(templateDir, templateDir, <strong class="jxr_keyword">new</strong> <a name="TemplateValidator" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/TemplateValidator.html#TemplateValidator">TemplateValidator</a>(templateDir, handlebarsManager));
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>     <em class="jxr_comment">// validate that roles reference existing templates</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>     validateFiles(roleDir, roleDir, <strong class="jxr_keyword">new</strong> <a name="RoleTemplateFileValidator" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/RoleTemplateFileValidator.html#RoleTemplateFileValidator">RoleTemplateFileValidator</a>(handlebarsManager));
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <em class="jxr_comment">// validate that no value providers are used in role files - they should be only used in environment</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     validateFiles(roleDir, roleDir, <strong class="jxr_keyword">new</strong> <a name="NoValueProviderInRoleValidator" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/NoValueProviderInRoleValidator.html#NoValueProviderInRoleValidator">NoValueProviderInRoleValidator</a>());
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     <em class="jxr_comment">// validate environment definition syntax</em>
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>     List&lt;Environment&gt; environmentList = validateFiles(environmentDir, environmentDir, <strong class="jxr_keyword">new</strong> ModelValidator&lt;Environment&gt;(<span class="jxr_string">"Environment"</span>, <strong class="jxr_keyword">new</strong> EnvironmentReader()),
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>         <em class="jxr_comment">// filter environments</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>         resourceInfo -&gt; {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>           <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.environments == <strong class="jxr_keyword">null</strong> || <strong class="jxr_keyword">this</strong>.environments.length == 0) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>           }
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>           <strong class="jxr_keyword">for</strong> (String environment : <strong class="jxr_keyword">this</strong>.environments) {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>             <strong class="jxr_keyword">if</strong> (StringUtils.equals(environment, FilenameUtils.getBaseName(resourceInfo.getName()))) {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>               <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>             }
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>           }
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>           <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>         });
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>     <em class="jxr_comment">// validate version information - for each environment separately</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>     <strong class="jxr_keyword">for</strong> (Environment environment : environmentList) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>       UrlFilePluginContext environmentUrlFilePluginContext = <strong class="jxr_keyword">new</strong> UrlFilePluginContext()
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>           .baseDir(project.getBasedir())
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>           .resourceClassLoader(mavenProjectClassLoader)
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>           .environment(environment)
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>           .pluginContextOptions(<strong class="jxr_keyword">new</strong> PluginContextOptions()
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>               .containerContext(mavenContext));
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>       UrlFileManager environmentUrlFileManager = <strong class="jxr_keyword">new</strong> UrlFileManager(pluginManager, environmentUrlFilePluginContext);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>       PluginContextOptions environmentPluginContextOptions = <strong class="jxr_keyword">new</strong> PluginContextOptions()
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>           .pluginContextOptions(pluginContextOptions)
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>           .urlFileManager(environmentUrlFileManager);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>       validateVersionInfo(environment, mavenProjectClasspathUrls, environmentPluginContextOptions);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>     }
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>   }
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>   <em class="jxr_comment">// ===== FILE VALIDATION =====</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>   <strong class="jxr_keyword">private</strong> &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator)
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>       <strong class="jxr_keyword">throws</strong> MojoFailureException {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">return</strong> validateFiles(sourceDir, rootSourceDir, validator, resourceInfo -&gt; <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>   }
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>   <strong class="jxr_keyword">private</strong> &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>       Predicate&lt;ResourceInfo&gt; resourceFilter) <strong class="jxr_keyword">throws</strong> MojoFailureException {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">if</strong> (!sourceDir.exists()) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>       <strong class="jxr_keyword">return</strong> List.of();
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>     }
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>     SortedSet&lt;Resource&gt; files = sourceDir.getResources();
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>     SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <strong class="jxr_keyword">if</strong> (files.isEmpty() &amp;&amp; dirs.isEmpty()) {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>       <strong class="jxr_keyword">return</strong> List.of();
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     }
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>     List&lt;T&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>     <strong class="jxr_keyword">for</strong> (Resource file : files) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.test(file)) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>         result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>       }
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>     }
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>     <strong class="jxr_keyword">for</strong> (ResourceCollection dir : dirs) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.test(dir)) {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>         result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>       }
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>     }
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>   }
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>   @SuppressWarnings(<span class="jxr_string">"java:S1075"</span>) <em class="jxr_comment">// no filesystem path</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getPathForLog(ResourceCollection rootSourceDir, Resource file) {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>     String path = PathUtil.unifySlashes(file.getCanonicalPath());
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>     String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + <span class="jxr_string">"/"</span>;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>     <strong class="jxr_keyword">return</strong> StringUtils.substringAfter(path, rootPath);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>   }
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>   <em class="jxr_comment">// ===== PLUGIN VERSION INFO VALIDATION =====</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">   * Validates that the CONGA maven plugin version and CONGA plugin versions match or are newer than those versions used</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">   * when generating the dependency artifacts.</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">   * @param environment Environment</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">   * @param mavenProjectClasspathUrls Classpath URLs of maven project</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">   * @param pluginContextOptions Plugin context options</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateVersionInfo(Environment environment, List&lt;URL&gt; mavenProjectClasspathUrls, PluginContextOptions pluginContextOptions)
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>       <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>     <em class="jxr_comment">// build combined classpath for dependencies defined in environment and maven project</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>     List&lt;URL&gt; classpathUrls = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>     classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>     classpathUrls.addAll(mavenProjectClasspathUrls);
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>     ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>     <em class="jxr_comment">// get version info from this project</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>     Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>     <em class="jxr_comment">// validate current version info against dependency version infos</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>     <strong class="jxr_keyword">for</strong> (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>       validateVersionInfo(currentVersionInfo, dependencyVersionInfo);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>     }
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>   }
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>   <strong class="jxr_keyword">private</strong> List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls, PluginContextOptions pluginContextOptions) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>     <strong class="jxr_keyword">return</strong> dependencyUrls.stream()
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>         .map(dependencyUrl -&gt; {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>           String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>           <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>             <strong class="jxr_keyword">return</strong> pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>           }
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>           <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> GeneratorException(<span class="jxr_string">"Unable to resolve: "</span> + resolvedDependencyUrl, ex);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>           }
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>         })
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>         .flatMap(List::stream)
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>         .collect(Collectors.toList());
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>   }
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateVersionInfo(Properties currentVersionInfo, Properties dependencyVersionInfo) <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">for</strong> (Object keyObject : currentVersionInfo.keySet()) {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>       String key = keyObject.toString();
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>       String currentVersionString = currentVersionInfo.getProperty(key);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>       String dependencyVersionString = dependencyVersionInfo.getProperty(key);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>       <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>         <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>       }
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>       DefaultArtifactVersion currentVersion = <strong class="jxr_keyword">new</strong> DefaultArtifactVersion(currentVersionString);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>       DefaultArtifactVersion dependencyVersion = <strong class="jxr_keyword">new</strong> DefaultArtifactVersion(dependencyVersionString);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>       <strong class="jxr_keyword">if</strong> (currentVersion.compareTo(dependencyVersion) &lt; 0) {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Newer CONGA maven plugin or plugin version required: "</span> + key + <span class="jxr_string">":"</span> + dependencyVersion.toString());
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>       }
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>     }
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>   }
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>   <strong class="jxr_keyword">private</strong> List&lt;Properties&gt; getDependencyVersionInfos(ClassLoader classLoader) <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>     PathMatchingResourcePatternResolver resolver = <strong class="jxr_keyword">new</strong> PathMatchingResourcePatternResolver(classLoader);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>       org.springframework.core.io.Resource[] resources = resolver.getResources(
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>           <span class="jxr_string">"classpath*:"</span> + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>       <strong class="jxr_keyword">return</strong> Arrays.stream(resources)
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>           .map(<strong class="jxr_keyword">this</strong>::toProperties)
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>           .collect(Collectors.toList());
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     }
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Unable to get classpath resources: "</span> + ex.getMessage(), ex);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>     }
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>   }
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>   <strong class="jxr_keyword">private</strong> Properties toProperties(org.springframework.core.io.Resource resource) {
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">try</strong> (InputStream is = resource.getInputStream()) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>       Properties props = <strong class="jxr_keyword">new</strong> Properties();
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>       props.load(is);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>       <strong class="jxr_keyword">return</strong> props;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     }
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Unable to read properties file: "</span> + resource.toString(), ex);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     }
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>   }
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> javax.inject.Inject;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.FilenameUtils;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.resolver.ResolutionErrorHandler;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.execution.MavenSession;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoExecutionException;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugin.MojoFailureException;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.LifecyclePhase;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Mojo;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Parameter;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.ResolutionScope;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.apache.maven.project.MavenProject;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.eclipse.aether.RepositorySystem;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.eclipse.aether.RepositorySystemSession;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.eclipse.aether.repository.RemoteRepository;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> org.sonatype.plexus.build.incremental.BuildContext;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.GeneratorException;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.GeneratorOptions;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.UrlFileManager;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.handlebars.HandlebarsManager;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.util.PluginManager;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.util.PluginManagerImpl;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.environment.Environment;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.reader.EnvironmentReader;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.reader.RoleReader;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.model.role.Role;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.Resource;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.ResourceCollection;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.ResourceInfo;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.resource.ResourceLoader;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.ClassLoaderUtil;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.MavenContext;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.PathUtil;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.DefinitionValidator;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.ModelValidator;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.NoValueProviderInRoleValidator;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.RoleTemplateFileValidator;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * Validates definitions by trying to parse them with model reader or compile them via handlebars.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * Validates that the CONGA maven plugin version and CONGA plugin versions match or are newer than those versions</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * used when generating the dependency artifacts.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  @Mojo(name = <span class="jxr_string">"validate"</span>, defaultPhase = LifecyclePhase.VALIDATE, requiresProject = <strong class="jxr_keyword">true</strong>, threadSafe = <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      requiresDependencyResolution = ResolutionScope.COMPILE)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ValidateMojo" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.html#ValidateMojo">ValidateMojo</a> <strong class="jxr_keyword">extends</strong> <a name="AbstractCongaMojo" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/AbstractCongaMojo.html#AbstractCongaMojo">AbstractCongaMojo</a> {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">   * Selected environments to validate.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>    @Parameter(property = <span class="jxr_string">"conga.environments"</span>)
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <strong class="jxr_keyword">private</strong> String[] environments;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>    @Parameter(property = <span class="jxr_string">"project"</span>, required = <strong class="jxr_keyword">true</strong>, readonly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>    <strong class="jxr_keyword">private</strong> MavenProject project;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    @Inject
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>    <strong class="jxr_keyword">private</strong> org.apache.maven.repository.RepositorySystem repositorySystem;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>    @Inject
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>   <strong class="jxr_keyword">private</strong> ResolutionErrorHandler resolutionErrorHandler;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   @Inject
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>   <strong class="jxr_keyword">private</strong> RepositorySystem repoSystem;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>   @Inject
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>   <strong class="jxr_keyword">private</strong> BuildContext buildContext;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>   @Parameter(defaultValue = <span class="jxr_string">"${repositorySystemSession}"</span>, readonly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>   <strong class="jxr_keyword">private</strong> RepositorySystemSession repoSession;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>   @Parameter(defaultValue = <span class="jxr_string">"${project.remoteProjectRepositories}"</span>, readonly = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">private</strong> List&lt;RemoteRepository&gt; remoteRepos;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>   @Parameter(defaultValue = <span class="jxr_string">"${session}"</span>, readonly = <strong class="jxr_keyword">true</strong>, required = false)
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>   <strong class="jxr_keyword">private</strong> MavenSession session;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>   @Override
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     List&lt;URL&gt; mavenProjectClasspathUrls = ClassLoaderUtil.getMavenProjectClasspathUrls(project);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     ClassLoader mavenProjectClassLoader = ClassLoaderUtil.buildClassLoader(mavenProjectClasspathUrls);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     ResourceLoader mavenProjectResourceLoader = <strong class="jxr_keyword">new</strong> ResourceLoader(mavenProjectClassLoader);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     ResourceCollection roleDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     ResourceCollection templateDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     ResourceCollection environmentDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <em class="jxr_comment">// validate role definition syntax</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     validateFiles(roleDir, roleDir, <strong class="jxr_keyword">new</strong> ModelValidator&lt;Role&gt;(<span class="jxr_string">"Role"</span>, <strong class="jxr_keyword">new</strong> RoleReader()));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     PluginManager pluginManager = <strong class="jxr_keyword">new</strong> PluginManagerImpl();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <a name="MavenContext" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/util/MavenContext.html#MavenContext">MavenContext</a> mavenContext = <strong class="jxr_keyword">new</strong> <a name="MavenContext" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/util/MavenContext.html#MavenContext">MavenContext</a>()
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         .project(project)
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         .session(session)
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         .setRepositorySystem(repositorySystem)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         .resolutionErrorHandler(resolutionErrorHandler)
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>         .buildContext(buildContext)
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         .log(getLog())
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>         .repoSystem(repoSystem)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         .repoSession(repoSession)
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         .remoteRepos(remoteRepos)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         .artifactTypeMappings(getArtifactTypeMappings());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     UrlFilePluginContext urlFilePluginContext = <strong class="jxr_keyword">new</strong> UrlFilePluginContext()
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         .baseDir(project.getBasedir())
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         .resourceClassLoader(mavenProjectClassLoader)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         .pluginContextOptions(<strong class="jxr_keyword">new</strong> PluginContextOptions()
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>           .containerContext(mavenContext));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     UrlFileManager urlFileManager = <strong class="jxr_keyword">new</strong> UrlFileManager(pluginManager, urlFilePluginContext);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     PluginContextOptions pluginContextOptions = <strong class="jxr_keyword">new</strong> PluginContextOptions()
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         .pluginManager(pluginManager)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         .urlFileManager(urlFileManager)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         .valueProviderConfig(getValueProviderConfig())
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         .genericPluginConfig(getPluginConfig())
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         .containerContext(mavenContext)
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         .logger(<strong class="jxr_keyword">new</strong> <a name="MavenSlf4jLogFacade" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/MavenSlf4jLogFacade.html#MavenSlf4jLogFacade">MavenSlf4jLogFacade</a>(getLog()));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     <em class="jxr_comment">// validate that all templates can be compiled</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     HandlebarsManager handlebarsManager = <strong class="jxr_keyword">new</strong> HandlebarsManager(List.of(templateDir), pluginContextOptions);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     validateFiles(templateDir, templateDir, <strong class="jxr_keyword">new</strong> <a name="TemplateValidator" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/TemplateValidator.html#TemplateValidator">TemplateValidator</a>(templateDir, handlebarsManager));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     <em class="jxr_comment">// validate that roles reference existing templates</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     validateFiles(roleDir, roleDir, <strong class="jxr_keyword">new</strong> <a name="RoleTemplateFileValidator" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/RoleTemplateFileValidator.html#RoleTemplateFileValidator">RoleTemplateFileValidator</a>(handlebarsManager));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <em class="jxr_comment">// validate that no value providers are used in role files - they should be only used in environment</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     validateFiles(roleDir, roleDir, <strong class="jxr_keyword">new</strong> <a name="NoValueProviderInRoleValidator" href="../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/NoValueProviderInRoleValidator.html#NoValueProviderInRoleValidator">NoValueProviderInRoleValidator</a>());
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <em class="jxr_comment">// validate environment definition syntax</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     List&lt;Environment&gt; environmentList = validateFiles(environmentDir, environmentDir, <strong class="jxr_keyword">new</strong> ModelValidator&lt;Environment&gt;(<span class="jxr_string">"Environment"</span>, <strong class="jxr_keyword">new</strong> EnvironmentReader()),
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         <em class="jxr_comment">// filter environments</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>         resourceInfo -&gt; {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>           <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.environments == <strong class="jxr_keyword">null</strong> || <strong class="jxr_keyword">this</strong>.environments.length == 0) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>           }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>           <strong class="jxr_keyword">for</strong> (String environment : <strong class="jxr_keyword">this</strong>.environments) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>             <strong class="jxr_keyword">if</strong> (StringUtils.equals(environment, FilenameUtils.getBaseName(resourceInfo.getName()))) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>               <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             }
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>           }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>           <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         });
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     <em class="jxr_comment">// validate version information - for each environment separately</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <strong class="jxr_keyword">for</strong> (Environment environment : environmentList) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>       UrlFilePluginContext environmentUrlFilePluginContext = <strong class="jxr_keyword">new</strong> UrlFilePluginContext()
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>           .baseDir(project.getBasedir())
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>           .resourceClassLoader(mavenProjectClassLoader)
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>           .environment(environment)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>           .pluginContextOptions(<strong class="jxr_keyword">new</strong> PluginContextOptions()
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>               .containerContext(mavenContext));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>       UrlFileManager environmentUrlFileManager = <strong class="jxr_keyword">new</strong> UrlFileManager(pluginManager, environmentUrlFilePluginContext);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>       PluginContextOptions environmentPluginContextOptions = <strong class="jxr_keyword">new</strong> PluginContextOptions()
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>           .pluginContextOptions(pluginContextOptions)
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>           .urlFileManager(environmentUrlFileManager);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>       validateVersionInfo(environment, mavenProjectClasspathUrls, environmentPluginContextOptions);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     }
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>   }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>   <em class="jxr_comment">// ===== FILE VALIDATION =====</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>   <strong class="jxr_keyword">private</strong> &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>       <strong class="jxr_keyword">throws</strong> MojoFailureException {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">return</strong> validateFiles(sourceDir, rootSourceDir, validator, resourceInfo -&gt; <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>   }
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>   <strong class="jxr_keyword">private</strong> &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>       Predicate&lt;ResourceInfo&gt; resourceFilter) <strong class="jxr_keyword">throws</strong> MojoFailureException {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     <strong class="jxr_keyword">if</strong> (!sourceDir.exists()) {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>       <strong class="jxr_keyword">return</strong> List.of();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     SortedSet&lt;Resource&gt; files = sourceDir.getResources();
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     <strong class="jxr_keyword">if</strong> (files.isEmpty() &amp;&amp; dirs.isEmpty()) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>       <strong class="jxr_keyword">return</strong> List.of();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>     }
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     List&lt;T&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>     <strong class="jxr_keyword">for</strong> (Resource file : files) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.test(file)) {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>       }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>     }
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">for</strong> (ResourceCollection dir : dirs) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>       <strong class="jxr_keyword">if</strong> (resourceFilter.test(dir)) {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>         result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>       }
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     }
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>   }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>   @SuppressWarnings(<span class="jxr_string">"java:S1075"</span>) <em class="jxr_comment">// no filesystem path</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getPathForLog(ResourceCollection rootSourceDir, Resource file) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>     String path = PathUtil.unifySlashes(file.getCanonicalPath());
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>     String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + <span class="jxr_string">"/"</span>;
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     <strong class="jxr_keyword">return</strong> StringUtils.substringAfter(path, rootPath);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>   }
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>   <em class="jxr_comment">// ===== PLUGIN VERSION INFO VALIDATION =====</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">   * Validates that the CONGA maven plugin version and CONGA plugin versions match or are newer than those versions used</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">   * when generating the dependency artifacts.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">   * @param environment Environment</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">   * @param mavenProjectClasspathUrls Classpath URLs of maven project</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">   * @param pluginContextOptions Plugin context options</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateVersionInfo(Environment environment, List&lt;URL&gt; mavenProjectClasspathUrls, PluginContextOptions pluginContextOptions)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>       <strong class="jxr_keyword">throws</strong> MojoExecutionException {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>     <em class="jxr_comment">// build combined classpath for dependencies defined in environment and maven project</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     List&lt;URL&gt; classpathUrls = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     classpathUrls.addAll(mavenProjectClasspathUrls);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>     ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <em class="jxr_comment">// get version info from this project</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     <em class="jxr_comment">// validate current version info against dependency version infos</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <strong class="jxr_keyword">for</strong> (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>       validateVersionInfo(currentVersionInfo, dependencyVersionInfo);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>     }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>   }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>   <strong class="jxr_keyword">private</strong> List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls, PluginContextOptions pluginContextOptions) {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>     <strong class="jxr_keyword">return</strong> dependencyUrls.stream()
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>         .map(dependencyUrl -&gt; {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>           String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>           <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>             <strong class="jxr_keyword">return</strong> pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>           }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>           <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> GeneratorException(<span class="jxr_string">"Unable to resolve: "</span> + resolvedDependencyUrl, ex);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>           }
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>         })
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>         .flatMap(List::stream)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>         .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>   }
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateVersionInfo(Properties currentVersionInfo, Properties dependencyVersionInfo) <strong class="jxr_keyword">throws</strong> MojoExecutionException {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">for</strong> (Object keyObject : currentVersionInfo.keySet()) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>       String key = keyObject.toString();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>       String currentVersionString = currentVersionInfo.getProperty(key);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>       String dependencyVersionString = dependencyVersionInfo.getProperty(key);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>       <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>         <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>       }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>       DefaultArtifactVersion currentVersion = <strong class="jxr_keyword">new</strong> DefaultArtifactVersion(currentVersionString);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>       DefaultArtifactVersion dependencyVersion = <strong class="jxr_keyword">new</strong> DefaultArtifactVersion(dependencyVersionString);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>       <strong class="jxr_keyword">if</strong> (currentVersion.compareTo(dependencyVersion) &lt; 0) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Newer CONGA maven plugin or plugin version required: "</span> + key + <span class="jxr_string">":"</span> + dependencyVersion.toString());
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       }
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>   }
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>   <strong class="jxr_keyword">private</strong> List&lt;Properties&gt; getDependencyVersionInfos(ClassLoader classLoader) <strong class="jxr_keyword">throws</strong> MojoExecutionException {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>     PathMatchingResourcePatternResolver resolver = <strong class="jxr_keyword">new</strong> PathMatchingResourcePatternResolver(classLoader);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>       org.springframework.core.io.Resource[] resources = resolver.getResources(
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>           <span class="jxr_string">"classpath*:"</span> + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>       <strong class="jxr_keyword">return</strong> Arrays.stream(resources)
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>           .map(<strong class="jxr_keyword">this</strong>::toProperties)
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>           .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     }
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Unable to get classpath resources: "</span> + ex.getMessage(), ex);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>     }
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>   }
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>   <strong class="jxr_keyword">private</strong> Properties toProperties(org.springframework.core.io.Resource resource) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">try</strong> (InputStream is = resource.getInputStream()) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>       Properties props = <strong class="jxr_keyword">new</strong> Properties();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>       props.load(is);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>       <strong class="jxr_keyword">return</strong> props;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>     <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Unable to read properties file: "</span> + resource.toString(), ex);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     }
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>   }
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> }
 </pre>
 <hr/>
 <div id="footer">© 2015–2025 <a href="https://devops.wcm.io">wcm.io DevOps</a></div>

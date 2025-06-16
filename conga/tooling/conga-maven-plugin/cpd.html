@@ -118,24 +118,24 @@
    <tbody>
     <tr class="b">
      <td>io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.java</td>
-     <td><a href="./xref/io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.html#L89">89</a></td>
+     <td><a href="./xref/io/wcm/devops/conga/tooling/maven/plugin/GenerateMojo.html#L90">90</a></td>
     </tr>
     <tr class="a">
      <td>io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.java</td>
-     <td><a href="./xref/io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.html#L93">93</a></td>
+     <td><a href="./xref/io/wcm/devops/conga/tooling/maven/plugin/ValidateMojo.html#L94">94</a></td>
     </tr>
     <tr class="b">
      <td colspan="2">
       <pre>@Parameter(property = "project", required = true, readonly = true)
   private MavenProject project;
 
-  @Component
+  @Inject
   private org.apache.maven.repository.RepositorySystem repositorySystem;
-  @Component
+  @Inject
   private ResolutionErrorHandler resolutionErrorHandler;
-  @Component
+  @Inject
   private RepositorySystem repoSystem;
-  @Component
+  @Inject
   private BuildContext buildContext;
   @Parameter(defaultValue = "${repositorySystemSession}", readonly = true)
   private RepositorySystemSession repoSession;

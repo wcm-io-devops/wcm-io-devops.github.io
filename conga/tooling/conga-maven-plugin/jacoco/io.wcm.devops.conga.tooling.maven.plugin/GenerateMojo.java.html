@@ -24,11 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.inject.Inject;
+
 import org.apache.maven.artifact.resolver.ResolutionErrorHandler;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -53,7 +54,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
  */
 @Mojo(name = &quot;generate&quot;, defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresProject = true, threadSafe = true,
     requiresDependencyResolution = ResolutionScope.COMPILE)
-<span class="fc" id="L56">public class GenerateMojo extends AbstractCongaMojo {</span>
+<span class="fc" id="L57">public class GenerateMojo extends AbstractCongaMojo {</span>
 
   /**
    * Selected environments to generate.
@@ -89,13 +90,13 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
   @Parameter(property = &quot;project&quot;, required = true, readonly = true)
   private MavenProject project;
 
-  @Component
+  @Inject
   private org.apache.maven.repository.RepositorySystem repositorySystem;
-  @Component
+  @Inject
   private ResolutionErrorHandler resolutionErrorHandler;
-  @Component
+  @Inject
   private RepositorySystem repoSystem;
-  @Component
+  @Inject
   private BuildContext buildContext;
   @Parameter(defaultValue = &quot;${repositorySystemSession}&quot;, readonly = true)
   private RepositorySystemSession repoSession;
@@ -107,49 +108,49 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
 
-<span class="fc" id="L110">    MavenContext mavenContext = new MavenContext()</span>
-<span class="fc" id="L111">        .project(project)</span>
-<span class="fc" id="L112">        .session(session)</span>
-<span class="fc" id="L113">        .setRepositorySystem(repositorySystem)</span>
-<span class="fc" id="L114">        .resolutionErrorHandler(resolutionErrorHandler)</span>
-<span class="fc" id="L115">        .buildContext(buildContext)</span>
-<span class="fc" id="L116">        .log(getLog())</span>
-<span class="fc" id="L117">        .repoSystem(repoSystem)</span>
-<span class="fc" id="L118">        .repoSession(repoSession)</span>
-<span class="fc" id="L119">        .remoteRepos(remoteRepos)</span>
-<span class="fc" id="L120">        .artifactTypeMappings(getArtifactTypeMappings());</span>
+<span class="fc" id="L111">    MavenContext mavenContext = new MavenContext()</span>
+<span class="fc" id="L112">        .project(project)</span>
+<span class="fc" id="L113">        .session(session)</span>
+<span class="fc" id="L114">        .setRepositorySystem(repositorySystem)</span>
+<span class="fc" id="L115">        .resolutionErrorHandler(resolutionErrorHandler)</span>
+<span class="fc" id="L116">        .buildContext(buildContext)</span>
+<span class="fc" id="L117">        .log(getLog())</span>
+<span class="fc" id="L118">        .repoSystem(repoSystem)</span>
+<span class="fc" id="L119">        .repoSession(repoSession)</span>
+<span class="fc" id="L120">        .remoteRepos(remoteRepos)</span>
+<span class="fc" id="L121">        .artifactTypeMappings(getArtifactTypeMappings());</span>
 
-<span class="fc" id="L122">    PluginManager pluginManager = new PluginManagerImpl();</span>
+<span class="fc" id="L123">    PluginManager pluginManager = new PluginManagerImpl();</span>
 
-<span class="fc" id="L124">    PluginContextOptions pluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L125">        .pluginManager(pluginManager)</span>
-<span class="fc" id="L126">        .valueProviderConfig(getValueProviderConfig())</span>
-<span class="fc" id="L127">        .genericPluginConfig(getPluginConfig())</span>
-<span class="fc" id="L128">        .containerContext(mavenContext)</span>
-<span class="fc" id="L129">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
+<span class="fc" id="L125">    PluginContextOptions pluginContextOptions = new PluginContextOptions()</span>
+<span class="fc" id="L126">        .pluginManager(pluginManager)</span>
+<span class="fc" id="L127">        .valueProviderConfig(getValueProviderConfig())</span>
+<span class="fc" id="L128">        .genericPluginConfig(getPluginConfig())</span>
+<span class="fc" id="L129">        .containerContext(mavenContext)</span>
+<span class="fc" id="L130">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
 
-<span class="fc" id="L131">    GeneratorOptions options = new GeneratorOptions()</span>
-<span class="fc" id="L132">        .baseDir(project.getBasedir())</span>
-<span class="fc" id="L133">        .roleDir(getRoleDir())</span>
-<span class="fc" id="L134">        .templateDir(getTemplateDir())</span>
-<span class="fc" id="L135">        .environmentDir(getEnvironmentDir())</span>
-<span class="fc" id="L136">        .destDir(getTargetDir())</span>
-<span class="fc" id="L137">        .deleteBeforeGenerate(deleteBeforeGenerate)</span>
-<span class="fc" id="L138">        .version(project.getVersion())</span>
-<span class="fc" id="L139">        .setAllowSymlinks(allowSymlinks)</span>
-<span class="fc" id="L140">        .modelExport(getModelExport())</span>
-<span class="fc" id="L141">        .valueProviderConfig(getValueProviderConfig())</span>
-<span class="fc" id="L142">        .genericPluginConfig(getPluginConfig())</span>
-<span class="fc" id="L143">        .containerContext(mavenContext)</span>
-<span class="fc" id="L144">        .containerClasspathUrls(ClassLoaderUtil.getMavenProjectClasspathUrls(project))</span>
-<span class="fc" id="L145">        .pluginManager(pluginManager)</span>
-<span class="fc" id="L146">        .dependencyVersionBuilder(new DependencyVersionBuilder(pluginContextOptions))</span>
-<span class="fc" id="L147">        .containerVersionInfo(buildContainerVersionInfo())</span>
-<span class="fc" id="L148">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
+<span class="fc" id="L132">    GeneratorOptions options = new GeneratorOptions()</span>
+<span class="fc" id="L133">        .baseDir(project.getBasedir())</span>
+<span class="fc" id="L134">        .roleDir(getRoleDir())</span>
+<span class="fc" id="L135">        .templateDir(getTemplateDir())</span>
+<span class="fc" id="L136">        .environmentDir(getEnvironmentDir())</span>
+<span class="fc" id="L137">        .destDir(getTargetDir())</span>
+<span class="fc" id="L138">        .deleteBeforeGenerate(deleteBeforeGenerate)</span>
+<span class="fc" id="L139">        .version(project.getVersion())</span>
+<span class="fc" id="L140">        .setAllowSymlinks(allowSymlinks)</span>
+<span class="fc" id="L141">        .modelExport(getModelExport())</span>
+<span class="fc" id="L142">        .valueProviderConfig(getValueProviderConfig())</span>
+<span class="fc" id="L143">        .genericPluginConfig(getPluginConfig())</span>
+<span class="fc" id="L144">        .containerContext(mavenContext)</span>
+<span class="fc" id="L145">        .containerClasspathUrls(ClassLoaderUtil.getMavenProjectClasspathUrls(project))</span>
+<span class="fc" id="L146">        .pluginManager(pluginManager)</span>
+<span class="fc" id="L147">        .dependencyVersionBuilder(new DependencyVersionBuilder(pluginContextOptions))</span>
+<span class="fc" id="L148">        .containerVersionInfo(buildContainerVersionInfo())</span>
+<span class="fc" id="L149">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
 
-<span class="fc" id="L150">    Generator generator = new Generator(options);</span>
-<span class="fc" id="L151">    generator.generate(environments, nodes);</span>
-<span class="fc" id="L152">  }</span>
+<span class="fc" id="L151">    Generator generator = new Generator(options);</span>
+<span class="fc" id="L152">    generator.generate(environments, nodes);</span>
+<span class="fc" id="L153">  }</span>
 
   /**
    * Build version information about CONGA Maven plugin and CONGA plugins, plus
@@ -158,21 +159,21 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.VersionInfoUtil;
    * @return Version information
    */
   private Map&lt;String, String&gt; buildContainerVersionInfo() {
-<span class="fc" id="L161">    Map&lt;String, String&gt; versionInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L162">    Map&lt;String, String&gt; versionInfo = new HashMap&lt;&gt;();</span>
 
-<span class="fc" id="L163">    Properties pluginProps = VersionInfoUtil.getVersionInfoProperties(project);</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">    for (Map.Entry&lt;Object, Object&gt; entry : pluginProps.entrySet()) {</span>
-<span class="fc" id="L165">      versionInfo.put(entry.getKey().toString(), entry.getValue().toString());</span>
-<span class="fc" id="L166">    }</span>
+<span class="fc" id="L164">    Properties pluginProps = VersionInfoUtil.getVersionInfoProperties(project);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">    for (Map.Entry&lt;Object, Object&gt; entry : pluginProps.entrySet()) {</span>
+<span class="fc" id="L166">      versionInfo.put(entry.getKey().toString(), entry.getValue().toString());</span>
+<span class="fc" id="L167">    }</span>
 
-<span class="fc bfc" id="L168" title="All 2 branches covered.">    for (String pluginKey : versionInfoAdditionalPlugins) {</span>
-<span class="fc" id="L169">      String pluginVersion = VersionInfoUtil.getPluginVersionFromPluginManagement(pluginKey, project);</span>
-<span class="pc bpc" id="L170" title="1 of 2 branches missed.">      if (pluginVersion != null) {</span>
-<span class="nc" id="L171">        versionInfo.put(pluginKey, pluginVersion);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">    for (String pluginKey : versionInfoAdditionalPlugins) {</span>
+<span class="fc" id="L170">      String pluginVersion = VersionInfoUtil.getPluginVersionFromPluginManagement(pluginKey, project);</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">      if (pluginVersion != null) {</span>
+<span class="nc" id="L172">        versionInfo.put(pluginKey, pluginVersion);</span>
       }
     }
 
-<span class="fc" id="L175">    return versionInfo;</span>
+<span class="fc" id="L176">    return versionInfo;</span>
   }
 
 }

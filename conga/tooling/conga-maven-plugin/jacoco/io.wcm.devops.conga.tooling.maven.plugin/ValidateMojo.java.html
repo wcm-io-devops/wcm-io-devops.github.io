@@ -30,6 +30,8 @@ import java.util.SortedSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.resolver.ResolutionErrorHandler;
@@ -37,7 +39,6 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -82,7 +83,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
  */
 @Mojo(name = &quot;validate&quot;, defaultPhase = LifecyclePhase.VALIDATE, requiresProject = true, threadSafe = true,
     requiresDependencyResolution = ResolutionScope.COMPILE)
-<span class="fc" id="L85">public class ValidateMojo extends AbstractCongaMojo {</span>
+<span class="fc" id="L86">public class ValidateMojo extends AbstractCongaMojo {</span>
 
   /**
    * Selected environments to validate.
@@ -93,13 +94,13 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
   @Parameter(property = &quot;project&quot;, required = true, readonly = true)
   private MavenProject project;
 
-  @Component
+  @Inject
   private org.apache.maven.repository.RepositorySystem repositorySystem;
-  @Component
+  @Inject
   private ResolutionErrorHandler resolutionErrorHandler;
-  @Component
+  @Inject
   private RepositorySystem repoSystem;
-  @Component
+  @Inject
   private BuildContext buildContext;
   @Parameter(defaultValue = &quot;${repositorySystemSession}&quot;, readonly = true)
   private RepositorySystemSession repoSession;
@@ -110,125 +111,125 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-<span class="fc" id="L113">    List&lt;URL&gt; mavenProjectClasspathUrls = ClassLoaderUtil.getMavenProjectClasspathUrls(project);</span>
-<span class="fc" id="L114">    ClassLoader mavenProjectClassLoader = ClassLoaderUtil.buildClassLoader(mavenProjectClasspathUrls);</span>
-<span class="fc" id="L115">    ResourceLoader mavenProjectResourceLoader = new ResourceLoader(mavenProjectClassLoader);</span>
+<span class="fc" id="L114">    List&lt;URL&gt; mavenProjectClasspathUrls = ClassLoaderUtil.getMavenProjectClasspathUrls(project);</span>
+<span class="fc" id="L115">    ClassLoader mavenProjectClassLoader = ClassLoaderUtil.buildClassLoader(mavenProjectClasspathUrls);</span>
+<span class="fc" id="L116">    ResourceLoader mavenProjectResourceLoader = new ResourceLoader(mavenProjectClassLoader);</span>
 
-<span class="fc" id="L117">    ResourceCollection roleDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());</span>
-<span class="fc" id="L118">    ResourceCollection templateDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());</span>
-<span class="fc" id="L119">    ResourceCollection environmentDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());</span>
+<span class="fc" id="L118">    ResourceCollection roleDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());</span>
+<span class="fc" id="L119">    ResourceCollection templateDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());</span>
+<span class="fc" id="L120">    ResourceCollection environmentDir = mavenProjectResourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());</span>
 
     // validate role definition syntax
-<span class="fc" id="L122">    validateFiles(roleDir, roleDir, new ModelValidator&lt;Role&gt;(&quot;Role&quot;, new RoleReader()));</span>
+<span class="fc" id="L123">    validateFiles(roleDir, roleDir, new ModelValidator&lt;Role&gt;(&quot;Role&quot;, new RoleReader()));</span>
 
-<span class="fc" id="L124">    PluginManager pluginManager = new PluginManagerImpl();</span>
+<span class="fc" id="L125">    PluginManager pluginManager = new PluginManagerImpl();</span>
 
-<span class="fc" id="L126">    MavenContext mavenContext = new MavenContext()</span>
-<span class="fc" id="L127">        .project(project)</span>
-<span class="fc" id="L128">        .session(session)</span>
-<span class="fc" id="L129">        .setRepositorySystem(repositorySystem)</span>
-<span class="fc" id="L130">        .resolutionErrorHandler(resolutionErrorHandler)</span>
-<span class="fc" id="L131">        .buildContext(buildContext)</span>
-<span class="fc" id="L132">        .log(getLog())</span>
-<span class="fc" id="L133">        .repoSystem(repoSystem)</span>
-<span class="fc" id="L134">        .repoSession(repoSession)</span>
-<span class="fc" id="L135">        .remoteRepos(remoteRepos)</span>
-<span class="fc" id="L136">        .artifactTypeMappings(getArtifactTypeMappings());</span>
+<span class="fc" id="L127">    MavenContext mavenContext = new MavenContext()</span>
+<span class="fc" id="L128">        .project(project)</span>
+<span class="fc" id="L129">        .session(session)</span>
+<span class="fc" id="L130">        .setRepositorySystem(repositorySystem)</span>
+<span class="fc" id="L131">        .resolutionErrorHandler(resolutionErrorHandler)</span>
+<span class="fc" id="L132">        .buildContext(buildContext)</span>
+<span class="fc" id="L133">        .log(getLog())</span>
+<span class="fc" id="L134">        .repoSystem(repoSystem)</span>
+<span class="fc" id="L135">        .repoSession(repoSession)</span>
+<span class="fc" id="L136">        .remoteRepos(remoteRepos)</span>
+<span class="fc" id="L137">        .artifactTypeMappings(getArtifactTypeMappings());</span>
 
-<span class="fc" id="L138">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L139">        .baseDir(project.getBasedir())</span>
-<span class="fc" id="L140">        .resourceClassLoader(mavenProjectClassLoader)</span>
-<span class="fc" id="L141">        .pluginContextOptions(new PluginContextOptions()</span>
-<span class="fc" id="L142">          .containerContext(mavenContext));</span>
-<span class="fc" id="L143">    UrlFileManager urlFileManager = new UrlFileManager(pluginManager, urlFilePluginContext);</span>
+<span class="fc" id="L139">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
+<span class="fc" id="L140">        .baseDir(project.getBasedir())</span>
+<span class="fc" id="L141">        .resourceClassLoader(mavenProjectClassLoader)</span>
+<span class="fc" id="L142">        .pluginContextOptions(new PluginContextOptions()</span>
+<span class="fc" id="L143">          .containerContext(mavenContext));</span>
+<span class="fc" id="L144">    UrlFileManager urlFileManager = new UrlFileManager(pluginManager, urlFilePluginContext);</span>
 
-<span class="fc" id="L145">    PluginContextOptions pluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L146">        .pluginManager(pluginManager)</span>
-<span class="fc" id="L147">        .urlFileManager(urlFileManager)</span>
-<span class="fc" id="L148">        .valueProviderConfig(getValueProviderConfig())</span>
-<span class="fc" id="L149">        .genericPluginConfig(getPluginConfig())</span>
-<span class="fc" id="L150">        .containerContext(mavenContext)</span>
-<span class="fc" id="L151">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
+<span class="fc" id="L146">    PluginContextOptions pluginContextOptions = new PluginContextOptions()</span>
+<span class="fc" id="L147">        .pluginManager(pluginManager)</span>
+<span class="fc" id="L148">        .urlFileManager(urlFileManager)</span>
+<span class="fc" id="L149">        .valueProviderConfig(getValueProviderConfig())</span>
+<span class="fc" id="L150">        .genericPluginConfig(getPluginConfig())</span>
+<span class="fc" id="L151">        .containerContext(mavenContext)</span>
+<span class="fc" id="L152">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
 
     // validate that all templates can be compiled
-<span class="fc" id="L154">    HandlebarsManager handlebarsManager = new HandlebarsManager(List.of(templateDir), pluginContextOptions);</span>
-<span class="fc" id="L155">    validateFiles(templateDir, templateDir, new TemplateValidator(templateDir, handlebarsManager));</span>
+<span class="fc" id="L155">    HandlebarsManager handlebarsManager = new HandlebarsManager(List.of(templateDir), pluginContextOptions);</span>
+<span class="fc" id="L156">    validateFiles(templateDir, templateDir, new TemplateValidator(templateDir, handlebarsManager));</span>
 
     // validate that roles reference existing templates
-<span class="fc" id="L158">    validateFiles(roleDir, roleDir, new RoleTemplateFileValidator(handlebarsManager));</span>
+<span class="fc" id="L159">    validateFiles(roleDir, roleDir, new RoleTemplateFileValidator(handlebarsManager));</span>
 
     // validate that no value providers are used in role files - they should be only used in environment
-<span class="fc" id="L161">    validateFiles(roleDir, roleDir, new NoValueProviderInRoleValidator());</span>
+<span class="fc" id="L162">    validateFiles(roleDir, roleDir, new NoValueProviderInRoleValidator());</span>
 
     // validate environment definition syntax
-<span class="fc" id="L164">    List&lt;Environment&gt; environmentList = validateFiles(environmentDir, environmentDir, new ModelValidator&lt;Environment&gt;(&quot;Environment&quot;, new EnvironmentReader()),</span>
+<span class="fc" id="L165">    List&lt;Environment&gt; environmentList = validateFiles(environmentDir, environmentDir, new ModelValidator&lt;Environment&gt;(&quot;Environment&quot;, new EnvironmentReader()),</span>
         // filter environments
         resourceInfo -&gt; {
-<span class="pc bpc" id="L167" title="2 of 4 branches missed.">          if (this.environments == null || this.environments.length == 0) {</span>
-<span class="fc" id="L168">            return true;</span>
+<span class="pc bpc" id="L168" title="2 of 4 branches missed.">          if (this.environments == null || this.environments.length == 0) {</span>
+<span class="fc" id="L169">            return true;</span>
           }
-<span class="nc bnc" id="L170" title="All 2 branches missed.">          for (String environment : this.environments) {</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (StringUtils.equals(environment, FilenameUtils.getBaseName(resourceInfo.getName()))) {</span>
-<span class="nc" id="L172">              return true;</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">          for (String environment : this.environments) {</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">            if (StringUtils.equals(environment, FilenameUtils.getBaseName(resourceInfo.getName()))) {</span>
+<span class="nc" id="L173">              return true;</span>
             }
           }
-<span class="nc" id="L175">          return false;</span>
+<span class="nc" id="L176">          return false;</span>
         });
 
     // validate version information - for each environment separately
-<span class="fc bfc" id="L179" title="All 2 branches covered.">    for (Environment environment : environmentList) {</span>
-<span class="fc" id="L180">      UrlFilePluginContext environmentUrlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L181">          .baseDir(project.getBasedir())</span>
-<span class="fc" id="L182">          .resourceClassLoader(mavenProjectClassLoader)</span>
-<span class="fc" id="L183">          .environment(environment)</span>
-<span class="fc" id="L184">          .pluginContextOptions(new PluginContextOptions()</span>
-<span class="fc" id="L185">              .containerContext(mavenContext));</span>
-<span class="fc" id="L186">      UrlFileManager environmentUrlFileManager = new UrlFileManager(pluginManager, environmentUrlFilePluginContext);</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">    for (Environment environment : environmentList) {</span>
+<span class="fc" id="L181">      UrlFilePluginContext environmentUrlFilePluginContext = new UrlFilePluginContext()</span>
+<span class="fc" id="L182">          .baseDir(project.getBasedir())</span>
+<span class="fc" id="L183">          .resourceClassLoader(mavenProjectClassLoader)</span>
+<span class="fc" id="L184">          .environment(environment)</span>
+<span class="fc" id="L185">          .pluginContextOptions(new PluginContextOptions()</span>
+<span class="fc" id="L186">              .containerContext(mavenContext));</span>
+<span class="fc" id="L187">      UrlFileManager environmentUrlFileManager = new UrlFileManager(pluginManager, environmentUrlFilePluginContext);</span>
 
-<span class="fc" id="L188">      PluginContextOptions environmentPluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L189">          .pluginContextOptions(pluginContextOptions)</span>
-<span class="fc" id="L190">          .urlFileManager(environmentUrlFileManager);</span>
-<span class="fc" id="L191">      validateVersionInfo(environment, mavenProjectClasspathUrls, environmentPluginContextOptions);</span>
-<span class="fc" id="L192">    }</span>
-<span class="fc" id="L193">  }</span>
+<span class="fc" id="L189">      PluginContextOptions environmentPluginContextOptions = new PluginContextOptions()</span>
+<span class="fc" id="L190">          .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L191">          .urlFileManager(environmentUrlFileManager);</span>
+<span class="fc" id="L192">      validateVersionInfo(environment, mavenProjectClasspathUrls, environmentPluginContextOptions);</span>
+<span class="fc" id="L193">    }</span>
+<span class="fc" id="L194">  }</span>
 
   // ===== FILE VALIDATION =====
 
   private &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator)
       throws MojoFailureException {
-<span class="fc" id="L199">    return validateFiles(sourceDir, rootSourceDir, validator, resourceInfo -&gt; true);</span>
+<span class="fc" id="L200">    return validateFiles(sourceDir, rootSourceDir, validator, resourceInfo -&gt; true);</span>
   }
 
   private &lt;T&gt; List&lt;T&gt; validateFiles(ResourceCollection sourceDir, ResourceCollection rootSourceDir, DefinitionValidator&lt;T&gt; validator,
       Predicate&lt;ResourceInfo&gt; resourceFilter) throws MojoFailureException {
-<span class="fc bfc" id="L204" title="All 2 branches covered.">    if (!sourceDir.exists()) {</span>
-<span class="fc" id="L205">      return List.of();</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">    if (!sourceDir.exists()) {</span>
+<span class="fc" id="L206">      return List.of();</span>
     }
-<span class="fc" id="L207">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
-<span class="fc" id="L208">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
-<span class="pc bpc" id="L209" title="1 of 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
-<span class="nc" id="L210">      return List.of();</span>
+<span class="fc" id="L208">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
+<span class="fc" id="L209">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
+<span class="pc bpc" id="L210" title="1 of 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
+<span class="nc" id="L211">      return List.of();</span>
     }
 
-<span class="fc" id="L213">    List&lt;T&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">    for (Resource file : files) {</span>
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">      if (resourceFilter.test(file)) {</span>
-<span class="fc" id="L216">        result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));</span>
+<span class="fc" id="L214">    List&lt;T&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">    for (Resource file : files) {</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">      if (resourceFilter.test(file)) {</span>
+<span class="fc" id="L217">        result.add(validator.validate(file, getPathForLog(rootSourceDir, file)));</span>
       }
-<span class="fc" id="L218">    }</span>
-<span class="fc bfc" id="L219" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
-<span class="pc bpc" id="L220" title="1 of 2 branches missed.">      if (resourceFilter.test(dir)) {</span>
-<span class="fc" id="L221">        result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));</span>
+<span class="fc" id="L219">    }</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">      if (resourceFilter.test(dir)) {</span>
+<span class="fc" id="L222">        result.addAll(validateFiles(dir, rootSourceDir, validator, resourceFilter));</span>
       }
-<span class="fc" id="L223">    }</span>
-<span class="fc" id="L224">    return result;</span>
+<span class="fc" id="L224">    }</span>
+<span class="fc" id="L225">    return result;</span>
   }
 
   @SuppressWarnings(&quot;java:S1075&quot;) // no filesystem path
   private static String getPathForLog(ResourceCollection rootSourceDir, Resource file) {
-<span class="fc" id="L229">    String path = PathUtil.unifySlashes(file.getCanonicalPath());</span>
-<span class="fc" id="L230">    String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + &quot;/&quot;;</span>
-<span class="fc" id="L231">    return StringUtils.substringAfter(path, rootPath);</span>
+<span class="fc" id="L230">    String path = PathUtil.unifySlashes(file.getCanonicalPath());</span>
+<span class="fc" id="L231">    String rootPath = PathUtil.unifySlashes(rootSourceDir.getCanonicalPath()) + &quot;/&quot;;</span>
+<span class="fc" id="L232">    return StringUtils.substringAfter(path, rootPath);</span>
   }
 
   // ===== PLUGIN VERSION INFO VALIDATION =====
@@ -244,74 +245,74 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
       throws MojoExecutionException {
 
     // build combined classpath for dependencies defined in environment and maven project
-<span class="fc" id="L247">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L248">    classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));</span>
-<span class="fc" id="L249">    classpathUrls.addAll(mavenProjectClasspathUrls);</span>
-<span class="fc" id="L250">    ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);</span>
+<span class="fc" id="L248">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L249">    classpathUrls.addAll(getEnvironmentClasspathUrls(environment.getDependencies(), pluginContextOptions));</span>
+<span class="fc" id="L250">    classpathUrls.addAll(mavenProjectClasspathUrls);</span>
+<span class="fc" id="L251">    ClassLoader environmentDependenciesClassLoader = ClassLoaderUtil.buildClassLoader(classpathUrls);</span>
 
     // get version info from this project
-<span class="fc" id="L253">    Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
+<span class="fc" id="L254">    Properties currentVersionInfo = VersionInfoUtil.getVersionInfoProperties(project);</span>
 
     // validate current version info against dependency version infos
-<span class="fc bfc" id="L256" title="All 2 branches covered.">    for (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {</span>
-<span class="fc" id="L257">      validateVersionInfo(currentVersionInfo, dependencyVersionInfo);</span>
-<span class="fc" id="L258">    }</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">    for (Properties dependencyVersionInfo : getDependencyVersionInfos(environmentDependenciesClassLoader)) {</span>
+<span class="fc" id="L258">      validateVersionInfo(currentVersionInfo, dependencyVersionInfo);</span>
+<span class="fc" id="L259">    }</span>
 
-<span class="fc" id="L260">  }</span>
+<span class="fc" id="L261">  }</span>
 
   private List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls, PluginContextOptions pluginContextOptions) {
-<span class="fc" id="L263">    return dependencyUrls.stream()</span>
-<span class="fc" id="L264">        .map(dependencyUrl -&gt; {</span>
-<span class="nc" id="L265">          String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
+<span class="fc" id="L264">    return dependencyUrls.stream()</span>
+<span class="fc" id="L265">        .map(dependencyUrl -&gt; {</span>
+<span class="nc" id="L266">          String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
           try {
-<span class="nc" id="L267">            return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
+<span class="nc" id="L268">            return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
           }
-<span class="nc" id="L269">          catch (IOException ex) {</span>
-<span class="nc" id="L270">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
+<span class="nc" id="L270">          catch (IOException ex) {</span>
+<span class="nc" id="L271">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
           }
         })
-<span class="fc" id="L273">        .flatMap(List::stream)</span>
-<span class="fc" id="L274">        .collect(Collectors.toList());</span>
+<span class="fc" id="L274">        .flatMap(List::stream)</span>
+<span class="fc" id="L275">        .collect(Collectors.toList());</span>
   }
 
   private void validateVersionInfo(Properties currentVersionInfo, Properties dependencyVersionInfo) throws MojoExecutionException {
-<span class="fc bfc" id="L278" title="All 2 branches covered.">    for (Object keyObject : currentVersionInfo.keySet()) {</span>
-<span class="fc" id="L279">      String key = keyObject.toString();</span>
-<span class="fc" id="L280">      String currentVersionString = currentVersionInfo.getProperty(key);</span>
-<span class="fc" id="L281">      String dependencyVersionString = dependencyVersionInfo.getProperty(key);</span>
-<span class="pc bpc" id="L282" title="2 of 4 branches missed.">      if (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {</span>
-<span class="nc" id="L283">        continue;</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">    for (Object keyObject : currentVersionInfo.keySet()) {</span>
+<span class="fc" id="L280">      String key = keyObject.toString();</span>
+<span class="fc" id="L281">      String currentVersionString = currentVersionInfo.getProperty(key);</span>
+<span class="fc" id="L282">      String dependencyVersionString = dependencyVersionInfo.getProperty(key);</span>
+<span class="pc bpc" id="L283" title="2 of 4 branches missed.">      if (StringUtils.isEmpty(currentVersionString) || StringUtils.isEmpty(dependencyVersionString)) {</span>
+<span class="nc" id="L284">        continue;</span>
       }
-<span class="fc" id="L285">      DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(currentVersionString);</span>
-<span class="fc" id="L286">      DefaultArtifactVersion dependencyVersion = new DefaultArtifactVersion(dependencyVersionString);</span>
-<span class="pc bpc" id="L287" title="1 of 2 branches missed.">      if (currentVersion.compareTo(dependencyVersion) &lt; 0) {</span>
-<span class="nc" id="L288">        throw new MojoExecutionException(&quot;Newer CONGA maven plugin or plugin version required: &quot; + key + &quot;:&quot; + dependencyVersion.toString());</span>
+<span class="fc" id="L286">      DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(currentVersionString);</span>
+<span class="fc" id="L287">      DefaultArtifactVersion dependencyVersion = new DefaultArtifactVersion(dependencyVersionString);</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">      if (currentVersion.compareTo(dependencyVersion) &lt; 0) {</span>
+<span class="nc" id="L289">        throw new MojoExecutionException(&quot;Newer CONGA maven plugin or plugin version required: &quot; + key + &quot;:&quot; + dependencyVersion.toString());</span>
       }
-<span class="fc" id="L290">    }</span>
-<span class="fc" id="L291">  }</span>
+<span class="fc" id="L291">    }</span>
+<span class="fc" id="L292">  }</span>
 
   private List&lt;Properties&gt; getDependencyVersionInfos(ClassLoader classLoader) throws MojoExecutionException {
-<span class="fc" id="L294">    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);</span>
+<span class="fc" id="L295">    PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);</span>
     try {
-<span class="fc" id="L296">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
+<span class="fc" id="L297">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
           &quot;classpath*:&quot; + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
-<span class="fc" id="L298">      return Arrays.stream(resources)</span>
-<span class="fc" id="L299">          .map(this::toProperties)</span>
-<span class="fc" id="L300">          .collect(Collectors.toList());</span>
+<span class="fc" id="L299">      return Arrays.stream(resources)</span>
+<span class="fc" id="L300">          .map(this::toProperties)</span>
+<span class="fc" id="L301">          .collect(Collectors.toList());</span>
     }
-<span class="nc" id="L302">    catch (IOException ex) {</span>
-<span class="nc" id="L303">      throw new MojoExecutionException(&quot;Unable to get classpath resources: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L303">    catch (IOException ex) {</span>
+<span class="nc" id="L304">      throw new MojoExecutionException(&quot;Unable to get classpath resources: &quot; + ex.getMessage(), ex);</span>
     }
   }
 
   private Properties toProperties(org.springframework.core.io.Resource resource) {
-<span class="fc" id="L308">    try (InputStream is = resource.getInputStream()) {</span>
-<span class="fc" id="L309">      Properties props = new Properties();</span>
-<span class="fc" id="L310">      props.load(is);</span>
-<span class="fc" id="L311">      return props;</span>
+<span class="fc" id="L309">    try (InputStream is = resource.getInputStream()) {</span>
+<span class="fc" id="L310">      Properties props = new Properties();</span>
+<span class="fc" id="L311">      props.load(is);</span>
+<span class="fc" id="L312">      return props;</span>
     }
-<span class="nc" id="L313">    catch (IOException ex) {</span>
-<span class="nc" id="L314">      throw new IllegalArgumentException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
+<span class="nc" id="L314">    catch (IOException ex) {</span>
+<span class="nc" id="L315">      throw new IllegalArgumentException(&quot;Unable to read properties file: &quot; + resource.toString(), ex);</span>
     }
   }
 
