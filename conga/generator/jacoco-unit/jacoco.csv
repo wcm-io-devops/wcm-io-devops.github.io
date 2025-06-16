@@ -40,7 +40,7 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,JsonFileHeader,
 CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,UnixShellScriptFileHeader,2,28,1,1,1,8,1,7,0,7
 CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,WindowsShellScriptFileHeader,0,28,1,3,0,8,1,8,0,7
 CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,NoneFileHeader,2,9,0,0,1,4,1,4,1,4
-CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,XmlFileHeader,28,109,2,2,8,27,2,5,0,5
+CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,XmlFileHeader,28,108,2,2,8,27,2,5,0,5
 CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,AbstractFileHeader,33,223,10,14,9,50,10,14,0,12
 CONGA Generator,io.wcm.devops.conga.generator.plugins.fileheader,ConfFileHeader,0,18,0,0,0,6,0,6,0,6
 CONGA Generator,io.wcm.devops.conga.generator.plugins.urlfile,ClasspathUrlFilePlugin,2,73,2,6,1,20,2,9,0,7
@@ -60,7 +60,7 @@ CONGA Generator,io.wcm.devops.conga.generator.util,PluginManagerImpl.new CacheLo
 CONGA Generator,io.wcm.devops.conga.generator.util,FileUtil,69,59,10,8,15,18,10,9,4,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableStringResolver,12,350,3,37,2,87,3,28,0,11
 CONGA Generator,io.wcm.devops.conga.generator.util,JexlResolver,2,141,1,17,1,37,1,14,0,6
-CONGA Generator,io.wcm.devops.conga.generator.util,ValueUtil,0,164,0,28,0,41,0,17,0,3
+CONGA Generator,io.wcm.devops.conga.generator.util,ValueUtil,0,160,0,28,0,41,0,17,0,3
 CONGA Generator,io.wcm.devops.conga.generator.util,ModelExportConfigProcessor,2,141,2,14,1,34,2,12,0,6
 CONGA Generator,io.wcm.devops.conga.generator.util,VariableObjectTreeResolver,0,22,0,0,0,6,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,EachIfEqualsHelper,0,19,0,2,0,7,0,4,0,3
@@ -75,7 +75,7 @@ CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.helper,Contains
 CONGA Generator,io.wcm.devops.conga.generator.plugins.validator,JsonValidator,0,39,0,0,0,10,0,4,0,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.validator,NoneValidator,2,9,0,0,1,4,1,4,1,4
 CONGA Generator,io.wcm.devops.conga.generator.plugins.validator,XmlValidator,7,34,0,0,2,12,0,4,0,4
-CONGA Generator,io.wcm.devops.conga.generator.plugins.export,YamlNodeModelExport,25,288,6,18,4,62,6,16,0,10
+CONGA Generator,io.wcm.devops.conga.generator.plugins.export,YamlNodeModelExport,25,291,6,18,4,62,6,16,0,10
 CONGA Generator,io.wcm.devops.conga.generator.plugins.export,NoneNodeModelExport,1,5,0,0,1,2,1,2,1,2
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,JsonEscapingStrategy,2,40,1,1,0,6,1,5,0,5
 CONGA Generator,io.wcm.devops.conga.generator.plugins.handlebars.escaping,NoneEscapingStrategy,4,10,1,1,1,3,2,3,1,3

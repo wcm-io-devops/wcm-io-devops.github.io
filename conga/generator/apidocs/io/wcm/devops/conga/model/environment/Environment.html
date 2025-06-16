@@ -416,10 +416,12 @@ extends <a href="../shared/AbstractConfigurable.html" title="class in io.wcm.dev
 <h4>getPluginConfig</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&gt;&nbsp;getPluginConfig()</pre>
 <div class="block">Defines a map of configuration parameters for CONGA plugins.
+
  <p>
  The outer map contains the plugin names as keys, and the configuration for this plugin as value.
  The inner map contains the key/value pairs for the plugin configuration.
  </p>
+
  <p>
  The configurations are merged with the configuration parameters defined in the POM.
  </p></div>

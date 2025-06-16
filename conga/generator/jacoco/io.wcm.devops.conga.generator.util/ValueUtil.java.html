@@ -109,9 +109,9 @@ public final class ValueUtil {
 <span class="fc bfc" id="L109" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
 <span class="fc" id="L110">          sb.append(&quot;,&quot;);</span>
         }
-<span class="fc" id="L112">        sb.append(valueToString(entry.getKey()));</span>
-<span class="fc" id="L113">        sb.append(&quot;=&quot;);</span>
-<span class="fc" id="L114">        sb.append(valueToString(entry.getValue()));</span>
+<span class="fc" id="L112">        sb.append(valueToString(entry.getKey()))</span>
+<span class="fc" id="L113">            .append(&quot;=&quot;)</span>
+<span class="fc" id="L114">            .append(valueToString(entry.getValue()));</span>
 <span class="fc" id="L115">      }</span>
 <span class="fc" id="L116">      return sb.toString();</span>
     }
