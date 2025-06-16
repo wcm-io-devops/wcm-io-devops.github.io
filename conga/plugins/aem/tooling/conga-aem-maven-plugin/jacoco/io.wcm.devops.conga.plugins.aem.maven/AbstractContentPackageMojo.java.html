@@ -24,11 +24,12 @@ import static io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.CRX_
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 
@@ -39,7 +40,7 @@ import io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.Service;
 /**
  * Common functionality for all mojos.
  */
-<span class="nc" id="L42">abstract class AbstractContentPackageMojo extends AbstractMojo {</span>
+<span class="nc" id="L43">abstract class AbstractContentPackageMojo extends AbstractMojo {</span>
 
   private static final String CONSOLE_URL = &quot;/system/console&quot;;
 
@@ -217,90 +218,90 @@ import io.wcm.tooling.commons.packmgr.install.VendorInstallerFactory.Service;
   @Parameter(property = &quot;session&quot;, defaultValue = &quot;${session}&quot;, readonly = true)
   private MavenSession session;
 
-  @Component(role = SettingsDecrypter.class)
+  @Inject
   private SettingsDecrypter decrypter;
 
   protected final boolean isSkip() {
-<span class="nc" id="L224">    return this.skip;</span>
+<span class="nc" id="L225">    return this.skip;</span>
   }
 
   protected PackageManagerProperties getPackageManagerProperties() throws MojoExecutionException {
-<span class="nc" id="L228">    PackageManagerProperties props = new PackageManagerProperties();</span>
+<span class="nc" id="L229">    PackageManagerProperties props = new PackageManagerProperties();</span>
 
-<span class="nc" id="L230">    props.setPackageManagerUrl(buildPackageManagerUrl());</span>
-<span class="nc" id="L231">    props.setUserId(this.userId);</span>
-<span class="nc" id="L232">    props.setPassword(this.password);</span>
-<span class="nc" id="L233">    props.setOAuth2AccessToken(this.oauth2AccessToken);</span>
-<span class="nc" id="L234">    props.setConsoleUserId(this.consoleUserId);</span>
-<span class="nc" id="L235">    props.setConsolePassword(this.consolePassword);</span>
-<span class="nc" id="L236">    props.setConsoleOAuth2AccessToken(this.consoleOauth2AccessToken);</span>
-<span class="nc" id="L237">    props.setRetryCount(this.retryCount);</span>
-<span class="nc" id="L238">    props.setRetryDelaySec(this.retryDelay);</span>
-<span class="nc" id="L239">    props.setBundleStatusUrl(buildBundleStatusUrl());</span>
-<span class="nc" id="L240">    props.setBundleStatusWaitLimitSec(this.bundleStatusWaitLimit);</span>
-<span class="nc" id="L241">    props.setBundleStatusBlacklistBundleNames(List.of(this.bundleStatusBlacklistBundleNames));</span>
-<span class="nc" id="L242">    props.setBundleStatusWhitelistBundleNames(List.of(this.bundleStatusWhitelistBundleNames));</span>
-<span class="nc" id="L243">    props.setPackageManagerInstallStatusURL(buildPackageManagerInstallStatusUrl());</span>
-<span class="nc" id="L244">    props.setPackageManagerInstallStatusWaitLimitSec(this.packageManagerInstallStatusWaitLimit);</span>
-<span class="nc" id="L245">    props.setRelaxedSSLCheck(this.relaxedSSLCheck);</span>
-<span class="nc" id="L246">    props.setHttpConnectTimeoutSec(this.httpConnectTimeoutSec);</span>
-<span class="nc" id="L247">    props.setHttpSocketTimeoutSec(this.httpSocketTimeout);</span>
-<span class="nc" id="L248">    props.setProxies(ProxySupport.getMavenProxies(session, decrypter));</span>
-<span class="nc" id="L249">    props.setPackageManagerOutputLogLevel(this.packageManagerOutputLogLevel);</span>
+<span class="nc" id="L231">    props.setPackageManagerUrl(buildPackageManagerUrl());</span>
+<span class="nc" id="L232">    props.setUserId(this.userId);</span>
+<span class="nc" id="L233">    props.setPassword(this.password);</span>
+<span class="nc" id="L234">    props.setOAuth2AccessToken(this.oauth2AccessToken);</span>
+<span class="nc" id="L235">    props.setConsoleUserId(this.consoleUserId);</span>
+<span class="nc" id="L236">    props.setConsolePassword(this.consolePassword);</span>
+<span class="nc" id="L237">    props.setConsoleOAuth2AccessToken(this.consoleOauth2AccessToken);</span>
+<span class="nc" id="L238">    props.setRetryCount(this.retryCount);</span>
+<span class="nc" id="L239">    props.setRetryDelaySec(this.retryDelay);</span>
+<span class="nc" id="L240">    props.setBundleStatusUrl(buildBundleStatusUrl());</span>
+<span class="nc" id="L241">    props.setBundleStatusWaitLimitSec(this.bundleStatusWaitLimit);</span>
+<span class="nc" id="L242">    props.setBundleStatusBlacklistBundleNames(List.of(this.bundleStatusBlacklistBundleNames));</span>
+<span class="nc" id="L243">    props.setBundleStatusWhitelistBundleNames(List.of(this.bundleStatusWhitelistBundleNames));</span>
+<span class="nc" id="L244">    props.setPackageManagerInstallStatusURL(buildPackageManagerInstallStatusUrl());</span>
+<span class="nc" id="L245">    props.setPackageManagerInstallStatusWaitLimitSec(this.packageManagerInstallStatusWaitLimit);</span>
+<span class="nc" id="L246">    props.setRelaxedSSLCheck(this.relaxedSSLCheck);</span>
+<span class="nc" id="L247">    props.setHttpConnectTimeoutSec(this.httpConnectTimeoutSec);</span>
+<span class="nc" id="L248">    props.setHttpSocketTimeoutSec(this.httpSocketTimeout);</span>
+<span class="nc" id="L249">    props.setProxies(ProxySupport.getMavenProxies(session, decrypter));</span>
+<span class="nc" id="L250">    props.setPackageManagerOutputLogLevel(this.packageManagerOutputLogLevel);</span>
 
-<span class="nc" id="L251">    return props;</span>
+<span class="nc" id="L252">    return props;</span>
   }
 
   private String buildPackageManagerUrl() throws MojoExecutionException {
-<span class="nc" id="L255">    String serviceUrl = this.serviceURL;</span>
-<span class="nc bnc" id="L256" title="All 3 branches missed.">    switch (VendorInstallerFactory.identify(serviceUrl)) {</span>
+<span class="nc" id="L256">    String serviceUrl = this.serviceURL;</span>
+<span class="nc bnc" id="L257" title="All 3 branches missed.">    switch (VendorInstallerFactory.identify(serviceUrl)) {</span>
       case CRX:
-<span class="nc" id="L258">        serviceUrl = VendorInstallerFactory.getBaseUrl(serviceUrl) + CRX_URL;</span>
-<span class="nc" id="L259">        break;</span>
+<span class="nc" id="L259">        serviceUrl = VendorInstallerFactory.getBaseUrl(serviceUrl) + CRX_URL;</span>
+<span class="nc" id="L260">        break;</span>
       case COMPOSUM:
-<span class="nc" id="L261">        serviceUrl = VendorInstallerFactory.getBaseUrl(serviceUrl) + COMPOSUM_URL;</span>
-<span class="nc" id="L262">        break;</span>
+<span class="nc" id="L262">        serviceUrl = VendorInstallerFactory.getBaseUrl(serviceUrl) + COMPOSUM_URL;</span>
+<span class="nc" id="L263">        break;</span>
       default:
-<span class="nc" id="L264">        throw new MojoExecutionException(&quot;Unsupported service URL: &quot; + serviceUrl);</span>
+<span class="nc" id="L265">        throw new MojoExecutionException(&quot;Unsupported service URL: &quot; + serviceUrl);</span>
     }
-<span class="nc" id="L266">    return serviceUrl;</span>
+<span class="nc" id="L267">    return serviceUrl;</span>
   }
 
   private String buildBundleStatusUrl() throws MojoExecutionException {
-<span class="nc bnc" id="L270" title="All 2 branches missed.">    if (StringUtils.equals(this.bundleStatusURL, &quot;-&quot;)) {</span>
-<span class="nc" id="L271">      return null;</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">    if (StringUtils.equals(this.bundleStatusURL, &quot;-&quot;)) {</span>
+<span class="nc" id="L272">      return null;</span>
     }
-<span class="nc bnc" id="L273" title="All 2 branches missed.">    if (this.bundleStatusURL != null) {</span>
-<span class="nc" id="L274">      return this.bundleStatusURL;</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">    if (this.bundleStatusURL != null) {</span>
+<span class="nc" id="L275">      return this.bundleStatusURL;</span>
     }
     // if not set use hostname from serviceURL and add default path to bundle status
-<span class="nc" id="L277">    String baseUrl = VendorInstallerFactory.getBaseUrl(buildPackageManagerUrl());</span>
-<span class="nc" id="L278">    return baseUrl + &quot;/system/console/bundles/.json&quot;;</span>
+<span class="nc" id="L278">    String baseUrl = VendorInstallerFactory.getBaseUrl(buildPackageManagerUrl());</span>
+<span class="nc" id="L279">    return baseUrl + &quot;/system/console/bundles/.json&quot;;</span>
   }
 
   private String buildPackageManagerInstallStatusUrl() throws MojoExecutionException {
-<span class="nc bnc" id="L282" title="All 2 branches missed.">    if (StringUtils.equals(this.packageManagerInstallStatusURL, &quot;-&quot;)</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">        || VendorInstallerFactory.identify(this.serviceURL) != Service.CRX) {</span>
-<span class="nc" id="L284">      return null;</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">    if (StringUtils.equals(this.packageManagerInstallStatusURL, &quot;-&quot;)</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">        || VendorInstallerFactory.identify(this.serviceURL) != Service.CRX) {</span>
+<span class="nc" id="L285">      return null;</span>
     }
-<span class="nc bnc" id="L286" title="All 2 branches missed.">    if (this.packageManagerInstallStatusURL != null) {</span>
-<span class="nc" id="L287">      return this.packageManagerInstallStatusURL;</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">    if (this.packageManagerInstallStatusURL != null) {</span>
+<span class="nc" id="L288">      return this.packageManagerInstallStatusURL;</span>
     }
     // if not set use hostname from serviceURL and add default path to bundle status
-<span class="nc" id="L290">    String baseUrl = VendorInstallerFactory.getBaseUrl(buildPackageManagerUrl());</span>
-<span class="nc" id="L291">    return baseUrl + &quot;/crx/packmgr/installstatus.jsp&quot;;</span>
+<span class="nc" id="L291">    String baseUrl = VendorInstallerFactory.getBaseUrl(buildPackageManagerUrl());</span>
+<span class="nc" id="L292">    return baseUrl + &quot;/crx/packmgr/installstatus.jsp&quot;;</span>
   }
 
   protected String buildConsoleUrl() {
-<span class="nc" id="L295">    return VendorInstallerFactory.getBaseUrl(this.serviceURL) + CONSOLE_URL;</span>
+<span class="nc" id="L296">    return VendorInstallerFactory.getBaseUrl(this.serviceURL) + CONSOLE_URL;</span>
   }
 
   protected String getConsoleUser() {
-<span class="nc" id="L299">    return this.consoleUserId;</span>
+<span class="nc" id="L300">    return this.consoleUserId;</span>
   }
 
   protected String getConsolePassword() {
-<span class="nc" id="L303">    return this.consolePassword;</span>
+<span class="nc" id="L304">    return this.consolePassword;</span>
   }
 
 }

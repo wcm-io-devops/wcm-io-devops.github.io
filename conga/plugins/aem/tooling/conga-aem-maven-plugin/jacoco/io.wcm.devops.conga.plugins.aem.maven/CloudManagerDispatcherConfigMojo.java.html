@@ -27,15 +27,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.zip.ZipArchiver;
+
+import com.google.inject.name.Named;
 
 import io.wcm.devops.conga.generator.util.FileUtil;
 import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
@@ -46,7 +48,7 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
  * Only nodes with role &lt;code&gt;aem-dispatcher-cloud&lt;/code&gt; are respected.
  */
 @Mojo(name = &quot;cloudmanager-dispatcher-config&quot;, threadSafe = true)
-<span class="fc" id="L49">public final class CloudManagerDispatcherConfigMojo extends AbstractCloudManagerMojo {</span>
+<span class="fc" id="L51">public final class CloudManagerDispatcherConfigMojo extends AbstractCloudManagerMojo {</span>
 
   private static final String ROLE_AEM_DISPATCHER_CLOUD = &quot;aem-dispatcher-cloud&quot;;
 
@@ -56,7 +58,8 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
   @Parameter(property = &quot;conga.cloudManager.dispatcherConfig.skip&quot;, defaultValue = &quot;false&quot;)
   private boolean skip;
 
-  @Component(role = Archiver.class, hint = &quot;zip&quot;)
+  @Inject
+  @Named(&quot;zip&quot;)
   private ZipArchiver zipArchiver;
 
   @Parameter(defaultValue = &quot;${project.build.outputTimestamp}&quot;)
@@ -64,48 +67,48 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if (skip) {</span>
-<span class="nc" id="L68">      return;</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">    if (skip) {</span>
+<span class="nc" id="L71">      return;</span>
     }
 
-<span class="fc" id="L71">    int dispatcherNodeCount = 0;</span>
-<span class="fc" id="L72">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
-<span class="fc bfc" id="L73" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
-<span class="fc" id="L74">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
-<span class="fc" id="L76">        ModelParser modelParser = new ModelParser(nodeDir);</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (modelParser.hasRole(ROLE_AEM_DISPATCHER_CLOUD)) {</span>
-<span class="fc" id="L78">          buildDispatcherConfig(environmentDir, nodeDir);</span>
-<span class="fc" id="L79">          dispatcherNodeCount++;</span>
+<span class="fc" id="L74">    int dispatcherNodeCount = 0;</span>
+<span class="fc" id="L75">    List&lt;File&gt; environmentDirs = getEnvironmentDir();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">    for (File environmentDir : environmentDirs) {</span>
+<span class="fc" id="L77">      List&lt;File&gt; nodeDirs = getNodeDirs(environmentDir);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">      for (File nodeDir : nodeDirs) {</span>
+<span class="fc" id="L79">        ModelParser modelParser = new ModelParser(nodeDir);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (modelParser.hasRole(ROLE_AEM_DISPATCHER_CLOUD)) {</span>
+<span class="fc" id="L81">          buildDispatcherConfig(environmentDir, nodeDir);</span>
+<span class="fc" id="L82">          dispatcherNodeCount++;</span>
         }
-<span class="fc" id="L81">      }</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L84">      }</span>
+<span class="fc" id="L85">    }</span>
 
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">    if (dispatcherNodeCount &gt; 1) {</span>
-<span class="nc" id="L85">      throw new MojoFailureException(&quot;More than one node with role '&quot; + ROLE_AEM_DISPATCHER_CLOUD + &quot;' found - &quot;</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">    if (dispatcherNodeCount &gt; 1) {</span>
+<span class="nc" id="L88">      throw new MojoFailureException(&quot;More than one node with role '&quot; + ROLE_AEM_DISPATCHER_CLOUD + &quot;' found - &quot;</span>
           + &quot;AEM Cloud service supports only a single dispatcher configuration.&quot;);
     }
-<span class="fc" id="L88">  }</span>
+<span class="fc" id="L91">  }</span>
 
   private void buildDispatcherConfig(File environmentDir, File nodeDir) throws MojoExecutionException {
-<span class="fc" id="L91">    File targetFile = new File(getTargetDir(), environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.dispatcher-config.zip&quot;);</span>
+<span class="fc" id="L94">    File targetFile = new File(getTargetDir(), environmentDir.getName() + &quot;.&quot; + nodeDir.getName() + &quot;.dispatcher-config.zip&quot;);</span>
 
     try {
-<span class="fc" id="L94">      String basePath = toZipDirectoryPath(nodeDir);</span>
-<span class="fc" id="L95">      addZipDirectory(basePath, nodeDir, Collections.singleton(ModelParser.MODEL_FILE));</span>
-<span class="fc" id="L96">      zipArchiver.setDestFile(targetFile);</span>
+<span class="fc" id="L97">      String basePath = toZipDirectoryPath(nodeDir);</span>
+<span class="fc" id="L98">      addZipDirectory(basePath, nodeDir, Collections.singleton(ModelParser.MODEL_FILE));</span>
+<span class="fc" id="L99">      zipArchiver.setDestFile(targetFile);</span>
 
-<span class="fc" id="L98">      BuildOutputTimestamp buildOutputTimestamp = new BuildOutputTimestamp(outputTimestamp);</span>
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">      if (buildOutputTimestamp.isValid()) {</span>
-<span class="fc" id="L100">        zipArchiver.configureReproducibleBuild(buildOutputTimestamp.toFileTime());</span>
+<span class="fc" id="L101">      BuildOutputTimestamp buildOutputTimestamp = new BuildOutputTimestamp(outputTimestamp);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">      if (buildOutputTimestamp.isValid()) {</span>
+<span class="fc" id="L103">        zipArchiver.configureReproducibleBuild(buildOutputTimestamp.toFileTime());</span>
       }
 
-<span class="fc" id="L103">      zipArchiver.createArchive();</span>
+<span class="fc" id="L106">      zipArchiver.createArchive();</span>
     }
-<span class="nc" id="L105">    catch (ArchiverException | IOException ex) {</span>
-<span class="nc" id="L106">      throw new MojoExecutionException(&quot;Unable to build file &quot; + targetFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L107">    }</span>
-<span class="fc" id="L108">  }</span>
+<span class="nc" id="L108">    catch (ArchiverException | IOException ex) {</span>
+<span class="nc" id="L109">      throw new MojoExecutionException(&quot;Unable to build file &quot; + targetFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L110">    }</span>
+<span class="fc" id="L111">  }</span>
 
   /**
    * Recursive through all directory and add file to zipArchiver.
@@ -117,39 +120,39 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
    */
   @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   private void addZipDirectory(String basePath, File directory, Set&lt;String&gt; excludeFiles) throws IOException {
-<span class="fc" id="L120">    String directoryPath = toZipDirectoryPath(directory);</span>
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
-<span class="fc" id="L122">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
-<span class="fc" id="L123">      File[] files = directory.listFiles();</span>
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">      if (files != null) {</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        for (File file : files) {</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">          if (excludeFiles.contains(file.getName())) {</span>
-<span class="fc" id="L127">            continue;</span>
+<span class="fc" id="L123">    String directoryPath = toZipDirectoryPath(directory);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">    if (StringUtils.startsWith(directoryPath, basePath)) {</span>
+<span class="fc" id="L125">      String relativeDirectoryPath = StringUtils.substring(directoryPath, basePath.length());</span>
+<span class="fc" id="L126">      File[] files = directory.listFiles();</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">      if (files != null) {</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (File file : files) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">          if (excludeFiles.contains(file.getName())) {</span>
+<span class="fc" id="L130">            continue;</span>
           }
-<span class="fc bfc" id="L129" title="All 2 branches covered.">          if (file.isDirectory()) {</span>
-<span class="fc" id="L130">            addZipDirectory(basePath, file, Collections.emptySet());</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">          if (file.isDirectory()) {</span>
+<span class="fc" id="L133">            addZipDirectory(basePath, file, Collections.emptySet());</span>
           }
-<span class="fc bfc" id="L132" title="All 2 branches covered.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
-<span class="fc" id="L133">            Path linkPath = file.toPath();</span>
-<span class="fc" id="L134">            Path targetPath = linkPath.toRealPath();</span>
-<span class="fc" id="L135">            Path symlinkPath = file.getParentFile().toPath().relativize(targetPath);</span>
-<span class="fc" id="L136">            zipArchiver.addSymlink(relativeDirectoryPath + file.getName(), sanitizePathSeparators(symlinkPath.toString()));</span>
-<span class="fc" id="L137">          }</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">          else if (Files.isSymbolicLink(file.toPath())) {</span>
+<span class="fc" id="L136">            Path linkPath = file.toPath();</span>
+<span class="fc" id="L137">            Path targetPath = linkPath.toRealPath();</span>
+<span class="fc" id="L138">            Path symlinkPath = file.getParentFile().toPath().relativize(targetPath);</span>
+<span class="fc" id="L139">            zipArchiver.addSymlink(relativeDirectoryPath + file.getName(), sanitizePathSeparators(symlinkPath.toString()));</span>
+<span class="fc" id="L140">          }</span>
           else {
-<span class="fc" id="L139">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
+<span class="fc" id="L142">            zipArchiver.addFile(file, relativeDirectoryPath + file.getName());</span>
           }
         }
       }
     }
-<span class="fc" id="L144">  }</span>
+<span class="fc" id="L147">  }</span>
 
   private String toZipDirectoryPath(File directory) {
-<span class="fc" id="L147">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
-<span class="fc" id="L148">    return sanitizePathSeparators(canoncialPath) + &quot;/&quot;;</span>
+<span class="fc" id="L150">    String canoncialPath = FileUtil.getCanonicalPath(directory);</span>
+<span class="fc" id="L151">    return sanitizePathSeparators(canoncialPath) + &quot;/&quot;;</span>
   }
 
   private String sanitizePathSeparators(String path) {
-<span class="fc" id="L152">    return StringUtils.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
+<span class="fc" id="L155">    return StringUtils.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
   }
 
 }
