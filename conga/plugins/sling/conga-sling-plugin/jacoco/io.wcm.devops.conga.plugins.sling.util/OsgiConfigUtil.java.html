@@ -39,6 +39,7 @@ public final class OsgiConfigUtil {
 
   /**
    * Writes the configuration data from the &lt;code&gt;Dictionary&lt;/code&gt; to the given &lt;code&gt;OutputStream&lt;/code&gt;.
+   *
    * &lt;p&gt;
    * This method writes at the current location in the stream and does not close the outputstream.
    * &lt;/p&gt;
@@ -47,10 +48,10 @@ public final class OsgiConfigUtil {
    * @throws IOException If an error occurs writing to the output stream.
    */
   public static void write(OutputStream out, Dictionary&lt;String, Object&gt; properties) throws IOException {
-<span class="fc" id="L50">    try (Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L51">      Configurations.buildWriter().build(writer).writeConfiguration(properties);</span>
+<span class="fc" id="L51">    try (Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L52">      Configurations.buildWriter().build(writer).writeConfiguration(properties);</span>
     }
-<span class="fc" id="L53">  }</span>
+<span class="fc" id="L54">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
