@@ -50,7 +50,7 @@ public final class RoleTemplateFileValidator implements DefinitionValidator&lt;V
 <span class="fc" id="L50">  }</span>
 
   @Override
-  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  @SuppressWarnings({ &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.ExceptionAsFlowControl&quot; })
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
 <span class="fc" id="L56">      Role role = modelReader.read(resource);</span>
