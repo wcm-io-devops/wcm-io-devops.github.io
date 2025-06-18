@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.apache.sling.provisioning.model.Model;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.spi.PostProcessorPlugin;
 import io.wcm.devops.conga.generator.spi.context.FileContext;
@@ -37,7 +36,7 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
  * Transforms a Sling Provisioning file into OSGi configuration files (.cfg.json).
  * Repoinit statements are supported as well, all other provisioning contents are ignored
  */
-<span class="fc" id="L40">public class ProvisioningOsgiConfigPostProcessor implements PostProcessorPlugin {</span>
+<span class="fc" id="L39">public class ProvisioningOsgiConfigPostProcessor implements PostProcessorPlugin {</span>
 
   /**
    * Plugin name
@@ -46,31 +45,30 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
 
   @Override
   public String getName() {
-<span class="fc" id="L49">    return NAME;</span>
+<span class="fc" id="L48">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(FileContext file, PostProcessorContext context) {
-<span class="fc" id="L54">    return ProvisioningUtil.isProvisioningFile(file);</span>
+<span class="fc" id="L53">    return ProvisioningUtil.isProvisioningFile(file);</span>
   }
 
   @Override
-  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
-<span class="fc" id="L60">    File file = fileContext.getFile();</span>
+<span class="fc" id="L58">    File file = fileContext.getFile();</span>
     try {
       // generate OSGi configurations
-<span class="fc" id="L63">      Model model = ProvisioningUtil.getModel(fileContext);</span>
-<span class="fc" id="L64">      List&lt;FileContext&gt; files = ProvisioningUtil.generateOsgiConfigurations(model, file.getParentFile(), context);</span>
+<span class="fc" id="L61">      Model model = ProvisioningUtil.getModel(fileContext);</span>
+<span class="fc" id="L62">      List&lt;FileContext&gt; files = ProvisioningUtil.generateOsgiConfigurations(model, file.getParentFile(), context);</span>
 
       // delete provisioning file after transformation
-<span class="fc" id="L67">      Files.delete(file.toPath());</span>
+<span class="fc" id="L65">      Files.delete(file.toPath());</span>
 
       // return list of generated osgi configuration files
-<span class="fc" id="L70">      return files;</span>
+<span class="fc" id="L68">      return files;</span>
     }
-<span class="nc" id="L72">    catch (IOException ex) {</span>
-<span class="nc" id="L73">      throw new GeneratorException(&quot;Unable to post-process Sling Provisioning OSGi configurations.&quot;, ex);</span>
+<span class="nc" id="L70">    catch (IOException ex) {</span>
+<span class="nc" id="L71">      throw new GeneratorException(&quot;Unable to post-process Sling Provisioning OSGi configurations.&quot;, ex);</span>
     }
   }
 

@@ -27,7 +27,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.provisioning.model.Model;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.spi.PostProcessorPlugin;
 import io.wcm.devops.conga.generator.spi.context.FileContext;
@@ -38,7 +37,7 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
 /**
  * Transforms a combined JSON file containing OSGi configurations into individual OSGi configuration files.
  */
-<span class="fc" id="L41">public class JsonOsgiConfigPostProcessor implements PostProcessorPlugin {</span>
+<span class="fc" id="L40">public class JsonOsgiConfigPostProcessor implements PostProcessorPlugin {</span>
 
   /**
    * Plugin name
@@ -52,33 +51,32 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
 
   @Override
   public String getName() {
-<span class="fc" id="L55">    return NAME;</span>
+<span class="fc" id="L54">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(FileContext file, PostProcessorContext context) {
-<span class="fc" id="L60">    return StringUtils.endsWith(file.getFile().getName(), FILE_EXTENSION);</span>
+<span class="fc" id="L59">    return StringUtils.endsWith(file.getFile().getName(), FILE_EXTENSION);</span>
   }
 
   @Override
-  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
-<span class="fc" id="L66">    File file = fileContext.getFile();</span>
+<span class="fc" id="L64">    File file = fileContext.getFile();</span>
     try {
       // read JSON file with combined configurations
-<span class="fc" id="L69">      Model model = JsonOsgiConfigUtil.readToProvisioningModel(file);</span>
+<span class="fc" id="L67">      Model model = JsonOsgiConfigUtil.readToProvisioningModel(file);</span>
 
       // generate OSGi configurations
-<span class="fc" id="L72">      List&lt;FileContext&gt; files = ProvisioningUtil.generateOsgiConfigurations(model, file.getParentFile(), context);</span>
+<span class="fc" id="L70">      List&lt;FileContext&gt; files = ProvisioningUtil.generateOsgiConfigurations(model, file.getParentFile(), context);</span>
 
       // delete provisioning file after transformation
-<span class="fc" id="L75">      Files.delete(file.toPath());</span>
+<span class="fc" id="L73">      Files.delete(file.toPath());</span>
 
       // return list of generated osgi configuration files
-<span class="fc" id="L78">      return files;</span>
+<span class="fc" id="L76">      return files;</span>
     }
-<span class="nc" id="L80">    catch (IOException ex) {</span>
-<span class="nc" id="L81">      throw new GeneratorException(&quot;Unable to parse JSON file with OSGi configurations.&quot;, ex);</span>
+<span class="nc" id="L78">    catch (IOException ex) {</span>
+<span class="nc" id="L79">      throw new GeneratorException(&quot;Unable to parse JSON file with OSGi configurations.&quot;, ex);</span>
     }
   }
 
