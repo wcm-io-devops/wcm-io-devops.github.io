@@ -175,7 +175,7 @@ public class AnsibleVariable {
 <span class="nc bnc" id="L175" title="All 2 branches missed.">                if (v != null) {</span>
 <span class="nc" id="L176">                    buf.append('\'').append(o.getKey()).append('\'');</span>
 <span class="nc bnc" id="L177" title="All 4 branches missed.">                    if (ClassUtils.isPrimitiveOrWrapper(v.getClass()) || v instanceof String) {</span>
-<span class="nc" id="L178">                        buf.append(&quot;'&quot; + v + &quot;'&quot;);</span>
+<span class="nc" id="L178">                      buf.append(&quot;'&quot;).append(v.toString()).append(&quot;'&quot;);</span>
                     } else {
 <span class="nc" id="L180">                        buf.append(valueToString(v));</span>
                     }

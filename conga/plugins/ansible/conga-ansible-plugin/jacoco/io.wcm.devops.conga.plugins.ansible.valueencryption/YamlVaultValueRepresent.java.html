@@ -27,12 +27,15 @@ import org.yaml.snakeyaml.representer.Represent;
 
 <span class="fc" id="L28">class YamlVaultValueRepresent implements Represent {</span>
 
+  /**
+   * Vault tag
+   */
   public static final String VAULT_TAG = &quot;!vault&quot;;
 
   @Override
   public Node representData(Object data) {
-<span class="fc" id="L34">    YamlVaultValue vaultValue = (YamlVaultValue)data;</span>
-<span class="fc" id="L35">    return new ScalarNode(new Tag(VAULT_TAG), vaultValue.getValue(), null, null, ScalarStyle.LITERAL);</span>
+<span class="fc" id="L37">    YamlVaultValue vaultValue = (YamlVaultValue)data;</span>
+<span class="fc" id="L38">    return new ScalarNode(new Tag(VAULT_TAG), vaultValue.getValue(), null, null, ScalarStyle.LITERAL);</span>
   }
 
 }

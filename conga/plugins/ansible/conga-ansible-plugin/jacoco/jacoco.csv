@@ -18,7 +18,7 @@ CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.util,AnsibleVaultPasswo
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleHost,109,23,20,0,31,8,17,4,7,4
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleGroup,146,60,18,0,39,16,21,8,12,8
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleInventory,72,43,8,0,20,11,10,6,6,6
-CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleVariable,321,36,49,1,68,12,32,5,7,5
+CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.type,AnsibleVariable,324,36,49,1,68,12,32,5,7,5
 CONGA Ansible Plugin,org.yaml.snakeyaml.inspector,TrustedTagInspector,0,5,0,0,0,2,0,2,0,2
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,EncryptionKeychain,9,148,0,0,2,36,0,13,0,13
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders.implementation,CypherAES,26,0,0,0,6,0,6,0,6,0

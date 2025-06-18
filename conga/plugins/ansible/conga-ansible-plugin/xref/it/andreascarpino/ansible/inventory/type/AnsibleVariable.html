@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>                 <strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>                     buf.append('\'').append(o.getKey()).append('\'');
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>                     <strong class="jxr_keyword">if</strong> (ClassUtils.isPrimitiveOrWrapper(v.getClass()) || v instanceof String) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>                         buf.append(<span class="jxr_string">"'"</span> + v + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>                       buf.append(<span class="jxr_string">"'"</span>).append(v.toString()).append(<span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>                     } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>                         buf.append(valueToString(v));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>                     }
