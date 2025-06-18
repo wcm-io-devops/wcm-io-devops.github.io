@@ -264,13 +264,13 @@ public final class ContentPackageUtil {
    * @param key Key
    * @return Option value or false
    */
-  private static boolean getOptionalPropBoolean(Map&lt;String, Object&gt; options, String key) {
+  public static boolean getOptionalPropBoolean(Map&lt;String, Object&gt; options, String key) {
 <span class="fc" id="L268">    Object value = getOptionalProp(options, key);</span>
 <span class="pc bpc" id="L269" title="1 of 2 branches missed.">    if (value instanceof Boolean) {</span>
 <span class="nc" id="L270">      return (Boolean)value;</span>
     }
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">    else if (value != null) {</span>
-<span class="nc" id="L273">      return BooleanUtils.toBoolean(value.toString());</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">    else if (value != null) {</span>
+<span class="fc" id="L273">      return BooleanUtils.toBoolean(value.toString());</span>
     }
 <span class="fc" id="L275">    return false;</span>
   }

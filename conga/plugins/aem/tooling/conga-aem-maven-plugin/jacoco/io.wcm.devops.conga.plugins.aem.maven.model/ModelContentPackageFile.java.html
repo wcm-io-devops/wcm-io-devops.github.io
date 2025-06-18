@@ -19,6 +19,8 @@
  */
 package io.wcm.devops.conga.plugins.aem.maven.model;
 
+import static io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePropertiesPostProcessor.DEPENDENCY_CHAIN_IGNORE_PROPERTY;
+import static io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY;
 import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_GROUP;
 import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_NAME;
 import static org.apache.jackrabbit.vault.packaging.PackageProperties.NAME_PACKAGE_TYPE;
@@ -31,8 +33,6 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
-import io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePropertiesPostProcessor;
-
 /**
  * Represents a content package file generated or referenced by CONGA.
  */
@@ -43,6 +43,7 @@ public final class ModelContentPackageFile extends AbstractInstallableFile imple
   private final Boolean recursive;
   private final Integer delayAfterInstallSec;
   private final Integer httpSocketTimeoutSec;
+  private final Boolean dependencyChainIgnore;
 
   private final String name;
   private final String group;
@@ -56,67 +57,72 @@ public final class ModelContentPackageFile extends AbstractInstallableFile imple
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public ModelContentPackageFile(File file, Map&lt;String, Object&gt; fileData, List&lt;String&gt; variants) {
-<span class="fc" id="L59">    super(file, variants);</span>
+<span class="fc" id="L60">    super(file, variants);</span>
 
-<span class="fc" id="L61">    this.install = (Boolean)fileData.get(&quot;install&quot;);</span>
-<span class="fc" id="L62">    this.force = (Boolean)fileData.get(&quot;force&quot;);</span>
-<span class="fc" id="L63">    this.recursive = (Boolean)fileData.get(&quot;recursive&quot;);</span>
-<span class="fc" id="L64">    this.delayAfterInstallSec = (Integer)fileData.get(&quot;delayAfterInstallSec&quot;);</span>
-<span class="fc" id="L65">    this.httpSocketTimeoutSec = (Integer)fileData.get(&quot;httpSocketTimeoutSec&quot;);</span>
+<span class="fc" id="L62">    this.install = (Boolean)fileData.get(&quot;install&quot;);</span>
+<span class="fc" id="L63">    this.force = (Boolean)fileData.get(&quot;force&quot;);</span>
+<span class="fc" id="L64">    this.recursive = (Boolean)fileData.get(&quot;recursive&quot;);</span>
+<span class="fc" id="L65">    this.delayAfterInstallSec = (Integer)fileData.get(&quot;delayAfterInstallSec&quot;);</span>
+<span class="fc" id="L66">    this.httpSocketTimeoutSec = (Integer)fileData.get(&quot;httpSocketTimeoutSec&quot;);</span>
+<span class="fc" id="L67">    this.dependencyChainIgnore = (Boolean)fileData.get(DEPENDENCY_CHAIN_IGNORE_PROPERTY);</span>
 
-<span class="fc" id="L67">    Map&lt;String, Object&gt; contentPackageProperties = (Map&lt;String, Object&gt;)fileData.get(</span>
-        ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY);
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    if (contentPackageProperties == null) {</span>
-<span class="nc" id="L70">      throw new IllegalArgumentException(ContentPackagePropertiesPostProcessor.MODEL_OPTIONS_PROPERTY + &quot; missing.&quot;);</span>
+<span class="fc" id="L69">    Map&lt;String, Object&gt; contentPackageProperties = (Map&lt;String, Object&gt;)fileData.get(MODEL_OPTIONS_PROPERTY);</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">    if (contentPackageProperties == null) {</span>
+<span class="nc" id="L71">      throw new IllegalArgumentException(MODEL_OPTIONS_PROPERTY + &quot; missing.&quot;);</span>
     }
-<span class="fc" id="L72">    this.name = Objects.toString(contentPackageProperties.get(NAME_NAME), null);</span>
-<span class="fc" id="L73">    this.group = Objects.toString(contentPackageProperties.get(NAME_GROUP), null);</span>
-<span class="fc" id="L74">    this.version = Objects.toString(contentPackageProperties.get(NAME_VERSION), null);</span>
-<span class="fc" id="L75">    this.packageType = Objects.toString(contentPackageProperties.get(NAME_PACKAGE_TYPE), null);</span>
-<span class="fc" id="L76">  }</span>
+<span class="fc" id="L73">    this.name = Objects.toString(contentPackageProperties.get(NAME_NAME), null);</span>
+<span class="fc" id="L74">    this.group = Objects.toString(contentPackageProperties.get(NAME_GROUP), null);</span>
+<span class="fc" id="L75">    this.version = Objects.toString(contentPackageProperties.get(NAME_VERSION), null);</span>
+<span class="fc" id="L76">    this.packageType = Objects.toString(contentPackageProperties.get(NAME_PACKAGE_TYPE), null);</span>
+<span class="fc" id="L77">  }</span>
 
   public Boolean getInstall() {
-<span class="fc" id="L79">    return this.install;</span>
+<span class="fc" id="L80">    return this.install;</span>
   }
 
   @Nullable
   public Boolean getForce() {
-<span class="fc" id="L84">    return this.force;</span>
+<span class="fc" id="L85">    return this.force;</span>
   }
 
   @Nullable
   public Boolean getRecursive() {
-<span class="fc" id="L89">    return this.recursive;</span>
+<span class="fc" id="L90">    return this.recursive;</span>
   }
 
   @Nullable
   public Integer getDelayAfterInstallSec() {
-<span class="fc" id="L94">    return this.delayAfterInstallSec;</span>
+<span class="fc" id="L95">    return this.delayAfterInstallSec;</span>
   }
 
   @Nullable
   public Integer getHttpSocketTimeoutSec() {
-<span class="fc" id="L99">    return this.httpSocketTimeoutSec;</span>
+<span class="fc" id="L100">    return this.httpSocketTimeoutSec;</span>
   }
 
   @Override
   public String getName() {
-<span class="fc" id="L104">    return this.name;</span>
+<span class="fc" id="L105">    return this.name;</span>
   }
 
   @Override
   public String getGroup() {
-<span class="fc" id="L109">    return this.group;</span>
+<span class="fc" id="L110">    return this.group;</span>
   }
 
   @Override
   public String getVersion() {
-<span class="fc" id="L114">    return this.version;</span>
+<span class="fc" id="L115">    return this.version;</span>
   }
 
   @Override
   public String getPackageType() {
-<span class="fc" id="L119">    return this.packageType;</span>
+<span class="fc" id="L120">    return this.packageType;</span>
+  }
+
+  @Override
+  public boolean isDependencyChainIgnore() {
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">    return dependencyChainIgnore != null &amp;&amp; dependencyChainIgnore;</span>
   }
 
 }

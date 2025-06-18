@@ -52,10 +52,15 @@ public interface ContentPackageFile extends InstallableFile {
   @Nullable
   String getPackageType();
 
+  /**
+   * @return Ignore in dependency chain
+   */
+  boolean isDependencyChainIgnore();
+
   default String getPackageInfo() {
-<span class="nc" id="L56">    return StringUtils.defaultString(getGroup())</span>
-<span class="nc" id="L57">        + &quot;:&quot; + StringUtils.defaultString(getName())</span>
-<span class="nc" id="L58">        + &quot;:&quot; + StringUtils.defaultString(getVersion());</span>
+<span class="nc" id="L61">    return StringUtils.defaultString(getGroup())</span>
+<span class="nc" id="L62">        + &quot;:&quot; + StringUtils.defaultString(getName())</span>
+<span class="nc" id="L63">        + &quot;:&quot; + StringUtils.defaultString(getVersion());</span>
   }
 
 }
