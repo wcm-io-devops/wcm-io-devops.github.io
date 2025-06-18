@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="AbstractFilterHelper" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/handlebars/helper/AbstractFilterHelper.html#AbstractFilterHelper">AbstractFilterHelper</a> <strong class="jxr_keyword">implements</strong> HelperPlugin&lt;Object&gt; {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>    @Override
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>    @SuppressWarnings(<span class="jxr_string">"PMD.PreserveStackTrace"</span>)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    @SuppressWarnings({ <span class="jxr_string">"PMD.PreserveStackTrace"</span>, <span class="jxr_string">"PMD.AvoidThrowingNewInstanceOfSameException"</span> })
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Object apply(Object context, Options options, HelperContext pluginContext) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">if</strong> (!(context instanceof Map)) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Excpected map object for filter rule."</span>);

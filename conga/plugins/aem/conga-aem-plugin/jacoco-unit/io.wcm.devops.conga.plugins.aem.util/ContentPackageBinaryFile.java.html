@@ -28,7 +28,6 @@ import java.nio.file.Files;
 
 import org.apache.commons.lang3.StringUtils;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.UrlFileManager;
 
 /**
@@ -42,13 +41,13 @@ public final class ContentPackageBinaryFile {
   private final String path;
   private final boolean delete;
 
-<span class="fc" id="L45">  ContentPackageBinaryFile(String file, String dir, String url, String path, boolean delete) {</span>
-<span class="fc" id="L46">    this.fileName = file;</span>
-<span class="fc" id="L47">    this.dir = dir;</span>
-<span class="fc" id="L48">    this.url = url;</span>
-<span class="fc" id="L49">    this.path = path;</span>
-<span class="fc" id="L50">    this.delete = delete;</span>
-<span class="fc" id="L51">  }</span>
+<span class="fc" id="L44">  ContentPackageBinaryFile(String file, String dir, String url, String path, boolean delete) {</span>
+<span class="fc" id="L45">    this.fileName = file;</span>
+<span class="fc" id="L46">    this.dir = dir;</span>
+<span class="fc" id="L47">    this.url = url;</span>
+<span class="fc" id="L48">    this.path = path;</span>
+<span class="fc" id="L49">    this.delete = delete;</span>
+<span class="fc" id="L50">  }</span>
 
   /**
    * @param urlFileManager URL file manager
@@ -57,34 +56,34 @@ public final class ContentPackageBinaryFile {
    * @throws IOException I/O exception
    */
   public InputStream getInputStream(UrlFileManager urlFileManager, File targetDir) throws IOException {
-<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (StringUtils.isNotBlank(url)) {</span>
-<span class="fc" id="L61">      return urlFileManager.getFile(url);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    if (StringUtils.isNotBlank(url)) {</span>
+<span class="fc" id="L60">      return urlFileManager.getFile(url);</span>
     }
-<span class="fc" id="L63">    File file = getFile(targetDir);</span>
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">    if (file != null) {</span>
-<span class="fc" id="L65">      return new BufferedInputStream(new FileInputStream(file));</span>
+<span class="fc" id="L62">    File file = getFile(targetDir);</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">    if (file != null) {</span>
+<span class="fc" id="L64">      return new BufferedInputStream(new FileInputStream(file));</span>
     }
     else {
-<span class="nc" id="L68">      throw new IllegalArgumentException(&quot;For a file definition either url or file has to be specified.&quot;);</span>
+<span class="nc" id="L67">      throw new IllegalArgumentException(&quot;For a file definition either url or file has to be specified.&quot;);</span>
     }
   }
 
   private File getFile(File targetDir) {
-<span class="fc" id="L73">    File parent = targetDir;</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(dir)) {</span>
-<span class="fc" id="L75">      parent = new File(targetDir, dir);</span>
+<span class="fc" id="L72">    File parent = targetDir;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(dir)) {</span>
+<span class="fc" id="L74">      parent = new File(targetDir, dir);</span>
     }
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(fileName)) {</span>
-<span class="fc" id="L78">      return new File(parent, fileName);</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(fileName)) {</span>
+<span class="fc" id="L77">      return new File(parent, fileName);</span>
     }
-<span class="nc" id="L80">    return null;</span>
+<span class="nc" id="L79">    return null;</span>
   }
 
   /**
    * @return Target path for file (including file name).
    */
   public String getPath() {
-<span class="fc" id="L87">    return this.path;</span>
+<span class="fc" id="L86">    return this.path;</span>
   }
 
   /**
@@ -93,19 +92,18 @@ public final class ContentPackageBinaryFile {
    * @param targetDir Target directory for configuration
    * @throws IOException I/O exception
    */
-  @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public void deleteIfRequired(UrlFileManager urlFileManager, File targetDir) throws IOException {
-<span class="fc bfc" id="L98" title="All 2 branches covered.">    if (delete) {</span>
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">      if (StringUtils.isNotBlank(url)) {</span>
-<span class="nc" id="L100">        urlFileManager.deleteFile(url);</span>
-<span class="nc" id="L101">        return;</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">    if (delete) {</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">      if (StringUtils.isNotBlank(url)) {</span>
+<span class="nc" id="L98">        urlFileManager.deleteFile(url);</span>
+<span class="nc" id="L99">        return;</span>
       }
-<span class="fc" id="L103">      File file = getFile(targetDir);</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">      if (file != null) {</span>
-<span class="fc" id="L105">        Files.delete(file.toPath());</span>
+<span class="fc" id="L101">      File file = getFile(targetDir);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">      if (file != null) {</span>
+<span class="fc" id="L103">        Files.delete(file.toPath());</span>
       }
     }
-<span class="fc" id="L108">  }</span>
+<span class="fc" id="L106">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

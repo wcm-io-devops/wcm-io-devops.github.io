@@ -63,7 +63,7 @@ import io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport;
   }
 
   @Override
-  @SuppressWarnings({ &quot;java:S3776&quot;, &quot;java:S5411&quot; }) // ignore complexity
+  @SuppressWarnings({ &quot;java:S3776&quot;, &quot;java:S5411&quot;, &quot;PMD.ExceptionAsFlowControl&quot; }) // ignore complexity
   public Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
 <span class="fc bfc" id="L68" title="All 2 branches covered.">    if (context == null) {</span>
 <span class="fc" id="L69">      return null;</span>

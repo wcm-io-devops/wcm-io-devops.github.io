@@ -33,7 +33,7 @@ import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
 <span class="fc" id="L33">abstract class AbstractFilterHelper implements HelperPlugin&lt;Object&gt; {</span>
 
   @Override
-  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  @SuppressWarnings({ &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.AvoidThrowingNewInstanceOfSameException&quot; })
   public final Object apply(Object context, Options options, HelperContext pluginContext) throws IOException {
 <span class="pc bpc" id="L38" title="1 of 2 branches missed.">    if (!(context instanceof Map)) {</span>
 <span class="nc" id="L39">      throw new IllegalArgumentException(&quot;Excpected map object for filter rule.&quot;);</span>

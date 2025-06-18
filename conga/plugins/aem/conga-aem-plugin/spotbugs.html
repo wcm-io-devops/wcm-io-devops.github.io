@@ -120,7 +120,7 @@
   <tbody>
    <tr class="b">
     <td>49</td>
-    <td>16</td>
+    <td>11</td>
     <td>0</td>
     <td>5</td>
    </tr>
@@ -139,29 +139,25 @@
   <tbody>
    <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</a></td>
-    <td>4</td>
+    <td>3</td>
    </tr>
    <tr class="a">
     <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a></td>
-    <td>2</td>
+    <td>1</td>
    </tr>
    <tr class="b">
-    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1</a></td>
+    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a></td>
     <td>1</td>
    </tr>
    <tr class="a">
-    <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a></td>
-    <td>2</td>
-   </tr>
-   <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a></td>
     <td>1</td>
    </tr>
-   <tr class="a">
-    <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a></td>
-    <td>3</td>
-   </tr>
    <tr class="b">
+    <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a></td>
+    <td>2</td>
+   </tr>
+   <tr class="a">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a></td>
     <td>3</td>
    </tr>
@@ -185,28 +181,21 @@
     <td>The cipher does not provide data integrity</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CIPHER_INTEGRITY">CIPHER_INTEGRITY</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L94">94</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L93">93</a></td>
     <td>High</td>
    </tr>
    <tr class="a">
     <td>The cipher is susceptible to padding oracle attacks</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PADDING_ORACLE">PADDING_ORACLE</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L94">94</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L93">93</a></td>
     <td>High</td>
    </tr>
    <tr class="b">
     <td>The initialization vector (IV) is not properly generated</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#STATIC_IV">STATIC_IV</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L93">93</a></td>
-    <td>Medium</td>
-   </tr>
-   <tr class="a">
-    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport.generateIV() is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L101">101-103</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L92">92</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -229,44 +218,14 @@
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L105">105</a></td>
-    <td>Medium</td>
-   </tr>
-   <tr class="a">
-    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor.apply(FileContext, PostProcessorContext) is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L83">83-138</a></td>
-    <td>Medium</td>
-   </tr>
-  </tbody>
- </table>
-</section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1"></a>
-<section>
- <h2 id="io.wcm.devops.conga.plugins.aem.postprocessor.cont1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1</h2>
- <table class="bodyTable table table-striped table-hover">
-  <thead>
-   <tr class="a">
-    <th>Bug</th>
-    <th>Category</th>
-    <th>Details</th>
-    <th>Line</th>
-    <th>Priority</th>
-   </tr>
-  </thead>
-  <tbody>
-   <tr class="b">
-    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1.accept(String, Dictionary) is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L158">158-181</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackageOsgiConfigPostProcessor.html#L98">98</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
  </table>
 </section><a name="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor"></a>
 <section>
- <h2 id="io.wcm.devops.conga.plugins.aem.postprocessor.cont2">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</h2>
+ <h2 id="io.wcm.devops.conga.plugins.aem.postprocessor.cont1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</h2>
  <table class="bodyTable table table-striped table-hover">
   <thead>
    <tr class="a">
@@ -282,14 +241,7 @@
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackagePostProcessor.html#L86">86</a></td>
-    <td>Medium</td>
-   </tr>
-   <tr class="a">
-    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor.apply(FileContext, PostProcessorContext) is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackagePostProcessor.html#L77">77-120</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/postprocessor/ContentPackagePostProcessor.html#L80">80</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -335,21 +287,14 @@
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L75">75</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L74">74</a></td>
     <td>Medium</td>
    </tr>
    <tr class="a">
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L78">78</a></td>
-    <td>Medium</td>
-   </tr>
-   <tr class="b">
-    <td>Suppressing annotation on the method io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile.deleteIfRequired(UrlFileManager, File) is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L98">98-108</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageBinaryFile.html#L77">77</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -372,21 +317,21 @@
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L394">394</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L347">347</a></td>
     <td>Medium</td>
    </tr>
    <tr class="a">
     <td>This API (java/nio/file/Paths.get(Ljava/net/URI;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L396">396</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L349">349</a></td>
     <td>Medium</td>
    </tr>
    <tr class="b">
     <td>This API (java/nio/file/Paths.get(Ljava/net/URI;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L401">401</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/util/ContentPackageUtil.html#L354">354</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -405,8 +350,7 @@
       <ul class="nav nav-list">
     <li><a href="#io.wcm.devops.conga.plugins.aem.crypto.impl.aescry" title="io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a>
-    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont1" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor$1</a>
-    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont2" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a>
+    <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont1" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentelemen" title="io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentpackag" title="io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentpackag1" title="io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a>
@@ -536,7 +480,7 @@
       <div class="span12">
         <p class="pull-right"><a href="#body">Back to top</a></p>
         <p class="copyright">Copyright &copy;2015-2025 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All Rights Reserved.</p>
-        <p class="version-date"><span class="projectVersion">Version: 2.20.3-SNAPSHOT. </span><span class="publishDate">Last Published: 2025-06-16. </span></p>
+        <p class="version-date"><span class="projectVersion">Version: 2.20.3-SNAPSHOT. </span><span class="publishDate">Last Published: 2025-06-18. </span></p>
       </div>
     </div>
   </div>
