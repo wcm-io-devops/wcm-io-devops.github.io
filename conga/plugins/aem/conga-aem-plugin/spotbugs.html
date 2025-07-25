@@ -120,9 +120,9 @@
   <tbody>
    <tr class="b">
     <td>49</td>
-    <td>11</td>
+    <td>14</td>
     <td>0</td>
-    <td>5</td>
+    <td>0</td>
    </tr>
   </tbody>
  </table>
@@ -142,22 +142,26 @@
     <td>3</td>
    </tr>
    <tr class="a">
+    <td><a href="#io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper">io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper</a></td>
+    <td>3</td>
+   </tr>
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a></td>
     <td>1</td>
    </tr>
-   <tr class="b">
+   <tr class="a">
     <td><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a></td>
     <td>1</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a></td>
     <td>1</td>
    </tr>
-   <tr class="b">
+   <tr class="a">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile">io.wcm.devops.conga.plugins.aem.util.ContentPackageBinaryFile</a></td>
     <td>2</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil">io.wcm.devops.conga.plugins.aem.util.ContentPackageUtil</a></td>
     <td>3</td>
    </tr>
@@ -196,6 +200,43 @@
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#STATIC_IV">STATIC_IV</a></td>
     <td><a href="./xref/io/wcm/devops/conga/plugins/aem/crypto/impl/AesCryptoSupport.html#L92">92</a></td>
+    <td>Medium</td>
+   </tr>
+  </tbody>
+ </table>
+</section><a name="io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper"></a>
+<section>
+ <h2 id="io.wcm.devops.conga.plugins.aem.handlebars.helper.">io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper</h2>
+ <table class="bodyTable table table-striped table-hover">
+  <thead>
+   <tr class="a">
+    <th>Bug</th>
+    <th>Category</th>
+    <th>Details</th>
+    <th>Line</th>
+    <th>Priority</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="b">
+    <td>java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder; is potentially injected into an XML string in method io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper.generateRule(String, String, HttpdFilterType, String, String).</td>
+    <td>SECURITY</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#POTENTIAL_XML_INJECTION">POTENTIAL_XML_INJECTION</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/handlebars/helper/AemHttpdFilterHelper.html#L97">97</a></td>
+    <td>Medium</td>
+   </tr>
+   <tr class="a">
+    <td>java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder; is potentially injected into an XML string in method io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper.generateRule(String, String, HttpdFilterType, String, String).</td>
+    <td>SECURITY</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#POTENTIAL_XML_INJECTION">POTENTIAL_XML_INJECTION</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/handlebars/helper/AemHttpdFilterHelper.html#L108">108</a></td>
+    <td>Medium</td>
+   </tr>
+   <tr class="b">
+    <td>java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder; is potentially injected into an XML string in method io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper.generateRule(String, String, HttpdFilterType, String, String).</td>
+    <td>SECURITY</td>
+    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#POTENTIAL_XML_INJECTION">POTENTIAL_XML_INJECTION</a></td>
+    <td><a href="./xref/io/wcm/devops/conga/plugins/aem/handlebars/helper/AemHttpdFilterHelper.html#L117">117</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -349,6 +390,7 @@
     <li class="dropdown"><a href="#files" title="Files">Files <b class="caret"></b></a>
       <ul class="nav nav-list">
     <li><a href="#io.wcm.devops.conga.plugins.aem.crypto.impl.aescry" title="io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport">io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport</a>
+    <li><a href="#io.wcm.devops.conga.plugins.aem.handlebars.helper." title="io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper">io.wcm.devops.conga.plugins.aem.handlebars.helper.AemHttpdFilterHelper</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackageOsgiConfigPostProcessor</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.postprocessor.cont1" title="io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor">io.wcm.devops.conga.plugins.aem.postprocessor.ContentPackagePostProcessor</a>
     <li><a href="#io.wcm.devops.conga.plugins.aem.util.contentelemen" title="io.wcm.devops.conga.plugins.aem.util.ContentElementHandler">io.wcm.devops.conga.plugins.aem.util.ContentElementHandler</a>
@@ -480,7 +522,7 @@
       <div class="span12">
         <p class="pull-right"><a href="#body">Back to top</a></p>
         <p class="copyright">Copyright &copy;2015-2025 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All Rights Reserved.</p>
-        <p class="version-date"><span class="projectVersion">Version: 2.21.1-SNAPSHOT. </span><span class="publishDate">Last Published: 2025-07-24. </span></p>
+        <p class="version-date"><span class="projectVersion">Version: 2.21.1-SNAPSHOT. </span><span class="publishDate">Last Published: 2025-07-25. </span></p>
       </div>
     </div>
   </div>
