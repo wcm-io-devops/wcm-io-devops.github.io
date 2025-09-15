@@ -25,6 +25,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import io.wcm.devops.conga.generator.spi.UrlFilePlugin;
 import io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
@@ -34,7 +35,7 @@ import net.wedjaa.ansible.vault.crypto.VaultHandler;
 /**
  * Decrypts a file encrypted with Ansible Vault. Can be combined with other URL file plugins.
  */
-<span class="fc" id="L37">public class AnsibleVaultUrlFilePlugin implements UrlFilePlugin {</span>
+<span class="fc" id="L38">public class AnsibleVaultUrlFilePlugin implements UrlFilePlugin {</span>
 
   /**
    * Plugin name
@@ -45,40 +46,40 @@ import net.wedjaa.ansible.vault.crypto.VaultHandler;
 
   @Override
   public String getName() {
-<span class="fc" id="L48">    return NAME;</span>
+<span class="fc" id="L49">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(String url, UrlFilePluginContext context) {
-<span class="fc" id="L53">    return StringUtils.startsWith(url, PREFIX);</span>
+<span class="fc" id="L54">    return Strings.CS.startsWith(url, PREFIX);</span>
   }
 
   @Override
   public String getFileName(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L58">    String innerUrl = getInnerUrl(url);</span>
-<span class="fc" id="L59">    return context.getUrlFileManager().getFileName(innerUrl);</span>
+<span class="fc" id="L59">    String innerUrl = getInnerUrl(url);</span>
+<span class="fc" id="L60">    return context.getUrlFileManager().getFileName(innerUrl);</span>
   }
 
   @Override
   public InputStream getFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L64">    String innerUrl = getInnerUrl(url);</span>
-<span class="fc" id="L65">    try (InputStream is = context.getUrlFileManager().getFile(innerUrl)) {</span>
-<span class="fc" id="L66">      byte[] encryptedData = IOUtils.toByteArray(is);</span>
-<span class="fc" id="L67">      byte[] decryptedData = decryptFile(encryptedData);</span>
-<span class="fc" id="L68">      return new ByteArrayInputStream(decryptedData);</span>
+<span class="fc" id="L65">    String innerUrl = getInnerUrl(url);</span>
+<span class="fc" id="L66">    try (InputStream is = context.getUrlFileManager().getFile(innerUrl)) {</span>
+<span class="fc" id="L67">      byte[] encryptedData = IOUtils.toByteArray(is);</span>
+<span class="fc" id="L68">      byte[] decryptedData = decryptFile(encryptedData);</span>
+<span class="fc" id="L69">      return new ByteArrayInputStream(decryptedData);</span>
     }
-<span class="fc" id="L70">    catch (IOException ex) {</span>
-<span class="fc" id="L71">      throw new IOException(&quot;Unable do decrypt file: &quot; + innerUrl, ex);</span>
+<span class="fc" id="L71">    catch (IOException ex) {</span>
+<span class="fc" id="L72">      throw new IOException(&quot;Unable do decrypt file: &quot; + innerUrl, ex);</span>
     }
   }
 
   private byte[] decryptFile(byte[] encrpytedData) throws IOException {
-<span class="fc" id="L76">    String password = AnsibleVaultPassword.get();</span>
-<span class="fc" id="L77">    return VaultHandler.decrypt(encrpytedData, password);</span>
+<span class="fc" id="L77">    String password = AnsibleVaultPassword.get();</span>
+<span class="fc" id="L78">    return VaultHandler.decrypt(encrpytedData, password);</span>
   }
 
   private String getInnerUrl(String url) {
-<span class="fc" id="L81">    return StringUtils.substringAfter(url, PREFIX);</span>
+<span class="fc" id="L82">    return StringUtils.substringAfter(url, PREFIX);</span>
   }
 
 }

@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 /**
  * @author Andrea Scarpino
@@ -83,7 +83,7 @@ public class AnsibleHost {
 <span class="nc" id="L83">    Iterator&lt;AnsibleVariable&gt; variableIterator = variables.iterator();</span>
 <span class="nc bnc" id="L84" title="All 2 branches missed.">    while (variableIterator.hasNext()) {</span>
 <span class="nc" id="L85">      AnsibleVariable v = variableIterator.next();</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">      if (StringUtils.equals(v.getName(), variableName)) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">      if (Strings.CS.equals(v.getName(), variableName)) {</span>
 <span class="nc" id="L87">        variableIterator.remove();</span>
       }
 <span class="nc" id="L89">    }</span>

@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.exec.ExecuteException;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.exec.PumpStreamHandler;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.FileUtils;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.Strings;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.util.FileUtil;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>    }
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPythonScript(File file) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">return</strong> StringUtils.endsWith(file.getName(), <span class="jxr_string">".py"</span>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">return</strong> Strings.CS.endsWith(file.getName(), <span class="jxr_string">".py"</span>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>    }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String executePyhtonScript(File file) <strong class="jxr_keyword">throws</strong> IOException {
