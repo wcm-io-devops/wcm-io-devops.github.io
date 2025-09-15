@@ -27,7 +27,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 /**
  * Read and write properties.xml for FileVault package.
@@ -63,7 +63,7 @@ final class FileVaultProperties {
 <span class="fc" id="L63">    String xmlOutput = bos.toString(StandardCharsets.UTF_8.name());</span>
 
     // normalize line endings with unix line ending
-<span class="fc" id="L66">    xmlOutput = StringUtils.replace(xmlOutput, System.lineSeparator(), &quot;\n&quot;);</span>
+<span class="fc" id="L66">    xmlOutput = Strings.CS.replace(xmlOutput, System.lineSeparator(), &quot;\n&quot;);</span>
 
     // output normalized XML
 <span class="fc" id="L69">    OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);</span>

@@ -20,8 +20,8 @@ CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.handlebars.helper,OakPasswordHa
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.handlebars.helper,AemDispatcherFilterHelper,0,147,1,17,0,26,1,11,0,3
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.handlebars.helper,NoClassNameOmitNullsStyle,0,32,0,2,0,11,0,4,0,3
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.postprocessor,ContentPackagePostProcessor,9,121,0,2,2,25,0,5,0,4
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.postprocessor,ContentPackageOsgiConfigPostProcessor.new ConfigConsumer() {...},0,63,0,2,0,10,0,3,0,2
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.postprocessor,ContentPackageOsgiConfigPostProcessor,10,153,2,14,2,31,2,13,0,7
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.postprocessor,ContentPackageOsgiConfigPostProcessor.new ConfigConsumer() {...},0,64,0,2,0,10,0,3,0,2
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.postprocessor,ContentPackageOsgiConfigPostProcessor,10,155,2,14,2,31,2,13,0,7
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.postprocessor,ContentPackagePropertiesPostProcessor,22,61,5,7,5,17,4,7,1,4
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto.impl,HmacCryptoKeySupport,0,18,0,0,0,5,0,3,0,3
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto.impl,AesCryptoSupport,6,100,0,0,2,24,0,9,0,9
@@ -32,8 +32,8 @@ CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,InfoPrefixLog,97,0,0,
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,AnyValidator.new EntityResolver() {...},2,6,0,0,1,1,1,1,1,1
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.validator,AnyValidator,3,93,0,2,0,21,1,7,1,6
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto,CryptoSupport,0,29,0,0,0,7,0,3,0,3
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto,CryptoString,0,128,0,20,0,23,0,13,0,3
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentPackageUtil,75,489,18,50,16,118,17,34,0,17
-CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentElementHandler,17,67,3,7,3,16,3,6,0,4
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.crypto,CryptoString,0,130,0,20,0,23,0,13,0,3
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentPackageUtil,75,494,18,50,16,118,17,34,0,17
+CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentElementHandler,17,68,3,7,3,16,3,6,0,4
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,JsonContentLoader,16,66,0,0,4,15,0,4,0,4
 CONGA AEM Plugin,io.wcm.devops.conga.plugins.aem.util,ContentPackageBinaryFile,12,85,5,9,4,24,5,7,0,5

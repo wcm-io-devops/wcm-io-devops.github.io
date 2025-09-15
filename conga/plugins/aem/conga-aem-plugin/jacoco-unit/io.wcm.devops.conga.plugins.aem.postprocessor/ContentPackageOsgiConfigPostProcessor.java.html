@@ -36,6 +36,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.sling.provisioning.model.Model;
 import org.slf4j.Logger;
 
@@ -56,7 +57,7 @@ import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
  * Transforms a Sling Provisioning file or Combined JSON file as used by CONGA Sling Plugin
  * into OSGi configurations and then packages them up in an AEM content package to be deployed via CRX package manager.
  */
-<span class="fc" id="L59">public class ContentPackageOsgiConfigPostProcessor extends AbstractPostProcessor {</span>
+<span class="fc" id="L60">public class ContentPackageOsgiConfigPostProcessor extends AbstractPostProcessor {</span>
 
   /**
    * Plugin name
@@ -65,70 +66,70 @@ import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
 
   @Override
   public String getName() {
-<span class="fc" id="L68">    return NAME;</span>
+<span class="fc" id="L69">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(FileContext file, PostProcessorContext context) {
-<span class="fc bfc" id="L73" title="All 2 branches covered.">    return ProvisioningUtil.isProvisioningFile(file)</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        || StringUtils.endsWith(file.getFile().getName(), JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">    return ProvisioningUtil.isProvisioningFile(file)</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        || Strings.CS.endsWith(file.getFile().getName(), JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
   }
 
   @Override
   public List&lt;FileContext&gt; apply(FileContext fileContext, PostProcessorContext context) {
-<span class="fc" id="L79">    File file = fileContext.getFile();</span>
-<span class="fc" id="L80">    Logger logger = context.getLogger();</span>
-<span class="fc" id="L81">    Map&lt;String, Object&gt; options = context.getOptions();</span>
+<span class="fc" id="L80">    File file = fileContext.getFile();</span>
+<span class="fc" id="L81">    Logger logger = context.getLogger();</span>
+<span class="fc" id="L82">    Map&lt;String, Object&gt; options = context.getOptions();</span>
 
     try {
       // generate OSGi configurations
       Model model;
-<span class="fc bfc" id="L86" title="All 2 branches covered.">      if (ProvisioningUtil.isProvisioningFile(fileContext)) {</span>
-<span class="fc" id="L87">        model = ProvisioningUtil.getModel(fileContext);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">      if (ProvisioningUtil.isProvisioningFile(fileContext)) {</span>
+<span class="fc" id="L88">        model = ProvisioningUtil.getModel(fileContext);</span>
       }
       else {
-<span class="fc" id="L90">        model = JsonOsgiConfigUtil.readToProvisioningModel(file);</span>
+<span class="fc" id="L91">        model = JsonOsgiConfigUtil.readToProvisioningModel(file);</span>
       }
 
       // check if any osgi configuration is present
-<span class="fc" id="L94">      boolean hasAnyConfig = !ProvisioningUtil.visitOsgiConfigurations(model,</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">          (ConfigConsumer&lt;Boolean&gt;)(path, properties) -&gt; true).isEmpty();</span>
+<span class="fc" id="L95">      boolean hasAnyConfig = !ProvisioningUtil.visitOsgiConfigurations(model,</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">          (ConfigConsumer&lt;Boolean&gt;)(path, properties) -&gt; true).isEmpty();</span>
 
       // create AEM content package with configurations
-<span class="fc" id="L98">      File zipFile = new File(file.getParentFile(), getBaseFileName(file.getName()) + &quot;.zip&quot;);</span>
-<span class="fc" id="L99">      logger.info(&quot;Generate {}&quot;, zipFile.getCanonicalPath());</span>
+<span class="fc" id="L99">      File zipFile = new File(file.getParentFile(), getBaseFileName(file.getName()) + &quot;.zip&quot;);</span>
+<span class="fc" id="L100">      logger.info(&quot;Generate {}&quot;, zipFile.getCanonicalPath());</span>
 
-<span class="fc" id="L101">      String rootPath = ContentPackageUtil.getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
+<span class="fc" id="L102">      String rootPath = ContentPackageUtil.getMandatoryProp(options, PROPERTY_PACKAGE_ROOT_PATH);</span>
 
-<span class="fc" id="L103">      ContentPackageBuilder builder = ContentPackageUtil.getContentPackageBuilder(options, context.getUrlFileManager());</span>
+<span class="fc" id="L104">      ContentPackageBuilder builder = ContentPackageUtil.getContentPackageBuilder(options, context.getUrlFileManager());</span>
 
       // set package type depending on if config is present or not
-<span class="fc bfc" id="L106" title="All 2 branches covered.">      builder.packageType(hasAnyConfig ? &quot;container&quot; : &quot;application&quot;);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">      builder.packageType(hasAnyConfig ? &quot;container&quot; : &quot;application&quot;);</span>
 
-<span class="fc" id="L108">      try (ContentPackage contentPackage = builder.build(zipFile)) {</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (hasAnyConfig) {</span>
+<span class="fc" id="L109">      try (ContentPackage contentPackage = builder.build(zipFile)) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (hasAnyConfig) {</span>
           // generate OSGI config files
-<span class="fc" id="L111">          generateOsgiConfigurations(model, contentPackage, rootPath, context);</span>
+<span class="fc" id="L112">          generateOsgiConfigurations(model, contentPackage, rootPath, context);</span>
         }
         else {
           // create folder for root path if package is empty otherwise
           // (to make sure probably already existing config is overridden/cleaned)
-<span class="fc" id="L116">          contentPackage.addContent(rootPath, Map.of(&quot;jcr:primaryType&quot;, &quot;nt:folder&quot;));</span>
+<span class="fc" id="L117">          contentPackage.addContent(rootPath, Map.of(&quot;jcr:primaryType&quot;, &quot;nt:folder&quot;));</span>
         }
       }
 
       // delete provisioning file after transformation
-<span class="fc" id="L121">      Files.delete(file.toPath());</span>
+<span class="fc" id="L122">      Files.delete(file.toPath());</span>
 
       // set force to true by default for CONGA-generated packages (but allow override from role definition)
-<span class="fc" id="L124">      Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L125">      modelOptions.put(&quot;force&quot;, true);</span>
-<span class="fc" id="L126">      modelOptions.putAll(fileContext.getModelOptions());</span>
+<span class="fc" id="L125">      Map&lt;String, Object&gt; modelOptions = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L126">      modelOptions.put(&quot;force&quot;, true);</span>
+<span class="fc" id="L127">      modelOptions.putAll(fileContext.getModelOptions());</span>
 
-<span class="fc" id="L128">      return List.of(new FileContext().file(zipFile).modelOptions(modelOptions));</span>
+<span class="fc" id="L129">      return List.of(new FileContext().file(zipFile).modelOptions(modelOptions));</span>
     }
-<span class="nc" id="L130">    catch (IOException ex) {</span>
-<span class="nc" id="L131">      throw new GeneratorException(&quot;Unable to post-process sling provisioning OSGi configurations.&quot;, ex);</span>
+<span class="nc" id="L131">    catch (IOException ex) {</span>
+<span class="nc" id="L132">      throw new GeneratorException(&quot;Unable to post-process sling provisioning OSGi configurations.&quot;, ex);</span>
     }
   }
 
@@ -142,40 +143,40 @@ import io.wcm.tooling.commons.contentpackagebuilder.ContentPackageBuilder;
    */
   private boolean generateOsgiConfigurations(Model model, ContentPackage contentPackage,
       String rootPath, PostProcessorContext context) throws IOException {
-<span class="fc" id="L145">    List&lt;Void&gt; result = ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;Void&gt;() {</span>
+<span class="fc" id="L146">    List&lt;Void&gt; result = ProvisioningUtil.visitOsgiConfigurations(model, new ConfigConsumer&lt;Void&gt;() {</span>
       @Override
       @SuppressWarnings(&quot;java:S3457&quot;) // log placeholders
       public Void accept(String path, Dictionary&lt;String, Object&gt; properties) throws IOException {
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        String contentPath = rootPath + (StringUtils.contains(path, &quot;/&quot;) ? &quot;.&quot; : &quot;/&quot;) + path;</span>
-<span class="fc" id="L150">        context.getLogger().info(&quot;  Include &quot; + contentPath);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        String contentPath = rootPath + (Strings.CS.contains(path, &quot;/&quot;) ? &quot;.&quot; : &quot;/&quot;) + path;</span>
+<span class="fc" id="L151">        context.getLogger().info(&quot;  Include &quot; + contentPath);</span>
 
         // write configuration to temporary file
-<span class="fc" id="L153">        File tempFile = File.createTempFile(NAME, &quot;.cfg.json&quot;);</span>
-<span class="fc" id="L154">        try (OutputStream os = new FileOutputStream(tempFile)) {</span>
-<span class="fc" id="L155">          OsgiConfigUtil.write(os, properties);</span>
+<span class="fc" id="L154">        File tempFile = File.createTempFile(NAME, &quot;.cfg.json&quot;);</span>
+<span class="fc" id="L155">        try (OutputStream os = new FileOutputStream(tempFile)) {</span>
+<span class="fc" id="L156">          OsgiConfigUtil.write(os, properties);</span>
         }
         try {
           // write configuration to content package
-<span class="fc" id="L159">          try (InputStream is = new BufferedInputStream(new FileInputStream(tempFile))) {</span>
-<span class="fc" id="L160">            contentPackage.addFile(contentPath, is);</span>
+<span class="fc" id="L160">          try (InputStream is = new BufferedInputStream(new FileInputStream(tempFile))) {</span>
+<span class="fc" id="L161">            contentPackage.addFile(contentPath, is);</span>
           }
         }
         finally {
           // remove temporary file
-<span class="fc" id="L165">          Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L166">          Files.delete(tempFile.toPath());</span>
         }
-<span class="fc" id="L167">        return null;</span>
+<span class="fc" id="L168">        return null;</span>
       }
     });
-<span class="pc bpc" id="L170" title="1 of 2 branches missed.">    return !result.isEmpty();</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">    return !result.isEmpty();</span>
   }
 
   private String getBaseFileName(String fileName) {
-<span class="fc bfc" id="L174" title="All 2 branches covered.">    if (StringUtils.endsWith(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION)) {</span>
-<span class="fc" id="L175">      return StringUtils.substringBeforeLast(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">    if (Strings.CS.endsWith(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION)) {</span>
+<span class="fc" id="L176">      return StringUtils.substringBeforeLast(fileName, JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
     }
     else {
-<span class="fc" id="L178">      return FilenameUtils.getBaseName(fileName);</span>
+<span class="fc" id="L179">      return FilenameUtils.getBaseName(fileName);</span>
     }
   }
 

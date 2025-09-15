@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.sling.contentparser.api.ContentHandler;
 
 import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
@@ -32,44 +33,44 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElementImpl;
 /**
  * {@link ContentHandler} implementation that produces a tree of {@link ContentElement} items.
  */
-<span class="fc" id="L35">final class ContentElementHandler implements ContentHandler {</span>
+<span class="fc" id="L36">final class ContentElementHandler implements ContentHandler {</span>
 
   private ContentElement root;
 
   @SuppressWarnings(&quot;java:S5998&quot;) // analyzed paths should be safe
-<span class="fc" id="L40">  private static final Pattern PATH_PATTERN = Pattern.compile(&quot;^((/[^/]+)*)(/([^/]+))$&quot;);</span>
+<span class="fc" id="L41">  private static final Pattern PATH_PATTERN = Pattern.compile(&quot;^((/[^/]+)*)(/([^/]+))$&quot;);</span>
 
   @Override
   public void resource(String path, Map&lt;String, Object&gt; properties) {
-<span class="fc bfc" id="L44" title="All 2 branches covered.">    if (StringUtils.equals(path, &quot;/&quot;)) {</span>
-<span class="fc" id="L45">      root = new ContentElementImpl(null, properties);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">    if (Strings.CS.equals(path, &quot;/&quot;)) {</span>
+<span class="fc" id="L46">      root = new ContentElementImpl(null, properties);</span>
     }
     else {
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">      if (root == null) {</span>
-<span class="nc" id="L49">        throw new IllegalArgumentException(&quot;Root resource not set.&quot;);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">      if (root == null) {</span>
+<span class="nc" id="L50">        throw new IllegalArgumentException(&quot;Root resource not set.&quot;);</span>
       }
-<span class="fc" id="L51">      Matcher matcher = PATH_PATTERN.matcher(path);</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">      if (!matcher.matches()) {</span>
-<span class="nc" id="L53">        throw new IllegalArgumentException(&quot;Unexpected path:&quot; + path);</span>
+<span class="fc" id="L52">      Matcher matcher = PATH_PATTERN.matcher(path);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">      if (!matcher.matches()) {</span>
+<span class="nc" id="L54">        throw new IllegalArgumentException(&quot;Unexpected path:&quot; + path);</span>
       }
-<span class="fc" id="L55">      String relativeParentPath = StringUtils.stripStart(matcher.group(1), &quot;/&quot;);</span>
-<span class="fc" id="L56">      String name = matcher.group(4);</span>
+<span class="fc" id="L56">      String relativeParentPath = StringUtils.stripStart(matcher.group(1), &quot;/&quot;);</span>
+<span class="fc" id="L57">      String name = matcher.group(4);</span>
       ContentElement parent;
-<span class="fc bfc" id="L58" title="All 2 branches covered.">      if (StringUtils.isEmpty(relativeParentPath)) {</span>
-<span class="fc" id="L59">        parent = root;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">      if (StringUtils.isEmpty(relativeParentPath)) {</span>
+<span class="fc" id="L60">        parent = root;</span>
       }
       else {
-<span class="fc" id="L62">        parent = root.getChild(relativeParentPath);</span>
+<span class="fc" id="L63">        parent = root.getChild(relativeParentPath);</span>
       }
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">      if (parent == null) {</span>
-<span class="nc" id="L65">        throw new IllegalArgumentException(&quot;Parent '&quot; + relativeParentPath + &quot;' does not exist.&quot;);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">      if (parent == null) {</span>
+<span class="nc" id="L66">        throw new IllegalArgumentException(&quot;Parent '&quot; + relativeParentPath + &quot;' does not exist.&quot;);</span>
       }
-<span class="fc" id="L67">      parent.getChildren().put(name, new ContentElementImpl(name, properties));</span>
+<span class="fc" id="L68">      parent.getChildren().put(name, new ContentElementImpl(name, properties));</span>
     }
-<span class="fc" id="L69">  }</span>
+<span class="fc" id="L70">  }</span>
 
   public ContentElement getRoot() {
-<span class="fc" id="L72">    return root;</span>
+<span class="fc" id="L73">    return root;</span>
   }
 
 }
