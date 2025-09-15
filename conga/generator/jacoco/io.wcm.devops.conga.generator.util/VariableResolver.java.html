@@ -22,6 +22,7 @@ package io.wcm.devops.conga.generator.util;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.generator.spi.ValueProviderPlugin;
@@ -39,9 +40,9 @@ public final class VariableResolver {
   /**
    * @param context Value provider global context
    */
-<span class="fc" id="L42">  public VariableResolver(ValueProviderGlobalContext context) {</span>
-<span class="fc" id="L43">    this.valueProviderGlobalContext = context;</span>
-<span class="fc" id="L44">  }</span>
+<span class="fc" id="L43">  public VariableResolver(ValueProviderGlobalContext context) {</span>
+<span class="fc" id="L44">    this.valueProviderGlobalContext = context;</span>
+<span class="fc" id="L45">  }</span>
 
   /**
    * Resolves a variable.
@@ -56,51 +57,51 @@ public final class VariableResolver {
     Object result;
 
     // resolve value from value provider
-<span class="fc bfc" id="L59" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(valueProviderName)) {</span>
-<span class="fc" id="L60">      ValueProviderContext valueProviderContext = new ValueProviderContext()</span>
-<span class="fc" id="L61">          .valueProviderGlobalContext(valueProviderGlobalContext)</span>
-<span class="fc" id="L62">          .valueProviderName(valueProviderName);</span>
-<span class="fc" id="L63">      ValueProviderPlugin valueProvider = getValueProvider(valueProviderContext);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(valueProviderName)) {</span>
+<span class="fc" id="L61">      ValueProviderContext valueProviderContext = new ValueProviderContext()</span>
+<span class="fc" id="L62">          .valueProviderGlobalContext(valueProviderGlobalContext)</span>
+<span class="fc" id="L63">          .valueProviderName(valueProviderName);</span>
+<span class="fc" id="L64">      ValueProviderPlugin valueProvider = getValueProvider(valueProviderContext);</span>
 
-<span class="fc" id="L65">      result = valueProvider.resolve(variable, valueProviderContext);</span>
+<span class="fc" id="L66">      result = valueProvider.resolve(variable, valueProviderContext);</span>
 
       // if value provider was not able to resolve variable and variable contains dot try to resolve map
-<span class="pc bpc" id="L68" title="1 of 4 branches missed.">      if (result == null &amp;&amp; StringUtils.contains(variable, &quot;.&quot;)) {</span>
-<span class="fc" id="L69">        String variableWithoutNesting = StringUtils.substringBefore(variable, &quot;.&quot;);</span>
-<span class="fc" id="L70">        String nestingVariables = StringUtils.substringAfter(variable, &quot;.&quot;);</span>
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">      if (result == null &amp;&amp; Strings.CS.contains(variable, &quot;.&quot;)) {</span>
+<span class="fc" id="L70">        String variableWithoutNesting = StringUtils.substringBefore(variable, &quot;.&quot;);</span>
+<span class="fc" id="L71">        String nestingVariables = StringUtils.substringAfter(variable, &quot;.&quot;);</span>
 
-<span class="fc" id="L72">        result = valueProvider.resolve(variableWithoutNesting, valueProviderContext);</span>
+<span class="fc" id="L73">        result = valueProvider.resolve(variableWithoutNesting, valueProviderContext);</span>
 
-<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (StringUtils.isNotBlank(nestingVariables) &amp;&amp; result instanceof Map) {</span>
-<span class="fc" id="L75">          result = MapExpander.getDeep((Map)result, nestingVariables);</span>
+<span class="pc bpc" id="L75" title="1 of 4 branches missed.">        if (StringUtils.isNotBlank(nestingVariables) &amp;&amp; result instanceof Map) {</span>
+<span class="fc" id="L76">          result = MapExpander.getDeep((Map)result, nestingVariables);</span>
         }
       }
 
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L80">    }</span>
 
     // resolve value from variable map
     else {
-<span class="fc" id="L83">      result = MapExpander.getDeep(variables, variable);</span>
+<span class="fc" id="L84">      result = MapExpander.getDeep(variables, variable);</span>
     }
 
-<span class="fc bfc" id="L86" title="All 4 branches covered.">    if (result == null &amp;&amp; defaultValueString != null) {</span>
+<span class="fc bfc" id="L87" title="All 4 branches covered.">    if (result == null &amp;&amp; defaultValueString != null) {</span>
       // fallback to default value
-<span class="fc" id="L88">      result = ValueUtil.stringToValue(defaultValueString);</span>
+<span class="fc" id="L89">      result = ValueUtil.stringToValue(defaultValueString);</span>
     }
 
-<span class="fc" id="L91">    return result;</span>
+<span class="fc" id="L92">    return result;</span>
   }
 
   private ValueProviderPlugin getValueProvider(ValueProviderContext valueProviderContext) {
-<span class="fc" id="L95">    String valueProviderPluginName = (String)valueProviderContext.getValueProviderConfig(ValueProviderGlobalContext.PARAM_PLUGIN_NAME);</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">    if (StringUtils.isBlank(valueProviderPluginName)) {</span>
-<span class="fc" id="L97">      valueProviderPluginName = valueProviderContext.getValueProviderName();</span>
+<span class="fc" id="L96">    String valueProviderPluginName = (String)valueProviderContext.getValueProviderConfig(ValueProviderGlobalContext.PARAM_PLUGIN_NAME);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">    if (StringUtils.isBlank(valueProviderPluginName)) {</span>
+<span class="fc" id="L98">      valueProviderPluginName = valueProviderContext.getValueProviderName();</span>
     }
     try {
-<span class="fc" id="L100">      return valueProviderGlobalContext.getPluginManager().get(valueProviderPluginName, ValueProviderPlugin.class);</span>
+<span class="fc" id="L101">      return valueProviderGlobalContext.getPluginManager().get(valueProviderPluginName, ValueProviderPlugin.class);</span>
     }
-<span class="nc" id="L102">    catch (GeneratorException ex) {</span>
-<span class="nc" id="L103">      throw new IllegalArgumentException(&quot;Unable to get value provider: &quot; + valueProviderContext.getValueProviderName(), ex);</span>
+<span class="nc" id="L103">    catch (GeneratorException ex) {</span>
+<span class="nc" id="L104">      throw new IllegalArgumentException(&quot;Unable to get value provider: &quot; + valueProviderContext.getValueProviderName(), ex);</span>
     }
   }
 

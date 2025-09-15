@@ -21,7 +21,7 @@ package io.wcm.devops.conga.generator.plugins.postprocessor;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import io.wcm.devops.conga.generator.plugins.fileheader.NoneFileHeader;
 import io.wcm.devops.conga.generator.spi.FileHeaderPlugin;
@@ -80,7 +80,7 @@ import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
 <span class="fc" id="L80">    Optional&lt;FileHeaderPlugin&gt; fileHeaderPlugin = postProcessorContext.getPluginManager()</span>
 <span class="fc" id="L81">        .getAll(FileHeaderPlugin.class).stream()</span>
 <span class="fc" id="L82">        .filter(plugin -&gt; plugin.accepts(file, dummyFileHeader))</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneFileHeader.NAME))</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        .filter(plugin -&gt; !Strings.CS.equals(plugin.getName(), NoneFileHeader.NAME))</span>
 <span class="fc" id="L84">        .findFirst();</span>
 <span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (fileHeaderPlugin.isPresent()) {</span>
 <span class="fc" id="L86">      return fileHeaderPlugin.get();</span>

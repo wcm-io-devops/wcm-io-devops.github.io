@@ -29,7 +29,7 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.Optional;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.Strings;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.plugins.fileheader.NoneFileHeader;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> io.wcm.devops.conga.generator.spi.FileHeaderPlugin;
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      Optional&lt;FileHeaderPlugin&gt; fileHeaderPlugin = postProcessorContext.getPluginManager()
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          .getAll(FileHeaderPlugin.<strong class="jxr_keyword">class</strong>).stream()
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          .filter(plugin -&gt; plugin.accepts(file, dummyFileHeader))
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          .filter(plugin -&gt; !StringUtils.equals(plugin.getName(), NoneFileHeader.NAME))
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          .filter(plugin -&gt; !Strings.CS.equals(plugin.getName(), NoneFileHeader.NAME))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          .findFirst();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">if</strong> (fileHeaderPlugin.isPresent()) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>        <strong class="jxr_keyword">return</strong> fileHeaderPlugin.get();

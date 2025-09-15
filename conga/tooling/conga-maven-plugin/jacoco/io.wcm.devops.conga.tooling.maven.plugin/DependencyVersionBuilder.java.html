@@ -31,6 +31,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.maven.model.Dependency;
 import org.eclipse.aether.artifact.Artifact;
 
@@ -48,49 +49,49 @@ class DependencyVersionBuilder implements Function&lt;Environment, Collection&lt
   private final MavenContext mavenContext;
   private final PluginContextOptions pluginContextOptions;
 
-<span class="fc" id="L51">  DependencyVersionBuilder(PluginContextOptions pluginContextOptions) {</span>
-<span class="fc" id="L52">    this.mavenContext = (MavenContext)pluginContextOptions.getContainerContext();</span>
-<span class="fc" id="L53">    this.pluginContextOptions = pluginContextOptions;</span>
-<span class="fc" id="L54">  }</span>
+<span class="fc" id="L52">  DependencyVersionBuilder(PluginContextOptions pluginContextOptions) {</span>
+<span class="fc" id="L53">    this.mavenContext = (MavenContext)pluginContextOptions.getContainerContext();</span>
+<span class="fc" id="L54">    this.pluginContextOptions = pluginContextOptions;</span>
+<span class="fc" id="L55">  }</span>
 
   @Override
   public Collection&lt;String&gt; apply(Environment environment) {
-<span class="fc" id="L58">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(environment, pluginContextOptions);</span>
+<span class="fc" id="L59">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(environment, pluginContextOptions);</span>
 
     try {
-<span class="fc" id="L61">      List&lt;Artifact&gt; dependencyArtifacts = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L62">      dependencyArtifacts.addAll(getCompileDependencyArtifacts(mavenArtifactHelper));</span>
-<span class="fc" id="L63">      dependencyArtifacts.addAll(getEnvironmentDependencyArtifacts(environment, mavenArtifactHelper));</span>
+<span class="fc" id="L62">      List&lt;Artifact&gt; dependencyArtifacts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L63">      dependencyArtifacts.addAll(getCompileDependencyArtifacts(mavenArtifactHelper));</span>
+<span class="fc" id="L64">      dependencyArtifacts.addAll(getEnvironmentDependencyArtifacts(environment, mavenArtifactHelper));</span>
 
-<span class="fc" id="L65">      return new TreeSet&lt;&gt;(</span>
-<span class="fc" id="L66">          dependencyArtifacts.stream()</span>
+<span class="fc" id="L66">      return new TreeSet&lt;&gt;(</span>
+<span class="fc" id="L67">          dependencyArtifacts.stream()</span>
               // include only dependencies with a CONGA-INF/ directory
-<span class="fc" id="L68">              .filter(this::hasCongaDefinitions)</span>
+<span class="fc" id="L69">              .filter(this::hasCongaDefinitions)</span>
               // transform to string
-<span class="fc" id="L70">              .map(this::toArtifactCoordsPaxUrlStyle)</span>
-<span class="fc" id="L71">              .collect(Collectors.toSet()));</span>
+<span class="fc" id="L71">              .map(this::toArtifactCoordsPaxUrlStyle)</span>
+<span class="fc" id="L72">              .collect(Collectors.toSet()));</span>
     }
-<span class="nc" id="L73">    catch (IOException ex) {</span>
-<span class="nc" id="L74">      throw new GeneratorException(ex.getMessage(), ex);</span>
+<span class="nc" id="L74">    catch (IOException ex) {</span>
+<span class="nc" id="L75">      throw new GeneratorException(ex.getMessage(), ex);</span>
     }
   }
 
   @SuppressWarnings(&quot;deprecation&quot;)
   private List&lt;Artifact&gt; getCompileDependencyArtifacts(MavenArtifactHelper mavenArtifactHelper) throws IOException {
-<span class="fc" id="L80">    List&lt;Artifact&gt; artifacts = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">    for (Dependency dependency : mavenContext.getProject().getCompileDependencies()) {</span>
-<span class="fc" id="L82">      artifacts.add(mavenArtifactHelper.resolveArtifact(</span>
-<span class="fc" id="L83">          dependency.getGroupId(),</span>
-<span class="fc" id="L84">          dependency.getArtifactId(),</span>
-<span class="fc" id="L85">          dependency.getType(),</span>
-<span class="fc" id="L86">          dependency.getClassifier(),</span>
-<span class="fc" id="L87">          dependency.getVersion()));</span>
-<span class="fc" id="L88">    }</span>
-<span class="fc" id="L89">    return artifacts;</span>
+<span class="fc" id="L81">    List&lt;Artifact&gt; artifacts = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">    for (Dependency dependency : mavenContext.getProject().getCompileDependencies()) {</span>
+<span class="fc" id="L83">      artifacts.add(mavenArtifactHelper.resolveArtifact(</span>
+<span class="fc" id="L84">          dependency.getGroupId(),</span>
+<span class="fc" id="L85">          dependency.getArtifactId(),</span>
+<span class="fc" id="L86">          dependency.getType(),</span>
+<span class="fc" id="L87">          dependency.getClassifier(),</span>
+<span class="fc" id="L88">          dependency.getVersion()));</span>
+<span class="fc" id="L89">    }</span>
+<span class="fc" id="L90">    return artifacts;</span>
   }
 
   private List&lt;Artifact&gt; getEnvironmentDependencyArtifacts(Environment environment, MavenArtifactHelper mavenArtifactHelper) throws IOException {
-<span class="fc" id="L93">    return mavenArtifactHelper.dependencyUrlsToArtifactsWithTransitiveDependencies(environment.getDependencies());</span>
+<span class="fc" id="L94">    return mavenArtifactHelper.dependencyUrlsToArtifactsWithTransitiveDependencies(environment.getDependencies());</span>
   }
 
   /**
@@ -99,26 +100,26 @@ class DependencyVersionBuilder implements Function&lt;Environment, Collection&lt
    * @return true if configuration definitions found
    */
   private boolean hasCongaDefinitions(Artifact artifact) {
-<span class="fc bfc" id="L102" title="All 2 branches covered.">    if (!StringUtils.equalsAny(artifact.getExtension(), &quot;jar&quot;)) {</span>
-<span class="fc" id="L103">      return false;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">    if (!Strings.CS.equalsAny(artifact.getExtension(), &quot;jar&quot;)) {</span>
+<span class="fc" id="L104">      return false;</span>
     }
-<span class="fc" id="L105">    String fileInfo = artifact.toString();</span>
+<span class="fc" id="L106">    String fileInfo = artifact.toString();</span>
     try {
-<span class="fc" id="L107">      fileInfo = FileUtil.getCanonicalPath(artifact.getFile());</span>
-<span class="fc" id="L108">      try (ZipFile zipFile = new ZipFile(artifact.getFile())) {</span>
-<span class="fc" id="L109">        Enumeration&lt;? extends ZipEntry&gt; entries = zipFile.entries();</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        while (entries.hasMoreElements()) {</span>
-<span class="fc" id="L111">          ZipEntry entry = entries.nextElement();</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">          if (StringUtils.startsWith(entry.getName(), GeneratorOptions.CLASSPATH_PREFIX)) {</span>
-<span class="fc" id="L113">            return true;</span>
+<span class="fc" id="L108">      fileInfo = FileUtil.getCanonicalPath(artifact.getFile());</span>
+<span class="fc" id="L109">      try (ZipFile zipFile = new ZipFile(artifact.getFile())) {</span>
+<span class="fc" id="L110">        Enumeration&lt;? extends ZipEntry&gt; entries = zipFile.entries();</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        while (entries.hasMoreElements()) {</span>
+<span class="fc" id="L112">          ZipEntry entry = entries.nextElement();</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">          if (Strings.CS.startsWith(entry.getName(), GeneratorOptions.CLASSPATH_PREFIX)) {</span>
+<span class="fc" id="L114">            return true;</span>
           }
-<span class="fc" id="L115">        }</span>
-<span class="fc" id="L116">      }</span>
+<span class="fc" id="L116">        }</span>
+<span class="fc" id="L117">      }</span>
     }
-<span class="nc" id="L118">    catch (IOException ex) {</span>
-<span class="nc" id="L119">      throw new GeneratorException(&quot;Unable to read from JAR file: &quot; + fileInfo, ex);</span>
-<span class="fc" id="L120">    }</span>
-<span class="fc" id="L121">    return false;</span>
+<span class="nc" id="L119">    catch (IOException ex) {</span>
+<span class="nc" id="L120">      throw new GeneratorException(&quot;Unable to read from JAR file: &quot; + fileInfo, ex);</span>
+<span class="fc" id="L121">    }</span>
+<span class="fc" id="L122">    return false;</span>
   }
 
   /**
@@ -127,9 +128,9 @@ class DependencyVersionBuilder implements Function&lt;Environment, Collection&lt
    * @return Artifact coords
    */
   private String toArtifactCoordsPaxUrlStyle(Artifact artifact) {
-<span class="fc" id="L130">    return artifact.getGroupId() + &quot;/&quot; + artifact.getArtifactId()</span>
-<span class="fc" id="L131">        + &quot;/&quot; + VersionInfoUtil.cleanupSnapshotVersion(artifact.getVersion())</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        + (StringUtils.isNotEmpty(artifact.getClassifier()) ? &quot;/&quot; + artifact.getExtension() + &quot;/&quot; + artifact.getClassifier() : &quot;&quot;);</span>
+<span class="fc" id="L131">    return artifact.getGroupId() + &quot;/&quot; + artifact.getArtifactId()</span>
+<span class="fc" id="L132">        + &quot;/&quot; + VersionInfoUtil.cleanupSnapshotVersion(artifact.getVersion())</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        + (StringUtils.isNotEmpty(artifact.getClassifier()) ? &quot;/&quot; + artifact.getExtension() + &quot;/&quot; + artifact.getClassifier() : &quot;&quot;);</span>
   }
 
 }

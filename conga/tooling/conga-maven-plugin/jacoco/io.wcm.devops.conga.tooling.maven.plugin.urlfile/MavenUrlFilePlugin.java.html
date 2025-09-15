@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.eclipse.aether.artifact.Artifact;
 
 import io.wcm.devops.conga.generator.spi.UrlFilePlugin;
@@ -38,7 +39,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper;
 /**
  * Download files from Maven artifact repository.
  */
-<span class="fc" id="L41">public class MavenUrlFilePlugin implements UrlFilePlugin {</span>
+<span class="fc" id="L42">public class MavenUrlFilePlugin implements UrlFilePlugin {</span>
 
   /**
    * Plugin name
@@ -52,59 +53,59 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper;
 
   @Override
   public String getName() {
-<span class="fc" id="L55">    return NAME;</span>
+<span class="fc" id="L56">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(String url, UrlFilePluginContext context) {
-<span class="fc" id="L60">    return StringUtils.startsWith(url, PREFIX);</span>
+<span class="fc" id="L61">    return Strings.CS.startsWith(url, PREFIX);</span>
   }
 
   @Override
   public String getFileName(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L65">    File file = getLocalFile(url, context);</span>
-<span class="fc" id="L66">    return file.getName();</span>
+<span class="fc" id="L66">    File file = getLocalFile(url, context);</span>
+<span class="fc" id="L67">    return file.getName();</span>
   }
 
   @Override
   public InputStream getFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L71">    File file = getLocalFile(url, context);</span>
-<span class="nc" id="L72">    return new BufferedInputStream(new FileInputStream(file));</span>
+<span class="nc" id="L72">    File file = getLocalFile(url, context);</span>
+<span class="nc" id="L73">    return new BufferedInputStream(new FileInputStream(file));</span>
   }
 
   @Override
   public URL getFileUrl(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L77">    File file = getLocalFile(url, context);</span>
-<span class="nc" id="L78">    return file.toURI().toURL();</span>
+<span class="nc" id="L78">    File file = getLocalFile(url, context);</span>
+<span class="nc" id="L79">    return file.toURI().toURL();</span>
   }
 
   @Override
   public List&lt;URL&gt; getFileUrlsWithDependencies(String url, UrlFilePluginContext context) throws IOException {
-<span class="nc" id="L83">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(context.getEnvironment(), context.getPluginContextOptions());</span>
-<span class="nc" id="L84">    List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L84">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(context.getEnvironment(), context.getPluginContextOptions());</span>
+<span class="nc" id="L85">    List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
 
     // add artifact itself
-<span class="nc" id="L87">    Artifact artifact = mavenArtifactHelper.resolveArtifact(getMavenCoords(url));</span>
-<span class="nc" id="L88">    urls.add(artifact.getFile().toURI().toURL());</span>
+<span class="nc" id="L88">    Artifact artifact = mavenArtifactHelper.resolveArtifact(getMavenCoords(url));</span>
+<span class="nc" id="L89">    urls.add(artifact.getFile().toURI().toURL());</span>
 
     // get transitive dependencies of artifact
-<span class="nc bnc" id="L91" title="All 2 branches missed.">    for (Artifact dependencyArtifact : mavenArtifactHelper.getTransitiveDependencies(artifact)) {</span>
-<span class="nc" id="L92">      urls.add(dependencyArtifact.getFile().toURI().toURL());</span>
-<span class="nc" id="L93">    }</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">    for (Artifact dependencyArtifact : mavenArtifactHelper.getTransitiveDependencies(artifact)) {</span>
+<span class="nc" id="L93">      urls.add(dependencyArtifact.getFile().toURI().toURL());</span>
+<span class="nc" id="L94">    }</span>
 
-<span class="nc" id="L95">    return urls;</span>
+<span class="nc" id="L96">    return urls;</span>
   }
 
   @Override
   public boolean isLocalFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L100">    File file = getLocalFile(url, context);</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    return file != null;</span>
+<span class="fc" id="L101">    File file = getLocalFile(url, context);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">    return file != null;</span>
   }
 
   @Override
   public File getLocalFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L106">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(context.getEnvironment(), context.getPluginContextOptions());</span>
-<span class="fc" id="L107">    return mavenArtifactHelper.resolveArtifact(getMavenCoords(url)).getFile();</span>
+<span class="fc" id="L107">    MavenArtifactHelper mavenArtifactHelper = new MavenArtifactHelper(context.getEnvironment(), context.getPluginContextOptions());</span>
+<span class="fc" id="L108">    return mavenArtifactHelper.resolveArtifact(getMavenCoords(url)).getFile();</span>
   }
 
   /**
@@ -113,7 +114,7 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.MavenArtifactHelper;
    * @return Maven coordinates
    */
   public static String getMavenCoords(String url) {
-<span class="fc" id="L116">    return StringUtils.substringAfter(url, PREFIX);</span>
+<span class="fc" id="L117">    return StringUtils.substringAfter(url, PREFIX);</span>
   }
 
 }

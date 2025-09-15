@@ -32,6 +32,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -46,7 +47,7 @@ import io.wcm.devops.conga.generator.util.FileUtil;
  * Exports model information for each node in YAML format.
  * This is useful e.g. for integration with Ansible.
  */
-<span class="fc" id="L49">public class YamlNodeModelExport implements NodeModelExportPlugin {</span>
+<span class="fc" id="L50">public class YamlNodeModelExport implements NodeModelExportPlugin {</span>
 
   /**
    * Plugin name
@@ -57,113 +58,113 @@ import io.wcm.devops.conga.generator.util.FileUtil;
 
   @Override
   public String getName() {
-<span class="fc" id="L60">    return NAME;</span>
+<span class="fc" id="L61">    return NAME;</span>
   }
 
   @Override
   public void export(NodeModelExportContext context) {
 
     // generate YAML data
-<span class="fc" id="L67">    List&lt;Map&lt;String, Object&gt;&gt; roles = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">    for (ExportNodeRoleData roleData : context.getRoleData()) {</span>
-<span class="fc" id="L69">      addRole(roles, roleData, context);</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L68">    List&lt;Map&lt;String, Object&gt;&gt; roles = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">    for (ExportNodeRoleData roleData : context.getRoleData()) {</span>
+<span class="fc" id="L70">      addRole(roles, roleData, context);</span>
+<span class="fc" id="L71">    }</span>
 
-<span class="fc" id="L72">    Map&lt;String, Object&gt; modelMap = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L73">    modelMap.put(&quot;roles&quot;, roles);</span>
+<span class="fc" id="L73">    Map&lt;String, Object&gt; modelMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L74">    modelMap.put(&quot;roles&quot;, roles);</span>
 
-<span class="fc" id="L75">    Map&lt;String, String&gt; versionInfo = context.getContainerVersionInfo();</span>
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">    if (versionInfo != null) {</span>
-<span class="nc" id="L77">      modelMap.put(&quot;versionInfo&quot;, Collections.unmodifiableSortedMap(new TreeMap&lt;&gt;(versionInfo)));</span>
+<span class="fc" id="L76">    Map&lt;String, String&gt; versionInfo = context.getContainerVersionInfo();</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">    if (versionInfo != null) {</span>
+<span class="nc" id="L78">      modelMap.put(&quot;versionInfo&quot;, Collections.unmodifiableSortedMap(new TreeMap&lt;&gt;(versionInfo)));</span>
     }
 
     // save YAML file
-<span class="fc" id="L81">    save(modelMap, context);</span>
-<span class="fc" id="L82">  }</span>
+<span class="fc" id="L82">    save(modelMap, context);</span>
+<span class="fc" id="L83">  }</span>
 
   private void addRole(List&lt;Map&lt;String, Object&gt;&gt; modelList, ExportNodeRoleData roleData, NodeModelExportContext context) {
-<span class="fc" id="L85">    String nodeDirPath = FileUtil.getCanonicalPath(context.getNodeDir());</span>
+<span class="fc" id="L86">    String nodeDirPath = FileUtil.getCanonicalPath(context.getNodeDir());</span>
 
-<span class="fc" id="L87">    Map&lt;String, Object&gt; roleMap = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L88">    roleMap.put(&quot;role&quot;, roleData.getRole());</span>
+<span class="fc" id="L88">    Map&lt;String, Object&gt; roleMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L89">    roleMap.put(&quot;role&quot;, roleData.getRole());</span>
 
-<span class="fc" id="L90">    List&lt;String&gt; variants = roleData.getRoleVariants();</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (variants.size() == 1) {</span>
-<span class="fc" id="L92">      roleMap.put(&quot;variant&quot;, variants.get(0));</span>
+<span class="fc" id="L91">    List&lt;String&gt; variants = roleData.getRoleVariants();</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    if (variants.size() == 1) {</span>
+<span class="fc" id="L93">      roleMap.put(&quot;variant&quot;, variants.get(0));</span>
     }
-<span class="fc bfc" id="L94" title="All 2 branches covered.">    if (!variants.isEmpty()) {</span>
-<span class="fc" id="L95">      roleMap.put(&quot;variants&quot;, variants);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">    if (!variants.isEmpty()) {</span>
+<span class="fc" id="L96">      roleMap.put(&quot;variants&quot;, variants);</span>
     }
 
-<span class="fc" id="L98">    roleMap.put(&quot;files&quot;, roleData.getFiles().stream()</span>
-<span class="fc" id="L99">        .filter(item -&gt; item.getFileContext().getFile().exists())</span>
-<span class="fc" id="L100">        .map(item -&gt; {</span>
-<span class="fc" id="L101">          Map&lt;String, Object&gt; itemMap = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L102">          itemMap.put(&quot;path&quot;, cleanupFileName(item.getFileContext().getCanonicalPath(), nodeDirPath));</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">          if (!item.getPostProcessors().isEmpty()) {</span>
-<span class="nc" id="L104">            itemMap.put(&quot;postProcessors&quot;, List.copyOf(item.getPostProcessors()));</span>
+<span class="fc" id="L99">    roleMap.put(&quot;files&quot;, roleData.getFiles().stream()</span>
+<span class="fc" id="L100">        .filter(item -&gt; item.getFileContext().getFile().exists())</span>
+<span class="fc" id="L101">        .map(item -&gt; {</span>
+<span class="fc" id="L102">          Map&lt;String, Object&gt; itemMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L103">          itemMap.put(&quot;path&quot;, cleanupFileName(item.getFileContext().getCanonicalPath(), nodeDirPath));</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">          if (!item.getPostProcessors().isEmpty()) {</span>
+<span class="nc" id="L105">            itemMap.put(&quot;postProcessors&quot;, List.copyOf(item.getPostProcessors()));</span>
           }
-<span class="fc" id="L106">          Map&lt;String, Object&gt; modelOptions = item.getFileContext().getModelOptions();</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">          if (modelOptions != null) {</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; entry : modelOptions.entrySet()) {</span>
-<span class="pc bpc" id="L109" title="1 of 2 branches missed.">              if (!itemMap.containsKey(entry.getKey())) {</span>
-<span class="fc" id="L110">                itemMap.put(entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L107">          Map&lt;String, Object&gt; modelOptions = item.getFileContext().getModelOptions();</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">          if (modelOptions != null) {</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; entry : modelOptions.entrySet()) {</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">              if (!itemMap.containsKey(entry.getKey())) {</span>
+<span class="fc" id="L111">                itemMap.put(entry.getKey(), entry.getValue());</span>
               }
-<span class="fc" id="L112">            }</span>
+<span class="fc" id="L113">            }</span>
           }
-<span class="fc" id="L114">          return itemMap;</span>
+<span class="fc" id="L115">          return itemMap;</span>
         })
-<span class="fc" id="L116">        .collect(Collectors.toList()));</span>
+<span class="fc" id="L117">        .collect(Collectors.toList()));</span>
 
-<span class="fc" id="L118">    roleMap.put(&quot;config&quot;, context.getModelExportConfigProcessor().apply(roleData.getConfig()));</span>
+<span class="fc" id="L119">    roleMap.put(&quot;config&quot;, context.getModelExportConfigProcessor().apply(roleData.getConfig()));</span>
 
-<span class="fc" id="L120">    addTenants(roleMap, roleData, context);</span>
+<span class="fc" id="L121">    addTenants(roleMap, roleData, context);</span>
 
-<span class="fc" id="L122">    modelList.add(roleMap);</span>
-<span class="fc" id="L123">  }</span>
+<span class="fc" id="L123">    modelList.add(roleMap);</span>
+<span class="fc" id="L124">  }</span>
 
   private void addTenants(Map&lt;String, Object&gt; roleMap, ExportNodeRoleData roleData, NodeModelExportContext context) {
-<span class="fc" id="L126">    List&lt;Map&lt;String, Object&gt;&gt; tenants = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L127">    List&lt;Map&lt;String, Object&gt;&gt; tenants = new ArrayList&lt;&gt;();</span>
 
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">    if (roleData.getTenantData() != null) {</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">      for (ExportNodeRoleTenantData tenantData : roleData.getTenantData()) {</span>
-<span class="fc" id="L130">        addTenant(tenants, tenantData, context);</span>
-<span class="fc" id="L131">      }</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">    if (roleData.getTenantData() != null) {</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">      for (ExportNodeRoleTenantData tenantData : roleData.getTenantData()) {</span>
+<span class="fc" id="L131">        addTenant(tenants, tenantData, context);</span>
+<span class="fc" id="L132">      }</span>
     }
 
-<span class="pc bpc" id="L134" title="1 of 2 branches missed.">    if (!tenants.isEmpty()) {</span>
-<span class="fc" id="L135">      roleMap.put(&quot;tenants&quot;, tenants);</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">    if (!tenants.isEmpty()) {</span>
+<span class="fc" id="L136">      roleMap.put(&quot;tenants&quot;, tenants);</span>
     }
-<span class="fc" id="L137">  }</span>
+<span class="fc" id="L138">  }</span>
 
   private void addTenant(List&lt;Map&lt;String, Object&gt;&gt; tenants, ExportNodeRoleTenantData tenantData, NodeModelExportContext context) {
-<span class="fc" id="L140">    Map&lt;String, Object&gt; tenantMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L141">    Map&lt;String, Object&gt; tenantMap = new LinkedHashMap&lt;&gt;();</span>
 
-<span class="fc" id="L142">    tenantMap.put(&quot;tenant&quot;, context.getVariableStringResolver().resolve(tenantData.getTenant(), tenantData.getConfig()));</span>
-<span class="fc bfc" id="L143" title="All 2 branches covered.">    if (!tenantData.getRoles().isEmpty()) {</span>
+<span class="fc" id="L143">    tenantMap.put(&quot;tenant&quot;, context.getVariableStringResolver().resolve(tenantData.getTenant(), tenantData.getConfig()));</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    if (!tenantData.getRoles().isEmpty()) {</span>
       // copy role list for each tenant to avoid alias in YAML export
-<span class="fc" id="L145">      tenantMap.put(&quot;roles&quot;, new ArrayList&lt;&gt;(tenantData.getRoles()));</span>
+<span class="fc" id="L146">      tenantMap.put(&quot;roles&quot;, new ArrayList&lt;&gt;(tenantData.getRoles()));</span>
     }
-<span class="fc" id="L147">    tenantMap.put(&quot;config&quot;, context.getModelExportConfigProcessor().apply(tenantData.getConfig()));</span>
+<span class="fc" id="L148">    tenantMap.put(&quot;config&quot;, context.getModelExportConfigProcessor().apply(tenantData.getConfig()));</span>
 
-<span class="fc" id="L149">    tenants.add(tenantMap);</span>
-<span class="fc" id="L150">  }</span>
+<span class="fc" id="L150">    tenants.add(tenantMap);</span>
+<span class="fc" id="L151">  }</span>
 
   private void save(Map&lt;String, Object&gt; modelMap, NodeModelExportContext context) {
-<span class="fc" id="L153">    File file = new File(context.getNodeDir(), MODEL_FILE);</span>
-<span class="fc" id="L154">    try (FileOutputStream os = new FileOutputStream(file);</span>
-<span class="fc" id="L155">        OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L156">      Yaml yaml = new Yaml(context.getYamlRepresenter(), new DumperOptions());</span>
-<span class="fc" id="L157">      yaml.dump(modelMap, writer);</span>
+<span class="fc" id="L154">    File file = new File(context.getNodeDir(), MODEL_FILE);</span>
+<span class="fc" id="L155">    try (FileOutputStream os = new FileOutputStream(file);</span>
+<span class="fc" id="L156">        OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L157">      Yaml yaml = new Yaml(context.getYamlRepresenter(), new DumperOptions());</span>
+<span class="fc" id="L158">      yaml.dump(modelMap, writer);</span>
     }
-<span class="nc" id="L159">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L160">      throw new GeneratorException(&quot;Unable to write model file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
-<span class="fc" id="L161">    }</span>
-<span class="fc" id="L162">  }</span>
+<span class="nc" id="L160">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L161">      throw new GeneratorException(&quot;Unable to write model file: &quot; + FileUtil.getCanonicalPath(file), ex);</span>
+<span class="fc" id="L162">    }</span>
+<span class="fc" id="L163">  }</span>
 
   private String cleanupFileName(String fileName, String basePath) {
-<span class="fc" id="L165">    String relativePath = StringUtils.substring(fileName, basePath.length() + 1);</span>
-<span class="fc" id="L166">    return StringUtils.replace(relativePath, File.separator, &quot;/&quot;);</span>
+<span class="fc" id="L166">    String relativePath = StringUtils.substring(fileName, basePath.length() + 1);</span>
+<span class="fc" id="L167">    return Strings.CS.replace(relativePath, File.separator, &quot;/&quot;);</span>
   }
 
 }

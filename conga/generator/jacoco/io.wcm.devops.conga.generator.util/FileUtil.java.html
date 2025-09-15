@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.spi.context.FileContext;
@@ -47,10 +48,10 @@ public final class FileUtil {
    */
   public static String getCanonicalPath(File file) {
     try {
-<span class="fc" id="L50">      return file.getCanonicalPath();</span>
+<span class="fc" id="L51">      return file.getCanonicalPath();</span>
     }
-<span class="nc" id="L52">    catch (IOException ex) {</span>
-<span class="nc" id="L53">      return file.getAbsolutePath();</span>
+<span class="nc" id="L53">    catch (IOException ex) {</span>
+<span class="nc" id="L54">      return file.getAbsolutePath();</span>
     }
   }
 
@@ -62,7 +63,7 @@ public final class FileUtil {
    */
   @Deprecated(forRemoval = true)
   public static String getCanonicalPath(FileContext fileContext) {
-<span class="nc" id="L65">    return fileContext.getCanonicalPath();</span>
+<span class="nc" id="L66">    return fileContext.getCanonicalPath();</span>
   }
 
   /**
@@ -71,10 +72,10 @@ public final class FileUtil {
    * @return File
    */
   public static File ensureFileExists(File file) {
-<span class="nc bnc" id="L74" title="All 4 branches missed.">    if (!file.exists() || !file.isFile()) {</span>
-<span class="nc" id="L75">      throw new IllegalArgumentException(&quot;File not found: &quot; + getCanonicalPath(file));</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">    if (!file.exists() || !file.isFile()) {</span>
+<span class="nc" id="L76">      throw new IllegalArgumentException(&quot;File not found: &quot; + getCanonicalPath(file));</span>
     }
-<span class="nc" id="L77">    return file;</span>
+<span class="nc" id="L78">    return file;</span>
   }
 
   /**
@@ -84,13 +85,13 @@ public final class FileUtil {
    */
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   public static File ensureDirExistsAutocreate(File dir) {
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">    if (!dir.exists()) {</span>
-<span class="fc" id="L88">      dir.mkdirs();</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if (!dir.exists()) {</span>
+<span class="fc" id="L89">      dir.mkdirs();</span>
     }
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (!dir.isDirectory()) {</span>
-<span class="nc" id="L91">      throw new IllegalArgumentException(&quot;Path is not a directory: &quot; + getCanonicalPath(dir));</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (!dir.isDirectory()) {</span>
+<span class="nc" id="L92">      throw new IllegalArgumentException(&quot;Path is not a directory: &quot; + getCanonicalPath(dir));</span>
     }
-<span class="fc" id="L93">    return dir;</span>
+<span class="fc" id="L94">    return dir;</span>
   }
 
   /**
@@ -100,7 +101,7 @@ public final class FileUtil {
    * @return true if file extension matches
    */
   public static boolean matchesExtension(String fileExtension, String extension) {
-<span class="fc" id="L103">    return StringUtils.equalsIgnoreCase(fileExtension, extension);</span>
+<span class="fc" id="L104">    return Strings.CI.equals(fileExtension, extension);</span>
   }
 
   /**
@@ -110,16 +111,16 @@ public final class FileUtil {
    * @return true if file extension matches
    */
   public static boolean matchesExtension(File file, String extension) {
-<span class="fc" id="L113">    String fileName = file.getName();</span>
+<span class="fc" id="L114">    String fileName = file.getName();</span>
     String fileExtension;
     // special handling for OSGi configuration resource file extension
-<span class="fc bfc" id="L116" title="All 2 branches covered.">    if (fileName.endsWith(&quot;.cfg.json&quot;)) {</span>
-<span class="fc" id="L117">      fileExtension = &quot;cfg.json&quot;;</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">    if (fileName.endsWith(&quot;.cfg.json&quot;)) {</span>
+<span class="fc" id="L118">      fileExtension = &quot;cfg.json&quot;;</span>
     }
     else {
-<span class="fc" id="L120">      fileExtension = FilenameUtils.getExtension(fileName);</span>
+<span class="fc" id="L121">      fileExtension = FilenameUtils.getExtension(fileName);</span>
     }
-<span class="fc" id="L122">    return matchesExtension(fileExtension, extension);</span>
+<span class="fc" id="L123">    return matchesExtension(fileExtension, extension);</span>
   }
 
   /**
@@ -129,7 +130,7 @@ public final class FileUtil {
    * @return true if file extension matches
    */
   public static boolean matchesExtension(FileContext fileContext, String extension) {
-<span class="fc" id="L132">    return matchesExtension(fileContext.getFile(), extension);</span>
+<span class="fc" id="L133">    return matchesExtension(fileContext.getFile(), extension);</span>
   }
 
   /**
@@ -139,14 +140,14 @@ public final class FileUtil {
    * @return Path or null if not defined
    */
   public static String getTemplatePath(Role role, RoleFile roleFile) {
-<span class="fc" id="L142">    String path = roleFile.getTemplate();</span>
-<span class="fc bfc" id="L143" title="All 2 branches covered.">    if (StringUtils.isEmpty(path)) {</span>
-<span class="fc" id="L144">      return null;</span>
+<span class="fc" id="L143">    String path = roleFile.getTemplate();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    if (StringUtils.isEmpty(path)) {</span>
+<span class="fc" id="L145">      return null;</span>
     }
-<span class="fc bfc" id="L146" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(role.getTemplateDir())) {</span>
-<span class="fc" id="L147">      path = FilenameUtils.concat(role.getTemplateDir(), path);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(role.getTemplateDir())) {</span>
+<span class="fc" id="L148">      path = FilenameUtils.concat(role.getTemplateDir(), path);</span>
     }
-<span class="fc" id="L149">    return path;</span>
+<span class="fc" id="L150">    return path;</span>
   }
 
   /**
@@ -156,7 +157,7 @@ public final class FileUtil {
    * @return Info string for role and file
    */
   public static String getFileInfo(NodeRole nodeRole, RoleFile roleFile) {
-<span class="nc" id="L159">    return getFileInfo(nodeRole.getRole(), roleFile);</span>
+<span class="nc" id="L160">    return getFileInfo(nodeRole.getRole(), roleFile);</span>
   }
 
   /**
@@ -166,17 +167,17 @@ public final class FileUtil {
    * @return Info string for role and file
    */
   public static String getFileInfo(String roleName, RoleFile roleFile) {
-<span class="nc" id="L169">    StringBuilder sb = new StringBuilder().append(roleName).append(&quot;/&quot;);</span>
-<span class="nc bnc" id="L170" title="All 2 branches missed.">    if (StringUtils.isNotEmpty(roleFile.getFile())) {</span>
-<span class="nc" id="L171">      sb.append(roleFile.getFile());</span>
+<span class="nc" id="L170">    StringBuilder sb = new StringBuilder().append(roleName).append(&quot;/&quot;);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">    if (StringUtils.isNotEmpty(roleFile.getFile())) {</span>
+<span class="nc" id="L172">      sb.append(roleFile.getFile());</span>
     }
-<span class="nc bnc" id="L173" title="All 2 branches missed.">    else if (StringUtils.isNotEmpty(roleFile.getUrl())) {</span>
-<span class="nc" id="L174">      sb.append(roleFile.getUrl());</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">    else if (StringUtils.isNotEmpty(roleFile.getUrl())) {</span>
+<span class="nc" id="L175">      sb.append(roleFile.getUrl());</span>
     }
     else {
-<span class="nc" id="L177">      sb.append(&quot;?&quot;);</span>
+<span class="nc" id="L178">      sb.append(&quot;?&quot;);</span>
     }
-<span class="nc" id="L179">    return sb.toString();</span>
+<span class="nc" id="L180">    return sb.toString();</span>
   }
 
 }

@@ -36,6 +36,7 @@ import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
 import org.apache.commons.jexl3.introspection.JexlPermissions;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import io.wcm.devops.conga.generator.GeneratorException;
 import io.wcm.devops.conga.model.util.MapMerger;
@@ -49,75 +50,75 @@ final class JexlResolver {
   private final JexlEngine jexl;
   private final VariableMapResolver variableMapResolver;
 
-<span class="fc" id="L52">  private static final Map&lt;String, Object&gt; JEXL_FUNCTION_NS = Map.of(</span>
+<span class="fc" id="L53">  private static final Map&lt;String, Object&gt; JEXL_FUNCTION_NS = Map.of(</span>
       &quot;stringUtils&quot;, StringUtils.class);
 
-<span class="fc" id="L55">  JexlResolver(VariableMapResolver variableMapResolver) {</span>
-<span class="fc" id="L56">    this.jexl = new JexlBuilder()</span>
-<span class="fc" id="L57">        .cache(CACHE_SIZE)</span>
-<span class="fc" id="L58">        .namespaces(JEXL_FUNCTION_NS)</span>
-<span class="fc" id="L59">        .permissions(JexlPermissions.UNRESTRICTED)</span>
-<span class="fc" id="L60">        .create();</span>
-<span class="fc" id="L61">    this.variableMapResolver = variableMapResolver;</span>
-<span class="fc" id="L62">  }</span>
+<span class="fc" id="L56">  JexlResolver(VariableMapResolver variableMapResolver) {</span>
+<span class="fc" id="L57">    this.jexl = new JexlBuilder()</span>
+<span class="fc" id="L58">        .cache(CACHE_SIZE)</span>
+<span class="fc" id="L59">        .namespaces(JEXL_FUNCTION_NS)</span>
+<span class="fc" id="L60">        .permissions(JexlPermissions.UNRESTRICTED)</span>
+<span class="fc" id="L61">        .create();</span>
+<span class="fc" id="L62">    this.variableMapResolver = variableMapResolver;</span>
+<span class="fc" id="L63">  }</span>
 
   public Object resolve(String expressionString, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L65">    Map&lt;String, Object&gt; resolvedVariables = resolveMapWithoutCycles(variables);</span>
+<span class="fc" id="L66">    Map&lt;String, Object&gt; resolvedVariables = resolveMapWithoutCycles(variables);</span>
     try {
-<span class="fc" id="L67">      JexlExpression expression = jexl.createExpression(expressionString);</span>
-<span class="fc" id="L68">      JexlContext context = new MapContext(resolvedVariables);</span>
-<span class="fc" id="L69">      return expression.evaluate(context);</span>
+<span class="fc" id="L68">      JexlExpression expression = jexl.createExpression(expressionString);</span>
+<span class="fc" id="L69">      JexlContext context = new MapContext(resolvedVariables);</span>
+<span class="fc" id="L70">      return expression.evaluate(context);</span>
     }
-<span class="fc" id="L71">    catch (JexlException ex) {</span>
-<span class="fc" id="L72">      throw new GeneratorException(&quot;Unable to parse expression: ${&quot; + expressionString + &quot;}: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L72">    catch (JexlException ex) {</span>
+<span class="fc" id="L73">      throw new GeneratorException(&quot;Unable to parse expression: ${&quot; + expressionString + &quot;}: &quot; + ex.getMessage(), ex);</span>
     }
   }
 
   private Map&lt;String, Object&gt; resolveMapWithoutCycles(Map&lt;String, Object&gt; variables) {
 
     // split out variables with values containing expressions that are not simple variable references
-<span class="fc" id="L79">    SplitResult splitResult = MapSplitter.splitMap(variables, entry -&gt; {</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">      if (entry.getValue() instanceof List) {</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (Object item : (List)entry.getValue()) {</span>
-<span class="fc bfc" id="L82" title="All 2 branches covered.">          if ((item instanceof String)</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">              &amp;&amp; hasJexlExpresssions((String)item)) {</span>
-<span class="nc" id="L84">            return false;</span>
+<span class="fc" id="L80">    SplitResult splitResult = MapSplitter.splitMap(variables, entry -&gt; {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">      if (entry.getValue() instanceof List) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (Object item : (List)entry.getValue()) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">          if ((item instanceof String)</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">              &amp;&amp; hasJexlExpresssions((String)item)) {</span>
+<span class="nc" id="L85">            return false;</span>
           }
-<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">        }</span>
       }
-<span class="fc bfc" id="L88" title="All 2 branches covered.">      else if (entry.getValue() instanceof String) {</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        return !hasJexlExpresssions((String)entry.getValue());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">      else if (entry.getValue() instanceof String) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        return !hasJexlExpresssions((String)entry.getValue());</span>
       }
-<span class="fc" id="L91">      return true;</span>
+<span class="fc" id="L92">      return true;</span>
     });
 
     // resolve simple variable references inside map
-<span class="fc" id="L95">    Map&lt;String, Object&gt; resolvedVariables = variableMapResolver.resolve(splitResult.getMatching());</span>
+<span class="fc" id="L96">    Map&lt;String, Object&gt; resolvedVariables = variableMapResolver.resolve(splitResult.getMatching());</span>
 
     // add back variables with complex expressions without resolving them
-<span class="fc" id="L98">    resolvedVariables = MapMerger.merge(resolvedVariables, splitResult.getUnmatching());</span>
+<span class="fc" id="L99">    resolvedVariables = MapMerger.merge(resolvedVariables, splitResult.getUnmatching());</span>
 
-<span class="fc" id="L100">    return resolvedVariables;</span>
+<span class="fc" id="L101">    return resolvedVariables;</span>
   }
 
   private boolean hasJexlExpresssions(String expressionString) {
-<span class="fc" id="L104">    Matcher matcher = MULTI_EXPRESSION_PATTERN.matcher(expressionString);</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L105">    Matcher matcher = MULTI_EXPRESSION_PATTERN.matcher(expressionString);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    while (matcher.find()) {</span>
 
-<span class="fc" id="L107">      boolean escapedVariable = StringUtils.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
-<span class="fc" id="L108">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+<span class="fc" id="L108">      boolean escapedVariable = Strings.CS.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
+<span class="fc" id="L109">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
 
       // keep escaped variables intact
-<span class="fc bfc" id="L111" title="All 2 branches covered.">      if (!escapedVariable) {</span>
-<span class="fc" id="L112">        Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">      if (!escapedVariable) {</span>
+<span class="fc" id="L113">        Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
         // if expression found that matches not the variable pattern this string contains Jexl expressions
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (!variableMatcher.matches()) {</span>
-<span class="fc" id="L115">          return true;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!variableMatcher.matches()) {</span>
+<span class="fc" id="L116">          return true;</span>
         }
       }
 
-<span class="fc" id="L119">    }</span>
-<span class="fc" id="L120">    return false;</span>
+<span class="fc" id="L120">    }</span>
+<span class="fc" id="L121">    return false;</span>
   }
 
 }

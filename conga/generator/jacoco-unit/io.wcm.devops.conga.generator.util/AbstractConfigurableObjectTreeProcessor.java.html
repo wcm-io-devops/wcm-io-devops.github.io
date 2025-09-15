@@ -27,7 +27,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import io.wcm.devops.conga.model.shared.Configurable;
 
@@ -86,7 +86,7 @@ abstract class AbstractConfigurableObjectTreeProcessor&lt;T&gt; {
 <span class="fc" id="L86">      Map&lt;String, String&gt; description = BeanUtils.describe(object);</span>
 <span class="fc bfc" id="L87" title="All 2 branches covered.">      for (String propertyName : description.keySet()) {</span>
 <span class="fc" id="L88">        Object propertyValue = PropertyUtils.getProperty(object, propertyName);</span>
-<span class="pc bpc" id="L89" title="1 of 4 branches missed.">        if (!StringUtils.equals(propertyName, &quot;class&quot;) &amp;&amp; !ignorePropertyNames.contains(propertyName)) {</span>
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">        if (!Strings.CS.equals(propertyName, &quot;class&quot;) &amp;&amp; !ignorePropertyNames.contains(propertyName)) {</span>
 <span class="fc" id="L90">          process(propertyValue, processor, parentPayload);</span>
         }
 <span class="fc" id="L92">      }</span>

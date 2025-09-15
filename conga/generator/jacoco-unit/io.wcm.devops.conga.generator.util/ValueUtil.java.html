@@ -26,6 +26,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
@@ -46,39 +47,39 @@ public final class ValueUtil {
    * @return Parsed value
    */
   public static Object stringToValue(String valueString) {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">    if (valueString == null) {</span>
-<span class="fc" id="L50">      return null;</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">    if (valueString == null) {</span>
+<span class="fc" id="L51">      return null;</span>
     }
-<span class="fc bfc" id="L52" title="All 2 branches covered.">    else if (StringUtils.contains(valueString, LIST_SEPARATOR)) {</span>
-<span class="fc" id="L53">      return stringToValueList(valueString);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">    else if (Strings.CS.contains(valueString, LIST_SEPARATOR)) {</span>
+<span class="fc" id="L54">      return stringToValueList(valueString);</span>
     }
-<span class="fc bfc" id="L55" title="All 2 branches covered.">    else if (StringUtils.equalsIgnoreCase(valueString, &quot;true&quot;)) {</span>
-<span class="fc" id="L56">      return true;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    else if (Strings.CI.equals(valueString, &quot;true&quot;)) {</span>
+<span class="fc" id="L57">      return true;</span>
     }
-<span class="fc bfc" id="L58" title="All 2 branches covered.">    else if (StringUtils.equalsIgnoreCase(valueString, &quot;false&quot;)) {</span>
-<span class="fc" id="L59">      return false;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    else if (Strings.CI.equals(valueString, &quot;false&quot;)) {</span>
+<span class="fc" id="L60">      return false;</span>
     }
-<span class="fc bfc" id="L61" title="All 2 branches covered.">    else if (NumberUtils.isCreatable(valueString)) {</span>
-<span class="fc" id="L62">      Number number = NumberUtils.createNumber(valueString);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">    else if (NumberUtils.isCreatable(valueString)) {</span>
+<span class="fc" id="L63">      Number number = NumberUtils.createNumber(valueString);</span>
       // edge case: a version number like 1.20 which looks like a double should be treated as string
       // so convert number back to string, and if it's different keep it as a string
-<span class="fc bfc" id="L65" title="All 2 branches covered.">      if (!StringUtils.equals(number.toString(), valueString)) {</span>
-<span class="fc" id="L66">        return valueString;</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">      if (!Strings.CS.equals(number.toString(), valueString)) {</span>
+<span class="fc" id="L67">        return valueString;</span>
       }
-<span class="fc" id="L68">      return number;</span>
+<span class="fc" id="L69">      return number;</span>
     }
     else {
-<span class="fc" id="L71">      return valueString;</span>
+<span class="fc" id="L72">      return valueString;</span>
     }
   }
 
   private static Object stringToValueList(String valueStringList) {
-<span class="fc" id="L76">    List&lt;Object&gt; list = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L77">    String[] valueStrings = StringUtils.splitPreserveAllTokens(valueStringList, LIST_SEPARATOR);</span>
-<span class="fc bfc" id="L78" title="All 2 branches covered.">    for (String valueString : valueStrings) {</span>
-<span class="fc" id="L79">      list.add(stringToValue(valueString));</span>
+<span class="fc" id="L77">    List&lt;Object&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L78">    String[] valueStrings = StringUtils.splitPreserveAllTokens(valueStringList, LIST_SEPARATOR);</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">    for (String valueString : valueStrings) {</span>
+<span class="fc" id="L80">      list.add(stringToValue(valueString));</span>
     }
-<span class="fc" id="L81">    return list;</span>
+<span class="fc" id="L82">    return list;</span>
   }
 
   /**
@@ -88,35 +89,35 @@ public final class ValueUtil {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public static String valueToString(Object value) {
-<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (value == null) {</span>
-<span class="fc" id="L92">      return &quot;&quot;;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L93">      return &quot;&quot;;</span>
     }
-<span class="fc bfc" id="L94" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L95">      StringBuilder sb = new StringBuilder();</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">      for (Object item : ((List)value)) {</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
-<span class="fc" id="L98">          sb.append(&quot;,&quot;);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L96">      StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">      for (Object item : ((List)value)) {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc" id="L99">          sb.append(&quot;,&quot;);</span>
         }
-<span class="fc" id="L100">        sb.append(valueToString(item));</span>
-<span class="fc" id="L101">      }</span>
-<span class="fc" id="L102">      return sb.toString();</span>
+<span class="fc" id="L101">        sb.append(valueToString(item));</span>
+<span class="fc" id="L102">      }</span>
+<span class="fc" id="L103">      return sb.toString();</span>
     }
-<span class="fc bfc" id="L104" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L105">      StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L106">      StringBuilder sb = new StringBuilder();</span>
       // use sorted map to ensure consistent order of keys
-<span class="fc" id="L107">      SortedMap&lt;Object, Object&gt; sortedMap = new TreeMap&lt;&gt;((Map&lt;Object, Object&gt;)value);</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">      for (Map.Entry&lt;Object, Object&gt; entry : sortedMap.entrySet()) {</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
-<span class="fc" id="L110">          sb.append(&quot;,&quot;);</span>
+<span class="fc" id="L108">      SortedMap&lt;Object, Object&gt; sortedMap = new TreeMap&lt;&gt;((Map&lt;Object, Object&gt;)value);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">      for (Map.Entry&lt;Object, Object&gt; entry : sortedMap.entrySet()) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc" id="L111">          sb.append(&quot;,&quot;);</span>
         }
-<span class="fc" id="L112">        sb.append(valueToString(entry.getKey()))</span>
-<span class="fc" id="L113">            .append(&quot;=&quot;)</span>
-<span class="fc" id="L114">            .append(valueToString(entry.getValue()));</span>
-<span class="fc" id="L115">      }</span>
-<span class="fc" id="L116">      return sb.toString();</span>
+<span class="fc" id="L113">        sb.append(valueToString(entry.getKey()))</span>
+<span class="fc" id="L114">            .append(&quot;=&quot;)</span>
+<span class="fc" id="L115">            .append(valueToString(entry.getValue()));</span>
+<span class="fc" id="L116">      }</span>
+<span class="fc" id="L117">      return sb.toString();</span>
     }
     else {
-<span class="fc" id="L119">      return value.toString();</span>
+<span class="fc" id="L120">      return value.toString();</span>
     }
   }
 
