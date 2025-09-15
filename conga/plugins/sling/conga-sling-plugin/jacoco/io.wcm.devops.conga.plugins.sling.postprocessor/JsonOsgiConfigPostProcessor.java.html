@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.sling.provisioning.model.Model;
 
 import io.wcm.devops.conga.generator.GeneratorException;
@@ -56,7 +56,7 @@ import io.wcm.devops.conga.plugins.sling.util.ProvisioningUtil;
 
   @Override
   public boolean accepts(FileContext file, PostProcessorContext context) {
-<span class="fc" id="L59">    return StringUtils.endsWith(file.getFile().getName(), FILE_EXTENSION);</span>
+<span class="fc" id="L59">    return Strings.CS.endsWith(file.getFile().getName(), FILE_EXTENSION);</span>
   }
 
   @Override

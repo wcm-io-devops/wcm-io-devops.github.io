@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -43,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 <span class="pc bpc" id="L43" title="1 of 4 branches missed.">    if (!isServiceRunmode(runmode1) &amp;&amp; isServiceRunmode(runmode2)) {</span>
 <span class="nc" id="L44">      return 1;</span>
     }
-<span class="fc" id="L46">    return StringUtils.compare(runmode1, runmode2);</span>
+<span class="fc" id="L46">    return Strings.CS.compare(runmode1, runmode2);</span>
   }
 
   private static boolean isServiceRunmode(@Nullable String runmode) {
