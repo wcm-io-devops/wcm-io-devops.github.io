@@ -15,7 +15,7 @@ CONGA Generator,io.wcm.devops.conga.generator,UrlFileManager,65,155,6,10,10,27,9
 CONGA Generator,io.wcm.devops.conga.generator,GeneratorException,0,9,0,0,0,4,0,2,0,2
 CONGA Generator,io.wcm.devops.conga.generator,ResourceLoaderUtil,34,99,2,6,8,22,2,5,0,3
 CONGA Generator,io.wcm.devops.conga.generator,Generator,26,131,7,9,5,27,6,5,0,3
-CONGA Generator,io.wcm.devops.conga.generator.spi,ImplicitApplyOptions,0,34,0,0,0,4,0,1,0,1
+CONGA Generator,io.wcm.devops.conga.generator.spi,ImplicitApplyOptions,0,21,0,0,0,4,0,1,0,1
 CONGA Generator,io.wcm.devops.conga.generator.spi,FileHeaderPlugin,2,2,0,0,1,1,1,1,1,1
 CONGA Generator,io.wcm.devops.conga.generator.spi,UrlFilePlugin,28,2,0,0,4,1,4,1,4,1
 CONGA Generator,io.wcm.devops.conga.generator.spi,ValidatorPlugin,0,2,0,0,0,1,0,1,0,1
