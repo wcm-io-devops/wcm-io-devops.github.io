@@ -149,8 +149,8 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>     Object result = resolve(value, variables, 0);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>     <strong class="jxr_keyword">if</strong> (deescapeVariables &amp;&amp; (result instanceof String)) {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>       result = deescape((String)result);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     <strong class="jxr_keyword">if</strong> (deescapeVariables &amp;&amp; (result instanceof String stringValue)) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>       result = deescape(stringValue);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>     }
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>     <strong class="jxr_keyword">return</strong> result;
@@ -203,9 +203,9 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>         Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>         <strong class="jxr_keyword">if</strong> (valueObject != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>           <strong class="jxr_keyword">if</strong> (valueObject instanceof String) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>           <strong class="jxr_keyword">if</strong> (valueObject instanceof String stringValue) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>             <em class="jxr_comment">// try again until all nested references are resolved</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>             <strong class="jxr_keyword">return</strong> resolve((String)valueObject, variables, iterationCount + 1);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>             <strong class="jxr_keyword">return</strong> resolve(stringValue, variables, iterationCount + 1);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>           }
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>           <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>             <strong class="jxr_keyword">return</strong> valueObject;

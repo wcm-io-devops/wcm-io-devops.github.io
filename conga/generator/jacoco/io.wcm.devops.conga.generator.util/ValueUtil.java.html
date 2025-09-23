@@ -92,10 +92,10 @@ public final class ValueUtil {
 <span class="fc bfc" id="L92" title="All 2 branches covered.">    if (value == null) {</span>
 <span class="fc" id="L93">      return &quot;&quot;;</span>
     }
-<span class="fc bfc" id="L95" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">    else if (value instanceof List list) {</span>
 <span class="fc" id="L96">      StringBuilder sb = new StringBuilder();</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">      for (Object item : ((List)value)) {</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">      for (Object item : list) {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (!sb.isEmpty()) {</span>
 <span class="fc" id="L99">          sb.append(&quot;,&quot;);</span>
         }
 <span class="fc" id="L101">        sb.append(valueToString(item));</span>
@@ -107,7 +107,7 @@ public final class ValueUtil {
       // use sorted map to ensure consistent order of keys
 <span class="fc" id="L108">      SortedMap&lt;Object, Object&gt; sortedMap = new TreeMap&lt;&gt;((Map&lt;Object, Object&gt;)value);</span>
 <span class="fc bfc" id="L109" title="All 2 branches covered.">      for (Map.Entry&lt;Object, Object&gt; entry : sortedMap.entrySet()) {</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (sb.length() &gt; 0) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (!sb.isEmpty()) {</span>
 <span class="fc" id="L111">          sb.append(&quot;,&quot;);</span>
         }
 <span class="fc" id="L113">        sb.append(valueToString(entry.getKey()))</span>

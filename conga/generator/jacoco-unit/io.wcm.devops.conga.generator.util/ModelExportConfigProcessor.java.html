@@ -93,9 +93,9 @@ public final class ModelExportConfigProcessor {
 <span class="fc bfc" id="L93" title="All 2 branches covered.">    if (value instanceof Map) {</span>
 <span class="fc" id="L94">      return encryptSensitiveValues((Map&lt;String, Object&gt;)value, parameterName + &quot;.&quot;);</span>
     }
-<span class="fc bfc" id="L96" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">    else if (value instanceof List&lt;?&gt; valueList) {</span>
 <span class="fc" id="L97">      List&lt;Object&gt; list = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">      for (Object itemValue : (List)value) {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">      for (Object itemValue : valueList) {</span>
 <span class="fc" id="L99">        list.add(encryptSensitiveValue(parameterName, itemValue));</span>
 <span class="fc" id="L100">      }</span>
 <span class="fc" id="L101">      return list;</span>

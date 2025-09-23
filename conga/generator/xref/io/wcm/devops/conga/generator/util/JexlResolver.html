@@ -86,16 +86,16 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">// split out variables with values containing expressions that are not simple variable references</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      SplitResult splitResult = MapSplitter.splitMap(variables, entry -&gt; {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>        <strong class="jxr_keyword">if</strong> (entry.getValue() instanceof List) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">for</strong> (Object item : (List)entry.getValue()) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>            <strong class="jxr_keyword">if</strong> ((item instanceof String)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                &amp;&amp; hasJexlExpresssions((String)item)) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>        <strong class="jxr_keyword">if</strong> (entry.getValue() instanceof List&lt;?&gt; list) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">for</strong> (Object item : list) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>            <strong class="jxr_keyword">if</strong> ((item instanceof String value)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                &amp;&amp; hasJexlExpresssions(value)) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>              <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>            }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          }
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>        }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>        <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (entry.getValue() instanceof String) {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">return</strong> !hasJexlExpresssions((String)entry.getValue());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>        <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (entry.getValue() instanceof String value) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">return</strong> !hasJexlExpresssions(value);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>        }
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>      });

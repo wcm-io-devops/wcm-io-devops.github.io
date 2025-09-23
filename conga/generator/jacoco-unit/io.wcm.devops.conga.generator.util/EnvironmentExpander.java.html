@@ -21,7 +21,6 @@ package io.wcm.devops.conga.generator.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,40 +46,40 @@ public final class EnvironmentExpander {
    * @return Environment that contains only nodes with single node names
    */
   public static Environment expandNodes(Environment environment, String environmentName) {
-<span class="fc" id="L50">    Environment clonedEnvironemnt = ObjectCloner.deepClone(environment);</span>
+<span class="fc" id="L49">    Environment clonedEnvironemnt = ObjectCloner.deepClone(environment);</span>
 
-<span class="fc" id="L52">    clonedEnvironemnt.setNodes(environment.getNodes().stream()</span>
-<span class="fc" id="L53">        .flatMap(node -&gt; getSingleNodes(node, environmentName))</span>
-<span class="fc" id="L54">        .collect(Collectors.toList()));</span>
+<span class="fc" id="L51">    clonedEnvironemnt.setNodes(environment.getNodes().stream()</span>
+<span class="fc" id="L52">        .flatMap(node -&gt; getSingleNodes(node, environmentName))</span>
+<span class="fc" id="L53">        .toList());</span>
 
-<span class="fc" id="L56">    return clonedEnvironemnt;</span>
+<span class="fc" id="L55">    return clonedEnvironemnt;</span>
   }
 
   private static Stream&lt;Node&gt; getSingleNodes(Node node, String environmentName) {
-<span class="fc" id="L60">    List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L59">    List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L62">    boolean hasNode = StringUtils.isNotEmpty(node.getNode());</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">    boolean hasNodes = !node.getNodes().isEmpty();</span>
+<span class="fc" id="L61">    boolean hasNode = StringUtils.isNotEmpty(node.getNode());</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">    boolean hasNodes = !node.getNodes().isEmpty();</span>
 
-<span class="pc bpc" id="L65" title="1 of 4 branches missed.">    if (!hasNode &amp;&amp; !hasNodes) {</span>
-<span class="nc" id="L66">      throw new GeneratorException(&quot;Node without properties 'node' and 'nodes' found in '&quot; + environmentName + &quot;'.&quot;);</span>
+<span class="pc bpc" id="L64" title="1 of 4 branches missed.">    if (!hasNode &amp;&amp; !hasNodes) {</span>
+<span class="nc" id="L65">      throw new GeneratorException(&quot;Node without properties 'node' and 'nodes' found in '&quot; + environmentName + &quot;'.&quot;);</span>
     }
-<span class="pc bpc" id="L68" title="1 of 4 branches missed.">    else if (hasNode &amp;&amp; hasNodes) {</span>
-<span class="nc" id="L69">      throw new GeneratorException(&quot;Node with both properties 'node' and 'nodes' found in '&quot; + environmentName + &quot;'.&quot;);</span>
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">    else if (hasNode &amp;&amp; hasNodes) {</span>
+<span class="nc" id="L68">      throw new GeneratorException(&quot;Node with both properties 'node' and 'nodes' found in '&quot; + environmentName + &quot;'.&quot;);</span>
     }
-<span class="fc bfc" id="L71" title="All 2 branches covered.">    else if (hasNode) {</span>
-<span class="fc" id="L72">      nodes.add(node);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">    else if (hasNode) {</span>
+<span class="fc" id="L71">      nodes.add(node);</span>
     }
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    else if (hasNodes) {</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">      for (String nodeName : node.getNodes()) {</span>
-<span class="fc" id="L76">        Node clonedNode = ObjectCloner.deepClone(node);</span>
-<span class="fc" id="L77">        clonedNode.setNode(nodeName);</span>
-<span class="fc" id="L78">        clonedNode.setNodes(List.of());</span>
-<span class="fc" id="L79">        nodes.add(clonedNode);</span>
-<span class="fc" id="L80">      }</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    else if (hasNodes) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">      for (String nodeName : node.getNodes()) {</span>
+<span class="fc" id="L75">        Node clonedNode = ObjectCloner.deepClone(node);</span>
+<span class="fc" id="L76">        clonedNode.setNode(nodeName);</span>
+<span class="fc" id="L77">        clonedNode.setNodes(List.of());</span>
+<span class="fc" id="L78">        nodes.add(clonedNode);</span>
+<span class="fc" id="L79">      }</span>
     }
 
-<span class="fc" id="L83">    return nodes.stream();</span>
+<span class="fc" id="L82">    return nodes.stream();</span>
   }
 
 }

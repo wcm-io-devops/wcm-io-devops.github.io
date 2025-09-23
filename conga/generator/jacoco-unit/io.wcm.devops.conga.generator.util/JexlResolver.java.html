@@ -78,16 +78,16 @@ final class JexlResolver {
 
     // split out variables with values containing expressions that are not simple variable references
 <span class="fc" id="L80">    SplitResult splitResult = MapSplitter.splitMap(variables, entry -&gt; {</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">      if (entry.getValue() instanceof List) {</span>
-<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (Object item : (List)entry.getValue()) {</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">          if ((item instanceof String)</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">              &amp;&amp; hasJexlExpresssions((String)item)) {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">      if (entry.getValue() instanceof List&lt;?&gt; list) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (Object item : list) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">          if ((item instanceof String value)</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">              &amp;&amp; hasJexlExpresssions(value)) {</span>
 <span class="nc" id="L85">            return false;</span>
           }
 <span class="fc" id="L87">        }</span>
       }
-<span class="fc bfc" id="L89" title="All 2 branches covered.">      else if (entry.getValue() instanceof String) {</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        return !hasJexlExpresssions((String)entry.getValue());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">      else if (entry.getValue() instanceof String value) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        return !hasJexlExpresssions(value);</span>
       }
 <span class="fc" id="L92">      return true;</span>
     });

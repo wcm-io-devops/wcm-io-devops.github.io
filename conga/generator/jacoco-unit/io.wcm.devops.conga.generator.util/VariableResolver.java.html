@@ -73,7 +73,7 @@ public final class VariableResolver {
 <span class="fc" id="L73">        result = valueProvider.resolve(variableWithoutNesting, valueProviderContext);</span>
 
 <span class="pc bpc" id="L75" title="1 of 4 branches missed.">        if (StringUtils.isNotBlank(nestingVariables) &amp;&amp; result instanceof Map) {</span>
-<span class="fc" id="L76">          result = MapExpander.getDeep((Map)result, nestingVariables);</span>
+<span class="fc" id="L76">          result = MapExpander.getDeep((Map&lt;String, Object&gt;)result, nestingVariables);</span>
         }
       }
 

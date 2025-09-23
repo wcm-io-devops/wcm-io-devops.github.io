@@ -141,8 +141,8 @@ public final class VariableStringResolver {
 
 <span class="fc" id="L142">    Object result = resolve(value, variables, 0);</span>
 
-<span class="fc bfc" id="L144" title="All 4 branches covered.">    if (deescapeVariables &amp;&amp; (result instanceof String)) {</span>
-<span class="fc" id="L145">      result = deescape((String)result);</span>
+<span class="fc bfc" id="L144" title="All 4 branches covered.">    if (deescapeVariables &amp;&amp; (result instanceof String stringValue)) {</span>
+<span class="fc" id="L145">      result = deescape(stringValue);</span>
     }
 
 <span class="fc" id="L148">    return result;</span>
@@ -195,9 +195,9 @@ public final class VariableStringResolver {
 
 <span class="fc" id="L196">        Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
 <span class="fc bfc" id="L197" title="All 2 branches covered.">        if (valueObject != null) {</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">          if (valueObject instanceof String) {</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">          if (valueObject instanceof String stringValue) {</span>
             // try again until all nested references are resolved
-<span class="fc" id="L200">            return resolve((String)valueObject, variables, iterationCount + 1);</span>
+<span class="fc" id="L200">            return resolve(stringValue, variables, iterationCount + 1);</span>
           }
           else {
 <span class="fc" id="L203">            return valueObject;</span>

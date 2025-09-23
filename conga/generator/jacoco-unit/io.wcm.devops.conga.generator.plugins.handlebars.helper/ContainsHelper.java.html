@@ -57,8 +57,8 @@ import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
   }
 
   private boolean contains(Object context, Object value) {
-<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (context instanceof Collection) {</span>
-<span class="fc" id="L61">      return ((Collection)context).contains(value);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (context instanceof Collection&lt;?&gt; collection) {</span>
+<span class="fc" id="L61">      return collection.contains(value);</span>
     }
 <span class="pc bpc" id="L63" title="1 of 2 branches missed.">    else if (context.getClass().isArray()) {</span>
 <span class="fc" id="L64">      return ArrayUtils.contains((Object[])context, value);</span>

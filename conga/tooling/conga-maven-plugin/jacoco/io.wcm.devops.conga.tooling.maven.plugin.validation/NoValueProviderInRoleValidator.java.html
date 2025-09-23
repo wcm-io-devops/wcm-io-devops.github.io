@@ -54,14 +54,14 @@ import io.wcm.devops.conga.resource.Resource;
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private void process(Object value) {
-<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (value instanceof String) {</span>
-<span class="fc" id="L58">      validate((String)value);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (value instanceof String stringValue) {</span>
+<span class="fc" id="L58">      validate(stringValue);</span>
     }
 <span class="fc bfc" id="L60" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L61">      ((Map)value).values().forEach(this::process);</span>
+<span class="fc" id="L61">      ((Map&lt;String, Object&gt;)value).values().forEach(this::process);</span>
     }
 <span class="fc bfc" id="L63" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L64">      ((List)value).forEach(this::process);</span>
+<span class="fc" id="L64">      ((List&lt;Object&gt;)value).forEach(this::process);</span>
     }
 <span class="fc" id="L66">  }</span>
 

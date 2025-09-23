@@ -57,8 +57,8 @@ public final class ConfigInheritanceResolver extends AbstractConfigurableObjectT
    */
   public static void resolve(Object model) {
 <span class="fc" id="L59">    Set&lt;String&gt; ignorePropertyNames = Collections.emptySet();</span>
-<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (model instanceof Environment) {</span>
-<span class="fc" id="L61">      resolveEnvironment((Environment)model);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (model instanceof Environment environment) {</span>
+<span class="fc" id="L61">      resolveEnvironment(environment);</span>
     }
 <span class="fc bfc" id="L63" title="All 2 branches covered.">    if (model instanceof Role) {</span>
       // do not inherit config of role variants field (WDCONGA-24)
