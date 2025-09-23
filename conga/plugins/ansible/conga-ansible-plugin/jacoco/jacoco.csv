@@ -4,7 +4,7 @@ CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryWr
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryReader,9,240,8,38,3,62,8,16,0,1
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders,CypherFactory,6,14,2,2,2,3,2,1,0,1
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin.InventoryContent,0,20,0,0,0,8,0,4,0,4
-CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin,12,246,6,26,4,58,6,19,0,9
+CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin,12,252,6,26,4,57,6,19,0,9
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleVaultValueProviderPlugin,9,71,1,7,2,18,1,7,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleValueEncryptionPlugin,8,27,0,0,2,7,0,4,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVaultValueRepresent,0,19,0,0,0,3,0,2,0,2
