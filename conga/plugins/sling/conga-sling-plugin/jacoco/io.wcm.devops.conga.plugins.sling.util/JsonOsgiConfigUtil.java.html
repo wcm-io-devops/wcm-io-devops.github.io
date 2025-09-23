@@ -87,37 +87,36 @@ public final class JsonOsgiConfigUtil {
 <span class="fc bfc" id="L87" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
 <span class="fc" id="L88">      String key = entry.getKey();</span>
 <span class="fc" id="L89">      Object value = entry.getValue();</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">      if (value instanceof Collection) {</span>
-<span class="fc" id="L91">        Collection&lt;?&gt; collection = ((Collection)value);</span>
-<span class="fc" id="L92">        value = collection.toArray((Object[])Array.newInstance(detectArrayType(collection), collection.size()));</span>
-<span class="fc" id="L93">      }</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">      else if (value instanceof Map) {</span>
-<span class="fc" id="L95">        value = convertListsToArrays((Map&lt;String, Object&gt;)value);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">      if (value instanceof Collection&lt;?&gt; collection) {</span>
+<span class="fc" id="L91">        value = collection.toArray((Object[])Array.newInstance(detectArrayType(collection), collection.size()));</span>
       }
-<span class="fc" id="L97">      result.put(key, value);</span>
-<span class="fc" id="L98">    }</span>
-<span class="fc" id="L99">    return result;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">      else if (value instanceof Map) {</span>
+<span class="fc" id="L94">        value = convertListsToArrays((Map&lt;String, Object&gt;)value);</span>
+      }
+<span class="fc" id="L96">      result.put(key, value);</span>
+<span class="fc" id="L97">    }</span>
+<span class="fc" id="L98">    return result;</span>
   }
 
   /**
    * Detect type from list of items. If all items have the same type this is returned, otherwise Object.class.
    */
   private static Class&lt;?&gt; detectArrayType(Collection&lt;?&gt; list) {
-<span class="fc" id="L106">    Class&lt;?&gt; type = null;</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">    for (Object item : list) {</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">      if (item != null) {</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (type == null) {</span>
-<span class="fc" id="L110">          type = item.getClass();</span>
+<span class="fc" id="L105">    Class&lt;?&gt; type = null;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    for (Object item : list) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">      if (item != null) {</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (type == null) {</span>
+<span class="fc" id="L109">          type = item.getClass();</span>
         }
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        else if (type != item.getClass()) {</span>
-<span class="fc" id="L113">          type = Object.class;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        else if (type != item.getClass()) {</span>
+<span class="fc" id="L112">          type = Object.class;</span>
         }
       }
-<span class="fc" id="L116">    }</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">    if (type == null) {</span>
-<span class="fc" id="L118">      type = Object.class;</span>
+<span class="fc" id="L115">    }</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">    if (type == null) {</span>
+<span class="fc" id="L117">      type = Object.class;</span>
     }
-<span class="fc" id="L120">    return type;</span>
+<span class="fc" id="L119">    return type;</span>
   }
 
   /**
@@ -127,16 +126,16 @@ public final class JsonOsgiConfigUtil {
    * @throws IOException I/O exception
    */
   public static Model readToProvisioningModel(File file) throws IOException {
-<span class="fc" id="L130">    Model model = new Model();</span>
-<span class="fc" id="L131">    String featureName = StringUtils.substringBeforeLast(file.getName(), JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
-<span class="fc" id="L132">    Feature feature = model.getOrCreateFeature(featureName);</span>
+<span class="fc" id="L129">    Model model = new Model();</span>
+<span class="fc" id="L130">    String featureName = StringUtils.substringBeforeLast(file.getName(), JsonOsgiConfigPostProcessor.FILE_EXTENSION);</span>
+<span class="fc" id="L131">    Feature feature = model.getOrCreateFeature(featureName);</span>
 
-<span class="fc" id="L134">    Map&lt;String, Object&gt; data = readToMap(file);</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : data.entrySet()) {</span>
-<span class="fc" id="L136">      processEntry(feature, entry.getKey(), entry.getValue());</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L133">    Map&lt;String, Object&gt; data = readToMap(file);</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : data.entrySet()) {</span>
+<span class="fc" id="L135">      processEntry(feature, entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L136">    }</span>
 
-<span class="fc" id="L139">    return model;</span>
+<span class="fc" id="L138">    return model;</span>
   }
 
   /**
@@ -144,38 +143,38 @@ public final class JsonOsgiConfigUtil {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   private static void processEntry(Feature feature, String key, Object value) throws IOException {
-<span class="fc" id="L147">    Matcher configurationsKeyMatcher = KEY_PATTERN_CONFIGURATIONS.matcher(key);</span>
-<span class="fc bfc" id="L148" title="All 2 branches covered.">    if (configurationsKeyMatcher.matches()) {</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
-<span class="fc" id="L150">        String[] runModes = toRunModes(configurationsKeyMatcher.group(RUNMODES_INDEX));</span>
-<span class="fc" id="L151">        processOsgiConfiguration(feature, runModes, (Map&lt;String, Object&gt;)value);</span>
-<span class="fc" id="L152">      }</span>
+<span class="fc" id="L146">    Matcher configurationsKeyMatcher = KEY_PATTERN_CONFIGURATIONS.matcher(key);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">    if (configurationsKeyMatcher.matches()) {</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
+<span class="fc" id="L149">        String[] runModes = toRunModes(configurationsKeyMatcher.group(RUNMODES_INDEX));</span>
+<span class="fc" id="L150">        processOsgiConfiguration(feature, runModes, (Map&lt;String, Object&gt;)value);</span>
+<span class="fc" id="L151">      }</span>
       else {
-<span class="nc" id="L154">        throw new IOException(&quot;Unexpected data for key &quot; + key + &quot;: &quot; + value.getClass().getName());</span>
+<span class="nc" id="L153">        throw new IOException(&quot;Unexpected data for key &quot; + key + &quot;: &quot; + value.getClass().getName());</span>
       }
     }
     else {
-<span class="fc" id="L158">      Matcher repoinitKeyMatcher = KEY_PATTERN_REPOINIT.matcher(key);</span>
-<span class="pc bpc" id="L159" title="1 of 2 branches missed.">      if (repoinitKeyMatcher.matches()) {</span>
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (value.getClass().isArray()) {</span>
-<span class="fc" id="L161">          String[] runModes = toRunModes(repoinitKeyMatcher.group(RUNMODES_INDEX));</span>
-<span class="fc" id="L162">          processRepoInit(feature, runModes, (Object[])value);</span>
-<span class="fc" id="L163">        }</span>
+<span class="fc" id="L157">      Matcher repoinitKeyMatcher = KEY_PATTERN_REPOINIT.matcher(key);</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">      if (repoinitKeyMatcher.matches()) {</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if (value.getClass().isArray()) {</span>
+<span class="fc" id="L160">          String[] runModes = toRunModes(repoinitKeyMatcher.group(RUNMODES_INDEX));</span>
+<span class="fc" id="L161">          processRepoInit(feature, runModes, (Object[])value);</span>
+<span class="fc" id="L162">        }</span>
         else {
-<span class="nc" id="L165">          throw new IOException(&quot;Unexpected data for key &quot; + key + &quot;: &quot; + value.getClass().getName());</span>
+<span class="nc" id="L164">          throw new IOException(&quot;Unexpected data for key &quot; + key + &quot;: &quot; + value.getClass().getName());</span>
         }
       }
       else {
-<span class="nc" id="L169">        throw new IOException(&quot;Invalid toplevel key in JSON file: &quot; + key);</span>
+<span class="nc" id="L168">        throw new IOException(&quot;Invalid toplevel key in JSON file: &quot; + key);</span>
       }
     }
-<span class="fc" id="L172">  }</span>
+<span class="fc" id="L171">  }</span>
 
   private static String @Nullable [] toRunModes(String runModesString) {
-<span class="fc bfc" id="L175" title="All 2 branches covered.">    if (StringUtils.isBlank(runModesString)) {</span>
-<span class="fc" id="L176">      return null;</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">    if (StringUtils.isBlank(runModesString)) {</span>
+<span class="fc" id="L175">      return null;</span>
     }
-<span class="fc" id="L178">    return StringUtils.split(runModesString, &quot;,&quot;);</span>
+<span class="fc" id="L177">    return StringUtils.split(runModesString, &quot;,&quot;);</span>
   }
 
   /**
@@ -183,35 +182,35 @@ public final class JsonOsgiConfigUtil {
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   private static void processOsgiConfiguration(Feature feature, String[] runModes, Map&lt;String, Object&gt; configurations) throws IOException {
-<span class="fc" id="L186">    RunMode runMode = feature.getOrCreateRunMode(runModes);</span>
-<span class="fc bfc" id="L187" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : configurations.entrySet()) {</span>
-<span class="fc" id="L188">      String pid = entry.getKey();</span>
-<span class="fc" id="L189">      Object value = entry.getValue();</span>
-<span class="pc bpc" id="L190" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
-<span class="fc" id="L191">        Map&lt;String, Object&gt; configProperties = (Map&lt;String, Object&gt;)value;</span>
-<span class="fc" id="L192">        Configuration config = runMode.getOrCreateConfiguration(pid, null);</span>
-<span class="fc" id="L193">        Dictionary&lt;String, Object&gt; properties = config.getProperties();</span>
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        for (Map.Entry&lt;String, Object&gt; configProperty : configProperties.entrySet()) {</span>
-<span class="fc" id="L195">          properties.put(configProperty.getKey(), configProperty.getValue());</span>
-<span class="fc" id="L196">        }</span>
-<span class="fc" id="L197">      }</span>
+<span class="fc" id="L185">    RunMode runMode = feature.getOrCreateRunMode(runModes);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">    for (Map.Entry&lt;String, Object&gt; entry : configurations.entrySet()) {</span>
+<span class="fc" id="L187">      String pid = entry.getKey();</span>
+<span class="fc" id="L188">      Object value = entry.getValue();</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">      if (value instanceof Map) {</span>
+<span class="fc" id="L190">        Map&lt;String, Object&gt; configProperties = (Map&lt;String, Object&gt;)value;</span>
+<span class="fc" id="L191">        Configuration config = runMode.getOrCreateConfiguration(pid, null);</span>
+<span class="fc" id="L192">        Dictionary&lt;String, Object&gt; properties = config.getProperties();</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        for (Map.Entry&lt;String, Object&gt; configProperty : configProperties.entrySet()) {</span>
+<span class="fc" id="L194">          properties.put(configProperty.getKey(), configProperty.getValue());</span>
+<span class="fc" id="L195">        }</span>
+<span class="fc" id="L196">      }</span>
       else {
-<span class="nc" id="L199">        throw new IOException(&quot;Unexpected configurations data for &quot; + pid + &quot;: &quot; + value.getClass().getName());</span>
+<span class="nc" id="L198">        throw new IOException(&quot;Unexpected configurations data for &quot; + pid + &quot;: &quot; + value.getClass().getName());</span>
       }
-<span class="fc" id="L201">    }</span>
-<span class="fc" id="L202">  }</span>
+<span class="fc" id="L200">    }</span>
+<span class="fc" id="L201">  }</span>
 
   /**
    * Convert repoinit statements to Provisioning model additional sections with associated run modes.
    */
   private static void processRepoInit(Feature feature, String[] runModes, Object[] repoinits) {
-<span class="fc" id="L208">    Section section = new Section(ProvisioningUtil.REPOINIT_SECTION);</span>
-<span class="fc" id="L209">    feature.getAdditionalSections().add(section);</span>
-<span class="fc bfc" id="L210" title="All 2 branches covered.">    if (runModes != null) {</span>
-<span class="fc" id="L211">      section.getAttributes().put(ProvisioningUtil.REPOINIT_PROPERTY_RUNMODES, StringUtils.join(runModes, &quot;,&quot;));</span>
+<span class="fc" id="L207">    Section section = new Section(ProvisioningUtil.REPOINIT_SECTION);</span>
+<span class="fc" id="L208">    feature.getAdditionalSections().add(section);</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">    if (runModes != null) {</span>
+<span class="fc" id="L210">      section.getAttributes().put(ProvisioningUtil.REPOINIT_PROPERTY_RUNMODES, StringUtils.join(runModes, &quot;,&quot;));</span>
     }
-<span class="fc" id="L213">    section.setContents(StringUtils.join(repoinits, &quot;\n&quot;));</span>
-<span class="fc" id="L214">  }</span>
+<span class="fc" id="L212">    section.setContents(StringUtils.join(repoinits, &quot;\n&quot;));</span>
+<span class="fc" id="L213">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
