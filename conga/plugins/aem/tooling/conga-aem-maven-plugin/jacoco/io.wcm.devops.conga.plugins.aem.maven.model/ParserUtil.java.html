@@ -24,7 +24,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,43 +40,43 @@ final class ParserUtil {
 
   @SuppressWarnings(&quot;unchecked&quot;)
   static List&lt;Map&lt;String, Object&gt;&gt; children(Map&lt;String, Object&gt; data, String propertyName) {
-<span class="fc" id="L44">    List&lt;Map&lt;String, Object&gt;&gt; children = (List&lt;Map&lt;String, Object&gt;&gt;)data.get(propertyName);</span>
-<span class="pc bpc" id="L45" title="1 of 2 branches missed.">    if (children == null) {</span>
-<span class="nc" id="L46">      return Collections.emptyList();</span>
+<span class="fc" id="L43">    List&lt;Map&lt;String, Object&gt;&gt; children = (List&lt;Map&lt;String, Object&gt;&gt;)data.get(propertyName);</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">    if (children == null) {</span>
+<span class="nc" id="L45">      return Collections.emptyList();</span>
     }
     else {
-<span class="fc" id="L49">      return children;</span>
+<span class="fc" id="L48">      return children;</span>
     }
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   static Set&lt;String&gt; toStringSet(Object value) {
-<span class="fc" id="L55">    Set&lt;String&gt; result = new LinkedHashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">    if (value instanceof String) {</span>
-<span class="fc" id="L57">      String target = (String)value;</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">      if (StringUtils.isNotBlank(target)) {</span>
-<span class="nc" id="L59">        result.add(target);</span>
+<span class="fc" id="L54">    Set&lt;String&gt; result = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">    if (value instanceof String stringValue) {</span>
+<span class="fc" id="L56">      String target = stringValue;</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">      if (StringUtils.isNotBlank(target)) {</span>
+<span class="nc" id="L58">        result.add(target);</span>
       }
-<span class="fc" id="L61">    }</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">    else if (value instanceof List) {</span>
-<span class="fc" id="L63">      result.addAll(((List&lt;String&gt;)value).stream()</span>
-<span class="fc" id="L64">          .filter(StringUtils::isNotBlank)</span>
-<span class="fc" id="L65">          .collect(Collectors.toList()));</span>
+<span class="fc" id="L60">    }</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">    else if (value instanceof List) {</span>
+<span class="fc" id="L62">      result.addAll(((List&lt;String&gt;)value).stream()</span>
+<span class="fc" id="L63">          .filter(StringUtils::isNotBlank)</span>
+<span class="fc" id="L64">          .toList());</span>
     }
     else {
-<span class="nc" id="L68">      throw new IllegalArgumentException(&quot;Value is neither string nor string list: &quot; + value);</span>
+<span class="nc" id="L67">      throw new IllegalArgumentException(&quot;Value is neither string nor string list: &quot; + value);</span>
     }
-<span class="fc" id="L70">    return result;</span>
+<span class="fc" id="L69">    return result;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   static List&lt;String&gt; getVariants(Map&lt;String, Object&gt; roleData) {
-<span class="fc" id="L75">    List&lt;String&gt; variants = (List&lt;String&gt;)roleData.get(PROP_VARIANTS);</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">    if (variants != null) {</span>
-<span class="fc" id="L77">      return variants;</span>
+<span class="fc" id="L74">    List&lt;String&gt; variants = (List&lt;String&gt;)roleData.get(PROP_VARIANTS);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">    if (variants != null) {</span>
+<span class="fc" id="L76">      return variants;</span>
     }
     else {
-<span class="fc" id="L80">      return Collections.emptyList();</span>
+<span class="fc" id="L79">      return Collections.emptyList();</span>
     }
   }
 

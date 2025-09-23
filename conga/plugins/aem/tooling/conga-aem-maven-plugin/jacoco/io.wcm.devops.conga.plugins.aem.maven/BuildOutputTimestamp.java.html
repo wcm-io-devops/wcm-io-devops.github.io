@@ -34,28 +34,31 @@ public class BuildOutputTimestamp {
   private final Optional&lt;Instant&gt; instant;
 
   /**
+   * Configured output timestamp
    * @param outputTimestamp Configured output timestamp
    */
-<span class="fc" id="L39">  public BuildOutputTimestamp(@Nullable String outputTimestamp) {</span>
-<span class="fc" id="L40">    this.instant = MavenArchiver.parseBuildOutputTimestamp(outputTimestamp);</span>
-<span class="fc" id="L41">  }</span>
+<span class="fc" id="L40">  public BuildOutputTimestamp(@Nullable String outputTimestamp) {</span>
+<span class="fc" id="L41">    this.instant = MavenArchiver.parseBuildOutputTimestamp(outputTimestamp);</span>
+<span class="fc" id="L42">  }</span>
 
   /**
+   * Check if a valid timestamp is configured,
    * @return true if a valid timestamp is configured
    */
   public boolean isValid() {
-<span class="fc" id="L47">    return instant.isPresent();</span>
+<span class="fc" id="L49">    return instant.isPresent();</span>
   }
 
   /**
+   * File time
    * @return FileTime or null if not a valid date
    */
   @Nullable
   public FileTime toFileTime() {
-<span class="fc" id="L55">    return instant</span>
-<span class="fc" id="L56">        .map(Instant::toEpochMilli)</span>
-<span class="fc" id="L57">        .map(FileTime::fromMillis)</span>
-<span class="fc" id="L58">        .orElse(null);</span>
+<span class="fc" id="L58">    return instant</span>
+<span class="fc" id="L59">        .map(Instant::toEpochMilli)</span>
+<span class="fc" id="L60">        .map(FileTime::fromMillis)</span>
+<span class="fc" id="L61">        .orElse(null);</span>
   }
 
 }

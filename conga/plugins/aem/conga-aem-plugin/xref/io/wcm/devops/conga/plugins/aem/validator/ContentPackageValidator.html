@@ -98,8 +98,8 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        <em class="jxr_comment">// validate package if a package type is defined</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>        <em class="jxr_comment">// supported only within Maven</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>        String packageType = Objects.toString(ContentPackageProperties.get(file.getFile()).get(NAME_PACKAGE_TYPE), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>        <strong class="jxr_keyword">if</strong> (packageType != <strong class="jxr_keyword">null</strong> &amp;&amp; context.getContainerContext() instanceof MavenContext) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          validateContentPackage(file.getFile(), context, (MavenContext)context.getContainerContext());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>        <strong class="jxr_keyword">if</strong> (packageType != <strong class="jxr_keyword">null</strong> &amp;&amp; context.getContainerContext() instanceof MavenContext mavenContext) {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          validateContentPackage(file.getFile(), context, mavenContext);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>        }
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">catch</strong> (IOException | IllegalAccessException | MojoExecutionException | MojoFailureException
@@ -184,24 +184,24 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>   @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>   <strong class="jxr_keyword">private</strong> Map&lt;String, Object&gt; toMap(Object value) {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>     <strong class="jxr_keyword">if</strong> (value instanceof Map) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>       <strong class="jxr_keyword">return</strong> (Map)value;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>       <strong class="jxr_keyword">return</strong> (Map&lt;String, Object&gt;)value;
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>     }
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">return</strong> Collections.emptyMap();
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>   }
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> toBoolean(Object value) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>     <strong class="jxr_keyword">if</strong> (value instanceof Boolean) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>       <strong class="jxr_keyword">return</strong> (Boolean)value;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     <strong class="jxr_keyword">if</strong> (value instanceof Boolean booleanValue) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>       <strong class="jxr_keyword">return</strong> booleanValue;
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>     }
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">if</strong> (value instanceof String) {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>       <strong class="jxr_keyword">return</strong> BooleanUtils.toBoolean((String)value);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">if</strong> (value instanceof String stringValue) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>       <strong class="jxr_keyword">return</strong> BooleanUtils.toBoolean(stringValue);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>     }
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>   }
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>   <strong class="jxr_keyword">private</strong> String toString(Object value) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>     <strong class="jxr_keyword">if</strong> (value instanceof String) {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>       <strong class="jxr_keyword">return</strong> (String)value;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     <strong class="jxr_keyword">if</strong> (value instanceof String stringValue) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>       <strong class="jxr_keyword">return</strong> stringValue;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>     }
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>     <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>       <strong class="jxr_keyword">return</strong> value.toString();

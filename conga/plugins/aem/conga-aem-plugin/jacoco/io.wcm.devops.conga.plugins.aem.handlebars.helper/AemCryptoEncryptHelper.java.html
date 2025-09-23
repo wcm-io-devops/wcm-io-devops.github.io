@@ -77,8 +77,8 @@ import io.wcm.devops.conga.plugins.aem.crypto.impl.AesCryptoSupport;
 <span class="fc" id="L77">      cryptoAesKeyUrl = Objects.toString(aemPluginConfig.get(PARAMETER_CRYPTO_AES_KEY_URL), null);</span>
 <span class="fc" id="L78">      Object cryptoSkipObject = aemPluginConfig.get(PARAMETER_CRYPTO_SKIP);</span>
 <span class="fc bfc" id="L79" title="All 2 branches covered.">      if (cryptoSkipObject != null) {</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (cryptoSkipObject instanceof Boolean) {</span>
-<span class="fc" id="L81">          cryptoSkip = (Boolean)cryptoSkipObject;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (cryptoSkipObject instanceof Boolean booleanValue) {</span>
+<span class="fc" id="L81">          cryptoSkip = booleanValue;</span>
         }
         else {
 <span class="fc" id="L84">          cryptoSkip = BooleanUtils.toBoolean(cryptoSkipObject.toString());</span>

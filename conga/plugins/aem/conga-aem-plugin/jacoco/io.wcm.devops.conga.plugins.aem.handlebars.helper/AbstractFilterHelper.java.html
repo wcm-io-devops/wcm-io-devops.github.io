@@ -51,7 +51,7 @@ import io.wcm.devops.conga.generator.spi.handlebars.context.HelperContext;
   private String toYaml(Map&lt;String, Object&gt; filterMap) {
 <span class="nc" id="L52">    StringBuilder sb = new StringBuilder();</span>
 <span class="nc" id="L53">    filterMap.entrySet().forEach(entry -&gt; {</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">      if (sb.length() == 0) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">      if (sb.isEmpty()) {</span>
 <span class="nc" id="L55">        sb.append(&quot;- &quot;);</span>
       }
       else {

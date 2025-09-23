@@ -90,8 +90,8 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
       // validate package if a package type is defined
       // supported only within Maven
 <span class="fc" id="L92">      String packageType = Objects.toString(ContentPackageProperties.get(file.getFile()).get(NAME_PACKAGE_TYPE), null);</span>
-<span class="pc bpc" id="L93" title="3 of 4 branches missed.">      if (packageType != null &amp;&amp; context.getContainerContext() instanceof MavenContext) {</span>
-<span class="nc" id="L94">        validateContentPackage(file.getFile(), context, (MavenContext)context.getContainerContext());</span>
+<span class="pc bpc" id="L93" title="3 of 4 branches missed.">      if (packageType != null &amp;&amp; context.getContainerContext() instanceof MavenContext mavenContext) {</span>
+<span class="nc" id="L94">        validateContentPackage(file.getFile(), context, mavenContext);</span>
       }
     }
 <span class="nc" id="L97">    catch (IOException | IllegalAccessException | MojoExecutionException | MojoFailureException</span>
@@ -176,24 +176,24 @@ import io.wcm.tooling.commons.packmgr.util.ContentPackageProperties;
   @SuppressWarnings(&quot;unchecked&quot;)
   private Map&lt;String, Object&gt; toMap(Object value) {
 <span class="nc bnc" id="L178" title="All 2 branches missed.">    if (value instanceof Map) {</span>
-<span class="nc" id="L179">      return (Map)value;</span>
+<span class="nc" id="L179">      return (Map&lt;String, Object&gt;)value;</span>
     }
 <span class="nc" id="L181">    return Collections.emptyMap();</span>
   }
 
   private boolean toBoolean(Object value) {
-<span class="nc bnc" id="L185" title="All 2 branches missed.">    if (value instanceof Boolean) {</span>
-<span class="nc" id="L186">      return (Boolean)value;</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">    if (value instanceof Boolean booleanValue) {</span>
+<span class="nc" id="L186">      return booleanValue;</span>
     }
-<span class="nc bnc" id="L188" title="All 2 branches missed.">    if (value instanceof String) {</span>
-<span class="nc" id="L189">      return BooleanUtils.toBoolean((String)value);</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">    if (value instanceof String stringValue) {</span>
+<span class="nc" id="L189">      return BooleanUtils.toBoolean(stringValue);</span>
     }
 <span class="nc" id="L191">    return false;</span>
   }
 
   private String toString(Object value) {
-<span class="nc bnc" id="L195" title="All 2 branches missed.">    if (value instanceof String) {</span>
-<span class="nc" id="L196">      return (String)value;</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">    if (value instanceof String stringValue) {</span>
+<span class="nc" id="L196">      return stringValue;</span>
     }
 <span class="nc bnc" id="L198" title="All 2 branches missed.">    else if (value != null) {</span>
 <span class="nc" id="L199">      return value.toString();</span>
