@@ -81,7 +81,7 @@ final class DispatcherFilter extends AbstractFilter {
 
     // validate
 <span class="fc" id="L83">    ensureNoMoreParams(mapCopy);</span>
-<span class="pc bpc" id="L84" title="7 of 18 branches missed.">    if (method == null &amp;&amp; url == null &amp;&amp; query == null &amp;&amp; protocol == null</span>
+<span class="pc bpc" id="L84" title="6 of 18 branches missed.">    if (method == null &amp;&amp; url == null &amp;&amp; query == null &amp;&amp; protocol == null</span>
         &amp;&amp; path == null &amp;&amp; selectors == null &amp;&amp; extension == null &amp;&amp; suffix == null
         &amp;&amp; glob == null) {
 <span class="fc" id="L87">      throw new IllegalArgumentException(&quot;Require any definition of: method, url, query, protocol, path, selectors, extension, suffix, glob&quot;);</span>

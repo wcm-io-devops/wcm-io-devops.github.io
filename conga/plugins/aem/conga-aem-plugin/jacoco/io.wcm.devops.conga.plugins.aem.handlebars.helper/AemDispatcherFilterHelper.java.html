@@ -46,42 +46,52 @@ import com.github.jknack.handlebars.Options;
 <span class="fc" id="L46">    DispatcherFilter filter = new DispatcherFilter(filterMap);</span>
 
 <span class="fc" id="L48">    StringBuilder sb = new StringBuilder()</span>
-<span class="fc" id="L49">        .append(&quot;{ &quot;)</span>
-<span class="fc" id="L50">        .append(&quot;/type \&quot;&quot;).append(filter.getType()).append(&quot;\&quot; &quot;);</span>
+<span class="fc" id="L49">        .append(&quot;{ &quot;);</span>
 
-<span class="fc bfc" id="L52" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getMethod())) {</span>
-<span class="fc" id="L53">      sb.append(&quot;/method '&quot;).append(filter.getMethod()).append(&quot;' &quot;);</span>
-    }
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(filter.getUrl())) {</span>
-<span class="fc" id="L56">      sb.append(&quot;/url '&quot;).append(filter.getUrl()).append(&quot;' &quot;);</span>
-    }
-<span class="fc bfc" id="L58" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getQuery())) {</span>
-<span class="fc" id="L59">      sb.append(&quot;/query '&quot;).append(filter.getQuery()).append(&quot;' &quot;);</span>
-    }
-<span class="fc bfc" id="L61" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getProtocol())) {</span>
-<span class="fc" id="L62">      sb.append(&quot;/protocol '&quot;).append(filter.getProtocol()).append(&quot;' &quot;);</span>
-    }
+<span class="fc" id="L51">    applySimpleValue(sb, &quot;type&quot;, filter.getType().toString());</span>
 
-<span class="fc bfc" id="L65" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getPath())) {</span>
-<span class="fc" id="L66">      sb.append(&quot;/path '&quot;).append(filter.getPath()).append(&quot;' &quot;);</span>
-    }
-<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getSelectors())) {</span>
-<span class="fc" id="L69">      sb.append(&quot;/selectors '&quot;).append(filter.getSelectors()).append(&quot;' &quot;);</span>
-    }
-<span class="fc bfc" id="L71" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getExtension())) {</span>
-<span class="fc" id="L72">      sb.append(&quot;/extension '&quot;).append(filter.getExtension()).append(&quot;' &quot;);</span>
-    }
-<span class="fc bfc" id="L74" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getSuffix())) {</span>
-<span class="fc" id="L75">      sb.append(&quot;/suffix '&quot;).append(filter.getSuffix()).append(&quot;' &quot;);</span>
-    }
+<span class="fc" id="L53">    applyRegexValue(sb, &quot;method&quot;, filter.getMethod());</span>
+<span class="fc" id="L54">    applyRegexValue(sb, &quot;url&quot;, filter.getUrl());</span>
+<span class="fc" id="L55">    applyRegexValue(sb, &quot;query&quot;, filter.getQuery());</span>
+<span class="fc" id="L56">    applyRegexValue(sb, &quot;protocol&quot;, filter.getProtocol());</span>
 
-<span class="fc bfc" id="L78" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(filter.getGlob())) {</span>
-<span class="fc" id="L79">      sb.append(&quot;/glob '&quot;).append(filter.getGlob()).append(&quot;' &quot;);</span>
-    }
+<span class="fc" id="L58">    applyRegexValue(sb, &quot;path&quot;, filter.getPath());</span>
+<span class="fc" id="L59">    applyRegexValueEmptyStringAllowed(sb, &quot;selectors&quot;, filter.getSelectors());</span>
+<span class="fc" id="L60">    applyRegexValueEmptyStringAllowed(sb, &quot;extension&quot;, filter.getExtension());</span>
+<span class="fc" id="L61">    applyRegexValueEmptyStringAllowed(sb, &quot;suffix&quot;, filter.getSuffix());</span>
 
-<span class="fc" id="L82">    sb.append(&quot;}&quot;);</span>
-<span class="fc" id="L83">    return sb.toString();</span>
+<span class="fc" id="L63">    applyRegexValue(sb, &quot;glob&quot;, filter.getGlob());</span>
+
+<span class="fc" id="L65">    sb.append(&quot;}&quot;);</span>
+<span class="fc" id="L66">    return sb.toString();</span>
   }
+
+  /**
+   * Append filter parameter as simple fixed string (enclosed in &quot;&quot;).
+   */
+  private void applySimpleValue(StringBuilder sb, String key, String value) {
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    if (StringUtils.isNotEmpty(value)) {</span>
+<span class="fc" id="L74">      sb.append(&quot;/&quot;).append(key).append(&quot; \&quot;&quot;).append(value).append(&quot;\&quot; &quot;);</span>
+    }
+<span class="fc" id="L76">  }</span>
+
+  /**
+   * Append filter parameter as string that may be a regex (enclosed in ''). Empty string are ignored.
+   */
+  private void applyRegexValue(StringBuilder sb, String key, String value) {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(value)) {</span>
+<span class="fc" id="L83">      sb.append(&quot;/&quot;).append(key).append(&quot; '&quot;).append(value).append(&quot;' &quot;);</span>
+    }
+<span class="fc" id="L85">  }</span>
+
+  /**
+   * Append filter parameter as string that may be a regex (enclosed in ''). Empty strings are left as-is.
+   */
+  private void applyRegexValueEmptyStringAllowed(StringBuilder sb, String key, String value) {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (value != null) {</span>
+<span class="fc" id="L92">      sb.append(&quot;/&quot;).append(key).append(&quot; '&quot;).append(value).append(&quot;' &quot;);</span>
+    }
+<span class="fc" id="L94">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
