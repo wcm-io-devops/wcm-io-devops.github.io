@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">   * after installing finishing the upload. This works only for AEMaaCS SDK instances.</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">   *</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">   * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">   * Expected is an URL like: <a href="http://localhost:4502/systemready" target="alexandria_uri">http://localhost:4502/systemready</a></em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">   * Expected is an URL like: <a href="http://localhost:4502/systemready.json" target="alexandria_uri">http://localhost:4502/systemready.json</a></em>
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">   * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">   *</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">   * &lt;p&gt;</em>
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a>     }
 <a class="jxr_linenumber" name="L313" href="#L313">313</a>     <em class="jxr_comment">// if not set use hostname from serviceURL and add default path to bundle status</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>     String baseUrl = VendorInstallerFactory.getBaseUrl(buildPackageManagerUrl());
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">return</strong> baseUrl + <span class="jxr_string">"/systemready"</span>;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>     <strong class="jxr_keyword">return</strong> baseUrl + <span class="jxr_string">"/systemready.json"</span>;
 <a class="jxr_linenumber" name="L316" href="#L316">316</a>   }
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>   <strong class="jxr_keyword">private</strong> String buildPackageManagerInstallStatusUrl() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
