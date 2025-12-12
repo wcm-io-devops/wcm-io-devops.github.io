@@ -91,6 +91,10 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - Context type</dd>
+</dl>
+<dl class="notes">
 <dt>Direct Known Subclasses:</dt>
 <dd><code><a href="../handlebars/context/EscapingStrategyContext.html" title="class in io.wcm.devops.conga.generator.spi.handlebars.context">EscapingStrategyContext</a></code>, <code><a href="FileHeaderContext.html" title="class in io.wcm.devops.conga.generator.spi.context">FileHeaderContext</a></code>, <code><a href="../handlebars/context/HelperContext.html" title="class in io.wcm.devops.conga.generator.spi.handlebars.context">HelperContext</a></code>, <code><a href="MultiplyContext.html" title="class in io.wcm.devops.conga.generator.spi.context">MultiplyContext</a></code>, <code><a href="../export/context/NodeModelExportContext.html" title="class in io.wcm.devops.conga.generator.spi.export.context">NodeModelExportContext</a></code>, <code><a href="PostProcessorContext.html" title="class in io.wcm.devops.conga.generator.spi.context">PostProcessorContext</a></code>, <code><a href="UrlFilePluginContext.html" title="class in io.wcm.devops.conga.generator.spi.context">UrlFilePluginContext</a></code>, <code><a href="ValidatorContext.html" title="class in io.wcm.devops.conga.generator.spi.context">ValidatorContext</a></code>, <code><a href="ValueEncryptionContext.html" title="class in io.wcm.devops.conga.generator.spi.context">ValueEncryptionContext</a></code>, <code><a href="ValueProviderContext.html" title="class in io.wcm.devops.conga.generator.spi.context">ValueProviderContext</a></code>, <code><a href="ValueProviderGlobalContext.html" title="class in io.wcm.devops.conga.generator.spi.context">ValueProviderGlobalContext</a></code>, <code><a href="../yaml/context/YamlConstructorContext.html" title="class in io.wcm.devops.conga.generator.spi.yaml.context">YamlConstructorContext</a></code>, <code><a href="../yaml/context/YamlRepresentContext.html" title="class in io.wcm.devops.conga.generator.spi.yaml.context">YamlRepresentContext</a></code></dd>
 </dl>
@@ -127,25 +131,39 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContainerContext()" class="member-name-link">getContainerContext</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets container context.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGenericPluginConfig()" class="member-name-link">getGenericPluginConfig</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets generic plugin configuration.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final org.slf4j.Logger</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLogger()" class="member-name-link">getLogger</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets logger.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="PluginContextOptions.html" title="class in io.wcm.devops.conga.generator.spi.context">PluginContextOptions</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPluginContextOptions()" class="member-name-link">getPluginContextOptions</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets plugin context options.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="../../util/PluginManager.html" title="interface in io.wcm.devops.conga.generator.util">PluginManager</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPluginManager()" class="member-name-link">getPluginManager</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets plugin manager.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="../../UrlFileManager.html" title="class in io.wcm.devops.conga.generator">UrlFileManager</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlFileManager()" class="member-name-link">getUrlFileManager</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets URL file manager.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="AbstractPluginContext.html" title="type parameter in AbstractPluginContext">T</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pluginContextOptions(io.wcm.devops.conga.generator.spi.context.PluginContextOptions)" class="member-name-link">pluginContextOptions</a><wbr>(<a href="PluginContextOptions.html" title="class in io.wcm.devops.conga.generator.spi.context">PluginContextOptions</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets plugin context options.</div>
+</div>
 </div>
 </div>
 </div>
@@ -181,6 +199,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getPluginContextOptions()">
 <h3>getPluginContextOptions</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="PluginContextOptions.html" title="class in io.wcm.devops.conga.generator.spi.context">PluginContextOptions</a></span>&nbsp;<span class="element-name">getPluginContextOptions</span>()</div>
+<div class="block">Gets plugin context options.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Generic plugin context options</dd>
@@ -191,6 +210,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="pluginContextOptions(io.wcm.devops.conga.generator.spi.context.PluginContextOptions)">
 <h3>pluginContextOptions</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="AbstractPluginContext.html" title="type parameter in AbstractPluginContext">T</a></span>&nbsp;<span class="element-name">pluginContextOptions</span><wbr><span class="parameters">(<a href="PluginContextOptions.html" title="class in io.wcm.devops.conga.generator.spi.context">PluginContextOptions</a>&nbsp;value)</span></div>
+<div class="block">Sets plugin context options.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - Generic plugin context options</dd>
@@ -203,6 +223,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getPluginManager()">
 <h3>getPluginManager</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../../util/PluginManager.html" title="interface in io.wcm.devops.conga.generator.util">PluginManager</a></span>&nbsp;<span class="element-name">getPluginManager</span>()</div>
+<div class="block">Gets plugin manager.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Plugin manager</dd>
@@ -213,6 +234,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getUrlFileManager()">
 <h3>getUrlFileManager</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../../UrlFileManager.html" title="class in io.wcm.devops.conga.generator">UrlFileManager</a></span>&nbsp;<span class="element-name">getUrlFileManager</span>()</div>
+<div class="block">Gets URL file manager.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>URL file manager</dd>
@@ -223,6 +245,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getGenericPluginConfig()">
 <h3>getGenericPluginConfig</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">getGenericPluginConfig</span>()</div>
+<div class="block">Gets generic plugin configuration.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Generic plugin configuration</dd>
@@ -233,6 +256,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getContainerContext()">
 <h3>getContainerContext</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name">getContainerContext</span>()</div>
+<div class="block">Gets container context.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Container-specific context object</dd>
@@ -243,6 +267,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getLogger()">
 <h3>getLogger</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="element-name">getLogger</span>()</div>
+<div class="block">Gets logger.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Logger</dd>

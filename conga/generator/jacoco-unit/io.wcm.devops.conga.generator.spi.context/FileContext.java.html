@@ -38,89 +38,99 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   private File targetDir;
 
   /**
+   * Gets file.
    * @return File
    */
   public File getFile() {
-<span class="fc" id="L44">    return file;</span>
+<span class="fc" id="L45">    return file;</span>
   }
 
   /**
+   * Sets file.
    * @param value File
    * @return this
    */
   public FileContext file(File value) {
-<span class="fc" id="L52">    file = value;</span>
-<span class="fc" id="L53">    canonicalPath = FileUtil.getCanonicalPath(value);</span>
-<span class="fc" id="L54">    return this;</span>
+<span class="fc" id="L54">    file = value;</span>
+<span class="fc" id="L55">    canonicalPath = FileUtil.getCanonicalPath(value);</span>
+<span class="fc" id="L56">    return this;</span>
   }
 
   /**
+   * Gets canonical path.
    * @return Canonical path
    */
   public String getCanonicalPath() {
-<span class="fc" id="L61">    return canonicalPath;</span>
+<span class="fc" id="L64">    return canonicalPath;</span>
   }
 
   /**
+   * Gets charset.
    * @return Charset
    */
   public String getCharset() {
-<span class="fc" id="L68">    return charset;</span>
+<span class="fc" id="L72">    return charset;</span>
   }
 
   /**
+   * Sets charset.
    * @param value Charset
    * @return this
    */
   public FileContext charset(String value) {
-<span class="fc" id="L76">    charset = value;</span>
-<span class="fc" id="L77">    return this;</span>
+<span class="fc" id="L81">    charset = value;</span>
+<span class="fc" id="L82">    return this;</span>
   }
 
   /**
+   * Sets charset.
    * @param value Charset
    * @return this
    */
   public FileContext charset(Charset value) {
-<span class="fc" id="L85">    charset = value.name();</span>
-<span class="fc" id="L86">    return this;</span>
+<span class="fc" id="L91">    charset = value.name();</span>
+<span class="fc" id="L92">    return this;</span>
   }
 
   /**
+   * Gets model options.
    * @return Model options
    */
   public Map&lt;String, Object&gt; getModelOptions() {
-<span class="fc" id="L93">    return this.modelOptions;</span>
+<span class="fc" id="L100">    return this.modelOptions;</span>
   }
 
   /**
+   * Sets model options.
    * @param value Model options
    * @return this
    */
   public FileContext modelOptions(Map&lt;String, Object&gt; value) {
-<span class="fc" id="L101">    this.modelOptions = value;</span>
-<span class="fc" id="L102">    return this;</span>
+<span class="fc" id="L109">    this.modelOptions = value;</span>
+<span class="fc" id="L110">    return this;</span>
   }
 
   /**
+   * Gets target directory.
    * @return Target directory for generated configuration
    */
   public File getTargetDir() {
-<span class="nc" id="L109">    return this.targetDir;</span>
+<span class="nc" id="L118">    return this.targetDir;</span>
   }
 
   /**
+   * Sets target directory.
    * @param value Target directory for generated configuration
    * @return this
    */
   public FileContext targetDir(File value) {
-<span class="fc" id="L117">    this.targetDir = value;</span>
-<span class="fc" id="L118">    return this;</span>
+<span class="fc" id="L127">    this.targetDir = value;</span>
+<span class="fc" id="L128">    return this;</span>
   }
 
   @Override
   public String toString() {
-<span class="nc" id="L123">    return canonicalPath;</span>
+<span class="nc" id="L133">    return canonicalPath;</span>
   }
 
 }

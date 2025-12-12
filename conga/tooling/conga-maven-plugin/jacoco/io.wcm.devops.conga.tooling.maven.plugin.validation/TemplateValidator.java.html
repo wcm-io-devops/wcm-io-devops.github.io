@@ -44,13 +44,14 @@ public final class TemplateValidator implements DefinitionValidator&lt;Void&gt; 
   private final HandlebarsManager handlebarsManager;
 
   /**
+   * Constructor.
    * @param templateDir Template directory
    * @param handlebarsManager Handlebars Manager
    */
-<span class="fc" id="L50">  public TemplateValidator(ResourceCollection templateDir, HandlebarsManager handlebarsManager) {</span>
-<span class="fc" id="L51">    this.templateDir = templateDir;</span>
-<span class="fc" id="L52">    this.handlebarsManager = handlebarsManager;</span>
-<span class="fc" id="L53">  }</span>
+<span class="fc" id="L51">  public TemplateValidator(ResourceCollection templateDir, HandlebarsManager handlebarsManager) {</span>
+<span class="fc" id="L52">    this.templateDir = templateDir;</span>
+<span class="fc" id="L53">    this.handlebarsManager = handlebarsManager;</span>
+<span class="fc" id="L54">  }</span>
 
   @Override
   @SuppressWarnings({
@@ -58,18 +59,18 @@ public final class TemplateValidator implements DefinitionValidator&lt;Void&gt; 
       &quot;java:S1075&quot; // uses / by intention
   })
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">    if (Strings.CI.equals(resource.getFileExtension(), FILE_EXTENSION)) {</span>
-<span class="fc" id="L62">      String templatePath = StringUtils.substringAfter(PathUtil.unifySlashes(resource.getCanonicalPath()),</span>
-<span class="fc" id="L63">          PathUtil.unifySlashes(templateDir.getCanonicalPath()) + &quot;/&quot;);</span>
-<span class="fc" id="L64">      Handlebars handlebars = handlebarsManager.get(NoneEscapingStrategy.NAME, StandardCharsets.UTF_8.name());</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">    if (Strings.CI.equals(resource.getFileExtension(), FILE_EXTENSION)) {</span>
+<span class="fc" id="L63">      String templatePath = StringUtils.substringAfter(PathUtil.unifySlashes(resource.getCanonicalPath()),</span>
+<span class="fc" id="L64">          PathUtil.unifySlashes(templateDir.getCanonicalPath()) + &quot;/&quot;);</span>
+<span class="fc" id="L65">      Handlebars handlebars = handlebarsManager.get(NoneEscapingStrategy.NAME, StandardCharsets.UTF_8.name());</span>
       try {
-<span class="fc" id="L66">        handlebars.compile(templatePath);</span>
+<span class="fc" id="L67">        handlebars.compile(templatePath);</span>
       }
-<span class="nc" id="L68">      /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L69">        throw new MojoFailureException(&quot;Template &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
-<span class="fc" id="L70">      }</span>
+<span class="nc" id="L69">      /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L70">        throw new MojoFailureException(&quot;Template &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="fc" id="L71">      }</span>
     }
-<span class="fc" id="L72">    return null;</span>
+<span class="fc" id="L73">    return null;</span>
   }
 
 }

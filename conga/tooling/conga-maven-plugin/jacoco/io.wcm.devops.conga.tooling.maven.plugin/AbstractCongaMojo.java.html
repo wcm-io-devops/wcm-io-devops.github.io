@@ -181,51 +181,87 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.PluginConfigUtil;
       &quot;bundle&quot;, &quot;jar&quot;,
       &quot;content-package&quot;, &quot;zip&quot;);
 
+  /**
+   * Gets template directory.
+   * @return Template directory
+   */
   protected File getTemplateDir() {
-<span class="fc" id="L185">    return templateDir;</span>
+<span class="fc" id="L189">    return templateDir;</span>
   }
 
+  /**
+   * Gets role directory.
+   * @return Role directory
+   */
   protected File getRoleDir() {
-<span class="fc" id="L189">    return roleDir;</span>
+<span class="fc" id="L197">    return roleDir;</span>
   }
 
+  /**
+   * Gets environment directory.
+   * @return Environment directory
+   */
   protected File getEnvironmentDir() {
-<span class="fc" id="L193">    return environmentDir;</span>
+<span class="fc" id="L205">    return environmentDir;</span>
   }
 
+  /**
+   * Gets target directory.
+   * @return Target directory
+   */
   protected File getTargetDir() {
-<span class="fc" id="L197">    return target;</span>
+<span class="fc" id="L213">    return target;</span>
   }
 
+  /**
+   * Gets Maven project.
+   * @return Maven project
+   */
   protected MavenProject getProject() {
-<span class="fc" id="L201">    return project;</span>
+<span class="fc" id="L221">    return project;</span>
   }
 
+  /**
+   * Gets model export configuration.
+   * @return Model export configuration
+   */
   protected ModelExport getModelExport() {
-<span class="fc" id="L205">    ModelExport modelExport = new ModelExport();</span>
+<span class="fc" id="L229">    ModelExport modelExport = new ModelExport();</span>
 
-<span class="fc" id="L207">    String[] nodeExportPlugins = StringUtils.split(this.modelExportNode, &quot;,&quot;);</span>
-<span class="pc bpc" id="L208" title="1 of 2 branches missed.">    if (nodeExportPlugins != null) {</span>
-<span class="fc" id="L209">      modelExport.setNode(Arrays.asList(nodeExportPlugins));</span>
+<span class="fc" id="L231">    String[] nodeExportPlugins = StringUtils.split(this.modelExportNode, &quot;,&quot;);</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">    if (nodeExportPlugins != null) {</span>
+<span class="fc" id="L233">      modelExport.setNode(Arrays.asList(nodeExportPlugins));</span>
     }
 
-<span class="fc" id="L212">    return modelExport;</span>
+<span class="fc" id="L236">    return modelExport;</span>
   }
 
+  /**
+   * Gets value provider configuration.
+   * @return Value provider configuration
+   */
   protected Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
-<span class="fc" id="L216">    return PluginConfigUtil.getConfigMap(this.valueProvider);</span>
+<span class="fc" id="L244">    return PluginConfigUtil.getConfigMap(this.valueProvider);</span>
   }
 
+  /**
+   * Gets plugin configuration.
+   * @return Plugin configuration
+   */
   protected Map&lt;String, Map&lt;String, Object&gt;&gt; getPluginConfig() {
-<span class="fc" id="L220">    return PluginConfigUtil.getConfigMap(this.pluginConfig);</span>
+<span class="fc" id="L252">    return PluginConfigUtil.getConfigMap(this.pluginConfig);</span>
   }
 
+  /**
+   * Gets artifact type mappings.
+   * @return Artifact type mappings
+   */
   protected Map&lt;String, String&gt; getArtifactTypeMappings() {
-<span class="fc" id="L224">    Map&lt;String, String&gt; mappings = this.artifactTypeMappings;</span>
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">    if (mappings == null) {</span>
-<span class="fc" id="L226">      mappings = DEFAULT_ARTIFACT_TYPE_MAPPINGS;</span>
+<span class="fc" id="L260">    Map&lt;String, String&gt; mappings = this.artifactTypeMappings;</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">    if (mappings == null) {</span>
+<span class="fc" id="L262">      mappings = DEFAULT_ARTIFACT_TYPE_MAPPINGS;</span>
     }
-<span class="fc" id="L228">    return mappings;</span>
+<span class="fc" id="L264">    return mappings;</span>
   }
 
   /**
@@ -236,19 +272,19 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.PluginConfigUtil;
   protected void buildDefinitionsJarFile() throws MojoExecutionException, MojoFailureException {
 
     // copy definitions to classes dir
-<span class="fc" id="L239">    File definitionDir = copyDefinitions();</span>
+<span class="fc" id="L275">    File definitionDir = copyDefinitions();</span>
 
     // build JAR artifact
-<span class="fc" id="L242">    File outputFile = buildJarFile(definitionDir);</span>
+<span class="fc" id="L278">    File outputFile = buildJarFile(definitionDir);</span>
 
     // set or attach JAR artifact
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">    if (Strings.CS.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {</span>
-<span class="fc" id="L246">      project.getArtifact().setFile(outputFile);</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">    if (Strings.CS.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {</span>
+<span class="fc" id="L282">      project.getArtifact().setFile(outputFile);</span>
     }
     else {
-<span class="nc" id="L249">      projectHelper.attachArtifact(project, outputFile, CLASSIFIER_DEFINITION);</span>
+<span class="nc" id="L285">      projectHelper.attachArtifact(project, outputFile, CLASSIFIER_DEFINITION);</span>
     }
-<span class="fc" id="L251">  }</span>
+<span class="fc" id="L287">  }</span>
 
   /**
    * Build JAR file with definitions.
@@ -256,51 +292,51 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.PluginConfigUtil;
    * @return JAR file
    */
   private File buildJarFile(File contentDirectory) throws MojoExecutionException {
-<span class="fc" id="L259">    File jarFile = new File(project.getBuild().getDirectory(), buildJarFileName());</span>
+<span class="fc" id="L295">    File jarFile = new File(project.getBuild().getDirectory(), buildJarFileName());</span>
 
-<span class="fc" id="L261">    MavenArchiver archiver = new MavenArchiver();</span>
-<span class="fc" id="L262">    archiver.setArchiver(jarArchiver);</span>
-<span class="fc" id="L263">    archiver.setOutputFile(jarFile);</span>
-<span class="fc" id="L264">    archive.setForced(true);</span>
+<span class="fc" id="L297">    MavenArchiver archiver = new MavenArchiver();</span>
+<span class="fc" id="L298">    archiver.setArchiver(jarArchiver);</span>
+<span class="fc" id="L299">    archiver.setOutputFile(jarFile);</span>
+<span class="fc" id="L300">    archive.setForced(true);</span>
 
     // include definitions
-<span class="fc" id="L267">    archiver.getArchiver().addDirectory(contentDirectory);</span>
+<span class="fc" id="L303">    archiver.getArchiver().addDirectory(contentDirectory);</span>
 
     // include resources
-<span class="fc bfc" id="L270" title="All 2 branches covered.">    for (org.apache.maven.model.Resource resource : project.getResources()) {</span>
-<span class="fc" id="L271">      File resourceDir = new File(resource.getDirectory());</span>
-<span class="fc bfc" id="L272" title="All 2 branches covered.">      if (resourceDir.exists()) {</span>
-<span class="fc" id="L273">        archiver.getArchiver().addDirectory(resourceDir,</span>
-<span class="fc" id="L274">            toArray(resource.getIncludes()), toArray(resource.getExcludes()));</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">    for (org.apache.maven.model.Resource resource : project.getResources()) {</span>
+<span class="fc" id="L307">      File resourceDir = new File(resource.getDirectory());</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">      if (resourceDir.exists()) {</span>
+<span class="fc" id="L309">        archiver.getArchiver().addDirectory(resourceDir,</span>
+<span class="fc" id="L310">            toArray(resource.getIncludes()), toArray(resource.getExcludes()));</span>
       }
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L312">    }</span>
 
     try {
-<span class="fc" id="L279">      archiver.createArchive(mavenSession, project, archive);</span>
+<span class="fc" id="L315">      archiver.createArchive(mavenSession, project, archive);</span>
     }
-<span class="nc" id="L281">    catch (ArchiverException | ManifestException | IOException | DependencyResolutionRequiredException ex) {</span>
-<span class="nc" id="L282">      throw new MojoExecutionException(&quot;Unable to build file &quot; + jarFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L283">    }</span>
+<span class="nc" id="L317">    catch (ArchiverException | ManifestException | IOException | DependencyResolutionRequiredException ex) {</span>
+<span class="nc" id="L318">      throw new MojoExecutionException(&quot;Unable to build file &quot; + jarFile.getPath() + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L319">    }</span>
 
-<span class="fc" id="L285">    return jarFile;</span>
+<span class="fc" id="L321">    return jarFile;</span>
   }
 
   @SuppressWarnings(&quot;java:S1168&quot;) // null array is allowed
   private String[] toArray(List&lt;String&gt; values) {
-<span class="pc bpc" id="L290" title="2 of 4 branches missed.">    if (values == null || values.isEmpty()) {</span>
-<span class="fc" id="L291">      return null;</span>
+<span class="pc bpc" id="L326" title="2 of 4 branches missed.">    if (values == null || values.isEmpty()) {</span>
+<span class="fc" id="L327">      return null;</span>
     }
-<span class="nc" id="L293">    return values.toArray(new String[0]);</span>
+<span class="nc" id="L329">    return values.toArray(new String[0]);</span>
   }
 
   private String buildJarFileName() {
-<span class="fc" id="L297">    StringBuilder sb = new StringBuilder();</span>
-<span class="fc" id="L298">    sb.append(project.getBuild().getFinalName());</span>
-<span class="pc bpc" id="L299" title="1 of 2 branches missed.">    if (!Strings.CS.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {</span>
-<span class="nc" id="L300">      sb.append(&quot;-&quot;).append(CLASSIFIER_DEFINITION);</span>
+<span class="fc" id="L333">    StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L334">    sb.append(project.getBuild().getFinalName());</span>
+<span class="pc bpc" id="L335" title="1 of 2 branches missed.">    if (!Strings.CS.equalsAny(project.getPackaging(), PACKAGING_DEFINITION, PACKAGING_CONFIGURATION)) {</span>
+<span class="nc" id="L336">      sb.append(&quot;-&quot;).append(CLASSIFIER_DEFINITION);</span>
     }
-<span class="fc" id="L302">    sb.append(&quot;.&quot;).append(FILE_EXTENSION_DEFINITION);</span>
-<span class="fc" id="L303">    return sb.toString();</span>
+<span class="fc" id="L338">    sb.append(&quot;.&quot;).append(FILE_EXTENSION_DEFINITION);</span>
+<span class="fc" id="L339">    return sb.toString();</span>
   }
 
   /**
@@ -308,73 +344,73 @@ import io.wcm.devops.conga.tooling.maven.plugin.util.PluginConfigUtil;
    */
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   private File copyDefinitions() throws MojoExecutionException {
-<span class="fc" id="L311">    File outputDir = new File(definitionTarget);</span>
-<span class="fc bfc" id="L312" title="All 2 branches covered.">    if (!outputDir.exists()) {</span>
-<span class="fc" id="L313">      outputDir.mkdirs();</span>
+<span class="fc" id="L347">    File outputDir = new File(definitionTarget);</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">    if (!outputDir.exists()) {</span>
+<span class="fc" id="L349">      outputDir.mkdirs();</span>
     }
 
-<span class="fc" id="L316">    ResourceLoader resourceLoader = new ResourceLoader();</span>
-<span class="fc" id="L317">    ResourceCollection roleDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());</span>
-<span class="fc" id="L318">    ResourceCollection templateDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());</span>
-<span class="fc" id="L319">    ResourceCollection environmentDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());</span>
+<span class="fc" id="L352">    ResourceLoader resourceLoader = new ResourceLoader();</span>
+<span class="fc" id="L353">    ResourceCollection roleDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getRoleDir());</span>
+<span class="fc" id="L354">    ResourceCollection templateDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getTemplateDir());</span>
+<span class="fc" id="L355">    ResourceCollection environmentDirCol = resourceLoader.getResourceCollection(ResourceLoader.FILE_PREFIX + getEnvironmentDir());</span>
 
     // copy definitions
     try {
-<span class="fc" id="L323">      copyDefinitions(roleDirCol, outputDir, outputDir, CLASSPATH_ROLES_DIR);</span>
-<span class="fc" id="L324">      copyDefinitions(templateDirCol, outputDir, outputDir, CLASSPATH_TEMPLATES_DIR);</span>
-<span class="fc" id="L325">      copyDefinitions(environmentDirCol, outputDir, outputDir, CLASSPATH_ENVIRONMENTS_DIR);</span>
+<span class="fc" id="L359">      copyDefinitions(roleDirCol, outputDir, outputDir, CLASSPATH_ROLES_DIR);</span>
+<span class="fc" id="L360">      copyDefinitions(templateDirCol, outputDir, outputDir, CLASSPATH_TEMPLATES_DIR);</span>
+<span class="fc" id="L361">      copyDefinitions(environmentDirCol, outputDir, outputDir, CLASSPATH_ENVIRONMENTS_DIR);</span>
     }
-<span class="nc" id="L327">    catch (IOException ex) {</span>
-<span class="nc" id="L328">      throw new MojoExecutionException(&quot;Unable to copy definitions:&quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L329">    }</span>
+<span class="nc" id="L363">    catch (IOException ex) {</span>
+<span class="nc" id="L364">      throw new MojoExecutionException(&quot;Unable to copy definitions:&quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L365">    }</span>
 
-<span class="fc" id="L331">    return outputDir;</span>
+<span class="fc" id="L367">    return outputDir;</span>
   }
 
   @SuppressFBWarnings(&quot;RV_RETURN_VALUE_IGNORED_BAD_PRACTICE&quot;)
   private void copyDefinitions(ResourceCollection sourceDir, File rootOutputDir, File parentTargetDir, String dirName) throws IOException {
-<span class="fc bfc" id="L336" title="All 2 branches covered.">    if (!sourceDir.exists()) {</span>
-<span class="fc" id="L337">      return;</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">    if (!sourceDir.exists()) {</span>
+<span class="fc" id="L373">      return;</span>
     }
-<span class="fc" id="L339">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
-<span class="fc" id="L340">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
-<span class="pc bpc" id="L341" title="1 of 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
-<span class="nc" id="L342">      return;</span>
-    }
-
-<span class="fc" id="L345">    File targetDir = new File(parentTargetDir, dirName);</span>
-<span class="pc bpc" id="L346" title="1 of 2 branches missed.">    if (!targetDir.exists()) {</span>
-<span class="fc" id="L347">      targetDir.mkdirs();</span>
+<span class="fc" id="L375">    SortedSet&lt;Resource&gt; files = sourceDir.getResources();</span>
+<span class="fc" id="L376">    SortedSet&lt;ResourceCollection&gt; dirs = sourceDir.getResourceCollections();</span>
+<span class="pc bpc" id="L377" title="1 of 4 branches missed.">    if (files.isEmpty() &amp;&amp; dirs.isEmpty()) {</span>
+<span class="nc" id="L378">      return;</span>
     }
 
-<span class="fc bfc" id="L350" title="All 2 branches covered.">    for (Resource file : files) {</span>
-<span class="fc" id="L351">      File targetFile = new File(targetDir, file.getName());</span>
+<span class="fc" id="L381">    File targetDir = new File(parentTargetDir, dirName);</span>
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">    if (!targetDir.exists()) {</span>
+<span class="fc" id="L383">      targetDir.mkdirs();</span>
+    }
 
-<span class="fc" id="L353">      getLog().info(&quot;Include &quot; + getPathForLog(rootOutputDir, targetFile));</span>
+<span class="fc bfc" id="L386" title="All 2 branches covered.">    for (Resource file : files) {</span>
+<span class="fc" id="L387">      File targetFile = new File(targetDir, file.getName());</span>
 
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">      if (targetFile.exists()) {</span>
-<span class="nc" id="L356">        Files.delete(targetFile.toPath());</span>
+<span class="fc" id="L389">      getLog().info(&quot;Include &quot; + getPathForLog(rootOutputDir, targetFile));</span>
+
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">      if (targetFile.exists()) {</span>
+<span class="nc" id="L392">        Files.delete(targetFile.toPath());</span>
       }
-<span class="fc" id="L358">      try (InputStream is = file.getInputStream()) {</span>
-<span class="fc" id="L359">        byte[] data = IOUtils.toByteArray(is);</span>
-<span class="fc" id="L360">        FileUtils.writeByteArrayToFile(targetFile, data);</span>
+<span class="fc" id="L394">      try (InputStream is = file.getInputStream()) {</span>
+<span class="fc" id="L395">        byte[] data = IOUtils.toByteArray(is);</span>
+<span class="fc" id="L396">        FileUtils.writeByteArrayToFile(targetFile, data);</span>
       }
-<span class="fc" id="L362">    }</span>
+<span class="fc" id="L398">    }</span>
 
-<span class="fc bfc" id="L364" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
-<span class="fc" id="L365">      copyDefinitions(dir, rootOutputDir, targetDir, dir.getName());</span>
-<span class="fc" id="L366">    }</span>
-<span class="fc" id="L367">  }</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">    for (ResourceCollection dir : dirs) {</span>
+<span class="fc" id="L401">      copyDefinitions(dir, rootOutputDir, targetDir, dir.getName());</span>
+<span class="fc" id="L402">    }</span>
+<span class="fc" id="L403">  }</span>
 
   @SuppressWarnings(&quot;java:S1075&quot;) // not a filesystem path
   private String getPathForLog(File rootOutputDir, File file) throws IOException {
-<span class="fc" id="L371">    String path = unifySlashes(file.getCanonicalPath());</span>
-<span class="fc" id="L372">    String rootPath = unifySlashes(rootOutputDir.getCanonicalPath()) + &quot;/&quot;;</span>
-<span class="fc" id="L373">    return StringUtils.substringAfter(path, rootPath);</span>
+<span class="fc" id="L407">    String path = unifySlashes(file.getCanonicalPath());</span>
+<span class="fc" id="L408">    String rootPath = unifySlashes(rootOutputDir.getCanonicalPath()) + &quot;/&quot;;</span>
+<span class="fc" id="L409">    return StringUtils.substringAfter(path, rootPath);</span>
   }
 
   private String unifySlashes(String path) {
-<span class="fc" id="L377">    return Strings.CS.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
+<span class="fc" id="L413">    return Strings.CS.replace(path, &quot;\\&quot;, &quot;/&quot;);</span>
   }
 
 }

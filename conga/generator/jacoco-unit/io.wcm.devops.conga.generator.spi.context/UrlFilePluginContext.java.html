@@ -34,67 +34,75 @@ import io.wcm.devops.conga.model.environment.Environment;
   private Environment environment;
 
   /**
+   * Gets base directory.
    * @return Base directory for resolving relative files in filesystem
    */
   public File getBaseDir() {
-<span class="fc" id="L40">    return baseDir;</span>
+<span class="fc" id="L41">    return baseDir;</span>
   }
 
   /**
+   * Sets base directory.
    * @param value Base directory for resolving relative files in filesystem
    * @return this
    */
   public UrlFilePluginContext baseDir(File value) {
-<span class="fc" id="L48">    baseDir = value;</span>
-<span class="fc" id="L49">    return this;</span>
+<span class="fc" id="L50">    baseDir = value;</span>
+<span class="fc" id="L51">    return this;</span>
   }
 
   /**
+   * Gets node base directory.
    * @return Base directory for resolving relative files of the generated files for the current node in filesystem
    */
   public File getNodeBaseDir() {
-<span class="fc" id="L56">    return nodeBaseDir;</span>
+<span class="fc" id="L59">    return nodeBaseDir;</span>
   }
 
   /**
+   * Sets node base directory.
    * @param value Base directory for resolving relative files of the generated files for the current node in filesystem
    * @return this
    */
   public UrlFilePluginContext baseNodeDir(File value) {
-<span class="fc" id="L64">    nodeBaseDir = value;</span>
-<span class="fc" id="L65">    return this;</span>
+<span class="fc" id="L68">    nodeBaseDir = value;</span>
+<span class="fc" id="L69">    return this;</span>
   }
 
   /**
+   * Sets resource class loader.
    * @param value Class loader for resources
    * @return this
    */
   public UrlFilePluginContext resourceClassLoader(ClassLoader value) {
-<span class="fc" id="L73">    resourceClassLoader = value;</span>
-<span class="fc" id="L74">    return this;</span>
+<span class="fc" id="L78">    resourceClassLoader = value;</span>
+<span class="fc" id="L79">    return this;</span>
   }
 
   /**
+   * Gets resource class loader.
    * @return Class loader for resources
    */
   public ClassLoader getResourceClassLoader() {
-<span class="fc" id="L81">    return resourceClassLoader;</span>
+<span class="fc" id="L87">    return resourceClassLoader;</span>
   }
 
   /**
+   * Gets environment.
    * @return Environment
    */
   public Environment getEnvironment() {
-<span class="nc" id="L88">    return this.environment;</span>
+<span class="nc" id="L95">    return this.environment;</span>
   }
 
   /**
+   * Sets environment.
    * @param value Environment
    * @return this
    */
   public UrlFilePluginContext environment(Environment value) {
-<span class="fc" id="L96">    this.environment = value;</span>
-<span class="fc" id="L97">    return this;</span>
+<span class="fc" id="L104">    this.environment = value;</span>
+<span class="fc" id="L105">    return this;</span>
   }
 
 }

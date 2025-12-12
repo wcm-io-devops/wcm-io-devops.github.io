@@ -34,22 +34,23 @@ public final class ModelValidator&lt;T&gt; implements DefinitionValidator&lt;T&g
   private final ModelReader&lt;T&gt; modelReader;
 
   /**
+   * Constructor.
    * @param modelName Model name (for log message)
    * @param modelReader Model reader implementation
    */
-<span class="fc" id="L40">  public ModelValidator(String modelName, ModelReader&lt;T&gt; modelReader) {</span>
-<span class="fc" id="L41">    this.modelName = modelName;</span>
-<span class="fc" id="L42">    this.modelReader = modelReader;</span>
-<span class="fc" id="L43">  }</span>
+<span class="fc" id="L41">  public ModelValidator(String modelName, ModelReader&lt;T&gt; modelReader) {</span>
+<span class="fc" id="L42">    this.modelName = modelName;</span>
+<span class="fc" id="L43">    this.modelReader = modelReader;</span>
+<span class="fc" id="L44">  }</span>
 
   @Override
   @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
   public T validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
-<span class="fc" id="L49">      return modelReader.read(resource);</span>
+<span class="fc" id="L50">      return modelReader.read(resource);</span>
     }
-<span class="nc" id="L51">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L52">      throw new MojoFailureException(modelName + &quot; definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="nc" id="L52">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L53">      throw new MojoFailureException(modelName + &quot; definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
     }
   }
 

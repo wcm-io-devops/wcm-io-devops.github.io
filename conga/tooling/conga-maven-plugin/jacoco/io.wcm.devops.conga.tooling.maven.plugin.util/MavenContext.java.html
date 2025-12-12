@@ -48,163 +48,183 @@ import org.sonatype.plexus.build.incremental.BuildContext;
   private Map&lt;String, String&gt; artifactTypeMappings;
 
   /**
+   * Gets Maven project.
    * @return Maven project
    */
   public MavenProject getProject() {
-<span class="fc" id="L54">    return this.project;</span>
+<span class="fc" id="L55">    return this.project;</span>
   }
 
   /**
+   * Sets Maven project.
    * @param value Maven project
    * @return this
    */
   public MavenContext project(MavenProject value) {
-<span class="fc" id="L62">    this.project = value;</span>
-<span class="fc" id="L63">    return this;</span>
+<span class="fc" id="L64">    this.project = value;</span>
+<span class="fc" id="L65">    return this;</span>
   }
 
   /**
+   * Gets Maven session.
    * @return Maven Session
    */
   public MavenSession getSession() {
-<span class="nc" id="L70">    return this.session;</span>
+<span class="nc" id="L73">    return this.session;</span>
   }
 
   /**
+   * Sets Maven session.
    * @param value Maven Session
    * @return this
    */
   public MavenContext session(MavenSession value) {
-<span class="fc" id="L78">    this.session = value;</span>
-<span class="fc" id="L79">    return this;</span>
+<span class="fc" id="L82">    this.session = value;</span>
+<span class="fc" id="L83">    return this;</span>
   }
 
   /**
+   * Gets repository system.
    * @return Repository system
    */
   public org.apache.maven.repository.RepositorySystem getRepositorySystem() {
-<span class="nc" id="L86">    return this.repositorySystem;</span>
+<span class="nc" id="L91">    return this.repositorySystem;</span>
   }
 
   /**
+   * Sets repository system.
    * @param value Repository system
    * @return this
    */
   public MavenContext setRepositorySystem(org.apache.maven.repository.RepositorySystem value) {
-<span class="fc" id="L94">    this.repositorySystem = value;</span>
-<span class="fc" id="L95">    return this;</span>
+<span class="fc" id="L100">    this.repositorySystem = value;</span>
+<span class="fc" id="L101">    return this;</span>
   }
 
   /**
+   * Gets resolution error handler.
    * @return Resolution error handler
    */
   public ResolutionErrorHandler getResolutionErrorHandler() {
-<span class="nc" id="L102">    return this.resolutionErrorHandler;</span>
+<span class="nc" id="L109">    return this.resolutionErrorHandler;</span>
   }
 
   /**
+   * Sets resolution error handler.
    * @param value Resolution error handler
    * @return this
    */
   public MavenContext resolutionErrorHandler(ResolutionErrorHandler value) {
-<span class="fc" id="L110">    this.resolutionErrorHandler = value;</span>
-<span class="fc" id="L111">    return this;</span>
+<span class="fc" id="L118">    this.resolutionErrorHandler = value;</span>
+<span class="fc" id="L119">    return this;</span>
   }
 
   /**
+   * Gets build context.
    * @return Build context
    */
   public BuildContext getBuildContext() {
-<span class="nc" id="L118">    return this.buildContext;</span>
+<span class="nc" id="L127">    return this.buildContext;</span>
   }
 
   /**
+   * Sets build context.
    * @param value Build context
    * @return this
    */
   public MavenContext buildContext(BuildContext value) {
-<span class="fc" id="L126">    this.buildContext = value;</span>
-<span class="fc" id="L127">    return this;</span>
+<span class="fc" id="L136">    this.buildContext = value;</span>
+<span class="fc" id="L137">    return this;</span>
   }
 
   /**
+   * Gets log.
    * @return Log
    */
   public Log getLog() {
-<span class="nc" id="L134">    return this.log;</span>
+<span class="nc" id="L145">    return this.log;</span>
   }
 
   /**
+   * Sets log.
    * @param value Log
    * @return this
    */
   public MavenContext log(Log value) {
-<span class="fc" id="L142">    this.log = value;</span>
-<span class="fc" id="L143">    return this;</span>
+<span class="fc" id="L154">    this.log = value;</span>
+<span class="fc" id="L155">    return this;</span>
   }
 
   /**
+   * Gets repository system.
    * @return Repository system
    */
   public RepositorySystem getRepoSystem() {
-<span class="fc" id="L150">    return this.repoSystem;</span>
+<span class="fc" id="L163">    return this.repoSystem;</span>
   }
 
   /**
+   * Sets repository system.
    * @param value Repository system
    * @return this
    */
   public MavenContext repoSystem(RepositorySystem value) {
-<span class="fc" id="L158">    this.repoSystem = value;</span>
-<span class="fc" id="L159">    return this;</span>
+<span class="fc" id="L172">    this.repoSystem = value;</span>
+<span class="fc" id="L173">    return this;</span>
   }
 
   /**
+   * Gets repository session.
    * @return Repository session
    */
   public RepositorySystemSession getRepoSession() {
-<span class="fc" id="L166">    return this.repoSession;</span>
+<span class="fc" id="L181">    return this.repoSession;</span>
   }
 
   /**
+   * Sets repository session.
    * @param value Repository session
    * @return this
    */
   public MavenContext repoSession(RepositorySystemSession value) {
-<span class="fc" id="L174">    this.repoSession = value;</span>
-<span class="fc" id="L175">    return this;</span>
-  }
-
-  /**
-   * @return Remote repositories
-   */
-  public List&lt;RemoteRepository&gt; getRemoteRepos() {
-<span class="fc" id="L182">    return this.remoteRepos;</span>
-  }
-
-  /**
-   * @param value Remote repositories
-   * @return this
-   */
-  public MavenContext remoteRepos(List&lt;RemoteRepository&gt; value) {
-<span class="fc" id="L190">    this.remoteRepos = value;</span>
+<span class="fc" id="L190">    this.repoSession = value;</span>
 <span class="fc" id="L191">    return this;</span>
   }
 
   /**
-   * @return Artifact type mappings
+   * Gets remote repositories.
+   * @return Remote repositories
    */
-  public Map&lt;String, String&gt; getArtifactTypeMappings() {
-<span class="fc" id="L198">    return this.artifactTypeMappings;</span>
+  public List&lt;RemoteRepository&gt; getRemoteRepos() {
+<span class="fc" id="L199">    return this.remoteRepos;</span>
   }
 
   /**
+   * Sets remote repositories.
+   * @param value Remote repositories
+   * @return this
+   */
+  public MavenContext remoteRepos(List&lt;RemoteRepository&gt; value) {
+<span class="fc" id="L208">    this.remoteRepos = value;</span>
+<span class="fc" id="L209">    return this;</span>
+  }
+
+  /**
+   * Gets artifact type mappings.
+   * @return Artifact type mappings
+   */
+  public Map&lt;String, String&gt; getArtifactTypeMappings() {
+<span class="fc" id="L217">    return this.artifactTypeMappings;</span>
+  }
+
+  /**
+   * Sets artifact type mappings.
    * @param value Artifact type mappings
    * @return this
    */
   public MavenContext artifactTypeMappings(Map&lt;String, String&gt; value) {
-<span class="fc" id="L206">    this.artifactTypeMappings = value;</span>
-<span class="fc" id="L207">    return this;</span>
+<span class="fc" id="L226">    this.artifactTypeMappings = value;</span>
+<span class="fc" id="L227">    return this;</span>
   }
 
 }

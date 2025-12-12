@@ -75,14 +75,15 @@ public final class VariableStringResolver {
   private final JexlResolver jexlResolver;
 
   /**
+   * Constructor.
    * @param valueProviderGlobalContext Value provider global context
    * @param variableMapResolver Variable map resolver
    */
   public VariableStringResolver(ValueProviderGlobalContext valueProviderGlobalContext,
-<span class="fc" id="L82">      VariableMapResolver variableMapResolver) {</span>
-<span class="fc" id="L83">    this.variableResolver = new VariableResolver(valueProviderGlobalContext);</span>
-<span class="fc" id="L84">    this.jexlResolver = new JexlResolver(variableMapResolver);</span>
-<span class="fc" id="L85">  }</span>
+<span class="fc" id="L83">      VariableMapResolver variableMapResolver) {</span>
+<span class="fc" id="L84">    this.variableResolver = new VariableResolver(valueProviderGlobalContext);</span>
+<span class="fc" id="L85">    this.jexlResolver = new JexlResolver(variableMapResolver);</span>
+<span class="fc" id="L86">  }</span>
 
   /**
    * Replace variable placeholders in a string with syntax ${key} with values from a map.
@@ -94,8 +95,8 @@ public final class VariableStringResolver {
    * @throws IllegalArgumentException when a variable name could not be resolve.d
    */
   public String resolveString(String value, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L97">    Object result = resolve(value, variables);</span>
-<span class="fc" id="L98">    return ValueUtil.valueToString(result);</span>
+<span class="fc" id="L98">    Object result = resolve(value, variables);</span>
+<span class="fc" id="L99">    return ValueUtil.valueToString(result);</span>
   }
 
   /**
@@ -108,7 +109,7 @@ public final class VariableStringResolver {
    * @throws IllegalArgumentException when a variable name could not be resolve.d
    */
   public Object resolve(String value, Map&lt;String, Object&gt; variables) {
-<span class="fc" id="L111">    return resolve(value, variables, true);</span>
+<span class="fc" id="L112">    return resolve(value, variables, true);</span>
   }
 
   /**
@@ -121,8 +122,8 @@ public final class VariableStringResolver {
    * @throws IllegalArgumentException when a variable name could not be resolve.d
    */
   public String resolveString(String value, Map&lt;String, Object&gt; variables, boolean deescapeVariables) {
-<span class="fc" id="L124">    Object result = resolve(value, variables, deescapeVariables);</span>
-<span class="fc" id="L125">    return ValueUtil.valueToString(result);</span>
+<span class="fc" id="L125">    Object result = resolve(value, variables, deescapeVariables);</span>
+<span class="fc" id="L126">    return ValueUtil.valueToString(result);</span>
   }
 
   /**
@@ -135,17 +136,17 @@ public final class VariableStringResolver {
    * @throws IllegalArgumentException when a variable name could not be resolve.d
    */
   public Object resolve(String value, Map&lt;String, Object&gt; variables, boolean deescapeVariables) {
-<span class="fc bfc" id="L138" title="All 2 branches covered.">    if (value == null) {</span>
-<span class="fc" id="L139">      return null;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L140">      return null;</span>
     }
 
-<span class="fc" id="L142">    Object result = resolve(value, variables, 0);</span>
+<span class="fc" id="L143">    Object result = resolve(value, variables, 0);</span>
 
-<span class="fc bfc" id="L144" title="All 4 branches covered.">    if (deescapeVariables &amp;&amp; (result instanceof String stringValue)) {</span>
-<span class="fc" id="L145">      result = deescape(stringValue);</span>
+<span class="fc bfc" id="L145" title="All 4 branches covered.">    if (deescapeVariables &amp;&amp; (result instanceof String stringValue)) {</span>
+<span class="fc" id="L146">      result = deescape(stringValue);</span>
     }
 
-<span class="fc" id="L148">    return result;</span>
+<span class="fc" id="L149">    return result;</span>
   }
 
   /**
@@ -154,74 +155,74 @@ public final class VariableStringResolver {
    * @return String with de-escaped variable references.
    */
   public String deescape(String value) {
-<span class="fc" id="L157">    return MULTI_EXPRESSION_PATTERN.matcher(value).replaceAll(&quot;\\$\\{&quot;</span>
+<span class="fc" id="L158">    return MULTI_EXPRESSION_PATTERN.matcher(value).replaceAll(&quot;\\$\\{&quot;</span>
         + &quot;$&quot; + EXPRESSION_POS_EXPRESSION + &quot;\\}&quot;);
   }
 
   private Object resolve(String value, Map&lt;String, Object&gt; variables, int iterationCount) {
-<span class="fc bfc" id="L162" title="All 2 branches covered.">    if (iterationCount &gt;= REPLACEMENT_MAX_ITERATIONS) {</span>
-<span class="fc" id="L163">      throw new IllegalArgumentException(&quot;Cyclic dependencies in variable string detected: &quot; + value);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">    if (iterationCount &gt;= REPLACEMENT_MAX_ITERATIONS) {</span>
+<span class="fc" id="L164">      throw new IllegalArgumentException(&quot;Cyclic dependencies in variable string detected: &quot; + value);</span>
     }
 
     // check if variable string contains only single variable - in this case resolve and return value without necessarily converting it to a string
-<span class="fc" id="L167">    Matcher matcherSingle = SINGLE_EXPRESSION_PATTERN.matcher(value);</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">    if (matcherSingle.matches()) {</span>
-<span class="fc" id="L169">      return resolveSingle(matcherSingle, variables, iterationCount);</span>
+<span class="fc" id="L168">    Matcher matcherSingle = SINGLE_EXPRESSION_PATTERN.matcher(value);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">    if (matcherSingle.matches()) {</span>
+<span class="fc" id="L170">      return resolveSingle(matcherSingle, variables, iterationCount);</span>
     }
     else {
-<span class="fc" id="L172">      Matcher matcherMulti = MULTI_EXPRESSION_PATTERN.matcher(value);</span>
-<span class="fc" id="L173">      return resolveMulti(matcherMulti, variables, iterationCount);</span>
+<span class="fc" id="L173">      Matcher matcherMulti = MULTI_EXPRESSION_PATTERN.matcher(value);</span>
+<span class="fc" id="L174">      return resolveMulti(matcherMulti, variables, iterationCount);</span>
     }
   }
 
   @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   private Object resolveSingle(Matcher matcher, Map&lt;String, Object&gt; variables, int iterationCount) {
-<span class="fc" id="L179">    boolean escapedVariable = Strings.CS.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
-<span class="fc" id="L180">    String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+<span class="fc" id="L180">    boolean escapedVariable = Strings.CS.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
+<span class="fc" id="L181">    String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
 
     // keep escaped variables intact
-<span class="fc bfc" id="L183" title="All 2 branches covered.">    if (escapedVariable) {</span>
-<span class="fc" id="L184">      return matcher.group(0);</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">    if (escapedVariable) {</span>
+<span class="fc" id="L185">      return matcher.group(0);</span>
     }
 
     else {
-<span class="fc" id="L188">      Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+<span class="fc" id="L189">      Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
 
       // resolve variable
-<span class="fc bfc" id="L191" title="All 2 branches covered.">      if (variableMatcher.matches()) {</span>
-<span class="fc" id="L192">        String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
-<span class="fc" id="L193">        String variable = Objects.toString(variableMatcher.group(VARIABLE_POS_VARIABLE_1), variableMatcher.group(VARIABLE_POS_VARIABLE_2));</span>
-<span class="fc" id="L194">        String defaultValueString = variableMatcher.group(VARIABLE_POS_DEFAULT_VALUE);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">      if (variableMatcher.matches()) {</span>
+<span class="fc" id="L193">        String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
+<span class="fc" id="L194">        String variable = Objects.toString(variableMatcher.group(VARIABLE_POS_VARIABLE_1), variableMatcher.group(VARIABLE_POS_VARIABLE_2));</span>
+<span class="fc" id="L195">        String defaultValueString = variableMatcher.group(VARIABLE_POS_DEFAULT_VALUE);</span>
 
-<span class="fc" id="L196">        Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (valueObject != null) {</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">          if (valueObject instanceof String stringValue) {</span>
+<span class="fc" id="L197">        Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (valueObject != null) {</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">          if (valueObject instanceof String stringValue) {</span>
             // try again until all nested references are resolved
-<span class="fc" id="L200">            return resolve(stringValue, variables, iterationCount + 1);</span>
+<span class="fc" id="L201">            return resolve(stringValue, variables, iterationCount + 1);</span>
           }
           else {
-<span class="fc" id="L203">            return valueObject;</span>
+<span class="fc" id="L204">            return valueObject;</span>
           }
         }
         else {
-<span class="fc" id="L207">          throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + variable);</span>
+<span class="fc" id="L208">          throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + variable);</span>
         }
       }
 
       // resolve JEXL expression
       else {
-<span class="fc" id="L213">        Object valueObject = jexlResolver.resolve(expression, variables);</span>
-<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (valueObject != null) {</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">          if (valueObject instanceof String) {</span>
+<span class="fc" id="L214">        Object valueObject = jexlResolver.resolve(expression, variables);</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (valueObject != null) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">          if (valueObject instanceof String) {</span>
             // try again until all nested references are resolved
-<span class="fc" id="L217">            return resolve((String)valueObject, variables, iterationCount + 1);</span>
+<span class="fc" id="L218">            return resolve((String)valueObject, variables, iterationCount + 1);</span>
           }
           else {
-<span class="fc" id="L220">            return valueObject;</span>
+<span class="fc" id="L221">            return valueObject;</span>
           }
         }
         else {
-<span class="nc" id="L224">          throw new IllegalArgumentException(&quot;Unable to resolve variable expression: &quot; + expression);</span>
+<span class="nc" id="L225">          throw new IllegalArgumentException(&quot;Unable to resolve variable expression: &quot; + expression);</span>
         }
       }
     }
@@ -229,59 +230,59 @@ public final class VariableStringResolver {
 
   @SuppressWarnings(&quot;java:S3776&quot;) // ignore complexity
   private Object resolveMulti(Matcher matcher, Map&lt;String, Object&gt; variables, int iterationCount) {
-<span class="fc" id="L232">    StringBuffer sb = new StringBuffer();</span>
-<span class="fc" id="L233">    boolean replacedAny = false;</span>
-<span class="fc bfc" id="L234" title="All 2 branches covered.">    while (matcher.find()) {</span>
-<span class="fc" id="L235">      boolean escapedVariable = Strings.CS.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
-<span class="fc" id="L236">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+<span class="fc" id="L233">    StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L234">    boolean replacedAny = false;</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L236">      boolean escapedVariable = Strings.CS.equals(matcher.group(EXPRESSION_POS_DOLLAR_SIGN), &quot;\\$&quot;);</span>
+<span class="fc" id="L237">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
 
       // keep escaped variables intact
-<span class="fc bfc" id="L239" title="All 2 branches covered.">      if (escapedVariable) {</span>
-<span class="fc" id="L240">        matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">      if (escapedVariable) {</span>
+<span class="fc" id="L241">        matcher.appendReplacement(sb, Matcher.quoteReplacement(matcher.group(0)));</span>
       }
 
       else {
-<span class="fc" id="L244">        Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+<span class="fc" id="L245">        Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
 
         // resolve variable
-<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (variableMatcher.matches()) {</span>
-<span class="fc" id="L248">          String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
-<span class="fc" id="L249">          String variable = Objects.toString(variableMatcher.group(VARIABLE_POS_VARIABLE_1), variableMatcher.group(VARIABLE_POS_VARIABLE_2));</span>
-<span class="fc" id="L250">          String defaultValueString = variableMatcher.group(VARIABLE_POS_DEFAULT_VALUE);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (variableMatcher.matches()) {</span>
+<span class="fc" id="L249">          String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
+<span class="fc" id="L250">          String variable = Objects.toString(variableMatcher.group(VARIABLE_POS_VARIABLE_1), variableMatcher.group(VARIABLE_POS_VARIABLE_2));</span>
+<span class="fc" id="L251">          String defaultValueString = variableMatcher.group(VARIABLE_POS_DEFAULT_VALUE);</span>
 
-<span class="fc" id="L252">          Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
-<span class="fc bfc" id="L253" title="All 2 branches covered.">          if (valueObject != null) {</span>
-<span class="fc" id="L254">            String variableValue = ValueUtil.valueToString(valueObject);</span>
-<span class="fc" id="L255">            matcher.appendReplacement(sb, Matcher.quoteReplacement(variableValue));</span>
-<span class="fc" id="L256">            replacedAny = true;</span>
-<span class="fc" id="L257">          }</span>
+<span class="fc" id="L253">          Object valueObject = variableResolver.resolve(valueProviderName, variable, defaultValueString, variables);</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">          if (valueObject != null) {</span>
+<span class="fc" id="L255">            String variableValue = ValueUtil.valueToString(valueObject);</span>
+<span class="fc" id="L256">            matcher.appendReplacement(sb, Matcher.quoteReplacement(variableValue));</span>
+<span class="fc" id="L257">            replacedAny = true;</span>
+<span class="fc" id="L258">          }</span>
           else {
-<span class="fc" id="L259">            throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + variable);</span>
+<span class="fc" id="L260">            throw new IllegalArgumentException(&quot;Unable to resolve variable: &quot; + variable);</span>
           }
-<span class="fc" id="L261">        }</span>
+<span class="fc" id="L262">        }</span>
 
         // resolve JEXL expression
         else {
-<span class="fc" id="L265">          Object valueObject = jexlResolver.resolve(expression, variables);</span>
-<span class="pc bpc" id="L266" title="1 of 2 branches missed.">          if (valueObject != null) {</span>
-<span class="fc" id="L267">            String variableValue = ValueUtil.valueToString(valueObject);</span>
-<span class="fc" id="L268">            matcher.appendReplacement(sb, Matcher.quoteReplacement(variableValue));</span>
-<span class="fc" id="L269">            replacedAny = true;</span>
-<span class="fc" id="L270">          }</span>
+<span class="fc" id="L266">          Object valueObject = jexlResolver.resolve(expression, variables);</span>
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">          if (valueObject != null) {</span>
+<span class="fc" id="L268">            String variableValue = ValueUtil.valueToString(valueObject);</span>
+<span class="fc" id="L269">            matcher.appendReplacement(sb, Matcher.quoteReplacement(variableValue));</span>
+<span class="fc" id="L270">            replacedAny = true;</span>
+<span class="fc" id="L271">          }</span>
           else {
-<span class="nc" id="L272">            throw new IllegalArgumentException(&quot;Unable to resolve variable expression: &quot; + expression);</span>
+<span class="nc" id="L273">            throw new IllegalArgumentException(&quot;Unable to resolve variable expression: &quot; + expression);</span>
           }
         }
       }
 
-<span class="fc" id="L277">    }</span>
-<span class="fc" id="L278">    matcher.appendTail(sb);</span>
-<span class="fc bfc" id="L279" title="All 2 branches covered.">    if (replacedAny) {</span>
+<span class="fc" id="L278">    }</span>
+<span class="fc" id="L279">    matcher.appendTail(sb);</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">    if (replacedAny) {</span>
       // try again until all nested references are resolved
-<span class="fc" id="L281">      return resolve(sb.toString(), variables, iterationCount + 1);</span>
+<span class="fc" id="L282">      return resolve(sb.toString(), variables, iterationCount + 1);</span>
     }
     else {
-<span class="fc" id="L284">      return sb.toString();</span>
+<span class="fc" id="L285">      return sb.toString();</span>
     }
   }
 
@@ -291,18 +292,18 @@ public final class VariableStringResolver {
    * @return true if a value provider reference was found.
    */
   public static boolean hasValueProviderReference(String value) {
-<span class="fc" id="L294">    Matcher matcher = MULTI_EXPRESSION_PATTERN.matcher(value);</span>
-<span class="fc bfc" id="L295" title="All 2 branches covered.">    while (matcher.find()) {</span>
-<span class="fc" id="L296">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
-<span class="fc" id="L297">      Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
-<span class="pc bpc" id="L298" title="1 of 2 branches missed.">      if (variableMatcher.matches()) {</span>
-<span class="fc" id="L299">        String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
-<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (StringUtils.isNotEmpty(valueProviderName)) {</span>
-<span class="fc" id="L301">          return true;</span>
+<span class="fc" id="L295">    Matcher matcher = MULTI_EXPRESSION_PATTERN.matcher(value);</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">    while (matcher.find()) {</span>
+<span class="fc" id="L297">      String expression = matcher.group(EXPRESSION_POS_EXPRESSION);</span>
+<span class="fc" id="L298">      Matcher variableMatcher = VARIABLE_PATTERN.matcher(expression);</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">      if (variableMatcher.matches()) {</span>
+<span class="fc" id="L300">        String valueProviderName = variableMatcher.group(VARIABLE_POS_VALUE_PROVIDER_NAME);</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        if (StringUtils.isNotEmpty(valueProviderName)) {</span>
+<span class="fc" id="L302">          return true;</span>
         }
       }
-<span class="fc" id="L304">    }</span>
-<span class="fc" id="L305">    return false;</span>
+<span class="fc" id="L305">    }</span>
+<span class="fc" id="L306">    return false;</span>
   }
 
 }

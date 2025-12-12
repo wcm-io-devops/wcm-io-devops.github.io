@@ -157,16 +157,24 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCommentBlockEnd()" class="member-name-link">getCommentBlockEnd</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets comment block end.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCommentBlockStart()" class="member-name-link">getCommentBlockStart</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets comment block start.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets plugin name.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sanitizeComment(java.lang.String)" class="member-name-link">sanitizeComment</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;line)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sanitizes comment line.</div>
+</div>
 </div>
 </div>
 </div>
@@ -231,6 +239,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getName()">
 <h3>getName</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getName</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../../spi/Plugin.html#getName()">Plugin</a></code></span></div>
+<div class="block">Gets plugin name.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Plugin name to be referenced in definition file</dd>
@@ -257,9 +267,15 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="sanitizeComment(java.lang.String)">
 <h3>sanitizeComment</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">sanitizeComment</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;line)</span></div>
+<div class="block"><span class="description-from-type-label">Description copied from class:&nbsp;<code><a href="AbstractFileHeader.html#sanitizeComment(java.lang.String)">AbstractFileHeader</a></code></span></div>
+<div class="block">Sanitizes comment line.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="AbstractFileHeader.html#sanitizeComment(java.lang.String)">sanitizeComment</a></code>&nbsp;in class&nbsp;<code><a href="AbstractFileHeader.html" title="class in io.wcm.devops.conga.generator.plugins.fileheader">AbstractFileHeader</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>line</code> - Comment line</dd>
+<dt>Returns:</dt>
+<dd>Sanitized comment line</dd>
 </dl>
 </section>
 </li>
@@ -267,9 +283,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getCommentBlockStart()">
 <h3>getCommentBlockStart</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getCommentBlockStart</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from class:&nbsp;<code><a href="AbstractFileHeader.html#getCommentBlockStart()">AbstractFileHeader</a></code></span></div>
+<div class="block">Gets comment block start.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="AbstractFileHeader.html#getCommentBlockStart()">getCommentBlockStart</a></code>&nbsp;in class&nbsp;<code><a href="AbstractFileHeader.html" title="class in io.wcm.devops.conga.generator.plugins.fileheader">AbstractFileHeader</a></code></dd>
+<dt>Returns:</dt>
+<dd>Comment block start string</dd>
 </dl>
 </section>
 </li>
@@ -277,9 +297,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getCommentBlockEnd()">
 <h3>getCommentBlockEnd</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getCommentBlockEnd</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from class:&nbsp;<code><a href="AbstractFileHeader.html#getCommentBlockEnd()">AbstractFileHeader</a></code></span></div>
+<div class="block">Gets comment block end.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="AbstractFileHeader.html#getCommentBlockEnd()">getCommentBlockEnd</a></code>&nbsp;in class&nbsp;<code><a href="AbstractFileHeader.html" title="class in io.wcm.devops.conga.generator.plugins.fileheader">AbstractFileHeader</a></code></dd>
+<dt>Returns:</dt>
+<dd>Comment block end string</dd>
 </dl>
 </section>
 </li>

@@ -40,99 +40,111 @@ import io.wcm.devops.conga.model.role.RoleFile;
   private VariableMapResolver variableMapResolver;
 
   /**
+   * Gets role.
    * @return Role
    */
   public Role getRole() {
-<span class="nc" id="L46">    return role;</span>
+<span class="nc" id="L47">    return role;</span>
   }
 
   /**
+   * Sets role.
    * @param value Role
    * @return this
    */
   public MultiplyContext role(Role value) {
-<span class="fc" id="L54">    role = value;</span>
-<span class="fc" id="L55">    return this;</span>
+<span class="fc" id="L56">    role = value;</span>
+<span class="fc" id="L57">    return this;</span>
   }
 
   /**
+   * Gets role file.
    * @return Role file
    */
   public RoleFile getRoleFile() {
-<span class="fc" id="L62">    return roleFile;</span>
+<span class="fc" id="L65">    return roleFile;</span>
   }
 
   /**
+   * Sets role file.
    * @param value Role file
    * @return this
    */
   public MultiplyContext roleFile(RoleFile value) {
-<span class="fc" id="L70">    roleFile = value;</span>
-<span class="fc" id="L71">    return this;</span>
+<span class="fc" id="L74">    roleFile = value;</span>
+<span class="fc" id="L75">    return this;</span>
   }
 
   /**
+   * Gets environment.
    * @return Environment
    */
   public Environment getEnvironment() {
-<span class="fc" id="L78">    return environment;</span>
+<span class="fc" id="L83">    return environment;</span>
   }
 
   /**
+   * Sets environment.
    * @param value Environment
    * @return this
    */
   public MultiplyContext environment(Environment value) {
-<span class="fc" id="L86">    environment = value;</span>
-<span class="fc" id="L87">    return this;</span>
+<span class="fc" id="L92">    environment = value;</span>
+<span class="fc" id="L93">    return this;</span>
   }
 
   /**
+   * Gets config.
    * @return Config
    */
   public Map&lt;String, Object&gt; getConfig() {
-<span class="fc" id="L94">    return config;</span>
+<span class="fc" id="L101">    return config;</span>
   }
 
   /**
+   * Sets config.
    * @param value Config
    * @return this
    */
   public MultiplyContext config(Map&lt;String, Object&gt; value) {
-<span class="fc" id="L102">    config = value;</span>
-<span class="fc" id="L103">    return this;</span>
+<span class="fc" id="L110">    config = value;</span>
+<span class="fc" id="L111">    return this;</span>
   }
 
   /**
+   * Gets variable string resolver.
    * @return Variable string resolver
    */
   public VariableStringResolver getVariableStringResolver() {
-<span class="fc" id="L110">    return this.variableStringResolver;</span>
+<span class="fc" id="L119">    return this.variableStringResolver;</span>
   }
 
   /**
+   * Sets variable string resolver.
    * @param value Variable string resolver
    * @return this
    */
   public MultiplyContext variableStringResolver(VariableStringResolver value) {
-<span class="fc" id="L118">    this.variableStringResolver = value;</span>
-<span class="fc" id="L119">    return this;</span>
+<span class="fc" id="L128">    this.variableStringResolver = value;</span>
+<span class="fc" id="L129">    return this;</span>
   }
 
   /**
+   * Gets variable map resolver.
    * @return Variable map resolver
    */
   public VariableMapResolver getVariableMapResolver() {
-<span class="nc" id="L126">    return this.variableMapResolver;</span>
+<span class="nc" id="L137">    return this.variableMapResolver;</span>
   }
 
   /**
+   * Sets variable map resolver.
    * @param value Variable map resolver
    * @return this
    */
   public MultiplyContext variableMapResolver(VariableMapResolver value) {
-<span class="fc" id="L134">    this.variableMapResolver = value;</span>
-<span class="fc" id="L135">    return this;</span>
+<span class="fc" id="L146">    this.variableMapResolver = value;</span>
+<span class="fc" id="L147">    return this;</span>
   }
 
 }

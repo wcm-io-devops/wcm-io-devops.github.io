@@ -42,26 +42,27 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ModelReader&lt;T&gt; modelReader;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">   * @param modelName Model name (for log message)</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">   * @param modelReader Model reader implementation</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">public</strong> <a name="ModelValidator" href="../../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/ModelValidator.html#ModelValidator">ModelValidator</a>(String modelName, ModelReader&lt;T&gt; modelReader) {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">this</strong>.modelName = modelName;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">this</strong>.modelReader = modelReader;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>    }
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>    @Override
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>    @SuppressWarnings(<span class="jxr_string">"PMD.PreserveStackTrace"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">public</strong> T validate(Resource resource, String pathForLog) <strong class="jxr_keyword">throws</strong> MojoFailureException {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>        <strong class="jxr_keyword">return</strong> modelReader.read(resource);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <em class="jxr_comment">/*CHECKSTYLE:OFF*/</em> <strong class="jxr_keyword">catch</strong> (Exception ex) { <em class="jxr_comment">/*CHECKSTYLE:ON*/</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoFailureException(modelName + <span class="jxr_string">" definition "</span> + pathForLog + <span class="jxr_string">" is invalid:\n"</span> + ex.getMessage());
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    }
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  }
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">   * Constructor.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">   * @param modelName Model name (for log message)</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">   * @param modelReader Model reader implementation</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">public</strong> <a name="ModelValidator" href="../../../../../../../../io/wcm/devops/conga/tooling/maven/plugin/validation/ModelValidator.html#ModelValidator">ModelValidator</a>(String modelName, ModelReader&lt;T&gt; modelReader) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">this</strong>.modelName = modelName;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">this</strong>.modelReader = modelReader;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>    }
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>    @Override
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    @SuppressWarnings(<span class="jxr_string">"PMD.PreserveStackTrace"</span>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>    <strong class="jxr_keyword">public</strong> T validate(Resource resource, String pathForLog) <strong class="jxr_keyword">throws</strong> MojoFailureException {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>        <strong class="jxr_keyword">return</strong> modelReader.read(resource);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <em class="jxr_comment">/*CHECKSTYLE:OFF*/</em> <strong class="jxr_keyword">catch</strong> (Exception ex) { <em class="jxr_comment">/*CHECKSTYLE:ON*/</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoFailureException(modelName + <span class="jxr_string">" definition "</span> + pathForLog + <span class="jxr_string">" is invalid:\n"</span> + ex.getMessage());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      }
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2015–2025 <a href="https://devops.wcm.io">wcm.io DevOps</a></div>

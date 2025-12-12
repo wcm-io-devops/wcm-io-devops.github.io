@@ -37,28 +37,30 @@ import java.util.Map;
   public static final String PARAM_PLUGIN_NAME = &quot;_plugin_&quot;;
 
   /**
+   * Gets value provider configuration.
    * @return Configuration for value providers.
    *         The outer map uses the value provider plugin name as key, the inner map contain the config properties.
    *         Never null.
    */
   public Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
-<span class="fc" id="L45">    Map&lt;String, Map&lt;String, Object&gt;&gt; value = this.getPluginContextOptions().getValueProviderConfig();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">    if (value == null) {</span>
-<span class="fc" id="L47">      value = Collections.emptyMap();</span>
+<span class="fc" id="L46">    Map&lt;String, Map&lt;String, Object&gt;&gt; value = this.getPluginContextOptions().getValueProviderConfig();</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    if (value == null) {</span>
+<span class="fc" id="L48">      value = Collections.emptyMap();</span>
     }
-<span class="fc" id="L49">    return value;</span>
+<span class="fc" id="L50">    return value;</span>
   }
 
   /**
+   * Gets value provider configuration.
    * @param valueProviderName Value provider name
    * @return Configuration for the given value provider. Never null.
    */
   public Map&lt;String, Object&gt; getValueProviderConfig(String valueProviderName) {
-<span class="fc" id="L57">    Map&lt;String, Object&gt; config = getValueProviderConfig().get(valueProviderName);</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">    if (config == null) {</span>
-<span class="fc" id="L59">      return Collections.emptyMap();</span>
+<span class="fc" id="L59">    Map&lt;String, Object&gt; config = getValueProviderConfig().get(valueProviderName);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (config == null) {</span>
+<span class="fc" id="L61">      return Collections.emptyMap();</span>
     }
-<span class="fc" id="L61">    return config;</span>
+<span class="fc" id="L63">    return config;</span>
   }
 
   /**
@@ -66,7 +68,7 @@ import java.util.Map;
    * @return Global cache map
    */
   public Map&lt;String, Object&gt; getGlobalValueProviderCache() {
-<span class="nc" id="L69">    return globalValueProviderCache;</span>
+<span class="nc" id="L71">    return globalValueProviderCache;</span>
   }
 
 }

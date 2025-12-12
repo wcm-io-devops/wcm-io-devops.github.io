@@ -38,46 +38,47 @@ public class CharsetAwareTemplateLoader extends AbstractTemplateLoader {
   private final String charset;
 
   /**
+   * Constructor.
    * @param templateDirs Template base directories
    * @param charset Charset for reading template files
    */
-<span class="fc" id="L44">  public CharsetAwareTemplateLoader(List&lt;ResourceCollection&gt; templateDirs, String charset) {</span>
-<span class="fc" id="L45">    this.templateDirs = templateDirs;</span>
-<span class="fc" id="L46">    this.charset = charset;</span>
-<span class="fc" id="L47">  }</span>
+<span class="fc" id="L45">  public CharsetAwareTemplateLoader(List&lt;ResourceCollection&gt; templateDirs, String charset) {</span>
+<span class="fc" id="L46">    this.templateDirs = templateDirs;</span>
+<span class="fc" id="L47">    this.charset = charset;</span>
+<span class="fc" id="L48">  }</span>
 
   @Override
   public TemplateSource sourceAt(String location) throws IOException {
-<span class="fc" id="L51">    Resource firstFile = null;</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">    for (ResourceCollection templateDir : templateDirs) {</span>
-<span class="fc" id="L53">      Resource file = templateDir.getResource(location);</span>
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">      if (firstFile == null) {</span>
-<span class="fc" id="L55">        firstFile = file;</span>
+<span class="fc" id="L52">    Resource firstFile = null;</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">    for (ResourceCollection templateDir : templateDirs) {</span>
+<span class="fc" id="L54">      Resource file = templateDir.getResource(location);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">      if (firstFile == null) {</span>
+<span class="fc" id="L56">        firstFile = file;</span>
       }
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">      if (file.exists()) {</span>
-<span class="fc" id="L58">        return new CharsetAwareTemplateSource(file, charset, location);</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">      if (file.exists()) {</span>
+<span class="fc" id="L59">        return new CharsetAwareTemplateSource(file, charset, location);</span>
       }
-<span class="nc" id="L60">    }</span>
-<span class="nc" id="L61">    throw new FileNotFoundException(&quot;Template file not found: &quot;</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        + (firstFile != null ? firstFile.getCanonicalPath() : location));</span>
+<span class="nc" id="L61">    }</span>
+<span class="nc" id="L62">    throw new FileNotFoundException(&quot;Template file not found: &quot;</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        + (firstFile != null ? firstFile.getCanonicalPath() : location));</span>
   }
 
   @Override
   public String resolve(String uri) {
-<span class="nc" id="L67">    Resource firstResource = null;</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">    for (ResourceCollection templateDir : templateDirs) {</span>
-<span class="nc" id="L69">      Resource file = templateDir.getResource(uri);</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">      if (firstResource == null) {</span>
-<span class="nc" id="L71">        firstResource = file;</span>
+<span class="nc" id="L68">    Resource firstResource = null;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">    for (ResourceCollection templateDir : templateDirs) {</span>
+<span class="nc" id="L70">      Resource file = templateDir.getResource(uri);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">      if (firstResource == null) {</span>
+<span class="nc" id="L72">        firstResource = file;</span>
       }
-<span class="nc bnc" id="L73" title="All 2 branches missed.">      if (file.exists()) {</span>
-<span class="nc" id="L74">        return file.getCanonicalPath();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">      if (file.exists()) {</span>
+<span class="nc" id="L75">        return file.getCanonicalPath();</span>
       }
-<span class="nc" id="L76">    }</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">    if (firstResource != null) {</span>
-<span class="nc" id="L78">      return firstResource.getCanonicalPath();</span>
+<span class="nc" id="L77">    }</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">    if (firstResource != null) {</span>
+<span class="nc" id="L79">      return firstResource.getCanonicalPath();</span>
     }
-<span class="nc" id="L80">    return null;</span>
+<span class="nc" id="L81">    return null;</span>
   }
 
 

@@ -59,6 +59,7 @@ public final class NodeModelExport {
 <span class="fc" id="L59">  private final List&lt;ExportNodeRoleData&gt; roleData = new ArrayList&lt;&gt;();</span>
 
   /**
+   * Constructor.
    * @param nodeDir Target directory for node
    * @param node Node
    * @param environment Environment
@@ -75,30 +76,30 @@ public final class NodeModelExport {
   public NodeModelExport(File nodeDir, Node node, Environment environment, ModelExport modelExport,
       VariableStringResolver variableStringResolver, VariableMapResolver variableMapResolver,
       Map&lt;String, String&gt; containerVersionInfo, PluginContextOptions pluginContextOptions,
-<span class="fc" id="L78">      Set&lt;String&gt; sensitiveConfigParameters, YamlRepresenter yamlRepresenter) {</span>
-<span class="fc" id="L79">    this.node = node;</span>
-<span class="fc" id="L80">    this.environment = environment;</span>
-<span class="fc" id="L81">    this.nodeDir = nodeDir;</span>
-<span class="fc" id="L82">    this.variableStringResolver = variableStringResolver;</span>
-<span class="fc" id="L83">    this.variableMapResolver = variableMapResolver;</span>
-<span class="fc" id="L84">    this.containerVersionInfo = containerVersionInfo;</span>
-<span class="fc" id="L85">    this.pluginContextOptions = pluginContextOptions;</span>
-<span class="fc" id="L86">    this.sensitiveConfigParameters = sensitiveConfigParameters;</span>
-<span class="fc" id="L87">    this.yamlRepresenter = yamlRepresenter;</span>
+<span class="fc" id="L79">      Set&lt;String&gt; sensitiveConfigParameters, YamlRepresenter yamlRepresenter) {</span>
+<span class="fc" id="L80">    this.node = node;</span>
+<span class="fc" id="L81">    this.environment = environment;</span>
+<span class="fc" id="L82">    this.nodeDir = nodeDir;</span>
+<span class="fc" id="L83">    this.variableStringResolver = variableStringResolver;</span>
+<span class="fc" id="L84">    this.variableMapResolver = variableMapResolver;</span>
+<span class="fc" id="L85">    this.containerVersionInfo = containerVersionInfo;</span>
+<span class="fc" id="L86">    this.pluginContextOptions = pluginContextOptions;</span>
+<span class="fc" id="L87">    this.sensitiveConfigParameters = sensitiveConfigParameters;</span>
+<span class="fc" id="L88">    this.yamlRepresenter = yamlRepresenter;</span>
 
     // get export plugins
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (modelExport != null) {</span>
-<span class="fc" id="L91">      List&lt;String&gt; nodeExportPlugins = modelExport.getNode();</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">      if (nodeExportPlugins != null) {</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (String nodeExportPlugin : nodeExportPlugins) {</span>
-<span class="fc" id="L94">          nodeModelExportPlugins.add(pluginContextOptions.getPluginManager().get(nodeExportPlugin, NodeModelExportPlugin.class));</span>
-<span class="fc" id="L95">        }</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (modelExport != null) {</span>
+<span class="fc" id="L92">      List&lt;String&gt; nodeExportPlugins = modelExport.getNode();</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">      if (nodeExportPlugins != null) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (String nodeExportPlugin : nodeExportPlugins) {</span>
+<span class="fc" id="L95">          nodeModelExportPlugins.add(pluginContextOptions.getPluginManager().get(nodeExportPlugin, NodeModelExportPlugin.class));</span>
+<span class="fc" id="L96">        }</span>
       }
     }
-<span class="fc" id="L98">  }</span>
+<span class="fc" id="L99">  }</span>
 
   private boolean isActive() {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    return !nodeModelExportPlugins.isEmpty();</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">    return !nodeModelExportPlugins.isEmpty();</span>
   }
 
   /**
@@ -109,65 +110,65 @@ public final class NodeModelExport {
    * @return Node role data
    */
   public ExportNodeRoleData addRole(String role, List&lt;String&gt; roleVariants, Map&lt;String, Object&gt; config) {
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">    if (!isActive()) {</span>
-<span class="nc" id="L113">      return new ExportNodeRoleData();</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">    if (!isActive()) {</span>
+<span class="nc" id="L114">      return new ExportNodeRoleData();</span>
     }
 
     // clone config to make sure it is not tampered by the plugin
-<span class="fc" id="L117">    Map&lt;String, Object&gt; clonedConfig = ObjectCloner.deepClone(config);</span>
+<span class="fc" id="L118">    Map&lt;String, Object&gt; clonedConfig = ObjectCloner.deepClone(config);</span>
 
     // resolve variables in configuration, and remove context properties
-<span class="fc" id="L120">    Map&lt;String, Object&gt; resolvedNodeConfig = variableMapResolver.resolve(clonedConfig, false);</span>
+<span class="fc" id="L121">    Map&lt;String, Object&gt; resolvedNodeConfig = variableMapResolver.resolve(clonedConfig, false);</span>
 
     // generate tenants and tenant config
-<span class="fc" id="L123">    List&lt;ExportNodeRoleTenantData&gt; tenantData = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L124" title="All 2 branches covered.">    for (Tenant tenant : environment.getTenants()) {</span>
-<span class="fc" id="L125">      Map&lt;String, Object&gt; tenantConfig = MapMerger.merge(tenant.getConfig(), clonedConfig);</span>
+<span class="fc" id="L124">    List&lt;ExportNodeRoleTenantData&gt; tenantData = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">    for (Tenant tenant : environment.getTenants()) {</span>
+<span class="fc" id="L126">      Map&lt;String, Object&gt; tenantConfig = MapMerger.merge(tenant.getConfig(), clonedConfig);</span>
 
       // set tenant-specific context variables
-<span class="fc" id="L128">      tenantConfig.put(ContextProperties.TENANT, variableStringResolver.resolve(tenant.getTenant(), tenantConfig));</span>
-<span class="fc" id="L129">      tenantConfig.put(ContextProperties.TENANT_ROLES, tenant.getRoles());</span>
+<span class="fc" id="L129">      tenantConfig.put(ContextProperties.TENANT, variableStringResolver.resolve(tenant.getTenant(), tenantConfig));</span>
+<span class="fc" id="L130">      tenantConfig.put(ContextProperties.TENANT_ROLES, tenant.getRoles());</span>
 
       // resolve variables in configuration
-<span class="fc" id="L132">      Map&lt;String, Object&gt; resolvedTenantConfig = variableMapResolver.resolve(tenantConfig, false);</span>
+<span class="fc" id="L133">      Map&lt;String, Object&gt; resolvedTenantConfig = variableMapResolver.resolve(tenantConfig, false);</span>
 
-<span class="fc" id="L134">      tenantData.add(new ExportNodeRoleTenantData()</span>
-<span class="fc" id="L135">          .tenant(tenant.getTenant())</span>
-<span class="fc" id="L136">          .roles(tenant.getRoles())</span>
-<span class="fc" id="L137">          .config(resolvedTenantConfig));</span>
-<span class="fc" id="L138">    }</span>
+<span class="fc" id="L135">      tenantData.add(new ExportNodeRoleTenantData()</span>
+<span class="fc" id="L136">          .tenant(tenant.getTenant())</span>
+<span class="fc" id="L137">          .roles(tenant.getRoles())</span>
+<span class="fc" id="L138">          .config(resolvedTenantConfig));</span>
+<span class="fc" id="L139">    }</span>
 
-<span class="fc" id="L140">    ExportNodeRoleData item = new ExportNodeRoleData()</span>
-<span class="fc" id="L141">        .role(role)</span>
-<span class="fc" id="L142">        .roleVariant(roleVariants)</span>
-<span class="fc" id="L143">        .config(resolvedNodeConfig)</span>
-<span class="fc" id="L144">        .tenantData(tenantData);</span>
-<span class="fc" id="L145">    roleData.add(item);</span>
-<span class="fc" id="L146">    return item;</span>
+<span class="fc" id="L141">    ExportNodeRoleData item = new ExportNodeRoleData()</span>
+<span class="fc" id="L142">        .role(role)</span>
+<span class="fc" id="L143">        .roleVariant(roleVariants)</span>
+<span class="fc" id="L144">        .config(resolvedNodeConfig)</span>
+<span class="fc" id="L145">        .tenantData(tenantData);</span>
+<span class="fc" id="L146">    roleData.add(item);</span>
+<span class="fc" id="L147">    return item;</span>
   }
 
   /**
    * Generate model YAML file.
    */
   public void generate() {
-<span class="pc bpc" id="L153" title="1 of 2 branches missed.">    if (!isActive()) {</span>
-<span class="nc" id="L154">      return;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">    if (!isActive()) {</span>
+<span class="nc" id="L155">      return;</span>
     }
 
-<span class="fc bfc" id="L157" title="All 2 branches covered.">    for (NodeModelExportPlugin plugin : nodeModelExportPlugins) {</span>
-<span class="fc" id="L158">      plugin.export(new NodeModelExportContext()</span>
-<span class="fc" id="L159">          .pluginContextOptions(pluginContextOptions)</span>
-<span class="fc" id="L160">          .node(node)</span>
-<span class="fc" id="L161">          .environment(environment)</span>
-<span class="fc" id="L162">          .roleData(roleData)</span>
-<span class="fc" id="L163">          .nodeDir(nodeDir)</span>
-<span class="fc" id="L164">          .variableStringResolver(variableStringResolver)</span>
-<span class="fc" id="L165">          .variableMapResolver(variableMapResolver)</span>
-<span class="fc" id="L166">          .containerVersionInfo(containerVersionInfo)</span>
-<span class="fc" id="L167">          .sensitiveConfigParameters(sensitiveConfigParameters)</span>
-<span class="fc" id="L168">          .yamlRepresenter(yamlRepresenter));</span>
-<span class="fc" id="L169">    }</span>
-<span class="fc" id="L170">  }</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">    for (NodeModelExportPlugin plugin : nodeModelExportPlugins) {</span>
+<span class="fc" id="L159">      plugin.export(new NodeModelExportContext()</span>
+<span class="fc" id="L160">          .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L161">          .node(node)</span>
+<span class="fc" id="L162">          .environment(environment)</span>
+<span class="fc" id="L163">          .roleData(roleData)</span>
+<span class="fc" id="L164">          .nodeDir(nodeDir)</span>
+<span class="fc" id="L165">          .variableStringResolver(variableStringResolver)</span>
+<span class="fc" id="L166">          .variableMapResolver(variableMapResolver)</span>
+<span class="fc" id="L167">          .containerVersionInfo(containerVersionInfo)</span>
+<span class="fc" id="L168">          .sensitiveConfigParameters(sensitiveConfigParameters)</span>
+<span class="fc" id="L169">          .yamlRepresenter(yamlRepresenter));</span>
+<span class="fc" id="L170">    }</span>
+<span class="fc" id="L171">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -83,15 +83,16 @@ public class HandlebarsManager {
       });
 
   /**
+   * Constructor.
    * @param templateDirs Template base directories
    * @param pluginContextOptions Plugin context options
    */
-<span class="fc" id="L89">  public HandlebarsManager(List&lt;ResourceCollection&gt; templateDirs, PluginContextOptions pluginContextOptions) {</span>
-<span class="fc" id="L90">    this.templateDirs = templateDirs;</span>
-<span class="fc" id="L91">    this.pluginManager = pluginContextOptions.getPluginManager();</span>
-<span class="fc" id="L92">    this.escapingStrategyContext = new EscapingStrategyContext().pluginContextOptions(pluginContextOptions);</span>
-<span class="fc" id="L93">    this.helperContext = new HelperContext().pluginContextOptions(pluginContextOptions);</span>
-<span class="fc" id="L94">  }</span>
+<span class="fc" id="L90">  public HandlebarsManager(List&lt;ResourceCollection&gt; templateDirs, PluginContextOptions pluginContextOptions) {</span>
+<span class="fc" id="L91">    this.templateDirs = templateDirs;</span>
+<span class="fc" id="L92">    this.pluginManager = pluginContextOptions.getPluginManager();</span>
+<span class="fc" id="L93">    this.escapingStrategyContext = new EscapingStrategyContext().pluginContextOptions(pluginContextOptions);</span>
+<span class="fc" id="L94">    this.helperContext = new HelperContext().pluginContextOptions(pluginContextOptions);</span>
+<span class="fc" id="L95">  }</span>
 
   /**
    * Get handlebars instance with escaping for file extension and charset.
@@ -100,8 +101,8 @@ public class HandlebarsManager {
    * @return Handlebars instance
    */
   public Handlebars get(String escapingStrategy, String charset) {
-<span class="fc" id="L103">    HandlebarsKey key = new HandlebarsKey(escapingStrategy, charset);</span>
-<span class="fc" id="L104">    return handlebarsCache.get(key);</span>
+<span class="fc" id="L104">    HandlebarsKey key = new HandlebarsKey(escapingStrategy, charset);</span>
+<span class="fc" id="L105">    return handlebarsCache.get(key);</span>
   }
 
 }

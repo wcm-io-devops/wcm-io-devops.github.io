@@ -34,83 +34,93 @@ import java.util.Map;
   private List&lt;ExportNodeRoleTenantData&gt; tenantData;
 
   /**
+   * Gets role name.
    * @return Role name
    */
   public String getRole() {
-<span class="fc" id="L40">    return this.role;</span>
+<span class="fc" id="L41">    return this.role;</span>
   }
 
   /**
+   * Sets role name.
    * @param value Role name
    * @return this
    */
   public ExportNodeRoleData role(String value) {
-<span class="fc" id="L48">    this.role = value;</span>
-<span class="fc" id="L49">    return this;</span>
+<span class="fc" id="L50">    this.role = value;</span>
+<span class="fc" id="L51">    return this;</span>
   }
 
   /**
+   * Gets role variant names.
    * @return Role variant names
    */
   public List&lt;String&gt; getRoleVariants() {
-<span class="fc" id="L56">    return this.roleVariants;</span>
+<span class="fc" id="L59">    return this.roleVariants;</span>
   }
 
   /**
+   * Sets role variant names.
    * @param values Role variant names
    * @return this
    */
   public ExportNodeRoleData roleVariant(List&lt;String&gt; values) {
-<span class="fc" id="L64">    this.roleVariants = values;</span>
-<span class="fc" id="L65">    return this;</span>
+<span class="fc" id="L68">    this.roleVariants = values;</span>
+<span class="fc" id="L69">    return this;</span>
   }
 
   /**
+   * Gets generated files.
    * @return Generated files
    */
   public List&lt;GeneratedFileContext&gt; getFiles() {
-<span class="fc" id="L72">    return this.files;</span>
+<span class="fc" id="L77">    return this.files;</span>
   }
 
   /**
+   * Sets generated files.
    * @param value Generated files
    * @return this
    */
   public ExportNodeRoleData files(List&lt;GeneratedFileContext&gt; value) {
-<span class="fc" id="L80">    this.files = value;</span>
-<span class="fc" id="L81">    return this;</span>
+<span class="fc" id="L86">    this.files = value;</span>
+<span class="fc" id="L87">    return this;</span>
   }
 
   /**
+   * Gets configuration.
    * @return Configuration
    */
   public Map&lt;String, Object&gt; getConfig() {
-<span class="fc" id="L88">    return this.config;</span>
+<span class="fc" id="L95">    return this.config;</span>
   }
 
   /**
+   * Sets configuration.
    * @param value Configuration
    * @return this
    */
   public ExportNodeRoleData config(Map&lt;String, Object&gt; value) {
-<span class="fc" id="L96">    this.config = value;</span>
-<span class="fc" id="L97">    return this;</span>
+<span class="fc" id="L104">    this.config = value;</span>
+<span class="fc" id="L105">    return this;</span>
   }
 
   /**
+   * Gets tenant data.
    * @return Tenant data
    */
   public List&lt;ExportNodeRoleTenantData&gt; getTenantData() {
-<span class="fc" id="L104">    return this.tenantData;</span>
+<span class="fc" id="L113">    return this.tenantData;</span>
   }
 
   /**
+   * Sets tenant data.
    * @param value Tenant data
    * @return this
    */
   public ExportNodeRoleData tenantData(List&lt;ExportNodeRoleTenantData&gt; value) {
-<span class="fc" id="L112">    this.tenantData = value;</span>
-<span class="fc" id="L113">    return this;</span>
+<span class="fc" id="L122">    this.tenantData = value;</span>
+<span class="fc" id="L123">    return this;</span>
   }
 
 }

@@ -50,173 +50,194 @@ import io.wcm.devops.conga.model.environment.Node;
   private YamlRepresenter yamlRepresenter;
 
   /**
+   * Gets node.
    * @return Node
    */
   public Node getNode() {
-<span class="nc" id="L56">    return this.node;</span>
+<span class="nc" id="L57">    return this.node;</span>
   }
 
   /**
+   * Sets node.
    * @param value Node
    * @return this
    */
   public NodeModelExportContext node(Node value) {
-<span class="fc" id="L64">    this.node = value;</span>
-<span class="fc" id="L65">    return this;</span>
+<span class="fc" id="L66">    this.node = value;</span>
+<span class="fc" id="L67">    return this;</span>
   }
 
   /**
+   * Gets environment.
    * @return Environment
    */
   public Environment getEnvironment() {
-<span class="nc" id="L72">    return environment;</span>
+<span class="nc" id="L75">    return environment;</span>
   }
 
   /**
+   * Sets environment.
    * @param value Environment
    * @return this
    */
   public NodeModelExportContext environment(Environment value) {
-<span class="fc" id="L80">    environment = value;</span>
-<span class="fc" id="L81">    return this;</span>
+<span class="fc" id="L84">    environment = value;</span>
+<span class="fc" id="L85">    return this;</span>
   }
 
   /**
+   * Gets node role data.
    * @return Node role data
    */
   public List&lt;ExportNodeRoleData&gt; getRoleData() {
-<span class="fc" id="L88">    return this.roleData;</span>
+<span class="fc" id="L93">    return this.roleData;</span>
   }
 
   /**
+   * Sets node role data.
    * @param value Node role data
    * @return this
    */
   public NodeModelExportContext roleData(List&lt;ExportNodeRoleData&gt; value) {
-<span class="fc" id="L96">    this.roleData = value;</span>
-<span class="fc" id="L97">    return this;</span>
+<span class="fc" id="L102">    this.roleData = value;</span>
+<span class="fc" id="L103">    return this;</span>
   }
 
   /**
+   * Gets node directory.
    * @return Node files target directory
    */
   public File getNodeDir() {
-<span class="fc" id="L104">    return this.nodeDir;</span>
+<span class="fc" id="L111">    return this.nodeDir;</span>
   }
 
   /**
+   * Sets node directory.
    * @param value Node files target directory
    * @return this
    */
   public NodeModelExportContext nodeDir(File value) {
-<span class="fc" id="L112">    this.nodeDir = value;</span>
-<span class="fc" id="L113">    return this;</span>
+<span class="fc" id="L120">    this.nodeDir = value;</span>
+<span class="fc" id="L121">    return this;</span>
   }
 
   /**
+   * Gets config.
    * @return Plugin config
    */
   public Map&lt;String, Object&gt; getConfig() {
-<span class="nc" id="L120">    return config;</span>
+<span class="nc" id="L129">    return config;</span>
   }
 
   /**
+   * Sets config.
    * @param value Plugin config
    * @return this
    */
   public NodeModelExportContext config(Map&lt;String, Object&gt; value) {
-<span class="nc" id="L128">    config = value;</span>
-<span class="nc" id="L129">    return this;</span>
+<span class="nc" id="L138">    config = value;</span>
+<span class="nc" id="L139">    return this;</span>
   }
 
   /**
+   * Gets variable string resolver.
    * @return Variable string resolver
    */
   public VariableStringResolver getVariableStringResolver() {
-<span class="fc" id="L136">    return this.variableStringResolver;</span>
+<span class="fc" id="L147">    return this.variableStringResolver;</span>
   }
 
   /**
+   * Sets variable string resolver.
    * @param value Variable string resolver
    * @return this
    */
   public NodeModelExportContext variableStringResolver(VariableStringResolver value) {
-<span class="fc" id="L144">    this.variableStringResolver = value;</span>
-<span class="fc" id="L145">    return this;</span>
+<span class="fc" id="L156">    this.variableStringResolver = value;</span>
+<span class="fc" id="L157">    return this;</span>
   }
 
   /**
+   * Gets variable map resolver.
    * @return Variable map resolver
    */
   public VariableMapResolver getVariableMapResolver() {
-<span class="nc" id="L152">    return this.variableMapResolver;</span>
+<span class="nc" id="L165">    return this.variableMapResolver;</span>
   }
 
   /**
+   * Sets variable map resolver.
    * @param value Variable map resolver
    * @return this
    */
   public NodeModelExportContext variableMapResolver(VariableMapResolver value) {
-<span class="fc" id="L160">    this.variableMapResolver = value;</span>
-<span class="fc" id="L161">    return this;</span>
+<span class="fc" id="L174">    this.variableMapResolver = value;</span>
+<span class="fc" id="L175">    return this;</span>
   }
 
   /**
+   * Gets container version info.
    * @return Version information from container, e.g. configured Maven plugin versions
    */
   public Map&lt;String, String&gt; getContainerVersionInfo() {
-<span class="fc" id="L168">    return this.containerVersionInfo;</span>
+<span class="fc" id="L183">    return this.containerVersionInfo;</span>
   }
 
   /**
+   * Sets container version info.
    * @param value Version information from container, e.g. configured Maven plugin versions
    * @return this
    */
   public NodeModelExportContext containerVersionInfo(Map&lt;String, String&gt; value) {
-<span class="fc" id="L176">    this.containerVersionInfo = value;</span>
-<span class="fc" id="L177">    return this;</span>
-  }
-
-  /**
-   * @return List of configuration parameter names that contain sensitive data.
-   */
-  public Set&lt;String&gt; getSensitiveConfigParameters() {
-<span class="fc" id="L184">    return this.sensitiveConfigParameters;</span>
-  }
-
-  /**
-   * @param value List of configuration parameter names that contain sensitive data
-   * @return this
-   */
-  public NodeModelExportContext sensitiveConfigParameters(Set&lt;String&gt; value) {
-<span class="fc" id="L192">    this.sensitiveConfigParameters = value;</span>
+<span class="fc" id="L192">    this.containerVersionInfo = value;</span>
 <span class="fc" id="L193">    return this;</span>
   }
 
   /**
+   * Gets sensitive config parameters.
+   * @return List of configuration parameter names that contain sensitive data.
+   */
+  public Set&lt;String&gt; getSensitiveConfigParameters() {
+<span class="fc" id="L201">    return this.sensitiveConfigParameters;</span>
+  }
+
+  /**
+   * Sets sensitive config parameters.
+   * @param value List of configuration parameter names that contain sensitive data
+   * @return this
+   */
+  public NodeModelExportContext sensitiveConfigParameters(Set&lt;String&gt; value) {
+<span class="fc" id="L210">    this.sensitiveConfigParameters = value;</span>
+<span class="fc" id="L211">    return this;</span>
+  }
+
+  /**
+   * Gets model export config processor.
    * @return Model export configuration processor
    */
   public ModelExportConfigProcessor getModelExportConfigProcessor() {
-<span class="fc bfc" id="L200" title="All 2 branches covered.">    if (this.modelExportConfigProcessor == null) {</span>
-<span class="fc" id="L201">      this.modelExportConfigProcessor = new ModelExportConfigProcessor(getPluginContextOptions(), getSensitiveConfigParameters());</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">    if (this.modelExportConfigProcessor == null) {</span>
+<span class="fc" id="L220">      this.modelExportConfigProcessor = new ModelExportConfigProcessor(getPluginContextOptions(), getSensitiveConfigParameters());</span>
     }
-<span class="fc" id="L203">    return this.modelExportConfigProcessor;</span>
+<span class="fc" id="L222">    return this.modelExportConfigProcessor;</span>
   }
 
   /**
+   * Gets YAML representer.
    * @return YAML representer
    */
   public YamlRepresenter getYamlRepresenter() {
-<span class="fc" id="L210">    return this.yamlRepresenter;</span>
+<span class="fc" id="L230">    return this.yamlRepresenter;</span>
   }
 
   /**
+   * Sets YAML representer.
    * @param value YAML representer
    * @return this
    */
   public NodeModelExportContext yamlRepresenter(YamlRepresenter value) {
-<span class="fc" id="L218">    this.yamlRepresenter = value;</span>
-<span class="fc" id="L219">    return this;</span>
+<span class="fc" id="L239">    this.yamlRepresenter = value;</span>
+<span class="fc" id="L240">    return this;</span>
   }
 
 }

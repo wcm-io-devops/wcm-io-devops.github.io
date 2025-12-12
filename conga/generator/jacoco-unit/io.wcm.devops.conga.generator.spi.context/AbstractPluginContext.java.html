@@ -28,61 +28,69 @@ import io.wcm.devops.conga.generator.util.PluginManager;
 
 /**
  * Generic plugin context.
+ * @param &lt;T&gt; Context type
  */
-<span class="fc" id="L32">public abstract class AbstractPluginContext&lt;T&gt; {</span>
+<span class="fc" id="L33">public abstract class AbstractPluginContext&lt;T&gt; {</span>
 
-<span class="fc" id="L34">  private PluginContextOptions pluginContextOptions = new PluginContextOptions();</span>
+<span class="fc" id="L35">  private PluginContextOptions pluginContextOptions = new PluginContextOptions();</span>
 
   /**
+   * Gets plugin context options.
    * @return Generic plugin context options
    */
   public final PluginContextOptions getPluginContextOptions() {
-<span class="fc" id="L40">    return this.pluginContextOptions;</span>
+<span class="fc" id="L42">    return this.pluginContextOptions;</span>
   }
 
   /**
+   * Sets plugin context options.
    * @param value Generic plugin context options
    * @return this
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public final T pluginContextOptions(PluginContextOptions value) {
-<span class="fc" id="L49">    this.pluginContextOptions = value;</span>
-<span class="fc" id="L50">    return (T)this;</span>
+<span class="fc" id="L52">    this.pluginContextOptions = value;</span>
+<span class="fc" id="L53">    return (T)this;</span>
   }
 
   /**
+   * Gets plugin manager.
    * @return Plugin manager
    */
   public final PluginManager getPluginManager() {
-<span class="fc" id="L57">    return pluginContextOptions.getPluginManager();</span>
+<span class="fc" id="L61">    return pluginContextOptions.getPluginManager();</span>
   }
 
   /**
+   * Gets URL file manager.
    * @return URL file manager
    */
   public final UrlFileManager getUrlFileManager() {
-<span class="nc" id="L64">    return pluginContextOptions.getUrlFileManager();</span>
+<span class="nc" id="L69">    return pluginContextOptions.getUrlFileManager();</span>
   }
 
   /**
+   * Gets generic plugin configuration.
    * @return Generic plugin configuration
    */
   public final Map&lt;String, Map&lt;String, Object&gt;&gt; getGenericPluginConfig() {
-<span class="nc" id="L71">    return pluginContextOptions.getGenericPluginConfig();</span>
+<span class="nc" id="L77">    return pluginContextOptions.getGenericPluginConfig();</span>
   }
 
   /**
+   * Gets container context.
    * @return Container-specific context object
    */
   public Object getContainerContext() {
-<span class="nc" id="L78">    return pluginContextOptions.getContainerContext();</span>
+<span class="nc" id="L85">    return pluginContextOptions.getContainerContext();</span>
   }
 
   /**
+   * Gets logger.
    * @return Logger
    */
   public final Logger getLogger() {
-<span class="nc" id="L85">    return pluginContextOptions.getLogger();</span>
+<span class="nc" id="L93">    return pluginContextOptions.getLogger();</span>
   }
 
 }

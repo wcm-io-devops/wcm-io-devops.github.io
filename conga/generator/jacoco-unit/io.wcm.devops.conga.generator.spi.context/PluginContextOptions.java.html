@@ -40,99 +40,111 @@ import io.wcm.devops.conga.generator.util.PluginManager;
   private Logger logger;
 
   /**
+   * Gets plugin manager.
    * @return Plugin manager
    */
   public PluginManager getPluginManager() {
-<span class="fc" id="L46">    return this.pluginManager;</span>
+<span class="fc" id="L47">    return this.pluginManager;</span>
   }
 
   /**
+   * Sets plugin manager.
    * @param value Plugin manager
    * @return this
    */
   public PluginContextOptions pluginManager(PluginManager value) {
-<span class="fc" id="L54">    this.pluginManager = value;</span>
-<span class="fc" id="L55">    return this;</span>
+<span class="fc" id="L56">    this.pluginManager = value;</span>
+<span class="fc" id="L57">    return this;</span>
   }
 
   /**
+   * Gets URL file manager.
    * @return URL file manager
    */
   public UrlFileManager getUrlFileManager() {
-<span class="fc" id="L62">    return this.urlFileManager;</span>
+<span class="fc" id="L65">    return this.urlFileManager;</span>
   }
 
   /**
+   * Sets URL file manager.
    * @param value URL file manager
    * @return this
    */
   public PluginContextOptions urlFileManager(UrlFileManager value) {
-<span class="fc" id="L70">    this.urlFileManager = value;</span>
-<span class="fc" id="L71">    return this;</span>
+<span class="fc" id="L74">    this.urlFileManager = value;</span>
+<span class="fc" id="L75">    return this;</span>
   }
 
   /**
+   * Gets value provider configuration.
    * @return Value provider configuration
    */
   public Map&lt;String, Map&lt;String, Object&gt;&gt; getValueProviderConfig() {
-<span class="fc" id="L78">    return this.valueProviderConfig;</span>
+<span class="fc" id="L83">    return this.valueProviderConfig;</span>
   }
 
   /**
+   * Sets value provider configuration.
    * @param value Value provider configuration
    * @return this
    */
   public PluginContextOptions valueProviderConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
-<span class="fc" id="L86">    this.valueProviderConfig = value;</span>
-<span class="fc" id="L87">    return this;</span>
+<span class="fc" id="L92">    this.valueProviderConfig = value;</span>
+<span class="fc" id="L93">    return this;</span>
   }
 
   /**
+   * Gets generic plugin configuration.
    * @return Generic plugin configuration
    */
   public Map&lt;String, Map&lt;String, Object&gt;&gt; getGenericPluginConfig() {
-<span class="fc" id="L94">    return this.genericPluginConfig;</span>
+<span class="fc" id="L101">    return this.genericPluginConfig;</span>
   }
 
   /**
+   * Sets generic plugin configuration.
    * @param value Generic plugin configuration
    * @return this
    */
   public PluginContextOptions genericPluginConfig(Map&lt;String, Map&lt;String, Object&gt;&gt; value) {
-<span class="fc" id="L102">    this.genericPluginConfig = value;</span>
-<span class="fc" id="L103">    return this;</span>
+<span class="fc" id="L110">    this.genericPluginConfig = value;</span>
+<span class="fc" id="L111">    return this;</span>
   }
 
   /**
+   * Gets container context.
    * @return Container-specific context object
    */
   public Object getContainerContext() {
-<span class="nc" id="L110">    return containerContext;</span>
+<span class="nc" id="L119">    return containerContext;</span>
   }
 
   /**
+   * Sets container context.
    * @param value Container-specific context object
    * @return this
    */
   public PluginContextOptions containerContext(Object value) {
-<span class="fc" id="L118">    containerContext = value;</span>
-<span class="fc" id="L119">    return this;</span>
+<span class="fc" id="L128">    containerContext = value;</span>
+<span class="fc" id="L129">    return this;</span>
   }
 
   /**
+   * Gets logger.
    * @return Logger
    */
   public Logger getLogger() {
-<span class="fc" id="L126">    return logger;</span>
+<span class="fc" id="L137">    return logger;</span>
   }
 
   /**
+   * Sets logger.
    * @param value Logger
    * @return this
    */
   public PluginContextOptions logger(Logger value) {
-<span class="fc" id="L134">    logger = value;</span>
-<span class="fc" id="L135">    return this;</span>
+<span class="fc" id="L146">    logger = value;</span>
+<span class="fc" id="L147">    return this;</span>
   }
 
   /**
@@ -141,13 +153,13 @@ import io.wcm.devops.conga.generator.util.PluginManager;
    * @return this
    */
   public PluginContextOptions pluginContextOptions(PluginContextOptions value) {
-<span class="fc" id="L144">    this.pluginManager = value.getPluginManager();</span>
-<span class="fc" id="L145">    this.urlFileManager = value.getUrlFileManager();</span>
-<span class="fc" id="L146">    this.valueProviderConfig = value.getValueProviderConfig();</span>
-<span class="fc" id="L147">    this.genericPluginConfig = value.getGenericPluginConfig();</span>
-<span class="fc" id="L148">    this.containerContext = value.containerContext;</span>
-<span class="fc" id="L149">    this.logger = value.getLogger();</span>
-<span class="fc" id="L150">    return this;</span>
+<span class="fc" id="L156">    this.pluginManager = value.getPluginManager();</span>
+<span class="fc" id="L157">    this.urlFileManager = value.getUrlFileManager();</span>
+<span class="fc" id="L158">    this.valueProviderConfig = value.getValueProviderConfig();</span>
+<span class="fc" id="L159">    this.genericPluginConfig = value.getGenericPluginConfig();</span>
+<span class="fc" id="L160">    this.containerContext = value.containerContext;</span>
+<span class="fc" id="L161">    this.logger = value.getLogger();</span>
+<span class="fc" id="L162">    return this;</span>
   }
 
 }
