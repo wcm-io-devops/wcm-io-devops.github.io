@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VaultHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto</a> &gt; <span class="el_source">VaultHandler.java</span></div><h1>VaultHandler.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package net.wedjaa.ansible.vault.crypto;
+
+/*
  * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
@@ -14,7 +35,6 @@
  * limitations under the License.
  */
 //CHECKSTYLE:OFF
-package net.wedjaa.ansible.vault.crypto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,53 +61,53 @@ public final class VaultHandler {
   /**
    * Character encoding
    */
-<span class="fc" id="L44">  public static final Charset CHAR_ENCODING = StandardCharsets.UTF_8;</span>
+<span class="fc" id="L64">  public static final Charset CHAR_ENCODING = StandardCharsets.UTF_8;</span>
 
   private VaultHandler() {
     // static methods only
   }
 
   public static byte[] encrypt(byte[] cleartext, String password, String cypher) throws IOException {
-<span class="fc" id="L51">    CypherInterface cypherInstance = CypherFactory.getCypher(cypher);</span>
-<span class="fc" id="L52">    byte[] vaultData = cypherInstance.encrypt(cleartext, password);</span>
-<span class="fc" id="L53">    String vaultDataString = new String(vaultData, CHAR_ENCODING);</span>
-<span class="fc" id="L54">    String vaultPackage = cypherInstance.infoLine() + &quot;\n&quot; + vaultDataString;</span>
-<span class="fc" id="L55">    return vaultPackage.getBytes(CHAR_ENCODING);</span>
+<span class="fc" id="L71">    CypherInterface cypherInstance = CypherFactory.getCypher(cypher);</span>
+<span class="fc" id="L72">    byte[] vaultData = cypherInstance.encrypt(cleartext, password);</span>
+<span class="fc" id="L73">    String vaultDataString = new String(vaultData, CHAR_ENCODING);</span>
+<span class="fc" id="L74">    String vaultPackage = cypherInstance.infoLine() + &quot;\n&quot; + vaultDataString;</span>
+<span class="fc" id="L75">    return vaultPackage.getBytes(CHAR_ENCODING);</span>
   }
 
   public static byte[] encrypt(byte[] cleartext, String password) throws IOException {
-<span class="fc" id="L59">    return encrypt(cleartext, password, DEFAULT_CYPHER);</span>
+<span class="fc" id="L79">    return encrypt(cleartext, password, DEFAULT_CYPHER);</span>
   }
 
   public static void encrypt(InputStream clearText, OutputStream cipherText, String password, String cypher) throws IOException {
-<span class="nc" id="L63">    String clearTextValue = IOUtils.toString(clearText, CHAR_ENCODING);</span>
-<span class="nc" id="L64">    cipherText.write(encrypt(clearTextValue.getBytes(CHAR_ENCODING), password, cypher));</span>
-<span class="nc" id="L65">  }</span>
+<span class="nc" id="L83">    String clearTextValue = IOUtils.toString(clearText, CHAR_ENCODING);</span>
+<span class="nc" id="L84">    cipherText.write(encrypt(clearTextValue.getBytes(CHAR_ENCODING), password, cypher));</span>
+<span class="nc" id="L85">  }</span>
 
   public static void encrypt(InputStream clearText, OutputStream cipherText, String password) throws IOException {
-<span class="nc" id="L68">    encrypt(clearText, cipherText, password, DEFAULT_CYPHER);</span>
-<span class="nc" id="L69">  }</span>
+<span class="nc" id="L88">    encrypt(clearText, cipherText, password, DEFAULT_CYPHER);</span>
+<span class="nc" id="L89">  }</span>
 
   public static void decrypt(InputStream encryptedVault, OutputStream decryptedVault, String password) throws IOException {
-<span class="fc" id="L72">    String encryptedValue = IOUtils.toString(encryptedVault, CHAR_ENCODING);</span>
-<span class="fc" id="L73">    decryptedVault.write(decrypt(encryptedValue.getBytes(CHAR_ENCODING), password));</span>
-<span class="fc" id="L74">  }</span>
+<span class="fc" id="L92">    String encryptedValue = IOUtils.toString(encryptedVault, CHAR_ENCODING);</span>
+<span class="fc" id="L93">    decryptedVault.write(decrypt(encryptedValue.getBytes(CHAR_ENCODING), password));</span>
+<span class="fc" id="L94">  }</span>
 
   public static byte[] decrypt(byte[] encrypted, String password) throws IOException {
-<span class="fc" id="L77">    byte[] encryptedProcessed = stripCarriageReturns(encrypted);</span>
+<span class="fc" id="L97">    byte[] encryptedProcessed = stripCarriageReturns(encrypted);</span>
 
-<span class="fc" id="L79">    VaultInfo vaultInfo = Util.getVaultInfo(encryptedProcessed);</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">    if (!vaultInfo.isEncryptedVault()) {</span>
-<span class="nc" id="L81">      throw new IOException(&quot;File is not an Ansible Encrypted Vault&quot;);</span>
+<span class="fc" id="L99">    VaultInfo vaultInfo = Util.getVaultInfo(encryptedProcessed);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    if (!vaultInfo.isEncryptedVault()) {</span>
+<span class="nc" id="L101">      throw new IOException(&quot;File is not an Ansible Encrypted Vault&quot;);</span>
     }
 
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">    if (!vaultInfo.isValidVault()) {</span>
-<span class="nc" id="L85">      throw new IOException(&quot;The vault is not a format we can handle - check the cypher.&quot;);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">    if (!vaultInfo.isValidVault()) {</span>
+<span class="nc" id="L105">      throw new IOException(&quot;The vault is not a format we can handle - check the cypher.&quot;);</span>
     }
 
-<span class="fc" id="L88">    byte[] encryptedData = Util.getVaultData(encryptedProcessed);</span>
+<span class="fc" id="L108">    byte[] encryptedData = Util.getVaultData(encryptedProcessed);</span>
 
-<span class="fc" id="L90">    return vaultInfo.getCypher().decrypt(encryptedData, password);</span>
+<span class="fc" id="L110">    return vaultInfo.getCypher().decrypt(encryptedData, password);</span>
   }
 
   /**
@@ -96,7 +116,7 @@ public final class VaultHandler {
    * @return Data without \r chars
    */
   private static byte[] stripCarriageReturns(byte[] data) {
-<span class="fc" id="L99">    return ArrayUtils.removeAllOccurrences(data, (byte)0xD);</span>
+<span class="fc" id="L119">    return ArrayUtils.removeAllOccurrences(data, (byte)0xD);</span>
   }
 
 }

@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VaultInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto.data</a> &gt; <span class="el_source">VaultInfo.java</span></div><h1>VaultInfo.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package net.wedjaa.ansible.vault.crypto.data;
+
+/*
  * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
@@ -14,7 +35,6 @@
  * limitations under the License.
  */
 //CHECKSTYLE:OFF
-package net.wedjaa.ansible.vault.crypto.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +44,7 @@ import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
 
 public class VaultInfo {
 
-<span class="fc" id="L27">  private static final Logger logger = LoggerFactory.getLogger(VaultInfo.class);</span>
+<span class="fc" id="L47">  private static final Logger logger = LoggerFactory.getLogger(VaultInfo.class);</span>
 
   public static final String INFO_SEPARATOR = &quot;;&quot;;
   public static final int INFO_ELEMENTS = 3;
@@ -40,34 +60,34 @@ public class VaultInfo {
   private String vaultCypher;
 
   public static String vaultInfoForCypher(String vaultCypher) {
-<span class="fc" id="L43">    return VAULT_MAGIC + &quot;;&quot; + VAULT_VERSION + &quot;;&quot; + vaultCypher;</span>
+<span class="fc" id="L63">    return VAULT_MAGIC + &quot;;&quot; + VAULT_VERSION + &quot;;&quot; + vaultCypher;</span>
   }
 
-<span class="fc" id="L46">  public VaultInfo(String infoLine) {</span>
-<span class="fc" id="L47">    logger.trace(&quot;Ansible Vault info: {}&quot;, infoLine);</span>
+<span class="fc" id="L66">  public VaultInfo(String infoLine) {</span>
+<span class="fc" id="L67">    logger.trace(&quot;Ansible Vault info: {}&quot;, infoLine);</span>
 
-<span class="fc" id="L49">    String[] infoParts = infoLine.split(INFO_SEPARATOR);</span>
-<span class="pc bpc" id="L50" title="2 of 4 branches missed.">    if (infoParts.length == INFO_ELEMENTS &amp;&amp; VAULT_MAGIC.equals(infoParts[MAGIC_PART])) {</span>
-<span class="fc" id="L51">      validVault = true;</span>
-<span class="fc" id="L52">      vaultVersion = infoParts[VERSION_PART];</span>
-<span class="fc" id="L53">      vaultCypher = infoParts[CYPHER_PART];</span>
+<span class="fc" id="L69">    String[] infoParts = infoLine.split(INFO_SEPARATOR);</span>
+<span class="pc bpc" id="L70" title="2 of 4 branches missed.">    if (infoParts.length == INFO_ELEMENTS &amp;&amp; VAULT_MAGIC.equals(infoParts[MAGIC_PART])) {</span>
+<span class="fc" id="L71">      validVault = true;</span>
+<span class="fc" id="L72">      vaultVersion = infoParts[VERSION_PART];</span>
+<span class="fc" id="L73">      vaultCypher = infoParts[CYPHER_PART];</span>
     }
-<span class="fc" id="L55">  }</span>
+<span class="fc" id="L75">  }</span>
 
   public boolean isEncryptedVault() {
-<span class="fc" id="L58">    return validVault;</span>
+<span class="fc" id="L78">    return validVault;</span>
   }
 
   public CypherInterface getCypher() {
-<span class="fc" id="L62">    return CypherFactory.getCypher(vaultCypher);</span>
+<span class="fc" id="L82">    return CypherFactory.getCypher(vaultCypher);</span>
   }
 
   public String getVaultVersion() {
-<span class="nc" id="L66">    return vaultVersion;</span>
+<span class="nc" id="L86">    return vaultVersion;</span>
   }
 
   public boolean isValidVault() {
-<span class="pc bpc" id="L70" title="2 of 4 branches missed.">    return isEncryptedVault() &amp;&amp; getCypher() != null;</span>
+<span class="pc bpc" id="L90" title="2 of 4 branches missed.">    return isEncryptedVault() &amp;&amp; getCypher() != null;</span>
   }
 
 }

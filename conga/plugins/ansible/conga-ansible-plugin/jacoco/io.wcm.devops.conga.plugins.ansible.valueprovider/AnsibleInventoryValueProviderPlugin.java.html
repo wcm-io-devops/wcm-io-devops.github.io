@@ -182,8 +182,8 @@ import it.andreascarpino.ansible.inventory.util.AnsibleInventoryReader;
 <span class="fc" id="L182">    Map&lt;String, List&lt;String&gt;&gt; config = new HashMap&lt;&gt;();</span>
 <span class="fc bfc" id="L183" title="All 2 branches covered.">    for (AnsibleGroup group : inventory.getGroups()) {</span>
 <span class="fc" id="L184">      config.put(group.getName(), group.getHosts().stream()</span>
-<span class="fc" id="L185">          .map(AnsibleHost::getName)</span>
-<span class="fc" id="L186">          .toList());</span>
+<span class="fc" id="L185">        .map(AnsibleHost::getName)</span>
+<span class="fc" id="L186">        .toList());</span>
 <span class="fc" id="L187">    }</span>
 <span class="fc" id="L188">    return config;</span>
   }

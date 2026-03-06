@@ -190,8 +190,8 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>     Map&lt;String, List&lt;String&gt;&gt; config = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>     <strong class="jxr_keyword">for</strong> (<a name="AnsibleGroup" href="../../../../../../../it/andreascarpino/ansible/inventory/type/AnsibleGroup.html#AnsibleGroup">AnsibleGroup</a> group : inventory.getGroups()) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>       config.put(group.getName(), group.getHosts().stream()
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>           .map(AnsibleHost::getName)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>           .toList());
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         .map(AnsibleHost::getName)
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>         .toList());
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>     }
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>     <strong class="jxr_keyword">return</strong> config;
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>   }

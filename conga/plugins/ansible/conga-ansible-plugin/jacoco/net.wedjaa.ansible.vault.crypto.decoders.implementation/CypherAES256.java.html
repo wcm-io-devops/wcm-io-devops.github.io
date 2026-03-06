@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CypherAES256.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CONGA Ansible Plugin</a> &gt; <a href="index.source.html" class="el_package">net.wedjaa.ansible.vault.crypto.decoders.implementation</a> &gt; <span class="el_source">CypherAES256.java</span></div><h1>CypherAES256.java</h1><pre class="source lang-java linenums">/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2016 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package net.wedjaa.ansible.vault.crypto.decoders.implementation;
+
+/*
  * Copyright 2016 - Fabio &quot;MrWHO&quot; Torchetti
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
@@ -14,7 +35,6 @@
  * limitations under the License.
  */
 //CHECKSTYLE:OFF
-package net.wedjaa.ansible.vault.crypto.decoders.implementation;
 
 import static net.wedjaa.ansible.vault.crypto.VaultHandler.CHAR_ENCODING;
 
@@ -35,9 +55,9 @@ import net.wedjaa.ansible.vault.crypto.data.VaultContent;
 import net.wedjaa.ansible.vault.crypto.data.VaultInfo;
 import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
 
-<span class="fc" id="L38">public class CypherAES256 implements CypherInterface {</span>
+<span class="fc" id="L58">public class CypherAES256 implements CypherInterface {</span>
 
-<span class="fc" id="L40">  private static final Logger logger = LoggerFactory.getLogger(CypherAES256.class);</span>
+<span class="fc" id="L60">  private static final Logger logger = LoggerFactory.getLogger(CypherAES256.class);</span>
 
   public static final String CYPHER_ID = &quot;AES256&quot;;
   public static final int AES_KEYLEN = 256;
@@ -52,201 +72,201 @@ import net.wedjaa.ansible.vault.crypto.decoders.inter.CypherInterface;
   public static final int ITERATIONS = 10000;
 
   private boolean hasValidAESProvider() {
-<span class="fc" id="L55">    boolean canCrypt = false;</span>
+<span class="fc" id="L75">    boolean canCrypt = false;</span>
     try {
-<span class="fc" id="L57">      int maxKeyLen = Cipher.getMaxAllowedKeyLength(CYPHER_ALGO);</span>
-<span class="fc" id="L58">      logger.trace(&quot;Available keylen: {}&quot;, maxKeyLen);</span>
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">      if (maxKeyLen &gt;= AES_KEYLEN) {</span>
-<span class="fc" id="L60">        canCrypt = true;</span>
+<span class="fc" id="L77">      int maxKeyLen = Cipher.getMaxAllowedKeyLength(CYPHER_ALGO);</span>
+<span class="fc" id="L78">      logger.trace(&quot;Available keylen: {}&quot;, maxKeyLen);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">      if (maxKeyLen &gt;= AES_KEYLEN) {</span>
+<span class="fc" id="L80">        canCrypt = true;</span>
       }
       else {
-<span class="nc" id="L63">        logger.warn(&quot;JRE doesn't support {} keylength for {}\nInstall unrestricted policy files from:\n{}&quot;,</span>
-<span class="nc" id="L64">            AES_KEYLEN, CYPHER_KEY_ALGO, JDK8_UPF_URL);</span>
+<span class="nc" id="L83">        logger.warn(&quot;JRE doesn't support {} keylength for {}\nInstall unrestricted policy files from:\n{}&quot;,</span>
+<span class="nc" id="L84">            AES_KEYLEN, CYPHER_KEY_ALGO, JDK8_UPF_URL);</span>
       }
     }
-<span class="nc" id="L67">    catch (Exception ex) {</span>
-<span class="nc" id="L68">      logger.warn(&quot;Failed to check for proper cypher algorithms: {}&quot;, ex.getMessage());</span>
-<span class="fc" id="L69">    }</span>
-<span class="fc" id="L70">    return canCrypt;</span>
+<span class="nc" id="L87">    catch (Exception ex) {</span>
+<span class="nc" id="L88">      logger.warn(&quot;Failed to check for proper cypher algorithms: {}&quot;, ex.getMessage());</span>
+<span class="fc" id="L89">    }</span>
+<span class="fc" id="L90">    return canCrypt;</span>
   }
 
   public byte[] calculateHMAC(byte[] key, byte[] data) throws IOException {
-<span class="fc" id="L74">    byte[] computedMac = null;</span>
+<span class="fc" id="L94">    byte[] computedMac = null;</span>
 
     try {
-<span class="fc" id="L77">      SecretKeySpec hmacKey = new SecretKeySpec(key, KEYGEN_ALGO);</span>
-<span class="fc" id="L78">      Mac mac = Mac.getInstance(KEYGEN_ALGO);</span>
-<span class="fc" id="L79">      mac.init(hmacKey);</span>
-<span class="fc" id="L80">      computedMac = mac.doFinal(data);</span>
+<span class="fc" id="L97">      SecretKeySpec hmacKey = new SecretKeySpec(key, KEYGEN_ALGO);</span>
+<span class="fc" id="L98">      Mac mac = Mac.getInstance(KEYGEN_ALGO);</span>
+<span class="fc" id="L99">      mac.init(hmacKey);</span>
+<span class="fc" id="L100">      computedMac = mac.doFinal(data);</span>
     }
-<span class="nc" id="L82">    catch (Exception ex) {</span>
-<span class="nc" id="L83">      throw new IOException(&quot;Error decrypting HMAC hash: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L84">    }</span>
+<span class="nc" id="L102">    catch (Exception ex) {</span>
+<span class="nc" id="L103">      throw new IOException(&quot;Error decrypting HMAC hash: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L104">    }</span>
 
-<span class="fc" id="L86">    return computedMac;</span>
+<span class="fc" id="L106">    return computedMac;</span>
   }
 
   public boolean verifyHMAC(byte[] hmac, byte[] key, byte[] data) throws IOException {
-<span class="fc" id="L90">    byte[] calculated = calculateHMAC(key, data);</span>
-<span class="fc" id="L91">    return Arrays.equals(hmac, calculated);</span>
+<span class="fc" id="L110">    byte[] calculated = calculateHMAC(key, data);</span>
+<span class="fc" id="L111">    return Arrays.equals(hmac, calculated);</span>
   }
 
   public int paddingLength(byte[] decrypted) {
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    if (decrypted.length == 0) {</span>
-<span class="nc" id="L96">      logger.trace(&quot;Empty decoded text has no padding.&quot;);</span>
-<span class="nc" id="L97">      return 0;</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">    if (decrypted.length == 0) {</span>
+<span class="nc" id="L116">      logger.trace(&quot;Empty decoded text has no padding.&quot;);</span>
+<span class="nc" id="L117">      return 0;</span>
     }
 
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L101">      logger.trace(&quot;Padding length: {}&quot;, decrypted[decrypted.length - 1]);</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L121">      logger.trace(&quot;Padding length: {}&quot;, decrypted[decrypted.length - 1]);</span>
     }
-<span class="fc" id="L103">    return decrypted[decrypted.length - 1];</span>
+<span class="fc" id="L123">    return decrypted[decrypted.length - 1];</span>
   }
 
   public byte[] unpad(byte[] decrypted) {
-<span class="fc" id="L107">    int length = decrypted.length - paddingLength(decrypted);</span>
-<span class="fc" id="L108">    return Arrays.copyOfRange(decrypted, 0, length);</span>
+<span class="fc" id="L127">    int length = decrypted.length - paddingLength(decrypted);</span>
+<span class="fc" id="L128">    return Arrays.copyOfRange(decrypted, 0, length);</span>
   }
 
   public byte[] pad(byte[] cleartext) throws IOException {
-<span class="fc" id="L112">    byte[] padded = null;</span>
+<span class="fc" id="L132">    byte[] padded = null;</span>
 
     try {
-<span class="fc" id="L115">      int blockSize = Cipher.getInstance(CYPHER_ALGO).getBlockSize();</span>
-<span class="fc" id="L116">      logger.trace(&quot;Padding to block size: {}&quot;, blockSize);</span>
-<span class="fc" id="L117">      int paddingLength = (blockSize - (cleartext.length % blockSize));</span>
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">      if (paddingLength == 0) {</span>
-<span class="nc" id="L119">        paddingLength = blockSize;</span>
+<span class="fc" id="L135">      int blockSize = Cipher.getInstance(CYPHER_ALGO).getBlockSize();</span>
+<span class="fc" id="L136">      logger.trace(&quot;Padding to block size: {}&quot;, blockSize);</span>
+<span class="fc" id="L137">      int paddingLength = (blockSize - (cleartext.length % blockSize));</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">      if (paddingLength == 0) {</span>
+<span class="nc" id="L139">        paddingLength = blockSize;</span>
       }
-<span class="fc" id="L121">      padded = Arrays.copyOf(cleartext, cleartext.length + paddingLength);</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">      for (int i = 1; i &lt;= paddingLength; i++) {</span>
-<span class="fc" id="L123">        padded[padded.length - i] = (byte)paddingLength;</span>
+<span class="fc" id="L141">      padded = Arrays.copyOf(cleartext, cleartext.length + paddingLength);</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">      for (int i = 1; i &lt;= paddingLength; i++) {</span>
+<span class="fc" id="L143">        padded[padded.length - i] = (byte)paddingLength;</span>
       }
 
     }
-<span class="nc" id="L127">    catch (Exception ex) {</span>
-<span class="nc" id="L128">      throw new IOException(&quot;Error calculating padding for &quot; + CYPHER_ALGO + &quot;: &quot; + ex.getMessage(), ex);</span>
-<span class="fc" id="L129">    }</span>
+<span class="nc" id="L147">    catch (Exception ex) {</span>
+<span class="nc" id="L148">      throw new IOException(&quot;Error calculating padding for &quot; + CYPHER_ALGO + &quot;: &quot; + ex.getMessage(), ex);</span>
+<span class="fc" id="L149">    }</span>
 
-<span class="fc" id="L131">    return padded;</span>
+<span class="fc" id="L151">    return padded;</span>
   }
 
   public byte[] decryptAES(byte[] cypher, byte[] key, byte[] iv) throws IOException {
 
-<span class="fc" id="L136">    SecretKeySpec keySpec = new SecretKeySpec(key, CYPHER_KEY_ALGO);</span>
-<span class="fc" id="L137">    IvParameterSpec ivSpec = new IvParameterSpec(iv);</span>
+<span class="fc" id="L156">    SecretKeySpec keySpec = new SecretKeySpec(key, CYPHER_KEY_ALGO);</span>
+<span class="fc" id="L157">    IvParameterSpec ivSpec = new IvParameterSpec(iv);</span>
     try {
-<span class="fc" id="L139">      Cipher cipher = Cipher.getInstance(CYPHER_ALGO);</span>
-<span class="fc" id="L140">      cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);</span>
-<span class="fc" id="L141">      byte[] decrypted = cipher.doFinal(cypher);</span>
-<span class="fc" id="L142">      return unpad(decrypted);</span>
+<span class="fc" id="L159">      Cipher cipher = Cipher.getInstance(CYPHER_ALGO);</span>
+<span class="fc" id="L160">      cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);</span>
+<span class="fc" id="L161">      byte[] decrypted = cipher.doFinal(cypher);</span>
+<span class="fc" id="L162">      return unpad(decrypted);</span>
     }
-<span class="nc" id="L144">    catch (Exception ex) {</span>
-<span class="nc" id="L145">      throw new IOException(&quot;Failed to decrypt data: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L164">    catch (Exception ex) {</span>
+<span class="nc" id="L165">      throw new IOException(&quot;Failed to decrypt data: &quot; + ex.getMessage(), ex);</span>
     }
   }
 
   public byte[] encryptAES(byte[] cleartext, byte[] key, byte[] iv) throws IOException {
-<span class="fc" id="L150">    SecretKeySpec keySpec = new SecretKeySpec(key, CYPHER_KEY_ALGO);</span>
-<span class="fc" id="L151">    IvParameterSpec ivSpec = new IvParameterSpec(iv);</span>
+<span class="fc" id="L170">    SecretKeySpec keySpec = new SecretKeySpec(key, CYPHER_KEY_ALGO);</span>
+<span class="fc" id="L171">    IvParameterSpec ivSpec = new IvParameterSpec(iv);</span>
     try {
-<span class="fc" id="L153">      Cipher cipher = Cipher.getInstance(CYPHER_ALGO);</span>
-<span class="fc" id="L154">      cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);</span>
-<span class="fc" id="L155">      return cipher.doFinal(cleartext);</span>
+<span class="fc" id="L173">      Cipher cipher = Cipher.getInstance(CYPHER_ALGO);</span>
+<span class="fc" id="L174">      cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);</span>
+<span class="fc" id="L175">      return cipher.doFinal(cleartext);</span>
     }
-<span class="nc" id="L157">    catch (Exception ex) {</span>
-<span class="nc" id="L158">      throw new IOException(&quot;Failed to encrypt data: &quot; + ex.getMessage(), ex);</span>
+<span class="nc" id="L177">    catch (Exception ex) {</span>
+<span class="nc" id="L178">      throw new IOException(&quot;Failed to encrypt data: &quot; + ex.getMessage(), ex);</span>
     }
   }
 
   @Override
   public byte[] decrypt(byte[] encryptedData, String password) throws IOException {
-<span class="fc" id="L164">    byte[] decrypted = null;</span>
+<span class="fc" id="L184">    byte[] decrypted = null;</span>
 
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">    if (!hasValidAESProvider()) {</span>
-<span class="nc" id="L167">      throw new IOException(&quot;Missing valid AES256 provider - install unrestricted policy profiles.&quot;);</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">    if (!hasValidAESProvider()) {</span>
+<span class="nc" id="L187">      throw new IOException(&quot;Missing valid AES256 provider - install unrestricted policy profiles.&quot;);</span>
     }
 
-<span class="fc" id="L170">    VaultContent vaultContent = new VaultContent(encryptedData);</span>
+<span class="fc" id="L190">    VaultContent vaultContent = new VaultContent(encryptedData);</span>
 
-<span class="fc" id="L172">    byte[] salt = vaultContent.getSalt();</span>
-<span class="fc" id="L173">    byte[] hmac = vaultContent.getHmac();</span>
-<span class="fc" id="L174">    byte[] cypher = vaultContent.getData();</span>
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L176">      logger.trace(&quot;Salt: {} - {}&quot;, salt.length, Util.hexit(salt, 100));</span>
-<span class="nc" id="L177">      logger.trace(&quot;HMAC: {} - {}&quot;, hmac.length, Util.hexit(hmac, 100));</span>
-<span class="nc" id="L178">      logger.trace(&quot;Data: {} - {}&quot;, cypher.length, Util.hexit(cypher, 100));</span>
+<span class="fc" id="L192">    byte[] salt = vaultContent.getSalt();</span>
+<span class="fc" id="L193">    byte[] hmac = vaultContent.getHmac();</span>
+<span class="fc" id="L194">    byte[] cypher = vaultContent.getData();</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L196">      logger.trace(&quot;Salt: {} - {}&quot;, salt.length, Util.hexit(salt, 100));</span>
+<span class="nc" id="L197">      logger.trace(&quot;HMAC: {} - {}&quot;, hmac.length, Util.hexit(hmac, 100));</span>
+<span class="nc" id="L198">      logger.trace(&quot;Data: {} - {}&quot;, cypher.length, Util.hexit(cypher, 100));</span>
     }
 
-<span class="fc" id="L181">    EncryptionKeychain keys = new EncryptionKeychain(salt, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);</span>
-<span class="fc" id="L182">    keys.createKeys();</span>
+<span class="fc" id="L201">    EncryptionKeychain keys = new EncryptionKeychain(salt, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);</span>
+<span class="fc" id="L202">    keys.createKeys();</span>
 
-<span class="fc" id="L184">    byte[] cypherKey = keys.getEncryptionKey();</span>
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L186">      logger.trace(&quot;Key 1: {} - {}&quot;, cypherKey.length, Util.hexit(cypherKey, 100));</span>
+<span class="fc" id="L204">    byte[] cypherKey = keys.getEncryptionKey();</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L206">      logger.trace(&quot;Key 1: {} - {}&quot;, cypherKey.length, Util.hexit(cypherKey, 100));</span>
     }
-<span class="fc" id="L188">    byte[] hmacKey = keys.getHmacKey();</span>
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L190">      logger.trace(&quot;Key 2: {} - {}&quot;, hmacKey.length, Util.hexit(hmacKey, 100));</span>
+<span class="fc" id="L208">    byte[] hmacKey = keys.getHmacKey();</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L210">      logger.trace(&quot;Key 2: {} - {}&quot;, hmacKey.length, Util.hexit(hmacKey, 100));</span>
     }
-<span class="fc" id="L192">    byte[] iv = keys.getIv();</span>
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L194">      logger.trace(&quot;IV: {} - {}&quot;, iv.length, Util.hexit(iv, 100));</span>
+<span class="fc" id="L212">    byte[] iv = keys.getIv();</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L214">      logger.trace(&quot;IV: {} - {}&quot;, iv.length, Util.hexit(iv, 100));</span>
     }
 
-<span class="fc bfc" id="L197" title="All 2 branches covered.">    if (verifyHMAC(hmac, hmacKey, cypher)) {</span>
-<span class="fc" id="L198">      logger.trace(&quot;Signature matches - decrypting&quot;);</span>
-<span class="fc" id="L199">      decrypted = decryptAES(cypher, cypherKey, iv);</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">      if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L201">        logger.trace(&quot;Decoded:\n{}&quot;, new String(decrypted, CHAR_ENCODING));</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">    if (verifyHMAC(hmac, hmacKey, cypher)) {</span>
+<span class="fc" id="L218">      logger.trace(&quot;Signature matches - decrypting&quot;);</span>
+<span class="fc" id="L219">      decrypted = decryptAES(cypher, cypherKey, iv);</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">      if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L221">        logger.trace(&quot;Decoded:\n{}&quot;, new String(decrypted, CHAR_ENCODING));</span>
       }
     }
     else {
-<span class="fc" id="L205">      throw new IOException(&quot;HMAC Digest doesn't match - possibly it's the wrong password.&quot;);</span>
+<span class="fc" id="L225">      throw new IOException(&quot;HMAC Digest doesn't match - possibly it's the wrong password.&quot;);</span>
     }
 
-<span class="fc" id="L208">    return decrypted;</span>
+<span class="fc" id="L228">    return decrypted;</span>
   }
 
   @Override
   public void decrypt(OutputStream decodedStream, byte[] encryptedData, String password) throws IOException {
-<span class="nc" id="L213">    decodedStream.write(decrypt(encryptedData, password));</span>
-<span class="nc" id="L214">  }</span>
+<span class="nc" id="L233">    decodedStream.write(decrypt(encryptedData, password));</span>
+<span class="nc" id="L234">  }</span>
 
   @Override
   public void encrypt(OutputStream encodedStream, byte[] data, String password) throws IOException {
-<span class="nc" id="L218">    encodedStream.write(encrypt(data, password));</span>
-<span class="nc" id="L219">  }</span>
+<span class="nc" id="L238">    encodedStream.write(encrypt(data, password));</span>
+<span class="nc" id="L239">  }</span>
 
   @Override
   public String infoLine() {
-<span class="fc" id="L223">    return VaultInfo.vaultInfoForCypher(CYPHER_ID);</span>
+<span class="fc" id="L243">    return VaultInfo.vaultInfoForCypher(CYPHER_ID);</span>
   }
 
   @Override
   @SuppressWarnings(&quot;PMD.AvoidReassigningParameters&quot;)
   public byte[] encrypt(byte[] data, String password) throws IOException {
-<span class="fc" id="L229">    EncryptionKeychain keys = new EncryptionKeychain(SALT_LENGTH, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);</span>
-<span class="fc" id="L230">    keys.createKeys();</span>
-<span class="fc" id="L231">    byte[] cypherKey = keys.getEncryptionKey();</span>
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L233">      logger.trace(&quot;Key 1: {} - {}&quot;, cypherKey.length, Util.hexit(cypherKey, 100));</span>
+<span class="fc" id="L249">    EncryptionKeychain keys = new EncryptionKeychain(SALT_LENGTH, password, KEYLEN, IVLEN, ITERATIONS, KEYGEN_ALGO);</span>
+<span class="fc" id="L250">    keys.createKeys();</span>
+<span class="fc" id="L251">    byte[] cypherKey = keys.getEncryptionKey();</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L253">      logger.trace(&quot;Key 1: {} - {}&quot;, cypherKey.length, Util.hexit(cypherKey, 100));</span>
     }
-<span class="fc" id="L235">    byte[] hmacKey = keys.getHmacKey();</span>
-<span class="pc bpc" id="L236" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L237">      logger.trace(&quot;Key 2: {} - {}&quot;, hmacKey.length, Util.hexit(hmacKey, 100));</span>
+<span class="fc" id="L255">    byte[] hmacKey = keys.getHmacKey();</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L257">      logger.trace(&quot;Key 2: {} - {}&quot;, hmacKey.length, Util.hexit(hmacKey, 100));</span>
     }
-<span class="fc" id="L239">    byte[] iv = keys.getIv();</span>
-<span class="pc bpc" id="L240" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L241">      logger.trace(&quot;IV: {} - {}&quot;, iv.length, Util.hexit(iv, 100));</span>
-<span class="nc" id="L242">      logger.trace(&quot;Original data length: {}&quot;, data.length);</span>
+<span class="fc" id="L259">    byte[] iv = keys.getIv();</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L261">      logger.trace(&quot;IV: {} - {}&quot;, iv.length, Util.hexit(iv, 100));</span>
+<span class="nc" id="L262">      logger.trace(&quot;Original data length: {}&quot;, data.length);</span>
     }
-<span class="fc" id="L244">    data = pad(data);</span>
-<span class="fc" id="L245">    logger.trace(&quot;Padded data length: {}&quot;, data.length);</span>
-<span class="fc" id="L246">    byte[] encrypted = encryptAES(data, keys.getEncryptionKey(), keys.getIv());</span>
-<span class="fc" id="L247">    byte[] hmacHash = calculateHMAC(keys.getHmacKey(), encrypted);</span>
-<span class="fc" id="L248">    VaultContent vaultContent = new VaultContent(keys.getSalt(), hmacHash, encrypted);</span>
-<span class="fc" id="L249">    return vaultContent.toByteArray();</span>
+<span class="fc" id="L264">    data = pad(data);</span>
+<span class="fc" id="L265">    logger.trace(&quot;Padded data length: {}&quot;, data.length);</span>
+<span class="fc" id="L266">    byte[] encrypted = encryptAES(data, keys.getEncryptionKey(), keys.getIv());</span>
+<span class="fc" id="L267">    byte[] hmacHash = calculateHMAC(keys.getHmacKey(), encrypted);</span>
+<span class="fc" id="L268">    VaultContent vaultContent = new VaultContent(keys.getSalt(), hmacHash, encrypted);</span>
+<span class="fc" id="L269">    return vaultContent.toByteArray();</span>
   }
 
 }

@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto,VaultHandler,29,68,2,2,7,17,4,6,2,6
 CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryWriter,167,187,24,20,34,36,15,15,2,6
-CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryReader,9,240,8,38,3,62,8,16,0,1
+CONGA Ansible Plugin,it.andreascarpino.ansible.inventory.util,AnsibleInventoryReader,9,240,8,38,3,63,8,16,0,1
 CONGA Ansible Plugin,net.wedjaa.ansible.vault.crypto.decoders,CypherFactory,6,14,2,2,2,3,2,1,0,1
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin.InventoryContent,0,20,0,0,0,8,0,4,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleInventoryValueProviderPlugin,12,252,6,26,4,57,6,19,0,9
@@ -9,8 +9,8 @@ CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueprovider,AnsibleVa
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleValueEncryptionPlugin,8,27,0,0,2,7,0,4,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVaultValueRepresent,0,19,0,0,0,3,0,2,0,2
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleYamlRepresentPlugin,0,13,0,0,0,4,0,3,0,3
-CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVaultValue,0,12,0,0,0,5,0,3,0,3
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,AnsibleYamlConstructorPlugin,15,0,0,0,4,0,3,0,3,0
+CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.valueencryption,YamlVaultValue,0,12,0,0,0,5,0,3,0,3
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.urlfile,AnsibleVaultUrlFilePlugin,0,60,0,0,0,15,0,7,0,7
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.util,AnsibleVaultPassword,26,52,5,9,6,17,5,6,0,4
 CONGA Ansible Plugin,io.wcm.devops.conga.plugins.ansible.util,FileScriptLoader,27,58,1,3,6,14,1,4,0,3
