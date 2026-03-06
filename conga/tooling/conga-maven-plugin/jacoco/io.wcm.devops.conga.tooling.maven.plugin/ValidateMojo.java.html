@@ -125,31 +125,31 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 <span class="fc" id="L125">    PluginManager pluginManager = new PluginManagerImpl();</span>
 
 <span class="fc" id="L127">    MavenContext mavenContext = new MavenContext()</span>
-<span class="fc" id="L128">        .project(project)</span>
-<span class="fc" id="L129">        .session(session)</span>
-<span class="fc" id="L130">        .setRepositorySystem(repositorySystem)</span>
-<span class="fc" id="L131">        .resolutionErrorHandler(resolutionErrorHandler)</span>
-<span class="fc" id="L132">        .buildContext(buildContext)</span>
-<span class="fc" id="L133">        .log(getLog())</span>
-<span class="fc" id="L134">        .repoSystem(repoSystem)</span>
-<span class="fc" id="L135">        .repoSession(repoSession)</span>
-<span class="fc" id="L136">        .remoteRepos(remoteRepos)</span>
-<span class="fc" id="L137">        .artifactTypeMappings(getArtifactTypeMappings());</span>
+<span class="fc" id="L128">      .project(project)</span>
+<span class="fc" id="L129">      .session(session)</span>
+<span class="fc" id="L130">      .setRepositorySystem(repositorySystem)</span>
+<span class="fc" id="L131">      .resolutionErrorHandler(resolutionErrorHandler)</span>
+<span class="fc" id="L132">      .buildContext(buildContext)</span>
+<span class="fc" id="L133">      .log(getLog())</span>
+<span class="fc" id="L134">      .repoSystem(repoSystem)</span>
+<span class="fc" id="L135">      .repoSession(repoSession)</span>
+<span class="fc" id="L136">      .remoteRepos(remoteRepos)</span>
+<span class="fc" id="L137">      .artifactTypeMappings(getArtifactTypeMappings());</span>
 
 <span class="fc" id="L139">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L140">        .baseDir(project.getBasedir())</span>
-<span class="fc" id="L141">        .resourceClassLoader(mavenProjectClassLoader)</span>
-<span class="fc" id="L142">        .pluginContextOptions(new PluginContextOptions()</span>
-<span class="fc" id="L143">          .containerContext(mavenContext));</span>
+<span class="fc" id="L140">      .baseDir(project.getBasedir())</span>
+<span class="fc" id="L141">      .resourceClassLoader(mavenProjectClassLoader)</span>
+<span class="fc" id="L142">      .pluginContextOptions(new PluginContextOptions()</span>
+<span class="fc" id="L143">        .containerContext(mavenContext));</span>
 <span class="fc" id="L144">    UrlFileManager urlFileManager = new UrlFileManager(pluginManager, urlFilePluginContext);</span>
 
 <span class="fc" id="L146">    PluginContextOptions pluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L147">        .pluginManager(pluginManager)</span>
-<span class="fc" id="L148">        .urlFileManager(urlFileManager)</span>
-<span class="fc" id="L149">        .valueProviderConfig(getValueProviderConfig())</span>
-<span class="fc" id="L150">        .genericPluginConfig(getPluginConfig())</span>
-<span class="fc" id="L151">        .containerContext(mavenContext)</span>
-<span class="fc" id="L152">        .logger(new MavenSlf4jLogFacade(getLog()));</span>
+<span class="fc" id="L147">      .pluginManager(pluginManager)</span>
+<span class="fc" id="L148">      .urlFileManager(urlFileManager)</span>
+<span class="fc" id="L149">      .valueProviderConfig(getValueProviderConfig())</span>
+<span class="fc" id="L150">      .genericPluginConfig(getPluginConfig())</span>
+<span class="fc" id="L151">      .containerContext(mavenContext)</span>
+<span class="fc" id="L152">      .logger(new MavenSlf4jLogFacade(getLog()));</span>
 
     // validate that all templates can be compiled
 <span class="fc" id="L155">    HandlebarsManager handlebarsManager = new HandlebarsManager(List.of(templateDir), pluginContextOptions);</span>
@@ -179,16 +179,16 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
     // validate version information - for each environment separately
 <span class="fc bfc" id="L180" title="All 2 branches covered.">    for (Environment environment : environmentList) {</span>
 <span class="fc" id="L181">      UrlFilePluginContext environmentUrlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L182">          .baseDir(project.getBasedir())</span>
-<span class="fc" id="L183">          .resourceClassLoader(mavenProjectClassLoader)</span>
-<span class="fc" id="L184">          .environment(environment)</span>
-<span class="fc" id="L185">          .pluginContextOptions(new PluginContextOptions()</span>
-<span class="fc" id="L186">              .containerContext(mavenContext));</span>
+<span class="fc" id="L182">        .baseDir(project.getBasedir())</span>
+<span class="fc" id="L183">        .resourceClassLoader(mavenProjectClassLoader)</span>
+<span class="fc" id="L184">        .environment(environment)</span>
+<span class="fc" id="L185">        .pluginContextOptions(new PluginContextOptions()</span>
+<span class="fc" id="L186">          .containerContext(mavenContext));</span>
 <span class="fc" id="L187">      UrlFileManager environmentUrlFileManager = new UrlFileManager(pluginManager, environmentUrlFilePluginContext);</span>
 
 <span class="fc" id="L189">      PluginContextOptions environmentPluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L190">          .pluginContextOptions(pluginContextOptions)</span>
-<span class="fc" id="L191">          .urlFileManager(environmentUrlFileManager);</span>
+<span class="fc" id="L190">        .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L191">        .urlFileManager(environmentUrlFileManager);</span>
 <span class="fc" id="L192">      validateVersionInfo(environment, mavenProjectClasspathUrls, environmentPluginContextOptions);</span>
 <span class="fc" id="L193">    }</span>
 <span class="fc" id="L194">  }</span>
@@ -262,17 +262,17 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 
   private List&lt;URL&gt; getEnvironmentClasspathUrls(List&lt;String&gt; dependencyUrls, PluginContextOptions pluginContextOptions) {
 <span class="fc" id="L264">    return dependencyUrls.stream()</span>
-<span class="fc" id="L265">        .map(dependencyUrl -&gt; {</span>
-<span class="nc" id="L266">          String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
-          try {
-<span class="nc" id="L268">            return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
-          }
-<span class="nc" id="L270">          catch (IOException ex) {</span>
-<span class="nc" id="L271">            throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
-          }
-        })
-<span class="fc" id="L274">        .flatMap(List::stream)</span>
-<span class="fc" id="L275">        .toList();</span>
+<span class="fc" id="L265">      .map(dependencyUrl -&gt; {</span>
+<span class="nc" id="L266">        String resolvedDependencyUrl = ClassLoaderUtil.resolveDependencyUrl(dependencyUrl, pluginContextOptions);</span>
+        try {
+<span class="nc" id="L268">          return pluginContextOptions.getUrlFileManager().getFileUrlsWithDependencies(resolvedDependencyUrl);</span>
+        }
+<span class="nc" id="L270">        catch (IOException ex) {</span>
+<span class="nc" id="L271">          throw new GeneratorException(&quot;Unable to resolve: &quot; + resolvedDependencyUrl, ex);</span>
+        }
+      })
+<span class="fc" id="L274">      .flatMap(List::stream)</span>
+<span class="fc" id="L275">      .toList();</span>
   }
 
   private void validateVersionInfo(Properties currentVersionInfo, Properties dependencyVersionInfo) throws MojoExecutionException {
@@ -297,8 +297,8 @@ import io.wcm.devops.conga.tooling.maven.plugin.validation.TemplateValidator;
 <span class="fc" id="L297">      org.springframework.core.io.Resource[] resources = resolver.getResources(</span>
           &quot;classpath*:&quot; + GeneratorOptions.CLASSPATH_PREFIX + BuildConstants.FILE_VERSION_INFO);
 <span class="fc" id="L299">      return Arrays.stream(resources)</span>
-<span class="fc" id="L300">          .map(this::toProperties)</span>
-<span class="fc" id="L301">          .toList();</span>
+<span class="fc" id="L300">        .map(this::toProperties)</span>
+<span class="fc" id="L301">        .toList();</span>
     }
 <span class="nc" id="L303">    catch (IOException ex) {</span>
 <span class="nc" id="L304">      throw new MojoExecutionException(&quot;Unable to get classpath resources: &quot; + ex.getMessage(), ex);</span>

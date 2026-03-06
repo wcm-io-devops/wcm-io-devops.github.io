@@ -88,7 +88,7 @@ public final class ClassLoaderUtil {
   public static String resolveDependencyUrl(String dependencyUrl, PluginContextOptions pluginContextOptions) {
 
 <span class="nc" id="L90">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
-<span class="nc" id="L91">        .pluginContextOptions(pluginContextOptions);</span>
+<span class="nc" id="L91">      .pluginContextOptions(pluginContextOptions);</span>
 <span class="nc" id="L92">    VariableMapResolver variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
 <span class="nc" id="L93">    VariableStringResolver variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
 

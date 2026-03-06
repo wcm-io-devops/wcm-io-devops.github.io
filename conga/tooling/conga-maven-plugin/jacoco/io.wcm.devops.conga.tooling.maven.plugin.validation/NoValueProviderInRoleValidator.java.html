@@ -72,12 +72,14 @@ import io.wcm.devops.conga.resource.Resource;
 <span class="fc" id="L72">  }</span>
 
   private static class MapReader extends AbstractModelReader&lt;Map&lt;String, Object&gt;&gt; {
+
     MapReader() {
-<span class="fc" id="L76">      super(getYaml());</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L77">      super(getYaml());</span>
+<span class="fc" id="L78">    }</span>
+
     private static Yaml getYaml() {
-<span class="fc" id="L79">      Constructor constructor = new Constructor(Map.class, YamlUtil.createLoaderOptions());</span>
-<span class="fc" id="L80">      return new Yaml(constructor);</span>
+<span class="fc" id="L81">      Constructor constructor = new Constructor(Map.class, YamlUtil.createLoaderOptions());</span>
+<span class="fc" id="L82">      return new Yaml(constructor);</span>
     }
   }
 

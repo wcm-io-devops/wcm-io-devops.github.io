@@ -50,15 +50,15 @@ public final class ModelExportConfigProcessor {
 <span class="fc" id="L50">  public ModelExportConfigProcessor(PluginContextOptions pluginContextOptions, Set&lt;String&gt; sensitiveConfigParameters) {</span>
 <span class="fc" id="L51">    this.valueEncryptionPlugin = getFirstEnabledValueEncryptionPlugin(pluginContextOptions.getPluginManager());</span>
 <span class="fc" id="L52">    this.valueEncryptionContext = new ValueEncryptionContext()</span>
-<span class="fc" id="L53">        .pluginContextOptions(pluginContextOptions);</span>
+<span class="fc" id="L53">      .pluginContextOptions(pluginContextOptions);</span>
 <span class="fc" id="L54">    this.sensitiveConfigParameters = sensitiveConfigParameters;</span>
 <span class="fc" id="L55">  }</span>
 
   private ValueEncryptionPlugin getFirstEnabledValueEncryptionPlugin(PluginManager pluginManager) {
 <span class="fc" id="L58">    return pluginManager.getAll(ValueEncryptionPlugin.class)</span>
-<span class="fc" id="L59">        .stream()</span>
-<span class="fc" id="L60">        .filter(ValueEncryptionPlugin::isEnabled)</span>
-<span class="fc" id="L61">        .findFirst().orElse(null);</span>
+<span class="fc" id="L59">      .stream()</span>
+<span class="fc" id="L60">      .filter(ValueEncryptionPlugin::isEnabled)</span>
+<span class="fc" id="L61">      .findFirst().orElse(null);</span>
   }
 
   /**

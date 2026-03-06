@@ -51,33 +51,35 @@ public final class RoleTemplateFileValidator implements DefinitionValidator&lt;V
 <span class="fc" id="L51">  }</span>
 
   @Override
-  @SuppressWarnings({ &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.ExceptionAsFlowControl&quot; })
+  @SuppressWarnings({
+      &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.ExceptionAsFlowControl&quot;
+  })
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
-<span class="fc" id="L57">      Role role = modelReader.read(resource);</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">      for (RoleFile roleFile : role.getFiles()) {</span>
+<span class="fc" id="L59">      Role role = modelReader.read(resource);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">      for (RoleFile roleFile : role.getFiles()) {</span>
 
         // validate template file
-<span class="fc" id="L61">        String templateFile = FileUtil.getTemplatePath(role, roleFile);</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (StringUtils.isNotEmpty(templateFile)) {</span>
-<span class="fc" id="L63">          Handlebars handlebars = handlebarsManager.get(NoneEscapingStrategy.NAME, roleFile.getCharset());</span>
-<span class="fc" id="L64">          handlebars.compile(templateFile);</span>
+<span class="fc" id="L63">        String templateFile = FileUtil.getTemplatePath(role, roleFile);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (StringUtils.isNotEmpty(templateFile)) {</span>
+<span class="fc" id="L65">          Handlebars handlebars = handlebarsManager.get(NoneEscapingStrategy.NAME, roleFile.getCharset());</span>
+<span class="fc" id="L66">          handlebars.compile(templateFile);</span>
         }
 
         // ensure only one of the parameters template, url, symlinkTarget is defined for a file
-<span class="fc" id="L68">        boolean hasTemplate = StringUtils.isNotEmpty(roleFile.getTemplate());</span>
-<span class="fc" id="L69">        boolean hasUrl = StringUtils.isNotEmpty(roleFile.getUrl());</span>
-<span class="fc" id="L70">        boolean hasSymlinkTarget = StringUtils.isNotEmpty(roleFile.getSymlinkTarget());</span>
-<span class="pc bpc" id="L71" title="3 of 12 branches missed.">        if ((hasTemplate &amp;&amp; hasUrl) || (hasTemplate &amp;&amp; hasSymlinkTarget) || (hasUrl &amp;&amp; hasSymlinkTarget)) {</span>
-<span class="nc" id="L72">          throw new IllegalArgumentException(&quot;Only one of the attributes 'template', 'url', 'symlinkTarget' is allowed for a file definition.&quot;);</span>
+<span class="fc" id="L70">        boolean hasTemplate = StringUtils.isNotEmpty(roleFile.getTemplate());</span>
+<span class="fc" id="L71">        boolean hasUrl = StringUtils.isNotEmpty(roleFile.getUrl());</span>
+<span class="fc" id="L72">        boolean hasSymlinkTarget = StringUtils.isNotEmpty(roleFile.getSymlinkTarget());</span>
+<span class="pc bpc" id="L73" title="3 of 12 branches missed.">        if ((hasTemplate &amp;&amp; hasUrl) || (hasTemplate &amp;&amp; hasSymlinkTarget) || (hasUrl &amp;&amp; hasSymlinkTarget)) {</span>
+<span class="nc" id="L74">          throw new IllegalArgumentException(&quot;Only one of the attributes 'template', 'url', 'symlinkTarget' is allowed for a file definition.&quot;);</span>
         }
 
-<span class="fc" id="L75">      }</span>
+<span class="fc" id="L77">      }</span>
     }
-<span class="nc" id="L77">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L78">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
-<span class="fc" id="L79">    }</span>
-<span class="fc" id="L80">    return null;</span>
+<span class="nc" id="L79">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L80">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="fc" id="L81">    }</span>
+<span class="fc" id="L82">    return null;</span>
   }
 
 }

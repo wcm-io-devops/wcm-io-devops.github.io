@@ -111,15 +111,15 @@ final class EnvironmentGenerator {
 <span class="fc" id="L111">    this.log = options.getLogger();</span>
 
 <span class="fc" id="L113">    this.pluginContextOptions = new PluginContextOptions()</span>
-<span class="fc" id="L114">        .pluginManager(options.getPluginManager())</span>
-<span class="fc" id="L115">        .valueProviderConfig(options.getValueProviderConfig())</span>
-<span class="fc" id="L116">        .genericPluginConfig(mergePluginConfig(environment.getPluginConfig(), options.getGenericPluginConfig()))</span>
-<span class="fc" id="L117">        .containerContext(options.getContainerContext())</span>
-<span class="fc" id="L118">        .logger(this.log);</span>
+<span class="fc" id="L114">      .pluginManager(options.getPluginManager())</span>
+<span class="fc" id="L115">      .valueProviderConfig(options.getValueProviderConfig())</span>
+<span class="fc" id="L116">      .genericPluginConfig(mergePluginConfig(environment.getPluginConfig(), options.getGenericPluginConfig()))</span>
+<span class="fc" id="L117">      .containerContext(options.getContainerContext())</span>
+<span class="fc" id="L118">      .logger(this.log);</span>
 
     // prepare variable resolvers
 <span class="fc" id="L121">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
-<span class="fc" id="L122">        .pluginContextOptions(this.pluginContextOptions);</span>
+<span class="fc" id="L122">      .pluginContextOptions(this.pluginContextOptions);</span>
 <span class="fc" id="L123">    this.variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
 <span class="fc" id="L124">    this.variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
 <span class="fc" id="L125">    VariableObjectTreeResolver variableObjectTreeResolver = new VariableObjectTreeResolver(valueProviderGlobalContext);</span>
@@ -143,10 +143,10 @@ final class EnvironmentGenerator {
 <span class="fc" id="L143">    this.roles.values().forEach(role -&gt; sensitiveConfigParameters.addAll(role.getSensitiveConfigParameters()));</span>
 
 <span class="fc" id="L145">    this.urlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L146">        .pluginContextOptions(pluginContextOptions)</span>
-<span class="fc" id="L147">        .baseDir(options.getBaseDir())</span>
-<span class="fc" id="L148">        .resourceClassLoader(resourceClassLoader)</span>
-<span class="fc" id="L149">        .environment(environment);</span>
+<span class="fc" id="L146">      .pluginContextOptions(pluginContextOptions)</span>
+<span class="fc" id="L147">      .baseDir(options.getBaseDir())</span>
+<span class="fc" id="L148">      .resourceClassLoader(resourceClassLoader)</span>
+<span class="fc" id="L149">      .environment(environment);</span>
 <span class="fc" id="L150">    this.urlFileManager = new UrlFileManager(options.getPluginManager(), this.urlFilePluginContext);</span>
 
 <span class="fc" id="L152">    this.handlebarsManager = new HandlebarsManager(templateDirs, this.pluginContextOptions);</span>
@@ -162,8 +162,8 @@ final class EnvironmentGenerator {
 <span class="fc" id="L162">    yamlRepresenter = new YamlRepresenter();</span>
 <span class="fc" id="L163">    options.getPluginManager().getAll(YamlRepresentPlugin.class).forEach(plugin -&gt; {</span>
 <span class="nc" id="L164">      YamlRepresentContext context = new YamlRepresentContext()</span>
-<span class="nc" id="L165">          .pluginContextOptions(pluginContextOptions)</span>
-<span class="nc" id="L166">          .yamlRepresenter(yamlRepresenter);</span>
+<span class="nc" id="L165">        .pluginContextOptions(pluginContextOptions)</span>
+<span class="nc" id="L166">        .yamlRepresenter(yamlRepresenter);</span>
 <span class="nc" id="L167">      plugin.register(context);</span>
 <span class="nc" id="L168">    });</span>
 <span class="fc" id="L169">  }</span>
@@ -254,8 +254,8 @@ final class EnvironmentGenerator {
 
           // filter out result files probably deleted by other file definitions
 <span class="fc" id="L256">          allFiles = allFiles.stream()</span>
-<span class="fc" id="L257">              .filter(generatedFile -&gt; generatedFile.getFileContext().getFile().exists())</span>
-<span class="fc" id="L258">              .toList();</span>
+<span class="fc" id="L257">            .filter(generatedFile -&gt; generatedFile.getFileContext().getFile().exists())</span>
+<span class="fc" id="L258">            .toList();</span>
 
 <span class="fc" id="L260">          exportNodeRoleData.files(allFiles);</span>
 <span class="fc" id="L261">        }</span>
@@ -310,12 +310,12 @@ final class EnvironmentGenerator {
     }
 <span class="fc" id="L311">    String fileExtension = FilenameUtils.getExtension(roleFile.getFile());</span>
 <span class="fc" id="L312">    EscapingStrategyContext context = new EscapingStrategyContext()</span>
-<span class="fc" id="L313">        .pluginContextOptions(this.pluginContextOptions);</span>
+<span class="fc" id="L313">      .pluginContextOptions(this.pluginContextOptions);</span>
 <span class="fc" id="L314">    return options.getPluginManager().getAll(EscapingStrategyPlugin.class).stream()</span>
-<span class="fc bfc" id="L315" title="All 2 branches covered.">        .filter(plugin -&gt; !Strings.CS.equals(plugin.getName(), NoneEscapingStrategy.NAME))</span>
-<span class="fc" id="L316">        .filter(plugin -&gt; plugin.accepts(fileExtension, context))</span>
-<span class="fc" id="L317">        .findFirst().orElse(options.getPluginManager().get(NoneEscapingStrategy.NAME, EscapingStrategyPlugin.class))</span>
-<span class="fc" id="L318">        .getName();</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">      .filter(plugin -&gt; !Strings.CS.equals(plugin.getName(), NoneEscapingStrategy.NAME))</span>
+<span class="fc" id="L316">      .filter(plugin -&gt; plugin.accepts(fileExtension, context))</span>
+<span class="fc" id="L317">      .findFirst().orElse(options.getPluginManager().get(NoneEscapingStrategy.NAME, EscapingStrategyPlugin.class))</span>
+<span class="fc" id="L318">      .getName();</span>
   }
 
   @SuppressWarnings(&quot;java:S107&quot;) // allow many parameters
@@ -327,13 +327,13 @@ final class EnvironmentGenerator {
     }
 
 <span class="fc" id="L329">    MultiplyContext multiplyContext = new MultiplyContext()</span>
-<span class="fc" id="L330">        .pluginContextOptions(this.pluginContextOptions)</span>
-<span class="fc" id="L331">        .role(role)</span>
-<span class="fc" id="L332">        .roleFile(roleFile)</span>
-<span class="fc" id="L333">        .environment(environment)</span>
-<span class="fc" id="L334">        .config(config)</span>
-<span class="fc" id="L335">        .variableStringResolver(variableStringResolver)</span>
-<span class="fc" id="L336">        .variableMapResolver(variableMapResolver);</span>
+<span class="fc" id="L330">      .pluginContextOptions(this.pluginContextOptions)</span>
+<span class="fc" id="L331">      .role(role)</span>
+<span class="fc" id="L332">      .roleFile(roleFile)</span>
+<span class="fc" id="L333">      .environment(environment)</span>
+<span class="fc" id="L334">      .config(config)</span>
+<span class="fc" id="L335">      .variableStringResolver(variableStringResolver)</span>
+<span class="fc" id="L336">      .variableMapResolver(variableMapResolver);</span>
 
 <span class="fc" id="L338">    List&lt;Map&lt;String, Object&gt;&gt; muliplyConfigs = multiplyPlugin.multiply(multiplyContext);</span>
 <span class="fc" id="L339">    int index = 0;</span>

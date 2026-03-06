@@ -47,29 +47,26 @@ import io.wcm.devops.conga.generator.util.FileUtil;
    * but without explicitly escaping unicode chars. The escaping of forward slashes is removed as well also part of the
    * JSON specifiction. Both for better readability.
    */
-<span class="fc" id="L50">  private static final CharSequenceTranslator ESCAPE_JSON =</span>
-      new AggregateTranslator(
-          new LookupTranslator(
-<span class="fc" id="L53">              Map.of(</span>
-                  &quot;\&quot;&quot;, &quot;\\\&quot;&quot;,
-                  &quot;\\&quot;, &quot;\\\\&quot;
-              )),
-            new LookupTranslator(EntityArrays.JAVA_CTRL_CHARS_ESCAPE)
-          );
+<span class="fc" id="L50">  private static final CharSequenceTranslator ESCAPE_JSON = new AggregateTranslator(</span>
+      new LookupTranslator(
+<span class="fc" id="L52">          Map.of(</span>
+              &quot;\&quot;&quot;, &quot;\\\&quot;&quot;,
+              &quot;\\&quot;, &quot;\\\\&quot;)),
+      new LookupTranslator(EntityArrays.JAVA_CTRL_CHARS_ESCAPE));
 
   @Override
   public String getName() {
-<span class="fc" id="L62">    return NAME;</span>
+<span class="fc" id="L59">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(String fileExtension, EscapingStrategyContext pluginContext) {
-<span class="fc" id="L67">    return FileUtil.matchesExtension(fileExtension, FILE_EXTENSION);</span>
+<span class="fc" id="L64">    return FileUtil.matchesExtension(fileExtension, FILE_EXTENSION);</span>
   }
 
   @Override
   public String escape(CharSequence value, EscapingStrategyContext pluginContext) {
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">    return value == null ? null : ESCAPE_JSON.translate(value);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    return value == null ? null : ESCAPE_JSON.translate(value);</span>
   }
 
 }

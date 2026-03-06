@@ -37,16 +37,17 @@ public final class VariableObjectTreeResolver extends AbstractConfigurableObject
   // payload not used for this processor
 <span class="fc" id="L38">  @SuppressWarnings(&quot;java:S1604&quot;) // not possible to use lambda here</span>
 <span class="fc" id="L39">  private final ConfigurableProcessor&lt;Object&gt; processor = new ConfigurableProcessor&lt;Object&gt;() {</span>
+
     @Override
     public Object process(Configurable configurable, Object payload) {
-<span class="fc" id="L42">      Map&lt;String, Object&gt; config = new HashMap&lt;&gt;(configurable.getConfig());</span>
+<span class="fc" id="L43">      Map&lt;String, Object&gt; config = new HashMap&lt;&gt;(configurable.getConfig());</span>
 
       // add all context variables with empty value so references to them do not lead to &quot;unknown variable&quot; errors
-<span class="fc" id="L45">      config.putAll(ContextPropertiesBuilder.getEmptyContextVariables());</span>
+<span class="fc" id="L46">      config.putAll(ContextPropertiesBuilder.getEmptyContextVariables());</span>
 
-<span class="fc" id="L47">      Map&lt;String, Object&gt; resolvedconfig = variableMapResolver.resolve(config);</span>
-<span class="fc" id="L48">      configurable.setConfig(resolvedconfig);</span>
-<span class="fc" id="L49">      return null;</span>
+<span class="fc" id="L48">      Map&lt;String, Object&gt; resolvedconfig = variableMapResolver.resolve(config);</span>
+<span class="fc" id="L49">      configurable.setConfig(resolvedconfig);</span>
+<span class="fc" id="L50">      return null;</span>
     }
   };
 
@@ -54,17 +55,17 @@ public final class VariableObjectTreeResolver extends AbstractConfigurableObject
    * Constructor.
    * @param valueProviderGlobalContext Value provider global context
    */
-<span class="fc" id="L57">  public VariableObjectTreeResolver(ValueProviderGlobalContext valueProviderGlobalContext) {</span>
-<span class="fc" id="L58">    this.variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
-<span class="fc" id="L59">  }</span>
+<span class="fc" id="L58">  public VariableObjectTreeResolver(ValueProviderGlobalContext valueProviderGlobalContext) {</span>
+<span class="fc" id="L59">    this.variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
+<span class="fc" id="L60">  }</span>
 
   /**
    * Resolve all variables.
    * @param object Model with {@link Configurable} instances at any nested level.
    */
   public void resolve(Object object) {
-<span class="fc" id="L66">    process(object, processor, null);</span>
-<span class="fc" id="L67">  }</span>
+<span class="fc" id="L67">    process(object, processor, null);</span>
+<span class="fc" id="L68">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

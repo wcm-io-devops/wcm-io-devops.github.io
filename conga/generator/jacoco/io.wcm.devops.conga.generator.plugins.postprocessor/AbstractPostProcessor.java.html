@@ -78,10 +78,10 @@ import io.wcm.devops.conga.generator.spi.context.PostProcessorContext;
   private FileHeaderPlugin detectFileHeaderPlugin(FileContext file, PostProcessorContext postProcessorContext) {
 <span class="fc" id="L79">    FileHeaderContext dummyFileHeader = new FileHeaderContext();</span>
 <span class="fc" id="L80">    Optional&lt;FileHeaderPlugin&gt; fileHeaderPlugin = postProcessorContext.getPluginManager()</span>
-<span class="fc" id="L81">        .getAll(FileHeaderPlugin.class).stream()</span>
-<span class="fc" id="L82">        .filter(plugin -&gt; plugin.accepts(file, dummyFileHeader))</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        .filter(plugin -&gt; !Strings.CS.equals(plugin.getName(), NoneFileHeader.NAME))</span>
-<span class="fc" id="L84">        .findFirst();</span>
+<span class="fc" id="L81">      .getAll(FileHeaderPlugin.class).stream()</span>
+<span class="fc" id="L82">      .filter(plugin -&gt; plugin.accepts(file, dummyFileHeader))</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">      .filter(plugin -&gt; !Strings.CS.equals(plugin.getName(), NoneFileHeader.NAME))</span>
+<span class="fc" id="L84">      .findFirst();</span>
 <span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (fileHeaderPlugin.isPresent()) {</span>
 <span class="fc" id="L86">      return fileHeaderPlugin.get();</span>
     }

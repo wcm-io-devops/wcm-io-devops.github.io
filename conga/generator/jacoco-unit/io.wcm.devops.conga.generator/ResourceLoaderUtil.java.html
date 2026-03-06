@@ -69,10 +69,10 @@ final class ResourceLoaderUtil {
       VariableStringResolver variableStringResolver, GeneratorOptions options) {
 
 <span class="fc" id="L71">    UrlFilePluginContext urlFilePluginContext = new UrlFilePluginContext()</span>
-<span class="fc" id="L72">        .baseDir(options.getBaseDir())</span>
-<span class="fc" id="L73">        .resourceClassLoader(ResourceLoaderUtil.class.getClassLoader())</span>
-<span class="fc" id="L74">        .pluginContextOptions(new PluginContextOptions()</span>
-<span class="fc" id="L75">            .containerContext(options.getContainerContext()));</span>
+<span class="fc" id="L72">      .baseDir(options.getBaseDir())</span>
+<span class="fc" id="L73">      .resourceClassLoader(ResourceLoaderUtil.class.getClassLoader())</span>
+<span class="fc" id="L74">      .pluginContextOptions(new PluginContextOptions()</span>
+<span class="fc" id="L75">        .containerContext(options.getContainerContext()));</span>
 <span class="fc" id="L76">    UrlFileManager urlFileManager = new UrlFileManager(options.getPluginManager(), urlFilePluginContext);</span>
 
 <span class="fc" id="L78">    List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>

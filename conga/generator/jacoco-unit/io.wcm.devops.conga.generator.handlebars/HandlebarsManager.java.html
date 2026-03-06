@@ -51,48 +51,49 @@ public class HandlebarsManager {
   private final EscapingStrategyContext escapingStrategyContext;
   private final HelperContext helperContext;
 
-<span class="fc" id="L54">  private final LoadingCache&lt;HandlebarsKey, Handlebars&gt; handlebarsCache =</span>
-<span class="fc" id="L55">      Caffeine.newBuilder().build(new CacheLoader&lt;HandlebarsKey, Handlebars&gt;() {</span>
-        @SuppressWarnings(&quot;unchecked&quot;)
-        @Override
-        public Handlebars load(HandlebarsKey options) throws Exception {
+<span class="fc" id="L54">  private final LoadingCache&lt;HandlebarsKey, Handlebars&gt; handlebarsCache = Caffeine.newBuilder().build(new CacheLoader&lt;HandlebarsKey, Handlebars&gt;() {</span>
 
-          // setup handlebars
-<span class="fc" id="L61">          TemplateLoader templateLoader = new CharsetAwareTemplateLoader(templateDirs, options.getCharset());</span>
-<span class="fc" id="L62">          EscapingStrategyPlugin escapingStrategy = pluginManager.get(options.getEscapingStrategy(), EscapingStrategyPlugin.class);</span>
-<span class="fc" id="L63">          Handlebars handlebars = new Handlebars(templateLoader)</span>
-<span class="fc" id="L64">              .with(value -&gt; escapingStrategy.escape(value, escapingStrategyContext));</span>
+    @SuppressWarnings(&quot;unchecked&quot;)
+    @Override
+    public Handlebars load(HandlebarsKey options) throws Exception {
 
-          // register helpers provided by JKnack Handlebars implementation
-<span class="fc" id="L67">          handlebars.registerHelpers(StringHelpers.class);</span>
-<span class="fc" id="L68">          handlebars.registerHelpers(ConditionalHelpers.class);</span>
-<span class="fc" id="L69">          handlebars.registerHelper(AssignHelper.NAME, new AssignHelper());</span>
+      // setup handlebars
+<span class="fc" id="L61">      TemplateLoader templateLoader = new CharsetAwareTemplateLoader(templateDirs, options.getCharset());</span>
+<span class="fc" id="L62">      EscapingStrategyPlugin escapingStrategy = pluginManager.get(options.getEscapingStrategy(), EscapingStrategyPlugin.class);</span>
+<span class="fc" id="L63">      Handlebars handlebars = new Handlebars(templateLoader)</span>
+<span class="fc" id="L64">        .with(value -&gt; escapingStrategy.escape(value, escapingStrategyContext));</span>
 
-          // register helper plugins
-<span class="fc" id="L72">          pluginManager.getAll(HelperPlugin.class)</span>
-<span class="fc" id="L73">              .forEach(plugin -&gt; handlebars.registerHelper(plugin.getName(), new Helper&lt;Object&gt;() {</span>
-                @Override
-                public Object apply(Object context, Options helperOptions) throws IOException {
-<span class="fc" id="L76">                  return plugin.apply(context, helperOptions, helperContext);</span>
-                }
-              }));
+      // register helpers provided by JKnack Handlebars implementation
+<span class="fc" id="L67">      handlebars.registerHelpers(StringHelpers.class);</span>
+<span class="fc" id="L68">      handlebars.registerHelpers(ConditionalHelpers.class);</span>
+<span class="fc" id="L69">      handlebars.registerHelper(AssignHelper.NAME, new AssignHelper());</span>
+
+      // register helper plugins
+<span class="fc" id="L72">      pluginManager.getAll(HelperPlugin.class)</span>
+<span class="fc" id="L73">        .forEach(plugin -&gt; handlebars.registerHelper(plugin.getName(), new Helper&lt;Object&gt;() {</span>
+
+          @Override
+          public Object apply(Object context, Options helperOptions) throws IOException {
+<span class="fc" id="L77">            return plugin.apply(context, helperOptions, helperContext);</span>
+          }
+        }));
 
 
-<span class="fc" id="L81">          return handlebars;</span>
-        }
-      });
+<span class="fc" id="L82">      return handlebars;</span>
+    }
+  });
 
   /**
    * Constructor.
    * @param templateDirs Template base directories
    * @param pluginContextOptions Plugin context options
    */
-<span class="fc" id="L90">  public HandlebarsManager(List&lt;ResourceCollection&gt; templateDirs, PluginContextOptions pluginContextOptions) {</span>
-<span class="fc" id="L91">    this.templateDirs = templateDirs;</span>
-<span class="fc" id="L92">    this.pluginManager = pluginContextOptions.getPluginManager();</span>
-<span class="fc" id="L93">    this.escapingStrategyContext = new EscapingStrategyContext().pluginContextOptions(pluginContextOptions);</span>
-<span class="fc" id="L94">    this.helperContext = new HelperContext().pluginContextOptions(pluginContextOptions);</span>
-<span class="fc" id="L95">  }</span>
+<span class="fc" id="L91">  public HandlebarsManager(List&lt;ResourceCollection&gt; templateDirs, PluginContextOptions pluginContextOptions) {</span>
+<span class="fc" id="L92">    this.templateDirs = templateDirs;</span>
+<span class="fc" id="L93">    this.pluginManager = pluginContextOptions.getPluginManager();</span>
+<span class="fc" id="L94">    this.escapingStrategyContext = new EscapingStrategyContext().pluginContextOptions(pluginContextOptions);</span>
+<span class="fc" id="L95">    this.helperContext = new HelperContext().pluginContextOptions(pluginContextOptions);</span>
+<span class="fc" id="L96">  }</span>
 
   /**
    * Get handlebars instance with escaping for file extension and charset.
@@ -101,8 +102,8 @@ public class HandlebarsManager {
    * @return Handlebars instance
    */
   public Handlebars get(String escapingStrategy, String charset) {
-<span class="fc" id="L104">    HandlebarsKey key = new HandlebarsKey(escapingStrategy, charset);</span>
-<span class="fc" id="L105">    return handlebarsCache.get(key);</span>
+<span class="fc" id="L105">    HandlebarsKey key = new HandlebarsKey(escapingStrategy, charset);</span>
+<span class="fc" id="L106">    return handlebarsCache.get(key);</span>
   }
 
 }

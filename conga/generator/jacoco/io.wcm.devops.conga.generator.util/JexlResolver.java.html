@@ -55,10 +55,10 @@ final class JexlResolver {
 
 <span class="fc" id="L56">  JexlResolver(VariableMapResolver variableMapResolver) {</span>
 <span class="fc" id="L57">    this.jexl = new JexlBuilder()</span>
-<span class="fc" id="L58">        .cache(CACHE_SIZE)</span>
-<span class="fc" id="L59">        .namespaces(JEXL_FUNCTION_NS)</span>
-<span class="fc" id="L60">        .permissions(JexlPermissions.UNRESTRICTED)</span>
-<span class="fc" id="L61">        .create();</span>
+<span class="fc" id="L58">      .cache(CACHE_SIZE)</span>
+<span class="fc" id="L59">      .namespaces(JEXL_FUNCTION_NS)</span>
+<span class="fc" id="L60">      .permissions(JexlPermissions.UNRESTRICTED)</span>
+<span class="fc" id="L61">      .create();</span>
 <span class="fc" id="L62">    this.variableMapResolver = variableMapResolver;</span>
 <span class="fc" id="L63">  }</span>
 

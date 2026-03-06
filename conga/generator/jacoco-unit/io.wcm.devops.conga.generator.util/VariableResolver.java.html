@@ -60,8 +60,8 @@ public final class VariableResolver {
     // resolve value from value provider
 <span class="fc bfc" id="L61" title="All 2 branches covered.">    if (StringUtils.isNotEmpty(valueProviderName)) {</span>
 <span class="fc" id="L62">      ValueProviderContext valueProviderContext = new ValueProviderContext()</span>
-<span class="fc" id="L63">          .valueProviderGlobalContext(valueProviderGlobalContext)</span>
-<span class="fc" id="L64">          .valueProviderName(valueProviderName);</span>
+<span class="fc" id="L63">        .valueProviderGlobalContext(valueProviderGlobalContext)</span>
+<span class="fc" id="L64">        .valueProviderName(valueProviderName);</span>
 <span class="fc" id="L65">      ValueProviderPlugin valueProvider = getValueProvider(valueProviderContext);</span>
 
 <span class="fc" id="L67">      result = valueProvider.resolve(variable, valueProviderContext);</span>
