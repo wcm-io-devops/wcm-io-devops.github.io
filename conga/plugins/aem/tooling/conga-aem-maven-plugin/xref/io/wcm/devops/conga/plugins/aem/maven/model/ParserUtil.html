@@ -68,8 +68,8 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof List) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>        result.addAll(((List&lt;String&gt;)value).stream()
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>            .filter(StringUtils::isNotBlank)
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>            .toList());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          .filter(StringUtils::isNotBlank)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          .toList());
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Value is neither string nor string list: "</span> + value);

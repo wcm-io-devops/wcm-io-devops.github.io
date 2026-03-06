@@ -82,8 +82,8 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; mapVariantsToRunModes(Collection&lt;String&gt; variants) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">return</strong> variants.stream()
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          .map(RunModeUtil::mapVariantToRunMode)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          .collect(Collectors.toSet());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>        .map(RunModeUtil::mapVariantToRunMode)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>        .collect(Collectors.toSet());
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>    }
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>    <em class="jxr_javadoccomment">/**</em>
@@ -115,19 +115,19 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>       List&lt;S&gt; fileSets, Function&lt;String, S&gt; fileSetFactory) {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>     Map&lt;String, S&gt; result = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>     fileSets.forEach(fileSet -&gt; fileSet.getEnvironmentRunModes().forEach(environmentRunMode -&gt; {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         FileSet&lt;T&gt; resultFileSet = result.computeIfAbsent(environmentRunMode, fileSetFactory);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         fileSet.getFiles().forEach(file -&gt; {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>           Optional&lt;T&gt; existingFile = resultFileSet.getFiles().stream()
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>               .filter(item -&gt; isSameFileNameHash(item, file))
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>               .findFirst();
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>           <strong class="jxr_keyword">if</strong> (existingFile.isPresent()) {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             <em class="jxr_comment">// if file was already added from other file set: eliminate duplicate, but add run modes</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>             existingFile.get().getVariants().addAll(file.getVariants());
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>           }
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>           <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>             resultFileSet.getFiles().add(file);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>           }
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         });
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>       FileSet&lt;T&gt; resultFileSet = result.computeIfAbsent(environmentRunMode, fileSetFactory);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       fileSet.getFiles().forEach(file -&gt; {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         Optional&lt;T&gt; existingFile = resultFileSet.getFiles().stream()
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>           .filter(item -&gt; isSameFileNameHash(item, file))
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>           .findFirst();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">if</strong> (existingFile.isPresent()) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>           <em class="jxr_comment">// if file was already added from other file set: eliminate duplicate, but add run modes</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>           existingFile.get().getVariants().addAll(file.getVariants());
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         }
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>         <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>           resultFileSet.getFiles().add(file);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>         }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>       });
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     }));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>     <em class="jxr_comment">// eliminate author+publish run modes if both are set on same file</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     result.values().forEach(

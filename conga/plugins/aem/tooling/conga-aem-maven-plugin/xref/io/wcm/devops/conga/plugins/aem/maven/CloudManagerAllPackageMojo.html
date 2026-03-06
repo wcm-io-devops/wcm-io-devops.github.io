@@ -272,13 +272,13 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a>     }
 <a class="jxr_linenumber" name="L265" href="#L265">265</a>     File targetFile = <strong class="jxr_keyword">new</strong> File(getTargetDir(), fileName);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AllPackageBuilder" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#AllPackageBuilder">AllPackageBuilder</a>(targetFile, <strong class="jxr_keyword">this</strong>.group, packageName)
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>         .version(project.getVersion())
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>         .autoDependenciesMode(<strong class="jxr_keyword">this</strong>.autoDependenciesMode)
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>         .runModeOptimization(<strong class="jxr_keyword">this</strong>.runModeOptimization)
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>         .packageTypeValidation(<strong class="jxr_keyword">this</strong>.packageTypeValidation)
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>         .packageVersionMode(<strong class="jxr_keyword">this</strong>.packageVersionMode)
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>         .logger(getLog())
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>         .buildOutputTimestamp(<strong class="jxr_keyword">new</strong> <a name="BuildOutputTimestamp" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/BuildOutputTimestamp.html#BuildOutputTimestamp">BuildOutputTimestamp</a>(outputTimestamp));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>       .version(project.getVersion())
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>       .autoDependenciesMode(<strong class="jxr_keyword">this</strong>.autoDependenciesMode)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>       .runModeOptimization(<strong class="jxr_keyword">this</strong>.runModeOptimization)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>       .packageTypeValidation(<strong class="jxr_keyword">this</strong>.packageTypeValidation)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>       .packageVersionMode(<strong class="jxr_keyword">this</strong>.packageVersionMode)
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>       .logger(getLog())
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>       .buildOutputTimestamp(<strong class="jxr_keyword">new</strong> <a name="BuildOutputTimestamp" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/BuildOutputTimestamp.html#BuildOutputTimestamp">BuildOutputTimestamp</a>(outputTimestamp));
 <a class="jxr_linenumber" name="L274" href="#L274">274</a>   }
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
 <a class="jxr_linenumber" name="L276" href="#L276">276</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> buildAllPackage(<a name="AllPackageBuilder" href="../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/AllPackageBuilder.html#AllPackageBuilder">AllPackageBuilder</a> builder) <strong class="jxr_keyword">throws</strong> MojoExecutionException {
@@ -329,11 +329,12 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a>   }
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 
 <a class="jxr_linenumber" name="L323" href="#L323">323</a>   <strong class="jxr_keyword">interface</strong> EnvironmentNodeVisitor {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>     <strong class="jxr_keyword">void</strong> visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>         List&lt;InstallableFile&gt; files) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException;
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>   }
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> }
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     <strong class="jxr_keyword">void</strong> visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>         List&lt;InstallableFile&gt; files) <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>   }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> }
 </pre>
 <hr/>
 <div id="footer">© 2015–2026 <a href="https://devops.wcm.io">wcm.io DevOps</a></div>

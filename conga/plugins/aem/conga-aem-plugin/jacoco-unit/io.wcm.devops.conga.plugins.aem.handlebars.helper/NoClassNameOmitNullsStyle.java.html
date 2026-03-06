@@ -22,28 +22,29 @@ package io.wcm.devops.conga.plugins.aem.handlebars.helper;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 final class NoClassNameOmitNullsStyle extends ToStringStyle {
+
   private static final long serialVersionUID = 1L;
 
   /**
    * Compact ToString style without class name ignoring null values.
    */
-<span class="fc" id="L30">  public static final ToStringStyle TOSTRING_STYLE = new NoClassNameOmitNullsStyle();</span>
+<span class="fc" id="L31">  public static final ToStringStyle TOSTRING_STYLE = new NoClassNameOmitNullsStyle();</span>
 
-<span class="fc" id="L32">  private NoClassNameOmitNullsStyle() {</span>
-<span class="fc" id="L33">    this.setUseClassName(false);</span>
-<span class="fc" id="L34">    this.setUseIdentityHashCode(false);</span>
-<span class="fc" id="L35">    this.setContentStart(&quot;&quot;);</span>
-<span class="fc" id="L36">    this.setContentEnd(&quot;&quot;);</span>
-<span class="fc" id="L37">    this.setFieldSeparator(&quot;, &quot;);</span>
-<span class="fc" id="L38">  }</span>
+<span class="fc" id="L33">  private NoClassNameOmitNullsStyle() {</span>
+<span class="fc" id="L34">    this.setUseClassName(false);</span>
+<span class="fc" id="L35">    this.setUseIdentityHashCode(false);</span>
+<span class="fc" id="L36">    this.setContentStart(&quot;&quot;);</span>
+<span class="fc" id="L37">    this.setContentEnd(&quot;&quot;);</span>
+<span class="fc" id="L38">    this.setFieldSeparator(&quot;, &quot;);</span>
+<span class="fc" id="L39">  }</span>
 
   @Override
   public void append(final StringBuffer buffer, final String fieldName, final Object value, final Boolean fullDetail) {
     // omit null values
-<span class="fc bfc" id="L43" title="All 2 branches covered.">    if (value != null) {</span>
-<span class="fc" id="L44">      super.append(buffer, fieldName, value, fullDetail);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">    if (value != null) {</span>
+<span class="fc" id="L45">      super.append(buffer, fieldName, value, fullDetail);</span>
     }
-<span class="fc" id="L46">  }</span>
+<span class="fc" id="L47">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

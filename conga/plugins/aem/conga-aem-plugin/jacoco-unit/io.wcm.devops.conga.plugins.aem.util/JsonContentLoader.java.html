@@ -55,10 +55,10 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
 
 <span class="fc" id="L56">  private static final ContentParser JSON_PARSER = new JSONContentParser();</span>
 <span class="fc" id="L57">  private static final ParserOptions JSON_PARSER_OPTIONS = new JSONParserOptions()</span>
-<span class="fc" id="L58">      .withFeatures(EnumSet.of(JSONParserFeature.COMMENTS, JSONParserFeature.QUOTE_TICK))</span>
-<span class="fc" id="L59">      .detectCalendarValues(true)</span>
-<span class="fc" id="L60">      .ignorePropertyNames(IGNORED_NAMES)</span>
-<span class="fc" id="L61">      .ignoreResourceNames(IGNORED_NAMES);</span>
+<span class="fc" id="L58">    .withFeatures(EnumSet.of(JSONParserFeature.COMMENTS, JSONParserFeature.QUOTE_TICK))</span>
+<span class="fc" id="L59">    .detectCalendarValues(true)</span>
+<span class="fc" id="L60">    .ignorePropertyNames(IGNORED_NAMES)</span>
+<span class="fc" id="L61">    .ignoreResourceNames(IGNORED_NAMES);</span>
 
   /**
    * Load a JSON file and transform the contained data structured in nested maps, as supported by the

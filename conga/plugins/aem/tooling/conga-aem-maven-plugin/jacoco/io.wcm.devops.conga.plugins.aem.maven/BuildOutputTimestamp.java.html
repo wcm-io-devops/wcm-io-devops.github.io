@@ -56,9 +56,9 @@ public class BuildOutputTimestamp {
   @Nullable
   public FileTime toFileTime() {
 <span class="fc" id="L58">    return instant</span>
-<span class="fc" id="L59">        .map(Instant::toEpochMilli)</span>
-<span class="fc" id="L60">        .map(FileTime::fromMillis)</span>
-<span class="fc" id="L61">        .orElse(null);</span>
+<span class="fc" id="L59">      .map(Instant::toEpochMilli)</span>
+<span class="fc" id="L60">      .map(FileTime::fromMillis)</span>
+<span class="fc" id="L61">      .orElse(null);</span>
   }
 
 }

@@ -43,24 +43,23 @@ import io.wcm.devops.conga.generator.util.FileUtil;
   /**
    * Defines translations for strings in ANY files.
    */
-<span class="fc" id="L46">  private static final CharSequenceTranslator ESCAPE_ANY =</span>
-<span class="fc" id="L47">      new LookupTranslator(Map.of(</span>
-          &quot;\&quot;&quot;, &quot;\\\&quot;&quot;,
-          &quot;\\&quot;, &quot;\\\\&quot;));
+<span class="fc" id="L46">  private static final CharSequenceTranslator ESCAPE_ANY = new LookupTranslator(Map.of(</span>
+      &quot;\&quot;&quot;, &quot;\\\&quot;&quot;,
+      &quot;\\&quot;, &quot;\\\\&quot;));
 
   @Override
   public String getName() {
-<span class="fc" id="L53">    return NAME;</span>
+<span class="fc" id="L52">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(String fileExtension, EscapingStrategyContext pluginContext) {
-<span class="fc" id="L58">    return FileUtil.matchesExtension(fileExtension, FILE_EXTENSION);</span>
+<span class="fc" id="L57">    return FileUtil.matchesExtension(fileExtension, FILE_EXTENSION);</span>
   }
 
   @Override
   public String escape(CharSequence value, EscapingStrategyContext pluginContext) {
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">    return value == null ? null : ESCAPE_ANY.translate(value);</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">    return value == null ? null : ESCAPE_ANY.translate(value);</span>
   }
 
 }

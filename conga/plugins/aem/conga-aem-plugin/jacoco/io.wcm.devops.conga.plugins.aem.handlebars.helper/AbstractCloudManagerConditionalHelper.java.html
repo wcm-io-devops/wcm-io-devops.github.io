@@ -93,8 +93,8 @@ import io.wcm.devops.conga.model.util.MapMerger;
 
   private List&lt;CloudManagerConditional&gt; getCloudManagerConditional(Map&lt;String, Object&gt; cloudManagerConditional) {
 <span class="fc" id="L95">    return ENVIRONMENTS.stream()</span>
-<span class="fc" id="L96">        .map(env -&gt; new CloudManagerConditional(env, cloudManagerConditional.getOrDefault(env, Map.of())))</span>
-<span class="fc" id="L97">        .toList();</span>
+<span class="fc" id="L96">      .map(env -&gt; new CloudManagerConditional(env, cloudManagerConditional.getOrDefault(env, Map.of())))</span>
+<span class="fc" id="L97">      .toList();</span>
   }
 
   /**

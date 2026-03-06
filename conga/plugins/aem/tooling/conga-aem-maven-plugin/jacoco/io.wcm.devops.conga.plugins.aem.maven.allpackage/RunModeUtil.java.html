@@ -74,8 +74,8 @@ final class RunModeUtil {
 
   private static Set&lt;String&gt; mapVariantsToRunModes(Collection&lt;String&gt; variants) {
 <span class="fc" id="L76">    return variants.stream()</span>
-<span class="fc" id="L77">        .map(RunModeUtil::mapVariantToRunMode)</span>
-<span class="fc" id="L78">        .collect(Collectors.toSet());</span>
+<span class="fc" id="L77">      .map(RunModeUtil::mapVariantToRunMode)</span>
+<span class="fc" id="L78">      .collect(Collectors.toSet());</span>
   }
 
   /**
@@ -107,19 +107,19 @@ final class RunModeUtil {
       List&lt;S&gt; fileSets, Function&lt;String, S&gt; fileSetFactory) {
 <span class="fc" id="L108">    Map&lt;String, S&gt; result = new LinkedHashMap&lt;&gt;();</span>
 <span class="fc" id="L109">    fileSets.forEach(fileSet -&gt; fileSet.getEnvironmentRunModes().forEach(environmentRunMode -&gt; {</span>
-<span class="fc" id="L110">        FileSet&lt;T&gt; resultFileSet = result.computeIfAbsent(environmentRunMode, fileSetFactory);</span>
-<span class="fc" id="L111">        fileSet.getFiles().forEach(file -&gt; {</span>
-<span class="fc" id="L112">          Optional&lt;T&gt; existingFile = resultFileSet.getFiles().stream()</span>
-<span class="fc" id="L113">              .filter(item -&gt; isSameFileNameHash(item, file))</span>
-<span class="fc" id="L114">              .findFirst();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">          if (existingFile.isPresent()) {</span>
-            // if file was already added from other file set: eliminate duplicate, but add run modes
-<span class="fc" id="L117">            existingFile.get().getVariants().addAll(file.getVariants());</span>
-          }
-          else {
-<span class="fc" id="L120">            resultFileSet.getFiles().add(file);</span>
-          }
-<span class="fc" id="L122">        });</span>
+<span class="fc" id="L110">      FileSet&lt;T&gt; resultFileSet = result.computeIfAbsent(environmentRunMode, fileSetFactory);</span>
+<span class="fc" id="L111">      fileSet.getFiles().forEach(file -&gt; {</span>
+<span class="fc" id="L112">        Optional&lt;T&gt; existingFile = resultFileSet.getFiles().stream()</span>
+<span class="fc" id="L113">          .filter(item -&gt; isSameFileNameHash(item, file))</span>
+<span class="fc" id="L114">          .findFirst();</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (existingFile.isPresent()) {</span>
+          // if file was already added from other file set: eliminate duplicate, but add run modes
+<span class="fc" id="L117">          existingFile.get().getVariants().addAll(file.getVariants());</span>
+        }
+        else {
+<span class="fc" id="L120">          resultFileSet.getFiles().add(file);</span>
+        }
+<span class="fc" id="L122">      });</span>
 <span class="fc" id="L123">    }));</span>
     // eliminate author+publish run modes if both are set on same file
 <span class="fc" id="L125">    result.values().forEach(</span>

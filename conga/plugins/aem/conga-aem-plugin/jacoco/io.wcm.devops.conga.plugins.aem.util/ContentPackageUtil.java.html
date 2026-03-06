@@ -87,14 +87,14 @@ public final class ContentPackageUtil {
    */
   public static ContentPackageBuilder getContentPackageBuilder(Map&lt;String, Object&gt; options, UrlFileManager urlFileManager) {
 <span class="fc" id="L89">    ContentPackageBuilder builder = new ContentPackageBuilder()</span>
-<span class="fc" id="L90">        .created(CURRENT_DATE)</span>
-<span class="fc" id="L91">        .group(getMandatoryProp(options, PROPERTY_PACKAGE_GROUP))</span>
-<span class="fc" id="L92">        .name(getMandatoryProp(options, PROPERTY_PACKAGE_NAME))</span>
-<span class="fc" id="L93">        .version(getOptionalProp(options, PROPERTY_PACKAGE_VERSION))</span>
-<span class="fc" id="L94">        .packageType(getOptionalProp(options, PROPERTY_PACKAGE_PACKAGE_TYPE))</span>
-<span class="fc" id="L95">        .requiresRoot(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_ROOT))</span>
-<span class="fc" id="L96">        .requiresRestart(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_RESTART))</span>
-<span class="fc" id="L97">        .allowIndexDefinitions(getOptionalPropBoolean(options, PROPERTY_PACKAGE_ALLOW_INDEX_DEFINITIONS));</span>
+<span class="fc" id="L90">      .created(CURRENT_DATE)</span>
+<span class="fc" id="L91">      .group(getMandatoryProp(options, PROPERTY_PACKAGE_GROUP))</span>
+<span class="fc" id="L92">      .name(getMandatoryProp(options, PROPERTY_PACKAGE_NAME))</span>
+<span class="fc" id="L93">      .version(getOptionalProp(options, PROPERTY_PACKAGE_VERSION))</span>
+<span class="fc" id="L94">      .packageType(getOptionalProp(options, PROPERTY_PACKAGE_PACKAGE_TYPE))</span>
+<span class="fc" id="L95">      .requiresRoot(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_ROOT))</span>
+<span class="fc" id="L96">      .requiresRestart(getOptionalPropBoolean(options, PROPERTY_PACKAGE_REQUIRES_RESTART))</span>
+<span class="fc" id="L97">      .allowIndexDefinitions(getOptionalPropBoolean(options, PROPERTY_PACKAGE_ALLOW_INDEX_DEFINITIONS));</span>
 
     // description
 <span class="fc" id="L100">    builder.description(getOptionalProp(options, PROPERTY_PACKAGE_DESCRIPTION));</span>
@@ -180,7 +180,7 @@ public final class ContentPackageUtil {
 <span class="fc" id="L180">    return filters;</span>
   }
 
-  private static Map&lt;String,Object&gt; getAdditionalyProperties(Map&lt;String, Object&gt; options) {
+  private static Map&lt;String, Object&gt; getAdditionalyProperties(Map&lt;String, Object&gt; options) {
 <span class="fc" id="L184">    Map&lt;String, Object&gt; props = getOptionalPropMap(options, PROPERTY_PACKAGE_PROPERTIES);</span>
 <span class="fc bfc" id="L185" title="All 2 branches covered.">    if (props == null) {</span>
 <span class="fc" id="L186">      props = Map.of();</span>
@@ -353,22 +353,22 @@ public final class ContentPackageUtil {
     // collect all files below the target dir
 <span class="fc" id="L354">    try (Stream&lt;Path&gt; paths = Files.walk(Paths.get(fileTargetDir.toURI()))) {</span>
 <span class="fc" id="L355">      return paths.filter(Files::isRegularFile)</span>
-          // strip off the target dir paths, keep only the relative path/file name
-<span class="fc" id="L357">          .map(ContentPackageUtil::normalizedAbsolutePath)</span>
-<span class="fc" id="L358">          .map(file -&gt; Strings.CS.removeStart(file, targetPathPrefix))</span>
-          // check if file matches with the regex, apply matching input groups to path
-<span class="fc" id="L360">          .map(file -&gt; {</span>
-<span class="fc" id="L361">            Matcher matcher = pattern.matcher(file);</span>
-<span class="pc bpc" id="L362" title="1 of 2 branches missed.">            if (matcher.matches()) {</span>
-<span class="fc" id="L363">              String adaptedPath = matcher.replaceAll(path);</span>
-<span class="fc" id="L364">              return new ContentPackageBinaryFile(file, dir, null, adaptedPath, delete);</span>
-            }
-            else {
-<span class="nc" id="L367">              return null;</span>
-            }
-          })
-<span class="fc" id="L370">          .filter(Objects::nonNull)</span>
-<span class="fc" id="L371">          .toList();</span>
+        // strip off the target dir paths, keep only the relative path/file name
+<span class="fc" id="L357">        .map(ContentPackageUtil::normalizedAbsolutePath)</span>
+<span class="fc" id="L358">        .map(file -&gt; Strings.CS.removeStart(file, targetPathPrefix))</span>
+        // check if file matches with the regex, apply matching input groups to path
+<span class="fc" id="L360">        .map(file -&gt; {</span>
+<span class="fc" id="L361">          Matcher matcher = pattern.matcher(file);</span>
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">          if (matcher.matches()) {</span>
+<span class="fc" id="L363">            String adaptedPath = matcher.replaceAll(path);</span>
+<span class="fc" id="L364">            return new ContentPackageBinaryFile(file, dir, null, adaptedPath, delete);</span>
+          }
+          else {
+<span class="nc" id="L367">            return null;</span>
+          }
+        })
+<span class="fc" id="L370">        .filter(Objects::nonNull)</span>
+<span class="fc" id="L371">        .toList();</span>
     }
   }
 

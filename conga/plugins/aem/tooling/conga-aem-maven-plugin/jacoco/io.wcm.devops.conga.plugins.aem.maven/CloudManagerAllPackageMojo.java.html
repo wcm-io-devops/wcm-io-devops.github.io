@@ -264,13 +264,13 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
     }
 <span class="fc" id="L265">    File targetFile = new File(getTargetDir(), fileName);</span>
 <span class="fc" id="L266">    return new AllPackageBuilder(targetFile, this.group, packageName)</span>
-<span class="fc" id="L267">        .version(project.getVersion())</span>
-<span class="fc" id="L268">        .autoDependenciesMode(this.autoDependenciesMode)</span>
-<span class="fc" id="L269">        .runModeOptimization(this.runModeOptimization)</span>
-<span class="fc" id="L270">        .packageTypeValidation(this.packageTypeValidation)</span>
-<span class="fc" id="L271">        .packageVersionMode(this.packageVersionMode)</span>
-<span class="fc" id="L272">        .logger(getLog())</span>
-<span class="fc" id="L273">        .buildOutputTimestamp(new BuildOutputTimestamp(outputTimestamp));</span>
+<span class="fc" id="L267">      .version(project.getVersion())</span>
+<span class="fc" id="L268">      .autoDependenciesMode(this.autoDependenciesMode)</span>
+<span class="fc" id="L269">      .runModeOptimization(this.runModeOptimization)</span>
+<span class="fc" id="L270">      .packageTypeValidation(this.packageTypeValidation)</span>
+<span class="fc" id="L271">      .packageVersionMode(this.packageVersionMode)</span>
+<span class="fc" id="L272">      .logger(getLog())</span>
+<span class="fc" id="L273">      .buildOutputTimestamp(new BuildOutputTimestamp(outputTimestamp));</span>
   }
 
   private void buildAllPackage(AllPackageBuilder builder) throws MojoExecutionException {
@@ -321,6 +321,7 @@ import io.wcm.devops.conga.plugins.aem.maven.model.ModelParser;
 <span class="fc" id="L321">  }</span>
 
   interface EnvironmentNodeVisitor {
+
     void visit(File environmentDir, File nodeDir, Set&lt;String&gt; cloudManagerTarget,
         List&lt;InstallableFile&gt; files) throws MojoExecutionException, MojoFailureException;
   }
