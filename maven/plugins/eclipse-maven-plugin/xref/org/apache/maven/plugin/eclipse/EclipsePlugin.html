@@ -2056,7 +2056,7 @@
 <a class="jxr_linenumber" name="L2048" href="#L2048">2048</a>         Build build = mavenProject.getBuild();
 <a class="jxr_linenumber" name="L2049" href="#L2049">2049</a>         <strong class="jxr_keyword">if</strong> ( build != <strong class="jxr_keyword">null</strong> )
 <a class="jxr_linenumber" name="L2050" href="#L2050">2050</a>         {
-<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a>             String eclipsePlugin = <span class="jxr_string">"org.apache.maven.plugins:maven-eclipse-plugin"</span>;
+<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a>             String eclipsePlugin = <span class="jxr_string">"io.wcm.devops.maven.plugins:eclipse-maven-plugin"</span>;
 <a class="jxr_linenumber" name="L2052" href="#L2052">2052</a>             Plugin plugin = (Plugin) build.getPluginsAsMap().get( eclipsePlugin );
 <a class="jxr_linenumber" name="L2053" href="#L2053">2053</a>             <strong class="jxr_keyword">if</strong> ( plugin == <strong class="jxr_keyword">null</strong> &amp;&amp; build.getPluginManagement() != <strong class="jxr_keyword">null</strong> )
 <a class="jxr_linenumber" name="L2054" href="#L2054">2054</a>             {
