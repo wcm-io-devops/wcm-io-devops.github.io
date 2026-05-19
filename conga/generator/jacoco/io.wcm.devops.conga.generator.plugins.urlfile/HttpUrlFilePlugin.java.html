@@ -22,6 +22,7 @@ package io.wcm.devops.conga.generator.plugins.urlfile;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +34,7 @@ import io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
 /**
  * Download files from HTTP or HTTPS URL.
  */
-<span class="fc" id="L36">public class HttpUrlFilePlugin implements UrlFilePlugin {</span>
+<span class="fc" id="L37">public class HttpUrlFilePlugin implements UrlFilePlugin {</span>
 
   /**
    * Plugin name
@@ -42,29 +43,29 @@ import io.wcm.devops.conga.generator.spi.context.UrlFilePluginContext;
 
   @Override
   public String getName() {
-<span class="fc" id="L45">    return NAME;</span>
+<span class="fc" id="L46">    return NAME;</span>
   }
 
   @Override
   public boolean accepts(String url, UrlFilePluginContext context) {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">    return Strings.CS.startsWith(url, &quot;http://&quot;)</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        || Strings.CS.startsWith(url, &quot;https://&quot;);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">    return Strings.CS.startsWith(url, &quot;http://&quot;)</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        || Strings.CS.startsWith(url, &quot;https://&quot;);</span>
   }
 
   @Override
   public String getFileName(String url, UrlFilePluginContext context) {
-<span class="nc" id="L56">    return StringUtils.substringAfterLast(url, &quot;/&quot;);</span>
+<span class="nc" id="L57">    return StringUtils.substringAfterLast(url, &quot;/&quot;);</span>
   }
 
   @Override
   public InputStream getFile(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L61">    URL result = new URL(url);</span>
-<span class="fc" id="L62">    return new BufferedInputStream(result.openStream());</span>
+<span class="fc" id="L62">    URL result = URI.create(url).toURL();</span>
+<span class="fc" id="L63">    return new BufferedInputStream(result.openStream());</span>
   }
 
   @Override
   public URL getFileUrl(String url, UrlFilePluginContext context) throws IOException {
-<span class="fc" id="L67">    return new URL(url);</span>
+<span class="fc" id="L68">    return URI.create(url).toURL();</span>
   }
 
 }

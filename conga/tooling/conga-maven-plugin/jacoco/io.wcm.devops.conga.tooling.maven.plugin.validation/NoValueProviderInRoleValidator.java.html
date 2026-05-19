@@ -40,46 +40,48 @@ import io.wcm.devops.conga.resource.Resource;
 <span class="fc" id="L40">  private final ModelReader&lt;Map&lt;String, Object&gt;&gt; mapReader = new MapReader();</span>
 
   @Override
-  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  @SuppressWarnings({
+      &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.AvoidCatchingGenericException&quot;
+  })
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
       // iterate over whole value and validate all string values that are found
-<span class="fc" id="L47">      process(mapReader.read(resource));</span>
+<span class="fc" id="L49">      process(mapReader.read(resource));</span>
     }
-<span class="nc" id="L49">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L50">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
-<span class="fc" id="L51">    }</span>
-<span class="fc" id="L52">    return null;</span>
+<span class="nc" id="L51">    catch (Exception ex) {</span>
+<span class="nc" id="L52">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="fc" id="L53">    }</span>
+<span class="fc" id="L54">    return null;</span>
   }
 
   @SuppressWarnings(&quot;unchecked&quot;)
   private void process(Object value) {
-<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (value instanceof String stringValue) {</span>
-<span class="fc" id="L58">      validate(stringValue);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    if (value instanceof String stringValue) {</span>
+<span class="fc" id="L60">      validate(stringValue);</span>
     }
-<span class="fc bfc" id="L60" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
-<span class="fc" id="L61">      ((Map&lt;String, Object&gt;)value).values().forEach(this::process);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">    else if (value instanceof Map) {</span>
+<span class="fc" id="L63">      ((Map&lt;String, Object&gt;)value).values().forEach(this::process);</span>
     }
-<span class="fc bfc" id="L63" title="All 2 branches covered.">    else if (value instanceof List) {</span>
-<span class="fc" id="L64">      ((List&lt;Object&gt;)value).forEach(this::process);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">    else if (value instanceof List) {</span>
+<span class="fc" id="L66">      ((List&lt;Object&gt;)value).forEach(this::process);</span>
     }
-<span class="fc" id="L66">  }</span>
+<span class="fc" id="L68">  }</span>
 
   private void validate(String value) {
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    if (VariableStringResolver.hasValueProviderReference(value)) {</span>
-<span class="nc" id="L70">      throw new IllegalStateException(&quot;Role definitions must not reference value providers: &quot; + value);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">    if (VariableStringResolver.hasValueProviderReference(value)) {</span>
+<span class="nc" id="L72">      throw new IllegalStateException(&quot;Role definitions must not reference value providers: &quot; + value);</span>
     }
-<span class="fc" id="L72">  }</span>
+<span class="fc" id="L74">  }</span>
 
   private static class MapReader extends AbstractModelReader&lt;Map&lt;String, Object&gt;&gt; {
 
     MapReader() {
-<span class="fc" id="L77">      super(getYaml());</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L79">      super(getYaml());</span>
+<span class="fc" id="L80">    }</span>
 
     private static Yaml getYaml() {
-<span class="fc" id="L81">      Constructor constructor = new Constructor(Map.class, YamlUtil.createLoaderOptions());</span>
-<span class="fc" id="L82">      return new Yaml(constructor);</span>
+<span class="fc" id="L83">      Constructor constructor = new Constructor(Map.class, YamlUtil.createLoaderOptions());</span>
+<span class="fc" id="L84">      return new Yaml(constructor);</span>
     }
   }
 

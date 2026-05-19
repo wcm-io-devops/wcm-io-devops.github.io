@@ -52,7 +52,7 @@ public final class RoleTemplateFileValidator implements DefinitionValidator&lt;V
 
   @Override
   @SuppressWarnings({
-      &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.ExceptionAsFlowControl&quot;
+      &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.ExceptionAsFlowControl&quot;, &quot;PMD.AvoidCatchingGenericException&quot;
   })
   public Void validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
@@ -76,7 +76,7 @@ public final class RoleTemplateFileValidator implements DefinitionValidator&lt;V
 
 <span class="fc" id="L77">      }</span>
     }
-<span class="nc" id="L79">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
+<span class="nc" id="L79">    catch (Exception ex) {</span>
 <span class="nc" id="L80">      throw new MojoFailureException(&quot;Role definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
 <span class="fc" id="L81">    }</span>
 <span class="fc" id="L82">    return null;</span>

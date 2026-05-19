@@ -122,7 +122,7 @@
   <tbody>
    <tr class="b">
     <td>126</td>
-    <td>17</td>
+    <td>15</td>
     <td>0</td>
     <td>0</td>
    </tr>
@@ -141,7 +141,7 @@
   <tbody>
    <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.EnvironmentGenerator">io.wcm.devops.conga.generator.EnvironmentGenerator</a></td>
-    <td>3</td>
+    <td>2</td>
    </tr>
    <tr class="a">
     <td><a href="#io.wcm.devops.conga.generator.FileGenerator">io.wcm.devops.conga.generator.FileGenerator</a></td>
@@ -152,30 +152,26 @@
     <td>1</td>
    </tr>
    <tr class="a">
-    <td><a href="#io.wcm.devops.conga.generator.ResourceLoaderUtil">io.wcm.devops.conga.generator.ResourceLoaderUtil</a></td>
-    <td>1</td>
-   </tr>
-   <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader</a></td>
     <td>1</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader</a></td>
     <td>3</td>
    </tr>
-   <tr class="b">
+   <tr class="a">
     <td><a href="#io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin</a></td>
     <td>4</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.plugins.urlfile.HttpUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.HttpUrlFilePlugin</a></td>
     <td>1</td>
    </tr>
-   <tr class="b">
+   <tr class="a">
     <td><a href="#io.wcm.devops.conga.generator.plugins.validator.XmlValidator">io.wcm.devops.conga.generator.plugins.validator.XmlValidator</a></td>
     <td>1</td>
    </tr>
-   <tr class="a">
+   <tr class="b">
     <td><a href="#io.wcm.devops.conga.generator.util.VariableStringResolver">io.wcm.devops.conga.generator.util.VariableStringResolver</a></td>
     <td>1</td>
    </tr>
@@ -199,21 +195,14 @@
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L388">388</a></td>
+    <td><a href="xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L386">386</a></td>
     <td>Medium</td>
    </tr>
    <tr class="a">
     <td>This API (java/io/File.&lt;init&gt;(Ljava/io/File;Ljava/lang/String;)V) reads a file whose location might be specified by user input</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-    <td><a href="xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L207">207</a></td>
-    <td>Medium</td>
-   </tr>
-   <tr class="b">
-    <td>Suppressing annotation RV_RETURN_VALUE_IGNORED_BAD_PRACTICE on the method io.wcm.devops.conga.generator.EnvironmentGenerator.generateFile(RoleFile, String, String, String, String, Map, File, Template, String, List, String) is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L378">378-423</a></td>
+    <td><a href="xref/io/wcm/devops/conga/generator/EnvironmentGenerator.html#L206">206</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -260,29 +249,6 @@
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
     <td><a href="xref/io/wcm/devops/conga/generator/Generator.html#L92">92</a></td>
-    <td>Medium</td>
-   </tr>
-  </tbody>
- </table>
-</section><a name="io.wcm.devops.conga.generator.ResourceLoaderUtil"></a>
-<section>
- <h2 id="io.wcm.devops.conga.generator.resourceloaderutil">io.wcm.devops.conga.generator.ResourceLoaderUtil</h2>
- <table class="bodyTable table table-striped table-hover">
-  <thead>
-   <tr class="a">
-    <th>Bug</th>
-    <th>Category</th>
-    <th>Details</th>
-    <th>Line</th>
-    <th>Priority</th>
-   </tr>
-  </thead>
-  <tbody>
-   <tr class="b">
-    <td>Suppressing annotation DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED on the method io.wcm.devops.conga.generator.ResourceLoaderUtil.buildClassLoader(List) is unnecessary</td>
-    <td>STYLE</td>
-    <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#US_USELESS_SUPPRESSION_ON_METHOD">US_USELESS_SUPPRESSION_ON_METHOD</a></td>
-    <td><a href="xref/io/wcm/devops/conga/generator/ResourceLoaderUtil.html#L58">58</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -409,7 +375,7 @@
     <td>This web server request could be used by an attacker to expose internal services and filesystem.</td>
     <td>SECURITY</td>
     <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#URLCONNECTION_SSRF_FD">URLCONNECTION_SSRF_FD</a></td>
-    <td><a href="xref/io/wcm/devops/conga/generator/plugins/urlfile/HttpUrlFilePlugin.html#L62">62</a></td>
+    <td><a href="xref/io/wcm/devops/conga/generator/plugins/urlfile/HttpUrlFilePlugin.html#L63">63</a></td>
     <td>Medium</td>
    </tr>
   </tbody>
@@ -475,7 +441,6 @@
     <li><a href="#io.wcm.devops.conga.generator.environmentgenerator" title="io.wcm.devops.conga.generator.EnvironmentGenerator">io.wcm.devops.conga.generator.EnvironmentGenerator</a>
     <li><a href="#io.wcm.devops.conga.generator.filegenerator" title="io.wcm.devops.conga.generator.FileGenerator">io.wcm.devops.conga.generator.FileGenerator</a>
     <li><a href="#io.wcm.devops.conga.generator.generator" title="io.wcm.devops.conga.generator.Generator">io.wcm.devops.conga.generator.Generator</a>
-    <li><a href="#io.wcm.devops.conga.generator.resourceloaderutil" title="io.wcm.devops.conga.generator.ResourceLoaderUtil">io.wcm.devops.conga.generator.ResourceLoaderUtil</a>
     <li><a href="#io.wcm.devops.conga.generator.plugins.fileheader.a" title="io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.AbstractFileHeader</a>
     <li><a href="#io.wcm.devops.conga.generator.plugins.fileheader.x" title="io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader">io.wcm.devops.conga.generator.plugins.fileheader.XmlFileHeader</a>
     <li><a href="#io.wcm.devops.conga.generator.plugins.urlfile.file" title="io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin">io.wcm.devops.conga.generator.plugins.urlfile.FilesystemUrlFilePlugin</a>
@@ -608,7 +573,7 @@
       <div class="span12">
         <p class="pull-right"><a href="#body">Back to top</a></p>
         <p class="copyright">Copyright &copy;2015-2026 <a href="https://devops.wcm.io">wcm.io DevOps</a>. All Rights Reserved.</p>
-        <p class="version-date"><span class="projectVersion">Version: 1.19.1-SNAPSHOT. </span><span class="publishDate">Last Published: 2026-05-13. </span></p>
+        <p class="version-date"><span class="projectVersion">Version: 1.19.1-SNAPSHOT. </span><span class="publishDate">Last Published: 2026-05-19. </span></p>
       </div>
     </div>
   </div>

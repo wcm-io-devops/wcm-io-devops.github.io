@@ -213,9 +213,9 @@ public final class VariableStringResolver {
       else {
 <span class="fc" id="L214">        Object valueObject = jexlResolver.resolve(expression, variables);</span>
 <span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (valueObject != null) {</span>
-<span class="fc bfc" id="L216" title="All 2 branches covered.">          if (valueObject instanceof String) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">          if (valueObject instanceof String valueObjectString) {</span>
             // try again until all nested references are resolved
-<span class="fc" id="L218">            return resolve((String)valueObject, variables, iterationCount + 1);</span>
+<span class="fc" id="L218">            return resolve(valueObjectString, variables, iterationCount + 1);</span>
           }
           else {
 <span class="fc" id="L221">            return valueObject;</span>

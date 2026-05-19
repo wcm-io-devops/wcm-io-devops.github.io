@@ -157,24 +157,25 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>     tenants.add(tenantMap);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>   }
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> save(Map&lt;String, Object&gt; modelMap, <a name="NodeModelExportContext" href="../../../../../../../io/wcm/devops/conga/generator/spi/export/context/NodeModelExportContext.html#NodeModelExportContext">NodeModelExportContext</a> context) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     File file = <strong class="jxr_keyword">new</strong> File(context.getNodeDir(), MODEL_FILE);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>     <strong class="jxr_keyword">try</strong> (FileOutputStream os = <strong class="jxr_keyword">new</strong> FileOutputStream(file);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>         OutputStreamWriter writer = <strong class="jxr_keyword">new</strong> OutputStreamWriter(os, StandardCharsets.UTF_8)) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>       Yaml yaml = <strong class="jxr_keyword">new</strong> Yaml(context.getYamlRepresenter(), <strong class="jxr_keyword">new</strong> DumperOptions());
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>       yaml.dump(modelMap, writer);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>     }
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>     <em class="jxr_comment">/*CHECKSTYLE:OFF*/</em> <strong class="jxr_keyword">catch</strong> (Exception ex) { <em class="jxr_comment">/*CHECKSTYLE:ON*/</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to write model file: "</span> + FileUtil.getCanonicalPath(file), ex);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     }
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>   }
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>   <strong class="jxr_keyword">private</strong> String cleanupFileName(String fileName, String basePath) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>     String relativePath = StringUtils.substring(fileName, basePath.length() + 1);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>     <strong class="jxr_keyword">return</strong> Strings.CS.replace(relativePath, File.separator, <span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>   }
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> }
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>   @SuppressWarnings(<span class="jxr_string">"PMD.AvoidCatchingGenericException"</span>)
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> save(Map&lt;String, Object&gt; modelMap, <a name="NodeModelExportContext" href="../../../../../../../io/wcm/devops/conga/generator/spi/export/context/NodeModelExportContext.html#NodeModelExportContext">NodeModelExportContext</a> context) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     File file = <strong class="jxr_keyword">new</strong> File(context.getNodeDir(), MODEL_FILE);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     <strong class="jxr_keyword">try</strong> (FileOutputStream os = <strong class="jxr_keyword">new</strong> FileOutputStream(file);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         OutputStreamWriter writer = <strong class="jxr_keyword">new</strong> OutputStreamWriter(os, StandardCharsets.UTF_8)) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>       Yaml yaml = <strong class="jxr_keyword">new</strong> Yaml(context.getYamlRepresenter(), <strong class="jxr_keyword">new</strong> DumperOptions());
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>       yaml.dump(modelMap, writer);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <strong class="jxr_keyword">catch</strong> (Exception ex) {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="GeneratorException" href="../../../../../../../io/wcm/devops/conga/generator/GeneratorException.html#GeneratorException">GeneratorException</a>(<span class="jxr_string">"Unable to write model file: "</span> + FileUtil.getCanonicalPath(file), ex);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>   }
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>   <strong class="jxr_keyword">private</strong> String cleanupFileName(String fileName, String basePath) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     String relativePath = StringUtils.substring(fileName, basePath.length() + 1);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     <strong class="jxr_keyword">return</strong> Strings.CS.replace(relativePath, File.separator, <span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>   }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> }
 </pre>
 <hr/>
 <div id="footer">© 2015–2026 <a href="https://devops.wcm.io">wcm.io DevOps</a></div>

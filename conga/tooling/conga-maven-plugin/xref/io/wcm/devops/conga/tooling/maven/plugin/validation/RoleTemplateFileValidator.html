@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>    @Override
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>    @SuppressWarnings({
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>        <span class="jxr_string">"PMD.PreserveStackTrace"</span>, <span class="jxr_string">"PMD.ExceptionAsFlowControl"</span>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>        <span class="jxr_string">"PMD.PreserveStackTrace"</span>, <span class="jxr_string">"PMD.ExceptionAsFlowControl"</span>, <span class="jxr_string">"PMD.AvoidCatchingGenericException"</span>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>    })
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>    <strong class="jxr_keyword">public</strong> Void validate(Resource resource, String pathForLog) <strong class="jxr_keyword">throws</strong> MojoFailureException {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">try</strong> {
@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>        }
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">/*CHECKSTYLE:OFF*/</em> <strong class="jxr_keyword">catch</strong> (Exception ex) { <em class="jxr_comment">/*CHECKSTYLE:ON*/</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">catch</strong> (Exception ex) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoFailureException(<span class="jxr_string">"Role definition "</span> + pathForLog + <span class="jxr_string">" is invalid:\n"</span> + ex.getMessage());
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

@@ -221,9 +221,9 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>       <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>         Object valueObject = jexlResolver.resolve(expression, variables);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>         <strong class="jxr_keyword">if</strong> (valueObject != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>           <strong class="jxr_keyword">if</strong> (valueObject instanceof String) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>           <strong class="jxr_keyword">if</strong> (valueObject instanceof String valueObjectString) {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>             <em class="jxr_comment">// try again until all nested references are resolved</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>             <strong class="jxr_keyword">return</strong> resolve((String)valueObject, variables, iterationCount + 1);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>             <strong class="jxr_keyword">return</strong> resolve(valueObjectString, variables, iterationCount + 1);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>           }
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>           <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>             <strong class="jxr_keyword">return</strong> valueObject;

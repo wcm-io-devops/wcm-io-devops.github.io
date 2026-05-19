@@ -44,13 +44,15 @@ public final class ModelValidator&lt;T&gt; implements DefinitionValidator&lt;T&g
 <span class="fc" id="L44">  }</span>
 
   @Override
-  @SuppressWarnings(&quot;PMD.PreserveStackTrace&quot;)
+  @SuppressWarnings({
+      &quot;PMD.PreserveStackTrace&quot;, &quot;PMD.AvoidCatchingGenericException&quot;
+  })
   public T validate(Resource resource, String pathForLog) throws MojoFailureException {
     try {
-<span class="fc" id="L50">      return modelReader.read(resource);</span>
+<span class="fc" id="L52">      return modelReader.read(resource);</span>
     }
-<span class="nc" id="L52">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L53">      throw new MojoFailureException(modelName + &quot; definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
+<span class="nc" id="L54">    catch (Exception ex) {</span>
+<span class="nc" id="L55">      throw new MojoFailureException(modelName + &quot; definition &quot; + pathForLog + &quot; is invalid:\n&quot; + ex.getMessage());</span>
     }
   }
 
