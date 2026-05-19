@@ -66,14 +66,15 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
    * @param jsonFile JSON file
    * @return Nested map with content data
    */
+  @SuppressWarnings(&quot;PMD.AvoidCatchingGenericException&quot;)
   public ContentElement load(File jsonFile) {
-<span class="fc" id="L70">    try (InputStream is = new BufferedInputStream(new FileInputStream(jsonFile))) {</span>
-<span class="fc" id="L71">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
-<span class="fc" id="L72">      JSON_PARSER.parse(contentHandler, is, JSON_PARSER_OPTIONS);</span>
-<span class="fc" id="L73">      return contentHandler.getRoot();</span>
+<span class="fc" id="L71">    try (InputStream is = new BufferedInputStream(new FileInputStream(jsonFile))) {</span>
+<span class="fc" id="L72">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
+<span class="fc" id="L73">      JSON_PARSER.parse(contentHandler, is, JSON_PARSER_OPTIONS);</span>
+<span class="fc" id="L74">      return contentHandler.getRoot();</span>
     }
-<span class="nc" id="L75">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L76">      throw new GeneratorException(&quot;Unable to parse JSON file: &quot; + FileUtil.getCanonicalPath(jsonFile), ex);</span>
+<span class="nc" id="L76">    catch (Exception ex) {</span>
+<span class="nc" id="L77">      throw new GeneratorException(&quot;Unable to parse JSON file: &quot; + FileUtil.getCanonicalPath(jsonFile), ex);</span>
     }
   }
 
@@ -84,14 +85,15 @@ import io.wcm.tooling.commons.contentpackagebuilder.element.ContentElement;
    * @return Nested map with content data
    * @throws IOException I/O exception
    */
+  @SuppressWarnings(&quot;PMD.AvoidCatchingGenericException&quot;)
   public ContentElement load(InputStream inputStream) throws IOException {
     try {
-<span class="fc" id="L89">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
-<span class="fc" id="L90">      JSON_PARSER.parse(contentHandler, inputStream, JSON_PARSER_OPTIONS);</span>
-<span class="fc" id="L91">      return contentHandler.getRoot();</span>
+<span class="fc" id="L91">      ContentElementHandler contentHandler = new ContentElementHandler();</span>
+<span class="fc" id="L92">      JSON_PARSER.parse(contentHandler, inputStream, JSON_PARSER_OPTIONS);</span>
+<span class="fc" id="L93">      return contentHandler.getRoot();</span>
     }
-<span class="nc" id="L93">    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/</span>
-<span class="nc" id="L94">      throw new GeneratorException(&quot;Unable to parse JSON stream.&quot;, ex);</span>
+<span class="nc" id="L95">    catch (Exception ex) {</span>
+<span class="nc" id="L96">      throw new GeneratorException(&quot;Unable to parse JSON stream.&quot;, ex);</span>
     }
   }
 

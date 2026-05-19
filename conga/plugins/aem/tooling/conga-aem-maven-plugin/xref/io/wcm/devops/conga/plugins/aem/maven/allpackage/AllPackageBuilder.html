@@ -587,278 +587,280 @@
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">   * @return Returns a list of content package *temporary* files - have to be deleted when processing is completed.</em>
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">   * @throws IOException I/O error</em>
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a>   @SuppressWarnings(<span class="jxr_string">"java:S3776"</span>) <em class="jxr_comment">// ignore complexity</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a>   <strong class="jxr_keyword">private</strong> List&lt;TemporaryContentPackageFile&gt; processContentPackage(<a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
-<a class="jxr_linenumber" name="L584" href="#L584">584</a>       <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> previousPkg, String environmentRunMode,
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>       Set&lt;Dependency&gt; allPackagesFromFileSets) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 
-<a class="jxr_linenumber" name="L587" href="#L587">587</a>     List&lt;TemporaryContentPackageFile&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L588" href="#L588">588</a>     List&lt;TemporaryContentPackageFile&gt; subPackages = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 
-<a class="jxr_linenumber" name="L590" href="#L590">590</a>     <em class="jxr_comment">// create temp zip file to create rewritten copy of package</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a>     File tempFile = File.createTempFile(FilenameUtils.getBaseName(pkg.getFile().getName()), <span class="jxr_string">".zip"</span>);
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 
-<a class="jxr_linenumber" name="L593" href="#L593">593</a>     <em class="jxr_comment">// open original content package</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a>     <strong class="jxr_keyword">try</strong> (ZipFile zipFileIn = <strong class="jxr_keyword">new</strong> ZipFile.Builder().setFile(pkg.getFile()).get()) {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
-<a class="jxr_linenumber" name="L596" href="#L596">596</a>       <em class="jxr_comment">// iterate through entries and write them to the temp. zip file</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>       <strong class="jxr_keyword">try</strong> (FileOutputStream fos = <strong class="jxr_keyword">new</strong> FileOutputStream(tempFile);
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>           ZipArchiveOutputStream zipOut = <strong class="jxr_keyword">new</strong> ZipArchiveOutputStream(fos)) {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>         Enumeration&lt;? <strong class="jxr_keyword">extends</strong> ZipArchiveEntry&gt; zipInEntries = zipFileIn.getEntries();
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>         <strong class="jxr_keyword">while</strong> (zipInEntries.hasMoreElements()) {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a>           ZipArchiveEntry zipInEntry = zipInEntries.nextElement();
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>           <strong class="jxr_keyword">if</strong> (!zipInEntry.isDirectory()) {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>             <strong class="jxr_keyword">try</strong> (InputStream is = zipFileIn.getInputStream(zipInEntry)) {
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>               <strong class="jxr_keyword">boolean</strong> processedEntry = false;
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>               <em class="jxr_comment">// if entry is properties.xml, update dependency information</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>               <strong class="jxr_keyword">if</strong> (Strings.CS.equals(zipInEntry.getName(), <span class="jxr_string">"META-INF/vault/properties.xml"</span>)) {
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>                 <a name="FileVaultProperties" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/FileVaultProperties.html#FileVaultProperties">FileVaultProperties</a> fileVaultProps = <strong class="jxr_keyword">new</strong> <a name="FileVaultProperties" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/FileVaultProperties.html#FileVaultProperties">FileVaultProperties</a>(is);
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>                 Properties props = fileVaultProps.getProperties();
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>                 addSuffixToPackageName(props, pkg, environmentRunMode);
-<a class="jxr_linenumber" name="L611" href="#L611">611</a>                 addSuffixToVersion(props, pkg);
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 
-<a class="jxr_linenumber" name="L613" href="#L613">613</a>                 <em class="jxr_comment">// update package dependencies</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>                 <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> dependencyFile = previousPkg;
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>                 <strong class="jxr_keyword">if</strong> (autoDependenciesMode == AutoDependenciesMode.OFF || pkg.isDependencyChainIgnore()) {
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>                   dependencyFile = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>                 }
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>                 updateDependencies(pkg, props, dependencyFile, environmentRunMode, allPackagesFromFileSets);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 
-<a class="jxr_linenumber" name="L620" href="#L620">620</a>                 <em class="jxr_comment">// if package type is missing in package properties, put in the type defined in model</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a>                 String packageType = pkg.getPackageType();
-<a class="jxr_linenumber" name="L622" href="#L622">622</a>                 <strong class="jxr_keyword">if</strong> (props.get(NAME_PACKAGE_TYPE) == <strong class="jxr_keyword">null</strong> &amp;&amp; packageType != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L623" href="#L623">623</a>                   props.put(NAME_PACKAGE_TYPE, packageType);
-<a class="jxr_linenumber" name="L624" href="#L624">624</a>                 }
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 
-<a class="jxr_linenumber" name="L626" href="#L626">626</a>                 ZipArchiveEntry zipOutEntry = newZipEntry(zipInEntry);
-<a class="jxr_linenumber" name="L627" href="#L627">627</a>                 zipOut.putArchiveEntry(zipOutEntry);
-<a class="jxr_linenumber" name="L628" href="#L628">628</a>                 fileVaultProps.storeToXml(zipOut);
-<a class="jxr_linenumber" name="L629" href="#L629">629</a>                 zipOut.closeArchiveEntry();
-<a class="jxr_linenumber" name="L630" href="#L630">630</a>                 processedEntry = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L631" href="#L631">631</a>               }
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
-<a class="jxr_linenumber" name="L633" href="#L633">633</a>               <em class="jxr_comment">// process sub-packages as well: add runmode suffix and update dependencies</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a>               <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Strings.CS.equals(FilenameUtils.getExtension(zipInEntry.getName()), <span class="jxr_string">"zip"</span>)) {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a>                 File tempSubPackageFile = File.createTempFile(FilenameUtils.getBaseName(zipInEntry.getName()), <span class="jxr_string">".zip"</span>);
-<a class="jxr_linenumber" name="L636" href="#L636">636</a>                 <strong class="jxr_keyword">try</strong> (FileOutputStream subPackageFos = <strong class="jxr_keyword">new</strong> FileOutputStream(tempSubPackageFile)) {
-<a class="jxr_linenumber" name="L637" href="#L637">637</a>                   IOUtils.copy(is, subPackageFos);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a>                 }
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
-<a class="jxr_linenumber" name="L640" href="#L640">640</a>                 <em class="jxr_comment">// check if contained ZIP file is really a content package</em>
-<a class="jxr_linenumber" name="L641" href="#L641">641</a>                 <em class="jxr_comment">// then process it as well, remove if from the content package is was contained in</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a>                 <em class="jxr_comment">// and add it as "1st level package" to the all package</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a>                 <a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a> tempSubPackage = <strong class="jxr_keyword">new</strong> <a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a>(tempSubPackageFile, pkg.getVariants());
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>                 <strong class="jxr_keyword">if</strong> (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(tempSubPackage)) {
-<a class="jxr_linenumber" name="L645" href="#L645">645</a>                   <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Package "</span> + pkg.getPackageInfo() + <span class="jxr_string">" contains sub package "</span> + tempSubPackage.getPackageInfo()
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>                       + <span class="jxr_string">" with invalid package type: '"</span> + StringUtils.defaultString(tempSubPackage.getPackageType()) + <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L647" href="#L647">647</a>                 }
-<a class="jxr_linenumber" name="L648" href="#L648">648</a>                 <strong class="jxr_keyword">if</strong> (StringUtils.isNoneBlank(tempSubPackage.getGroup(), tempSubPackage.getName())) {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a>                   subPackages.add(tempSubPackage);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a>                   processedEntry = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>                 }
-<a class="jxr_linenumber" name="L652" href="#L652">652</a>                 <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>                   FileUtils.deleteQuietly(tempSubPackageFile);
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>                 }
-<a class="jxr_linenumber" name="L655" href="#L655">655</a>               }
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a>               <em class="jxr_comment">// otherwise transfer the binary data 1:1</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a>               <strong class="jxr_keyword">if</strong> (!processedEntry) {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a>                 ZipArchiveEntry zipOutEntry = newZipEntry(zipInEntry);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a>                 zipOut.putArchiveEntry(zipOutEntry);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a>                 IOUtils.copy(is, zipOut);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a>                 zipOut.closeArchiveEntry();
-<a class="jxr_linenumber" name="L663" href="#L663">663</a>               }
-<a class="jxr_linenumber" name="L664" href="#L664">664</a>             }
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 
-<a class="jxr_linenumber" name="L666" href="#L666">666</a>           }
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>         }
-<a class="jxr_linenumber" name="L668" href="#L668">668</a>       }
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 
-<a class="jxr_linenumber" name="L670" href="#L670">670</a>       <em class="jxr_comment">// add sub package metadata to set with dependency information</em>
-<a class="jxr_linenumber" name="L671" href="#L671">671</a>       <strong class="jxr_keyword">for</strong> (<a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a> tempSubPackage : subPackages) {
-<a class="jxr_linenumber" name="L672" href="#L672">672</a>         addDependencyInformation(allPackagesFromFileSets, tempSubPackage);
-<a class="jxr_linenumber" name="L673" href="#L673">673</a>       }
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
-<a class="jxr_linenumber" name="L675" href="#L675">675</a>       <em class="jxr_comment">// process sub packages and add to result</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a>       <strong class="jxr_keyword">for</strong> (<a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a> tempSubPackage : subPackages) {
-<a class="jxr_linenumber" name="L677" href="#L677">677</a>         result.addAll(processContentPackage(tempSubPackage, previousPkg, environmentRunMode, allPackagesFromFileSets));
-<a class="jxr_linenumber" name="L678" href="#L678">678</a>       }
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 
-<a class="jxr_linenumber" name="L680" href="#L680">680</a>       result.add(<strong class="jxr_keyword">new</strong> <a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a>(tempFile, pkg.getVariants()));
-<a class="jxr_linenumber" name="L681" href="#L681">681</a>     }
-<a class="jxr_linenumber" name="L682" href="#L682">682</a>     <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L683" href="#L683">683</a>   }
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 
-<a class="jxr_linenumber" name="L685" href="#L685">685</a>   <strong class="jxr_keyword">private</strong> ZipArchiveEntry newZipEntry(ZipArchiveEntry in) {
-<a class="jxr_linenumber" name="L686" href="#L686">686</a>     ZipArchiveEntry out = <strong class="jxr_keyword">new</strong> ZipArchiveEntry(in.getName());
-<a class="jxr_linenumber" name="L687" href="#L687">687</a>     <strong class="jxr_keyword">if</strong> (buildOutputTimestamp != <strong class="jxr_keyword">null</strong> &amp;&amp; buildOutputTimestamp.isValid()) {
-<a class="jxr_linenumber" name="L688" href="#L688">688</a>       out.setLastModifiedTime(buildOutputTimestamp.toFileTime());
-<a class="jxr_linenumber" name="L689" href="#L689">689</a>     }
-<a class="jxr_linenumber" name="L690" href="#L690">690</a>     <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (in.getLastModifiedTime() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L691" href="#L691">691</a>       out.setLastModifiedTime(in.getLastModifiedTime());
-<a class="jxr_linenumber" name="L692" href="#L692">692</a>     }
-<a class="jxr_linenumber" name="L693" href="#L693">693</a>     <strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L694" href="#L694">694</a>   }
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
-<a class="jxr_linenumber" name="L696" href="#L696">696</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">   * Add dependency information to dependencies string in properties (if it does not exist already).</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">   * @param pkg Current content package</em>
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">   * @param props Properties</em>
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">   * @param dependencyFile Dependency package</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">   * @param allPackagesFromFileSets Set with all packages from all file sets as dependency instances</em>
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> updateDependencies(<a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg, Properties props, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> dependencyFile,
-<a class="jxr_linenumber" name="L704" href="#L704">704</a>       String environmentRunMode, Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<a class="jxr_linenumber" name="L705" href="#L705">705</a>     String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), <span class="jxr_string">","</span>);
-<a class="jxr_linenumber" name="L706" href="#L706">706</a>     Dependency[] existingDeps = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L707" href="#L707">707</a>     <strong class="jxr_keyword">if</strong> (existingDepsStrings != <strong class="jxr_keyword">null</strong> &amp;&amp; existingDepsStrings.length &gt; 0) {
-<a class="jxr_linenumber" name="L708" href="#L708">708</a>       existingDeps = Dependency.fromString(existingDepsStrings);
-<a class="jxr_linenumber" name="L709" href="#L709">709</a>     }
-<a class="jxr_linenumber" name="L710" href="#L710">710</a>     <strong class="jxr_keyword">if</strong> (existingDeps != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L711" href="#L711">711</a>       existingDeps = autoDependenciesMode == AutoDependenciesMode.OFF
-<a class="jxr_linenumber" name="L712" href="#L712">712</a>           ? rewriteReferencesToManagedPackages(pkg, environmentRunMode, allPackagesFromFileSets, existingDeps)
-<a class="jxr_linenumber" name="L713" href="#L713">713</a>           : removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);
-<a class="jxr_linenumber" name="L714" href="#L714">714</a>     }
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 
-<a class="jxr_linenumber" name="L716" href="#L716">716</a>     Dependency[] deps;
-<a class="jxr_linenumber" name="L717" href="#L717">717</a>     <strong class="jxr_keyword">if</strong> (dependencyFile != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L718" href="#L718">718</a>       Dependency newDependency = createDependencyFromContentPackageFile(dependencyFile, environmentRunMode);
-<a class="jxr_linenumber" name="L719" href="#L719">719</a>       deps = addDependency(existingDeps, newDependency);
-<a class="jxr_linenumber" name="L720" href="#L720">720</a>     }
-<a class="jxr_linenumber" name="L721" href="#L721">721</a>     <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L722" href="#L722">722</a>       deps = existingDeps;
-<a class="jxr_linenumber" name="L723" href="#L723">723</a>     }
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
-<a class="jxr_linenumber" name="L725" href="#L725">725</a>     <strong class="jxr_keyword">if</strong> (deps != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L726" href="#L726">726</a>       String dependenciesString = Dependency.toString(deps);
-<a class="jxr_linenumber" name="L727" href="#L727">727</a>       props.put(NAME_DEPENDENCIES, dependenciesString);
-<a class="jxr_linenumber" name="L728" href="#L728">728</a>     }
-<a class="jxr_linenumber" name="L729" href="#L729">729</a>   }
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 
-<a class="jxr_linenumber" name="L731" href="#L731">731</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency createDependencyFromContentPackageFile(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> dependencyFile,
-<a class="jxr_linenumber" name="L732" href="#L732">732</a>       @NotNull String environmentRunMode) {
-<a class="jxr_linenumber" name="L733" href="#L733">733</a>     String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);
-<a class="jxr_linenumber" name="L734" href="#L734">734</a>     String dependencyVersion = dependencyFile.getVersion() + buildVersionSuffix(dependencyFile, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L735" href="#L735">735</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dependency(dependencyFile.getGroup(),
-<a class="jxr_linenumber" name="L736" href="#L736">736</a>         dependencyFile.getName() + runModeSuffix,
-<a class="jxr_linenumber" name="L737" href="#L737">737</a>         VersionRange.fromString(dependencyVersion));
-<a class="jxr_linenumber" name="L738" href="#L738">738</a>   }
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 
-<a class="jxr_linenumber" name="L740" href="#L740">740</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Dependency[] addDependency(Dependency[] existingDeps, Dependency newDependency) {
-<a class="jxr_linenumber" name="L741" href="#L741">741</a>     <strong class="jxr_keyword">if</strong> (existingDeps != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L742" href="#L742">742</a>       <strong class="jxr_keyword">return</strong> DependencyUtil.add(existingDeps, newDependency);
-<a class="jxr_linenumber" name="L743" href="#L743">743</a>     }
-<a class="jxr_linenumber" name="L744" href="#L744">744</a>     <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dependency[] {
-<a class="jxr_linenumber" name="L746" href="#L746">746</a>           newDependency
-<a class="jxr_linenumber" name="L747" href="#L747">747</a>       };
-<a class="jxr_linenumber" name="L748" href="#L748">748</a>     }
-<a class="jxr_linenumber" name="L749" href="#L749">749</a>   }
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 
-<a class="jxr_linenumber" name="L751" href="#L751">751</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addSuffixToPackageName(Properties props, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg, String environmentRunMode) {
-<a class="jxr_linenumber" name="L752" href="#L752">752</a>     String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);
-<a class="jxr_linenumber" name="L753" href="#L753">753</a>     String packageName = props.getProperty(NAME_NAME) + runModeSuffix;
-<a class="jxr_linenumber" name="L754" href="#L754">754</a>     props.put(NAME_NAME, packageName);
-<a class="jxr_linenumber" name="L755" href="#L755">755</a>   }
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 
-<a class="jxr_linenumber" name="L757" href="#L757">757</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addSuffixToVersion(Properties props, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg) {
-<a class="jxr_linenumber" name="L758" href="#L758">758</a>     <em class="jxr_comment">// package version</em>
-<a class="jxr_linenumber" name="L759" href="#L759">759</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(pkg.getVersion())) {
-<a class="jxr_linenumber" name="L760" href="#L760">760</a>       <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L761" href="#L761">761</a>     }
-<a class="jxr_linenumber" name="L762" href="#L762">762</a>     String suffixedVersion = pkg.getVersion() + buildVersionSuffix(pkg, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L763" href="#L763">763</a>     props.put(NAME_VERSION, suffixedVersion);
-<a class="jxr_linenumber" name="L764" href="#L764">764</a>   }
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 
-<a class="jxr_linenumber" name="L766" href="#L766">766</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency[] rewriteReferencesToManagedPackages(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
-<a class="jxr_linenumber" name="L767" href="#L767">767</a>       @NotNull String environmentRunMode, @NotNull Set&lt;Dependency&gt; allPackagesFromFileSets, @NotNull Dependency[] deps) {
-<a class="jxr_linenumber" name="L768" href="#L768">768</a>     <strong class="jxr_keyword">return</strong> Arrays.stream(deps)
-<a class="jxr_linenumber" name="L769" href="#L769">769</a>       .map(dep -&gt; rewriteReferenceIfDependencyIsManagedPackage(pkg, environmentRunMode, allPackagesFromFileSets, dep))
-<a class="jxr_linenumber" name="L770" href="#L770">770</a>       .toArray(Dependency[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L771" href="#L771">771</a>   }
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 
-<a class="jxr_linenumber" name="L773" href="#L773">773</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency rewriteReferenceIfDependencyIsManagedPackage(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
-<a class="jxr_linenumber" name="L774" href="#L774">774</a>       @NotNull String environmentRunMode, @NotNull Set&lt;Dependency&gt; allPackagesFromFileSets, @NotNull Dependency dep) {
-<a class="jxr_linenumber" name="L775" href="#L775">775</a>     <em class="jxr_comment">// not a managed package, return as is</em>
-<a class="jxr_linenumber" name="L776" href="#L776">776</a>     <strong class="jxr_keyword">if</strong> (!allPackagesFromFileSets.contains(dep)) {
-<a class="jxr_linenumber" name="L777" href="#L777">777</a>       <strong class="jxr_keyword">return</strong> dep;
-<a class="jxr_linenumber" name="L778" href="#L778">778</a>     }
-<a class="jxr_linenumber" name="L779" href="#L779">779</a>     <strong class="jxr_keyword">return</strong> findContentPackageFileForDependency(pkg, dep)
-<a class="jxr_linenumber" name="L780" href="#L780">780</a>       <em class="jxr_comment">// found a content package file for the dependency, rewrite the dependency</em>
-<a class="jxr_linenumber" name="L781" href="#L781">781</a>       .map(contentPackageFile -&gt; createDependencyFromContentPackageFile(contentPackageFile, environmentRunMode))
-<a class="jxr_linenumber" name="L782" href="#L782">782</a>       <em class="jxr_comment">// found no content package file for the dependency, use current run mode suffix</em>
-<a class="jxr_linenumber" name="L783" href="#L783">783</a>       .orElseGet(() -&gt; createDependencyWithCurrentPackageRunModeSuffix(pkg, environmentRunMode, dep));
-<a class="jxr_linenumber" name="L784" href="#L784">784</a>   }
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 
-<a class="jxr_linenumber" name="L786" href="#L786">786</a>   <strong class="jxr_keyword">private</strong> @NotNull Optional&lt;ContentPackageFile&gt; findContentPackageFileForDependency(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
-<a class="jxr_linenumber" name="L787" href="#L787">787</a>       @NotNull Dependency dep) {
-<a class="jxr_linenumber" name="L788" href="#L788">788</a>     <em class="jxr_comment">// look for content package in all file sets</em>
-<a class="jxr_linenumber" name="L789" href="#L789">789</a>     <strong class="jxr_keyword">return</strong> contentPackageFileSets.stream()
-<a class="jxr_linenumber" name="L790" href="#L790">790</a>       <em class="jxr_comment">// prefer file set which contains the current package to use current run mode</em>
-<a class="jxr_linenumber" name="L791" href="#L791">791</a>       .sorted((fileSet1, fileSet2) -&gt; sortFileSetsContainingPackageFirst(pkg, fileSet1, fileSet2))
-<a class="jxr_linenumber" name="L792" href="#L792">792</a>       .flatMap(fileSet -&gt; fileSet.getFiles().stream())
-<a class="jxr_linenumber" name="L793" href="#L793">793</a>       .filter(contentPackageFile -&gt; isContentPackageForDependency(contentPackageFile, dep))
-<a class="jxr_linenumber" name="L794" href="#L794">794</a>       .findFirst();
-<a class="jxr_linenumber" name="L795" href="#L795">795</a>   }
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
-<a class="jxr_linenumber" name="L797" href="#L797">797</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> sortFileSetsContainingPackageFirst(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
-<a class="jxr_linenumber" name="L798" href="#L798">798</a>       @NotNull <a name="ContentPackageFileSet" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/ContentPackageFileSet.html#ContentPackageFileSet">ContentPackageFileSet</a> fileSet1, @NotNull <a name="ContentPackageFileSet" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/ContentPackageFileSet.html#ContentPackageFileSet">ContentPackageFileSet</a> fileSet2) {
-<a class="jxr_linenumber" name="L799" href="#L799">799</a>     <strong class="jxr_keyword">int</strong> fileSet1ContainsPackage = fileSet1.getFiles().contains(pkg) ? 1 : 0;
-<a class="jxr_linenumber" name="L800" href="#L800">800</a>     <strong class="jxr_keyword">int</strong> fileSet2ContainsPackage = fileSet2.getFiles().contains(pkg) ? 1 : 0;
-<a class="jxr_linenumber" name="L801" href="#L801">801</a>     <strong class="jxr_keyword">return</strong> fileSet2ContainsPackage - fileSet1ContainsPackage;
-<a class="jxr_linenumber" name="L802" href="#L802">802</a>   }
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 
-<a class="jxr_linenumber" name="L804" href="#L804">804</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isContentPackageForDependency(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> contentPackageFile, @NotNull Dependency dep) {
-<a class="jxr_linenumber" name="L805" href="#L805">805</a>     <strong class="jxr_keyword">return</strong> contentPackageFile.getGroup().equals(dep.getGroup())
-<a class="jxr_linenumber" name="L806" href="#L806">806</a>         &amp;&amp; contentPackageFile.getName().equals(dep.getName());
-<a class="jxr_linenumber" name="L807" href="#L807">807</a>   }
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 
-<a class="jxr_linenumber" name="L809" href="#L809">809</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency createDependencyWithCurrentPackageRunModeSuffix(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
-<a class="jxr_linenumber" name="L810" href="#L810">810</a>       @NotNull String environmentRunMode, @NotNull Dependency dep) {
-<a class="jxr_linenumber" name="L811" href="#L811">811</a>     String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);
-<a class="jxr_linenumber" name="L812" href="#L812">812</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dependency(dep.getGroup(), dep.getName() + runModeSuffix, dep.getRange());
-<a class="jxr_linenumber" name="L813" href="#L813">813</a>   }
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 
-<a class="jxr_linenumber" name="L815" href="#L815">815</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">   * Removes existing references to packages contained in the list of packages to manage by this builder because</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">   * they are added new (and probably with a different package name) during processing.</em>
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">   * @param deps Dependencies list</em>
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">   * @param allPackagesFromFileSets Set with all packages from all file sets as dependency instances</em>
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">   * @return Dependencies list</em>
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Dependency[] removeReferencesToManagedPackages(Dependency[] deps, Set&lt;Dependency&gt; allPackagesFromFileSets) {
-<a class="jxr_linenumber" name="L823" href="#L823">823</a>     <strong class="jxr_keyword">return</strong> Arrays.stream(deps)
-<a class="jxr_linenumber" name="L824" href="#L824">824</a>       .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))
-<a class="jxr_linenumber" name="L825" href="#L825">825</a>       .toArray(size -&gt; <strong class="jxr_keyword">new</strong> Dependency[size]);
-<a class="jxr_linenumber" name="L826" href="#L826">826</a>   }
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 
-<a class="jxr_linenumber" name="L828" href="#L828">828</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addDependencyInformation(Set&lt;Dependency&gt; allPackagesFromFileSets, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg) {
-<a class="jxr_linenumber" name="L829" href="#L829">829</a>     allPackagesFromFileSets.add(<strong class="jxr_keyword">new</strong> Dependency(pkg.getGroup(), pkg.getName(), VersionRange.fromString(pkg.getVersion())));
-<a class="jxr_linenumber" name="L830" href="#L830">830</a>   }
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
-<a class="jxr_linenumber" name="L832" href="#L832">832</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">   * @return Group name</em>
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L835" href="#L835">835</a>   <strong class="jxr_keyword">public</strong> String getGroupName() {
-<a class="jxr_linenumber" name="L836" href="#L836">836</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.groupName;
-<a class="jxr_linenumber" name="L837" href="#L837">837</a>   }
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 
-<a class="jxr_linenumber" name="L839" href="#L839">839</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">   * @return Package name</em>
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a>   <strong class="jxr_keyword">public</strong> String getPackageName() {
-<a class="jxr_linenumber" name="L843" href="#L843">843</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.packageName;
-<a class="jxr_linenumber" name="L844" href="#L844">844</a>   }
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 
-<a class="jxr_linenumber" name="L846" href="#L846">846</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">   * @return Target file</em>
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L849" href="#L849">849</a>   <strong class="jxr_keyword">public</strong> File getTargetFile() {
-<a class="jxr_linenumber" name="L850" href="#L850">850</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.targetFile;
-<a class="jxr_linenumber" name="L851" href="#L851">851</a>   }
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> }
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>   @SuppressWarnings({
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>       <span class="jxr_string">"java:S3776"</span>, <span class="jxr_string">"java:S6541"</span> <em class="jxr_comment">// ignore complexity</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a>   })
+<a class="jxr_linenumber" name="L585" href="#L585">585</a>   <strong class="jxr_keyword">private</strong> List&lt;TemporaryContentPackageFile&gt; processContentPackage(<a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
+<a class="jxr_linenumber" name="L586" href="#L586">586</a>       <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> previousPkg, String environmentRunMode,
+<a class="jxr_linenumber" name="L587" href="#L587">587</a>       Set&lt;Dependency&gt; allPackagesFromFileSets) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>     List&lt;TemporaryContentPackageFile&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L590" href="#L590">590</a>     List&lt;TemporaryContentPackageFile&gt; subPackages = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>     <em class="jxr_comment">// create temp zip file to create rewritten copy of package</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>     File tempFile = File.createTempFile(FilenameUtils.getBaseName(pkg.getFile().getName()), <span class="jxr_string">".zip"</span>);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a>     <em class="jxr_comment">// open original content package</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>     <strong class="jxr_keyword">try</strong> (ZipFile zipFileIn = <strong class="jxr_keyword">new</strong> ZipFile.Builder().setFile(pkg.getFile()).get()) {
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>       <em class="jxr_comment">// iterate through entries and write them to the temp. zip file</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a>       <strong class="jxr_keyword">try</strong> (FileOutputStream fos = <strong class="jxr_keyword">new</strong> FileOutputStream(tempFile);
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>           ZipArchiveOutputStream zipOut = <strong class="jxr_keyword">new</strong> ZipArchiveOutputStream(fos)) {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>         Enumeration&lt;? <strong class="jxr_keyword">extends</strong> ZipArchiveEntry&gt; zipInEntries = zipFileIn.getEntries();
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>         <strong class="jxr_keyword">while</strong> (zipInEntries.hasMoreElements()) {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>           ZipArchiveEntry zipInEntry = zipInEntries.nextElement();
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>           <strong class="jxr_keyword">if</strong> (!zipInEntry.isDirectory()) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>             <strong class="jxr_keyword">try</strong> (InputStream is = zipFileIn.getInputStream(zipInEntry)) {
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>               <strong class="jxr_keyword">boolean</strong> processedEntry = false;
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>               <em class="jxr_comment">// if entry is properties.xml, update dependency information</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>               <strong class="jxr_keyword">if</strong> (Strings.CS.equals(zipInEntry.getName(), <span class="jxr_string">"META-INF/vault/properties.xml"</span>)) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>                 <a name="FileVaultProperties" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/FileVaultProperties.html#FileVaultProperties">FileVaultProperties</a> fileVaultProps = <strong class="jxr_keyword">new</strong> <a name="FileVaultProperties" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/FileVaultProperties.html#FileVaultProperties">FileVaultProperties</a>(is);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>                 Properties props = fileVaultProps.getProperties();
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>                 addSuffixToPackageName(props, pkg, environmentRunMode);
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>                 addSuffixToVersion(props, pkg);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>                 <em class="jxr_comment">// update package dependencies</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>                 <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> dependencyFile = previousPkg;
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>                 <strong class="jxr_keyword">if</strong> (autoDependenciesMode == AutoDependenciesMode.OFF || pkg.isDependencyChainIgnore()) {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>                   dependencyFile = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>                 }
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>                 updateDependencies(pkg, props, dependencyFile, environmentRunMode, allPackagesFromFileSets);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>                 <em class="jxr_comment">// if package type is missing in package properties, put in the type defined in model</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>                 String packageType = pkg.getPackageType();
+<a class="jxr_linenumber" name="L624" href="#L624">624</a>                 <strong class="jxr_keyword">if</strong> (props.get(NAME_PACKAGE_TYPE) == <strong class="jxr_keyword">null</strong> &amp;&amp; packageType != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L625" href="#L625">625</a>                   props.put(NAME_PACKAGE_TYPE, packageType);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a>                 }
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
+<a class="jxr_linenumber" name="L628" href="#L628">628</a>                 ZipArchiveEntry zipOutEntry = newZipEntry(zipInEntry);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a>                 zipOut.putArchiveEntry(zipOutEntry);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a>                 fileVaultProps.storeToXml(zipOut);
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>                 zipOut.closeArchiveEntry();
+<a class="jxr_linenumber" name="L632" href="#L632">632</a>                 processedEntry = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L633" href="#L633">633</a>               }
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
+<a class="jxr_linenumber" name="L635" href="#L635">635</a>               <em class="jxr_comment">// process sub-packages as well: add runmode suffix and update dependencies</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a>               <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Strings.CS.equals(FilenameUtils.getExtension(zipInEntry.getName()), <span class="jxr_string">"zip"</span>)) {
+<a class="jxr_linenumber" name="L637" href="#L637">637</a>                 File tempSubPackageFile = File.createTempFile(FilenameUtils.getBaseName(zipInEntry.getName()), <span class="jxr_string">".zip"</span>);
+<a class="jxr_linenumber" name="L638" href="#L638">638</a>                 <strong class="jxr_keyword">try</strong> (FileOutputStream subPackageFos = <strong class="jxr_keyword">new</strong> FileOutputStream(tempSubPackageFile)) {
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>                   IOUtils.copy(is, subPackageFos);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>                 }
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>                 <em class="jxr_comment">// check if contained ZIP file is really a content package</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>                 <em class="jxr_comment">// then process it as well, remove if from the content package is was contained in</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>                 <em class="jxr_comment">// and add it as "1st level package" to the all package</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>                 <a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a> tempSubPackage = <strong class="jxr_keyword">new</strong> <a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a>(tempSubPackageFile, pkg.getVariants());
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>                 <strong class="jxr_keyword">if</strong> (packageTypeValidation == PackageTypeValidation.STRICT &amp;&amp; !isValidPackageType(tempSubPackage)) {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a>                   <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Package "</span> + pkg.getPackageInfo() + <span class="jxr_string">" contains sub package "</span> + tempSubPackage.getPackageInfo()
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>                       + <span class="jxr_string">" with invalid package type: '"</span> + StringUtils.defaultString(tempSubPackage.getPackageType()) + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>                 }
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>                 <strong class="jxr_keyword">if</strong> (StringUtils.isNoneBlank(tempSubPackage.getGroup(), tempSubPackage.getName())) {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a>                   subPackages.add(tempSubPackage);
+<a class="jxr_linenumber" name="L652" href="#L652">652</a>                   processedEntry = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>                 }
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>                 <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>                   FileUtils.deleteQuietly(tempSubPackageFile);
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>                 }
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>               }
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>               <em class="jxr_comment">// otherwise transfer the binary data 1:1</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a>               <strong class="jxr_keyword">if</strong> (!processedEntry) {
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>                 ZipArchiveEntry zipOutEntry = newZipEntry(zipInEntry);
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>                 zipOut.putArchiveEntry(zipOutEntry);
+<a class="jxr_linenumber" name="L663" href="#L663">663</a>                 IOUtils.copy(is, zipOut);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a>                 zipOut.closeArchiveEntry();
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>               }
+<a class="jxr_linenumber" name="L666" href="#L666">666</a>             }
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>           }
+<a class="jxr_linenumber" name="L669" href="#L669">669</a>         }
+<a class="jxr_linenumber" name="L670" href="#L670">670</a>       }
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a>       <em class="jxr_comment">// add sub package metadata to set with dependency information</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a>       <strong class="jxr_keyword">for</strong> (<a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a> tempSubPackage : subPackages) {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a>         addDependencyInformation(allPackagesFromFileSets, tempSubPackage);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a>       }
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 
+<a class="jxr_linenumber" name="L677" href="#L677">677</a>       <em class="jxr_comment">// process sub packages and add to result</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a>       <strong class="jxr_keyword">for</strong> (<a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a> tempSubPackage : subPackages) {
+<a class="jxr_linenumber" name="L679" href="#L679">679</a>         result.addAll(processContentPackage(tempSubPackage, previousPkg, environmentRunMode, allPackagesFromFileSets));
+<a class="jxr_linenumber" name="L680" href="#L680">680</a>       }
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>       result.add(<strong class="jxr_keyword">new</strong> <a name="TemporaryContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/TemporaryContentPackageFile.html#TemporaryContentPackageFile">TemporaryContentPackageFile</a>(tempFile, pkg.getVariants()));
+<a class="jxr_linenumber" name="L683" href="#L683">683</a>     }
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>     <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L685" href="#L685">685</a>   }
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 
+<a class="jxr_linenumber" name="L687" href="#L687">687</a>   <strong class="jxr_keyword">private</strong> ZipArchiveEntry newZipEntry(ZipArchiveEntry in) {
+<a class="jxr_linenumber" name="L688" href="#L688">688</a>     ZipArchiveEntry out = <strong class="jxr_keyword">new</strong> ZipArchiveEntry(in.getName());
+<a class="jxr_linenumber" name="L689" href="#L689">689</a>     <strong class="jxr_keyword">if</strong> (buildOutputTimestamp != <strong class="jxr_keyword">null</strong> &amp;&amp; buildOutputTimestamp.isValid()) {
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>       out.setLastModifiedTime(buildOutputTimestamp.toFileTime());
+<a class="jxr_linenumber" name="L691" href="#L691">691</a>     }
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>     <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (in.getLastModifiedTime() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>       out.setLastModifiedTime(in.getLastModifiedTime());
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>     }
+<a class="jxr_linenumber" name="L695" href="#L695">695</a>     <strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L696" href="#L696">696</a>   }
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 
+<a class="jxr_linenumber" name="L698" href="#L698">698</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">   * Add dependency information to dependencies string in properties (if it does not exist already).</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">   * @param pkg Current content package</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">   * @param props Properties</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">   * @param dependencyFile Dependency package</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">   * @param allPackagesFromFileSets Set with all packages from all file sets as dependency instances</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> updateDependencies(<a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg, Properties props, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> dependencyFile,
+<a class="jxr_linenumber" name="L706" href="#L706">706</a>       String environmentRunMode, Set&lt;Dependency&gt; allPackagesFromFileSets) {
+<a class="jxr_linenumber" name="L707" href="#L707">707</a>     String[] existingDepsStrings = StringUtils.split(props.getProperty(NAME_DEPENDENCIES), <span class="jxr_string">","</span>);
+<a class="jxr_linenumber" name="L708" href="#L708">708</a>     Dependency[] existingDeps = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L709" href="#L709">709</a>     <strong class="jxr_keyword">if</strong> (existingDepsStrings != <strong class="jxr_keyword">null</strong> &amp;&amp; existingDepsStrings.length &gt; 0) {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a>       existingDeps = Dependency.fromString(existingDepsStrings);
+<a class="jxr_linenumber" name="L711" href="#L711">711</a>     }
+<a class="jxr_linenumber" name="L712" href="#L712">712</a>     <strong class="jxr_keyword">if</strong> (existingDeps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L713" href="#L713">713</a>       existingDeps = autoDependenciesMode == AutoDependenciesMode.OFF
+<a class="jxr_linenumber" name="L714" href="#L714">714</a>           ? rewriteReferencesToManagedPackages(pkg, environmentRunMode, allPackagesFromFileSets, existingDeps)
+<a class="jxr_linenumber" name="L715" href="#L715">715</a>           : removeReferencesToManagedPackages(existingDeps, allPackagesFromFileSets);
+<a class="jxr_linenumber" name="L716" href="#L716">716</a>     }
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
+<a class="jxr_linenumber" name="L718" href="#L718">718</a>     Dependency[] deps;
+<a class="jxr_linenumber" name="L719" href="#L719">719</a>     <strong class="jxr_keyword">if</strong> (dependencyFile != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L720" href="#L720">720</a>       Dependency newDependency = createDependencyFromContentPackageFile(dependencyFile, environmentRunMode);
+<a class="jxr_linenumber" name="L721" href="#L721">721</a>       deps = addDependency(existingDeps, newDependency);
+<a class="jxr_linenumber" name="L722" href="#L722">722</a>     }
+<a class="jxr_linenumber" name="L723" href="#L723">723</a>     <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L724" href="#L724">724</a>       deps = existingDeps;
+<a class="jxr_linenumber" name="L725" href="#L725">725</a>     }
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 
+<a class="jxr_linenumber" name="L727" href="#L727">727</a>     <strong class="jxr_keyword">if</strong> (deps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L728" href="#L728">728</a>       String dependenciesString = Dependency.toString(deps);
+<a class="jxr_linenumber" name="L729" href="#L729">729</a>       props.put(NAME_DEPENDENCIES, dependenciesString);
+<a class="jxr_linenumber" name="L730" href="#L730">730</a>     }
+<a class="jxr_linenumber" name="L731" href="#L731">731</a>   }
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 
+<a class="jxr_linenumber" name="L733" href="#L733">733</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency createDependencyFromContentPackageFile(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> dependencyFile,
+<a class="jxr_linenumber" name="L734" href="#L734">734</a>       @NotNull String environmentRunMode) {
+<a class="jxr_linenumber" name="L735" href="#L735">735</a>     String runModeSuffix = buildRunModeSuffix(dependencyFile, environmentRunMode);
+<a class="jxr_linenumber" name="L736" href="#L736">736</a>     String dependencyVersion = dependencyFile.getVersion() + buildVersionSuffix(dependencyFile, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L737" href="#L737">737</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dependency(dependencyFile.getGroup(),
+<a class="jxr_linenumber" name="L738" href="#L738">738</a>         dependencyFile.getName() + runModeSuffix,
+<a class="jxr_linenumber" name="L739" href="#L739">739</a>         VersionRange.fromString(dependencyVersion));
+<a class="jxr_linenumber" name="L740" href="#L740">740</a>   }
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Dependency[] addDependency(Dependency[] existingDeps, Dependency newDependency) {
+<a class="jxr_linenumber" name="L743" href="#L743">743</a>     <strong class="jxr_keyword">if</strong> (existingDeps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L744" href="#L744">744</a>       <strong class="jxr_keyword">return</strong> DependencyUtil.add(existingDeps, newDependency);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>     }
+<a class="jxr_linenumber" name="L746" href="#L746">746</a>     <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dependency[] {
+<a class="jxr_linenumber" name="L748" href="#L748">748</a>           newDependency
+<a class="jxr_linenumber" name="L749" href="#L749">749</a>       };
+<a class="jxr_linenumber" name="L750" href="#L750">750</a>     }
+<a class="jxr_linenumber" name="L751" href="#L751">751</a>   }
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 
+<a class="jxr_linenumber" name="L753" href="#L753">753</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addSuffixToPackageName(Properties props, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg, String environmentRunMode) {
+<a class="jxr_linenumber" name="L754" href="#L754">754</a>     String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);
+<a class="jxr_linenumber" name="L755" href="#L755">755</a>     String packageName = props.getProperty(NAME_NAME) + runModeSuffix;
+<a class="jxr_linenumber" name="L756" href="#L756">756</a>     props.put(NAME_NAME, packageName);
+<a class="jxr_linenumber" name="L757" href="#L757">757</a>   }
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 
+<a class="jxr_linenumber" name="L759" href="#L759">759</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addSuffixToVersion(Properties props, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg) {
+<a class="jxr_linenumber" name="L760" href="#L760">760</a>     <em class="jxr_comment">// package version</em>
+<a class="jxr_linenumber" name="L761" href="#L761">761</a>     <strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(pkg.getVersion())) {
+<a class="jxr_linenumber" name="L762" href="#L762">762</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L763" href="#L763">763</a>     }
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>     String suffixedVersion = pkg.getVersion() + buildVersionSuffix(pkg, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>     props.put(NAME_VERSION, suffixedVersion);
+<a class="jxr_linenumber" name="L766" href="#L766">766</a>   }
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 
+<a class="jxr_linenumber" name="L768" href="#L768">768</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency[] rewriteReferencesToManagedPackages(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
+<a class="jxr_linenumber" name="L769" href="#L769">769</a>       @NotNull String environmentRunMode, @NotNull Set&lt;Dependency&gt; allPackagesFromFileSets, @NotNull Dependency[] deps) {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a>     <strong class="jxr_keyword">return</strong> Arrays.stream(deps)
+<a class="jxr_linenumber" name="L771" href="#L771">771</a>       .map(dep -&gt; rewriteReferenceIfDependencyIsManagedPackage(pkg, environmentRunMode, allPackagesFromFileSets, dep))
+<a class="jxr_linenumber" name="L772" href="#L772">772</a>       .toArray(Dependency[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L773" href="#L773">773</a>   }
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
+<a class="jxr_linenumber" name="L775" href="#L775">775</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency rewriteReferenceIfDependencyIsManagedPackage(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
+<a class="jxr_linenumber" name="L776" href="#L776">776</a>       @NotNull String environmentRunMode, @NotNull Set&lt;Dependency&gt; allPackagesFromFileSets, @NotNull Dependency dep) {
+<a class="jxr_linenumber" name="L777" href="#L777">777</a>     <em class="jxr_comment">// not a managed package, return as is</em>
+<a class="jxr_linenumber" name="L778" href="#L778">778</a>     <strong class="jxr_keyword">if</strong> (!allPackagesFromFileSets.contains(dep)) {
+<a class="jxr_linenumber" name="L779" href="#L779">779</a>       <strong class="jxr_keyword">return</strong> dep;
+<a class="jxr_linenumber" name="L780" href="#L780">780</a>     }
+<a class="jxr_linenumber" name="L781" href="#L781">781</a>     <strong class="jxr_keyword">return</strong> findContentPackageFileForDependency(pkg, dep)
+<a class="jxr_linenumber" name="L782" href="#L782">782</a>       <em class="jxr_comment">// found a content package file for the dependency, rewrite the dependency</em>
+<a class="jxr_linenumber" name="L783" href="#L783">783</a>       .map(contentPackageFile -&gt; createDependencyFromContentPackageFile(contentPackageFile, environmentRunMode))
+<a class="jxr_linenumber" name="L784" href="#L784">784</a>       <em class="jxr_comment">// found no content package file for the dependency, use current run mode suffix</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a>       .orElseGet(() -&gt; createDependencyWithCurrentPackageRunModeSuffix(pkg, environmentRunMode, dep));
+<a class="jxr_linenumber" name="L786" href="#L786">786</a>   }
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 
+<a class="jxr_linenumber" name="L788" href="#L788">788</a>   <strong class="jxr_keyword">private</strong> @NotNull Optional&lt;ContentPackageFile&gt; findContentPackageFileForDependency(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
+<a class="jxr_linenumber" name="L789" href="#L789">789</a>       @NotNull Dependency dep) {
+<a class="jxr_linenumber" name="L790" href="#L790">790</a>     <em class="jxr_comment">// look for content package in all file sets</em>
+<a class="jxr_linenumber" name="L791" href="#L791">791</a>     <strong class="jxr_keyword">return</strong> contentPackageFileSets.stream()
+<a class="jxr_linenumber" name="L792" href="#L792">792</a>       <em class="jxr_comment">// prefer file set which contains the current package to use current run mode</em>
+<a class="jxr_linenumber" name="L793" href="#L793">793</a>       .sorted((fileSet1, fileSet2) -&gt; sortFileSetsContainingPackageFirst(pkg, fileSet1, fileSet2))
+<a class="jxr_linenumber" name="L794" href="#L794">794</a>       .flatMap(fileSet -&gt; fileSet.getFiles().stream())
+<a class="jxr_linenumber" name="L795" href="#L795">795</a>       .filter(contentPackageFile -&gt; isContentPackageForDependency(contentPackageFile, dep))
+<a class="jxr_linenumber" name="L796" href="#L796">796</a>       .findFirst();
+<a class="jxr_linenumber" name="L797" href="#L797">797</a>   }
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 
+<a class="jxr_linenumber" name="L799" href="#L799">799</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> sortFileSetsContainingPackageFirst(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
+<a class="jxr_linenumber" name="L800" href="#L800">800</a>       @NotNull <a name="ContentPackageFileSet" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/ContentPackageFileSet.html#ContentPackageFileSet">ContentPackageFileSet</a> fileSet1, @NotNull <a name="ContentPackageFileSet" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/allpackage/ContentPackageFileSet.html#ContentPackageFileSet">ContentPackageFileSet</a> fileSet2) {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a>     <strong class="jxr_keyword">int</strong> fileSet1ContainsPackage = fileSet1.getFiles().contains(pkg) ? 1 : 0;
+<a class="jxr_linenumber" name="L802" href="#L802">802</a>     <strong class="jxr_keyword">int</strong> fileSet2ContainsPackage = fileSet2.getFiles().contains(pkg) ? 1 : 0;
+<a class="jxr_linenumber" name="L803" href="#L803">803</a>     <strong class="jxr_keyword">return</strong> fileSet2ContainsPackage - fileSet1ContainsPackage;
+<a class="jxr_linenumber" name="L804" href="#L804">804</a>   }
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 
+<a class="jxr_linenumber" name="L806" href="#L806">806</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isContentPackageForDependency(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> contentPackageFile, @NotNull Dependency dep) {
+<a class="jxr_linenumber" name="L807" href="#L807">807</a>     <strong class="jxr_keyword">return</strong> contentPackageFile.getGroup().equals(dep.getGroup())
+<a class="jxr_linenumber" name="L808" href="#L808">808</a>         &amp;&amp; contentPackageFile.getName().equals(dep.getName());
+<a class="jxr_linenumber" name="L809" href="#L809">809</a>   }
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 
+<a class="jxr_linenumber" name="L811" href="#L811">811</a>   <strong class="jxr_keyword">private</strong> @NotNull Dependency createDependencyWithCurrentPackageRunModeSuffix(@NotNull <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg,
+<a class="jxr_linenumber" name="L812" href="#L812">812</a>       @NotNull String environmentRunMode, @NotNull Dependency dep) {
+<a class="jxr_linenumber" name="L813" href="#L813">813</a>     String runModeSuffix = buildRunModeSuffix(pkg, environmentRunMode);
+<a class="jxr_linenumber" name="L814" href="#L814">814</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Dependency(dep.getGroup(), dep.getName() + runModeSuffix, dep.getRange());
+<a class="jxr_linenumber" name="L815" href="#L815">815</a>   }
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">   * Removes existing references to packages contained in the list of packages to manage by this builder because</em>
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">   * they are added new (and probably with a different package name) during processing.</em>
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">   * @param deps Dependencies list</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">   * @param allPackagesFromFileSets Set with all packages from all file sets as dependency instances</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">   * @return Dependencies list</em>
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L824" href="#L824">824</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Dependency[] removeReferencesToManagedPackages(Dependency[] deps, Set&lt;Dependency&gt; allPackagesFromFileSets) {
+<a class="jxr_linenumber" name="L825" href="#L825">825</a>     <strong class="jxr_keyword">return</strong> Arrays.stream(deps)
+<a class="jxr_linenumber" name="L826" href="#L826">826</a>       .filter(dep -&gt; !allPackagesFromFileSets.contains(dep))
+<a class="jxr_linenumber" name="L827" href="#L827">827</a>       .toArray(size -&gt; <strong class="jxr_keyword">new</strong> Dependency[size]);
+<a class="jxr_linenumber" name="L828" href="#L828">828</a>   }
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 
+<a class="jxr_linenumber" name="L830" href="#L830">830</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addDependencyInformation(Set&lt;Dependency&gt; allPackagesFromFileSets, <a name="ContentPackageFile" href="../../../../../../../../io/wcm/devops/conga/plugins/aem/maven/model/ContentPackageFile.html#ContentPackageFile">ContentPackageFile</a> pkg) {
+<a class="jxr_linenumber" name="L831" href="#L831">831</a>     allPackagesFromFileSets.add(<strong class="jxr_keyword">new</strong> Dependency(pkg.getGroup(), pkg.getName(), VersionRange.fromString(pkg.getVersion())));
+<a class="jxr_linenumber" name="L832" href="#L832">832</a>   }
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 
+<a class="jxr_linenumber" name="L834" href="#L834">834</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">   * @return Group name</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a>   <strong class="jxr_keyword">public</strong> String getGroupName() {
+<a class="jxr_linenumber" name="L838" href="#L838">838</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.groupName;
+<a class="jxr_linenumber" name="L839" href="#L839">839</a>   }
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 
+<a class="jxr_linenumber" name="L841" href="#L841">841</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">   * @return Package name</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a>   <strong class="jxr_keyword">public</strong> String getPackageName() {
+<a class="jxr_linenumber" name="L845" href="#L845">845</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.packageName;
+<a class="jxr_linenumber" name="L846" href="#L846">846</a>   }
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 
+<a class="jxr_linenumber" name="L848" href="#L848">848</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">   * @return Target file</em>
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a>   <strong class="jxr_keyword">public</strong> File getTargetFile() {
+<a class="jxr_linenumber" name="L852" href="#L852">852</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.targetFile;
+<a class="jxr_linenumber" name="L853" href="#L853">853</a>   }
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> }
 </pre>
 <hr/>
 <div id="footer">© 2015–2026 <a href="https://devops.wcm.io">wcm.io DevOps</a></div>

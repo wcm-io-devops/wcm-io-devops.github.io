@@ -197,43 +197,44 @@ import io.wcm.tooling.commons.packmgr.install.PackageInstaller;
   /**
    * Executes the sling-maven-plugin directly from the current project to install OSGi bundles.
    */
+  @SuppressWarnings(&quot;PMD.AvoidCatchingGenericException&quot;)
   private void installBundleViaSlingPlugin(File file) throws MojoExecutionException {
-<span class="nc" id="L201">    Plugin plugin = new Plugin();</span>
-<span class="nc" id="L202">    plugin.setGroupId(&quot;org.apache.sling&quot;);</span>
-<span class="nc" id="L203">    plugin.setArtifactId(&quot;sling-maven-plugin&quot;);</span>
-<span class="nc" id="L204">    plugin.setVersion(this.slingPluginVersion);</span>
+<span class="nc" id="L202">    Plugin plugin = new Plugin();</span>
+<span class="nc" id="L203">    plugin.setGroupId(&quot;org.apache.sling&quot;);</span>
+<span class="nc" id="L204">    plugin.setArtifactId(&quot;sling-maven-plugin&quot;);</span>
+<span class="nc" id="L205">    plugin.setVersion(this.slingPluginVersion);</span>
 
     try {
-<span class="nc" id="L207">      PluginDescriptor pluginDescriptor = pluginManager.getPluginDescriptor(plugin,</span>
-<span class="nc" id="L208">          project.getRemotePluginRepositories(), session.getRepositorySession());</span>
-<span class="nc" id="L209">      MojoDescriptor mojoDescriptor = pluginDescriptor.getMojo(&quot;install-file&quot;);</span>
-<span class="nc" id="L210">      MojoExecution mojoExecution = new MojoExecution(pluginDescriptor.getMojo(&quot;install-file&quot;));</span>
+<span class="nc" id="L208">      PluginDescriptor pluginDescriptor = pluginManager.getPluginDescriptor(plugin,</span>
+<span class="nc" id="L209">          project.getRemotePluginRepositories(), session.getRepositorySession());</span>
+<span class="nc" id="L210">      MojoDescriptor mojoDescriptor = pluginDescriptor.getMojo(&quot;install-file&quot;);</span>
+<span class="nc" id="L211">      MojoExecution mojoExecution = new MojoExecution(pluginDescriptor.getMojo(&quot;install-file&quot;));</span>
 
-<span class="nc" id="L212">      Xpp3Dom config = convertConfiguration(mojoDescriptor.getMojoConfiguration());</span>
-<span class="nc" id="L213">      config.getChild(&quot;slingUrl&quot;).setValue(buildConsoleUrl());</span>
-<span class="nc" id="L214">      config.getChild(&quot;user&quot;).setValue(this.getConsoleUser());</span>
-<span class="nc" id="L215">      config.getChild(&quot;password&quot;).setValue(this.getConsolePassword());</span>
-<span class="nc" id="L216">      config.getChild(&quot;mountByFS&quot;).setValue(&quot;false&quot;);</span>
-<span class="nc" id="L217">      config.getChild(&quot;bundleFileName&quot;).setValue(file.getAbsolutePath());</span>
-<span class="nc" id="L218">      mojoExecution.setConfiguration(config);</span>
+<span class="nc" id="L213">      Xpp3Dom config = convertConfiguration(mojoDescriptor.getMojoConfiguration());</span>
+<span class="nc" id="L214">      config.getChild(&quot;slingUrl&quot;).setValue(buildConsoleUrl());</span>
+<span class="nc" id="L215">      config.getChild(&quot;user&quot;).setValue(this.getConsoleUser());</span>
+<span class="nc" id="L216">      config.getChild(&quot;password&quot;).setValue(this.getConsolePassword());</span>
+<span class="nc" id="L217">      config.getChild(&quot;mountByFS&quot;).setValue(&quot;false&quot;);</span>
+<span class="nc" id="L218">      config.getChild(&quot;bundleFileName&quot;).setValue(file.getAbsolutePath());</span>
+<span class="nc" id="L219">      mojoExecution.setConfiguration(config);</span>
 
-<span class="nc" id="L220">      buildPluginManager.executeMojo(session, mojoExecution);</span>
+<span class="nc" id="L221">      buildPluginManager.executeMojo(session, mojoExecution);</span>
     }
-<span class="nc" id="L222">    catch (Exception ex) {</span>
-<span class="nc" id="L223">      throw new MojoExecutionException(&quot;Faild to execute plugin: &quot; + plugin, ex);</span>
-<span class="nc" id="L224">    }</span>
-<span class="nc" id="L225">  }</span>
+<span class="nc" id="L223">    catch (Exception ex) {</span>
+<span class="nc" id="L224">      throw new MojoExecutionException(&quot;Faild to execute plugin: &quot; + plugin, ex);</span>
+<span class="nc" id="L225">    }</span>
+<span class="nc" id="L226">  }</span>
 
   private Xpp3Dom convertConfiguration(PlexusConfiguration plexusConfig) throws PlexusConfigurationException {
-<span class="nc" id="L228">    Xpp3Dom config = new Xpp3Dom(plexusConfig.getName());</span>
-<span class="nc" id="L229">    config.setValue(plexusConfig.getValue());</span>
-<span class="nc bnc" id="L230" title="All 2 branches missed.">    for (String attribute : plexusConfig.getAttributeNames()) {</span>
-<span class="nc" id="L231">      config.setAttribute(attribute, plexusConfig.getAttribute(attribute));</span>
+<span class="nc" id="L229">    Xpp3Dom config = new Xpp3Dom(plexusConfig.getName());</span>
+<span class="nc" id="L230">    config.setValue(plexusConfig.getValue());</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">    for (String attribute : plexusConfig.getAttributeNames()) {</span>
+<span class="nc" id="L232">      config.setAttribute(attribute, plexusConfig.getAttribute(attribute));</span>
     }
-<span class="nc bnc" id="L233" title="All 2 branches missed.">    for (PlexusConfiguration child : plexusConfig.getChildren()) {</span>
-<span class="nc" id="L234">      config.addChild(convertConfiguration(child));</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">    for (PlexusConfiguration child : plexusConfig.getChildren()) {</span>
+<span class="nc" id="L235">      config.addChild(convertConfiguration(child));</span>
     }
-<span class="nc" id="L236">    return config;</span>
+<span class="nc" id="L237">    return config;</span>
   }
 
 }
