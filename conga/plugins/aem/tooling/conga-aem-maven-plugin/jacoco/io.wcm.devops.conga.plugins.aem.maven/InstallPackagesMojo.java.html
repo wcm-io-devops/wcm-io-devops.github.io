@@ -139,17 +139,17 @@ import io.wcm.tooling.commons.packmgr.install.PackageInstaller;
 <span class="nc" id="L139">    installer.setReplicate(this.replicate);</span>
 
 <span class="nc bnc" id="L141" title="All 2 branches missed.">    for (InstallableFile item : items) {</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">      if (item instanceof ModelContentPackageFile modelContentPackageFile) {</span>
-<span class="nc" id="L143">        PackageFile packageFile = toPackageFile(modelContentPackageFile);</span>
-<span class="nc" id="L144">        installer.installFile(packageFile);</span>
-<span class="nc" id="L145">      }</span>
-<span class="nc bnc" id="L146" title="All 2 branches missed.">      else if (item instanceof BundleFile bundleFile) {</span>
-<span class="nc bnc" id="L147" title="All 4 branches missed.">        if (bundleFile.getInstall() == null || bundleFile.getInstall()) {</span>
+<span class="nc bnc" id="L142" title="All 3 branches missed.">      switch (item) {</span>
+<span class="nc" id="L143">        case ModelContentPackageFile modelContentPackageFile -&gt; {</span>
+<span class="nc" id="L144">          PackageFile packageFile = toPackageFile(modelContentPackageFile);</span>
+<span class="nc" id="L145">          installer.installFile(packageFile);</span>
+<span class="nc" id="L146">        }</span>
+<span class="nc bnc" id="L147" title="All 4 branches missed.">        case BundleFile bundleFile when bundleFile.getInstall() == null || bundleFile.getInstall() -&gt; {</span>
 <span class="nc" id="L148">          installBundleViaSlingPlugin(bundleFile.getFile());</span>
-        }
-      }
-      else {
-<span class="nc" id="L152">        getLog().warn(&quot;Unsupported file: &quot; + getCanonicalPath(item.getFile()));</span>
+<span class="nc" id="L149">        }</span>
+        default -&gt; {
+<span class="nc" id="L151">          getLog().warn(&quot;Unsupported file: &quot; + getCanonicalPath(item.getFile()));</span>
+<span class="nc" id="L152">        }</span>
       }
 <span class="nc" id="L154">    }</span>
 <span class="nc" id="L155">  }</span>
