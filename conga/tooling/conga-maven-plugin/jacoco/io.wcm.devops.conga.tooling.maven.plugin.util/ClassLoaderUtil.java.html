@@ -32,7 +32,6 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.devops.conga.generator.spi.context.PluginContextOptions;
 import io.wcm.devops.conga.generator.spi.context.ValueProviderGlobalContext;
 import io.wcm.devops.conga.generator.util.VariableMapResolver;
@@ -52,9 +51,8 @@ public final class ClassLoaderUtil {
    * @param classpathUrls Classpath urls
    * @return Resource loader
    */
-  @SuppressFBWarnings(&quot;DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED&quot;)
   public static ClassLoader buildClassLoader(List&lt;URL&gt; classpathUrls) {
-<span class="fc" id="L57">    return new URLClassLoader(classpathUrls.toArray(new URL[0]));</span>
+<span class="fc" id="L55">    return new URLClassLoader(classpathUrls.toArray(new URL[0]));</span>
   }
 
   /**
@@ -65,17 +63,17 @@ public final class ClassLoaderUtil {
    */
   public static List&lt;URL&gt; getMavenProjectClasspathUrls(MavenProject project) throws MojoExecutionException {
     try {
-<span class="fc" id="L68">      List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">      for (String path : project.getCompileClasspathElements()) {</span>
-<span class="fc" id="L70">        classpathUrls.add(new File(path).toURI().toURL());</span>
-<span class="fc" id="L71">      }</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">      for (Resource resource : project.getResources()) {</span>
-<span class="fc" id="L73">        classpathUrls.add(new File(resource.getDirectory()).toURI().toURL());</span>
-<span class="fc" id="L74">      }</span>
-<span class="fc" id="L75">      return classpathUrls;</span>
+<span class="fc" id="L66">      List&lt;URL&gt; classpathUrls = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">      for (String path : project.getCompileClasspathElements()) {</span>
+<span class="fc" id="L68">        classpathUrls.add(new File(path).toURI().toURL());</span>
+<span class="fc" id="L69">      }</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">      for (Resource resource : project.getResources()) {</span>
+<span class="fc" id="L71">        classpathUrls.add(new File(resource.getDirectory()).toURI().toURL());</span>
+<span class="fc" id="L72">      }</span>
+<span class="fc" id="L73">      return classpathUrls;</span>
     }
-<span class="nc" id="L77">    catch (MalformedURLException | DependencyResolutionRequiredException ex) {</span>
-<span class="nc" id="L78">      throw new MojoExecutionException(&quot;Unable to get classpath elements for class loader.&quot;, ex);</span>
+<span class="nc" id="L75">    catch (MalformedURLException | DependencyResolutionRequiredException ex) {</span>
+<span class="nc" id="L76">      throw new MojoExecutionException(&quot;Unable to get classpath elements for class loader.&quot;, ex);</span>
     }
   }
 
@@ -87,13 +85,13 @@ public final class ClassLoaderUtil {
    */
   public static String resolveDependencyUrl(String dependencyUrl, PluginContextOptions pluginContextOptions) {
 
-<span class="nc" id="L90">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
-<span class="nc" id="L91">      .pluginContextOptions(pluginContextOptions);</span>
-<span class="nc" id="L92">    VariableMapResolver variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
-<span class="nc" id="L93">    VariableStringResolver variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
+<span class="nc" id="L88">    ValueProviderGlobalContext valueProviderGlobalContext = new ValueProviderGlobalContext()</span>
+<span class="nc" id="L89">      .pluginContextOptions(pluginContextOptions);</span>
+<span class="nc" id="L90">    VariableMapResolver variableMapResolver = new VariableMapResolver(valueProviderGlobalContext);</span>
+<span class="nc" id="L91">    VariableStringResolver variableStringResolver = new VariableStringResolver(valueProviderGlobalContext, variableMapResolver);</span>
 
     // resolver variables without config map - thus supporting only value providers with external values
-<span class="nc" id="L96">    return variableStringResolver.resolveString(dependencyUrl, Map.of());</span>
+<span class="nc" id="L94">    return variableStringResolver.resolveString(dependencyUrl, Map.of());</span>
   }
 
 }
