@@ -43,131 +43,132 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings(&quot;PMD&quot;)
 public final class VaultContent {
 
-<span class="fc" id="L48">  private static final Logger logger = LoggerFactory.getLogger(VaultContent.class);</span>
+<span class="fc" id="L49">  private static final Logger logger = LoggerFactory.getLogger(VaultContent.class);</span>
 
   private final byte[] salt;
   private final byte[] hmac;
   private final byte[] data;
 
-<span class="fc" id="L54">  public VaultContent(byte[] encryptedVault) throws IOException {</span>
-<span class="fc" id="L55">    byte[][] vaultContents = splitData(encryptedVault);</span>
-<span class="fc" id="L56">    salt = Util.unhex(new String(vaultContents[0], CHAR_ENCODING));</span>
-<span class="fc" id="L57">    hmac = Util.unhex(new String(vaultContents[1], CHAR_ENCODING));</span>
-<span class="fc" id="L58">    data = Util.unhex(new String(vaultContents[2], CHAR_ENCODING));</span>
-<span class="fc" id="L59">  }</span>
+<span class="fc" id="L55">  public VaultContent(byte[] encryptedVault) throws IOException {</span>
+<span class="fc" id="L56">    byte[][] vaultContents = splitData(encryptedVault);</span>
+<span class="fc" id="L57">    salt = Util.unhex(new String(vaultContents[0], CHAR_ENCODING));</span>
+<span class="fc" id="L58">    hmac = Util.unhex(new String(vaultContents[1], CHAR_ENCODING));</span>
+<span class="fc" id="L59">    data = Util.unhex(new String(vaultContents[2], CHAR_ENCODING));</span>
+<span class="fc" id="L60">  }</span>
 
-<span class="fc" id="L61">  public VaultContent(byte[] salt, byte[] hmac, byte[] data) {</span>
-<span class="fc" id="L62">    this.salt = salt;</span>
-<span class="fc" id="L63">    this.hmac = hmac;</span>
-<span class="fc" id="L64">    this.data = data;</span>
-<span class="fc" id="L65">  }</span>
+<span class="fc" id="L62">  public VaultContent(byte[] salt, byte[] hmac, byte[] data) {</span>
+<span class="fc" id="L63">    this.salt = salt;</span>
+<span class="fc" id="L64">    this.hmac = hmac;</span>
+<span class="fc" id="L65">    this.data = data;</span>
+<span class="fc" id="L66">  }</span>
 
   public byte[] toByteArray() {
-<span class="fc" id="L68">    return toString().getBytes(CHAR_ENCODING);</span>
+<span class="fc" id="L69">    return toString().getBytes(CHAR_ENCODING);</span>
   }
 
   @Override
   public String toString() {
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
-<span class="nc" id="L74">      logger.trace(&quot;Salt: {} - HMAC: {} - Data: {} - TargetLen: {}&quot;, salt.length, hmac.length, data.length, (salt.length + hmac.length + data.length) * 2);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L75">      logger.trace(&quot;Salt: {} - HMAC: {} - Data: {} - TargetLen: {}&quot;, salt.length, hmac.length, data.length, (salt.length + hmac.length + data.length) * 2);</span>
     }
-<span class="fc" id="L76">    String saltString = Util.hexit(salt);</span>
-<span class="fc" id="L77">    logger.trace(&quot;Salt String Length: {}&quot;, saltString.length());</span>
-<span class="fc" id="L78">    String hmacString = Util.hexit(hmac);</span>
-<span class="fc" id="L79">    logger.trace(&quot;HMAC String Length: {}&quot;, hmacString.length());</span>
-<span class="fc" id="L80">    String dataString = Util.hexit(data, -1);</span>
-<span class="fc" id="L81">    logger.trace(&quot;DATA String Length: {}&quot;, dataString.length());</span>
-<span class="fc" id="L82">    String complete = saltString + &quot;\n&quot; + hmacString + &quot;\n&quot; + dataString;</span>
-<span class="fc" id="L83">    logger.trace(&quot;Complete: {} \n{}&quot;, complete.length(), complete);</span>
-<span class="fc" id="L84">    String result = Util.hexit(complete.getBytes(CHAR_ENCODING), 80);</span>
-<span class="fc" id="L85">    logger.trace(&quot;Result: [{}] {}\n{}&quot;, complete.length() * 2, result.length(), result);</span>
-<span class="fc" id="L86">    return result;</span>
+<span class="fc" id="L77">    String saltString = Util.hexit(salt);</span>
+<span class="fc" id="L78">    logger.trace(&quot;Salt String Length: {}&quot;, saltString.length());</span>
+<span class="fc" id="L79">    String hmacString = Util.hexit(hmac);</span>
+<span class="fc" id="L80">    logger.trace(&quot;HMAC String Length: {}&quot;, hmacString.length());</span>
+<span class="fc" id="L81">    String dataString = Util.hexit(data, -1);</span>
+<span class="fc" id="L82">    logger.trace(&quot;DATA String Length: {}&quot;, dataString.length());</span>
+<span class="fc" id="L83">    String complete = saltString + &quot;\n&quot; + hmacString + &quot;\n&quot; + dataString;</span>
+<span class="fc" id="L84">    logger.trace(&quot;Complete: {} \n{}&quot;, complete.length(), complete);</span>
+<span class="fc" id="L85">    String result = Util.hexit(complete.getBytes(CHAR_ENCODING), 80);</span>
+<span class="fc" id="L86">    logger.trace(&quot;Result: [{}] {}\n{}&quot;, complete.length() * 2, result.length(), result);</span>
+<span class="fc" id="L87">    return result;</span>
   }
 
   private int[] getDataLengths(byte[] encodedData) throws IOException {
 
-<span class="fc" id="L91">    int[] result = new int[3];</span>
+<span class="fc" id="L92">    int[] result = new int[3];</span>
 
-<span class="fc" id="L93">    int idx = 0;</span>
-<span class="fc" id="L94">    int saltLen = 0;</span>
-<span class="pc bpc" id="L95" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
-<span class="fc" id="L96">      saltLen++;</span>
-<span class="fc" id="L97">      idx++;</span>
+<span class="fc" id="L94">    int idx = 0;</span>
+<span class="fc" id="L95">    int saltLen = 0;</span>
+<span class="pc bpc" id="L96" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L97">      saltLen++;</span>
+<span class="fc" id="L98">      idx++;</span>
     }
     // Skip the newline
-<span class="fc" id="L100">    idx++;</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
-<span class="nc" id="L102">      throw new IOException(&quot;Malformed data - salt incomplete&quot;);</span>
+<span class="fc" id="L101">    idx++;</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L103">      throw new IOException(&quot;Malformed data - salt incomplete&quot;);</span>
     }
-<span class="fc" id="L104">    result[0] = saltLen;</span>
+<span class="fc" id="L105">    result[0] = saltLen;</span>
 
-<span class="fc" id="L106">    int hmacLen = 0;</span>
-<span class="pc bpc" id="L107" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
-<span class="fc" id="L108">      hmacLen++;</span>
-<span class="fc" id="L109">      idx++;</span>
+<span class="fc" id="L107">    int hmacLen = 0;</span>
+<span class="pc bpc" id="L108" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L109">      hmacLen++;</span>
+<span class="fc" id="L110">      idx++;</span>
     }
     // Skip the newline
-<span class="fc" id="L112">    idx++;</span>
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
-<span class="nc" id="L114">      throw new IOException(&quot;Malformed data - hmac incomplete&quot;);</span>
+<span class="fc" id="L113">    idx++;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L115">      throw new IOException(&quot;Malformed data - hmac incomplete&quot;);</span>
     }
-<span class="fc" id="L116">    result[1] = hmacLen;</span>
-<span class="fc" id="L117">    int dataLen = 0;</span>
-<span class="fc bfc" id="L118" title="All 2 branches covered.">    while (idx &lt; encodedData.length) {</span>
-<span class="fc" id="L119">      dataLen++;</span>
-<span class="fc" id="L120">      idx++;</span>
+<span class="fc" id="L117">    result[1] = hmacLen;</span>
+<span class="fc" id="L118">    int dataLen = 0;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">    while (idx &lt; encodedData.length) {</span>
+<span class="fc" id="L120">      dataLen++;</span>
+<span class="fc" id="L121">      idx++;</span>
     }
-<span class="fc" id="L122">    result[2] = dataLen;</span>
+<span class="fc" id="L123">    result[2] = dataLen;</span>
 
-<span class="fc" id="L124">    return result;</span>
+<span class="fc" id="L125">    return result;</span>
   }
 
   private byte[][] splitData(byte[] encodedData) throws IOException {
-<span class="fc" id="L128">    int[] partsLength = getDataLengths(encodedData);</span>
+<span class="fc" id="L129">    int[] partsLength = getDataLengths(encodedData);</span>
 
-<span class="fc" id="L130">    byte[][] result = new byte[3][];</span>
+<span class="fc" id="L131">    byte[][] result = new byte[3][];</span>
 
-<span class="fc" id="L132">    int idx = 0;</span>
-<span class="fc" id="L133">    int saltIdx = 0;</span>
-<span class="fc" id="L134">    result[0] = new byte[partsLength[0]];</span>
-<span class="pc bpc" id="L135" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
-<span class="fc" id="L136">      result[0][saltIdx++] = encodedData[idx++];</span>
+<span class="fc" id="L133">    int idx = 0;</span>
+<span class="fc" id="L134">    int saltIdx = 0;</span>
+<span class="fc" id="L135">    result[0] = new byte[partsLength[0]];</span>
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L137">      result[0][saltIdx++] = encodedData[idx++];</span>
     }
     // Skip the newline
-<span class="fc" id="L139">    idx++;</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
-<span class="nc" id="L141">      throw new IOException(&quot;Malformed data - salt incomplete&quot;);</span>
+<span class="fc" id="L140">    idx++;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L142">      throw new IOException(&quot;Malformed data - salt incomplete&quot;);</span>
     }
-<span class="fc" id="L143">    int macIdx = 0;</span>
-<span class="fc" id="L144">    result[1] = new byte[partsLength[1]];</span>
-<span class="pc bpc" id="L145" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
-<span class="fc" id="L146">      result[1][macIdx++] = encodedData[idx++];</span>
+<span class="fc" id="L144">    int macIdx = 0;</span>
+<span class="fc" id="L145">    result[1] = new byte[partsLength[1]];</span>
+<span class="pc bpc" id="L146" title="1 of 4 branches missed.">    while (encodedData[idx] != '\n' &amp;&amp; idx &lt; encodedData.length) {</span>
+<span class="fc" id="L147">      result[1][macIdx++] = encodedData[idx++];</span>
     }
     // Skip the newline
-<span class="fc" id="L149">    idx++;</span>
-<span class="pc bpc" id="L150" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
-<span class="nc" id="L151">      throw new IOException(&quot;Malformed data - hmac incomplete&quot;);</span>
+<span class="fc" id="L150">    idx++;</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">    if (idx == encodedData.length) {</span>
+<span class="nc" id="L152">      throw new IOException(&quot;Malformed data - hmac incomplete&quot;);</span>
     }
-<span class="fc" id="L153">    int dataIdx = 0;</span>
-<span class="fc" id="L154">    result[2] = new byte[partsLength[2]];</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">    while (idx &lt; encodedData.length) {</span>
-<span class="fc" id="L156">      result[2][dataIdx++] = encodedData[idx++];</span>
+<span class="fc" id="L154">    int dataIdx = 0;</span>
+<span class="fc" id="L155">    result[2] = new byte[partsLength[2]];</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">    while (idx &lt; encodedData.length) {</span>
+<span class="fc" id="L157">      result[2][dataIdx++] = encodedData[idx++];</span>
     }
-<span class="fc" id="L158">    return result;</span>
+<span class="fc" id="L159">    return result;</span>
   }
 
   public byte[] getSalt() {
-<span class="fc" id="L162">    return salt;</span>
+<span class="fc" id="L163">    return salt;</span>
   }
 
   public byte[] getHmac() {
-<span class="fc" id="L166">    return hmac;</span>
+<span class="fc" id="L167">    return hmac;</span>
   }
 
   public byte[] getData() {
-<span class="fc" id="L170">    return data;</span>
+<span class="fc" id="L171">    return data;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
